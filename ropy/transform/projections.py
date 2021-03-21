@@ -31,13 +31,15 @@ def camera_frustum(hfov: float, image_shape: Tuple[int, int]) -> np.array:
 
     Parameters
     ----------
-    hfov: float The camera's horizontal field of view in radians within the
+    hfov: float 
+        The camera's horizontal field of view in radians within the
         interval (0, 2pi) image_shape: Tuple[int, int] The shape of the image
         produced by the camera as ``(height, width)``.
 
     Returns
     -------
-    projection_matrix: np.array The matrix describing the projection
+    projection_matrix: np.array 
+        The matrix describing the projection.
 
     Notes
     -----
