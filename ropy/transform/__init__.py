@@ -23,6 +23,6 @@ Functions to compute perspective transformations
 
 """
 
-from .base import homogenize, cartesianize
+from .base import homogenize, cartesianize, normalize_scale
 
 from . import (base, coordinates, projections)

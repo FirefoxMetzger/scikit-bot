@@ -44,6 +44,27 @@ def cartesianize(homogeneous_vector: np.array) -> np.array:
     return homogeneous_vector[..., :-1] / homogeneous_vector[..., -1]
 
 
+def normalize_scale(vector: np.array) -> np.array:
+    """
+    Return an equivalent homogeneous vector with scale set to 1.
+
+    Parameters
+    ----------
+    vector: np.array
+        The vector (in homogeneous coordinates) to be scale-normalized.
+    
+    Returns
+    -------
+    vector: np.array
+        An equivalent vector with scale component set to 1.
+
+    """
+
+    vector = np.asarray(vector)
+
+    return vector / vector[-1]
+
+
 def rotation_matrix(angle: float, u: np.array, v: np.array) -> np.array:
     """
     Returns a matrix rotating the span of u and v by the given angle.
