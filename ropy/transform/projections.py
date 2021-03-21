@@ -49,19 +49,23 @@ def camera_frustum(hfov: float, image_shape: Tuple[int, int]) -> np.array:
     aspect_ratio = width / height
     scale = 2 * tan(hfov/2)
 
-    # translate the camera
+    # translate to origin of image frame
     translation = np.array([
         [1, 0, 0, 0],
         [-tan(hfov/2), 1, 0, 0],
         [-tan(hfov/2)/aspect_ratio, 0, 1, 0],
         [0, 0, 0, 1]
     ])
+
+    # rotate to image frame
     rotate_frame = np.array([
         [0, -1, 0, 0],
         [0, 0, -1, 0],
         [1, 0, 0, 0],
         [0, 0, 0, 1]
     ])
+
+    # project to 2D
     camera_matrix = np.array([
         [width, 0, 0, 0],
         [0, width, 0, 0],
