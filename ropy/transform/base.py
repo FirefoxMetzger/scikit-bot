@@ -2,7 +2,7 @@ import numpy as np
 from math import sin, cos
 
 
-def homogenize(cartesian_vector: np.array) -> np.array:
+def _homogenize(cartesian_vector: np.array) -> np.array:
     """Convert a vector from cartesian coordinates into homogeneous coordinates.
 
     Parameters
@@ -24,7 +24,7 @@ def homogenize(cartesian_vector: np.array) -> np.array:
     return homogeneous_vector
 
 
-def cartesianize(homogeneous_vector: np.array) -> np.array:
+def _cartesianize(homogeneous_vector: np.array) -> np.array:
     """Convert a vector from homogeneous coordinates to cartesian coordinates.
 
     Parameters
@@ -88,8 +88,8 @@ def rotation_matrix(angle: float, u: np.array, v: np.array) -> np.array:
     # comment
     # https://math.stackexchange.com/questions/197772/generalized-rotation-matrix-in-n-dimensional-space-around-n-2-unit-vector#comment453048_197778
     
-    u = cartesianize(np.asarray(u))
-    v = cartesianize(np.asarray(v))
+    u = _cartesianize(np.asarray(u))
+    v = _cartesianize(np.asarray(v))
 
     ndim = u.size
 

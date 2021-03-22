@@ -22,7 +22,7 @@ def test_frustum_project(point_in, fov, im_shape, point_out):
     
     # this line is not needed here, but it makes sense to touch
     # it during this test
-    point_px = tf.normalize_scale(point_px)
+    point_px = tf.base.normalize_scale(point_px)
     
     point_px = tf.cartesianize(point_px)
 
