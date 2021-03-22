@@ -75,23 +75,25 @@ def rotation_matrix(angle: float, u: np.array, v: np.array) -> np.array:
         The amount (in radians) by which to rotate the plane.
     u: np.array
         One of two orthonormal basis vectors (u,v) that span the plane
-        in which the rotation takes place.
+        in which the rotation takes place. The vector is given in
+        homogeneous coordinates.
     v: np.array
         One of the two orthonormal basis vectors (u,v) that span the plane
-        in which the rotation takes place.
+        in which the rotation takes place. The vector is given in
+        homogeneous coordinates.
 
     Returns
     -------
     rotation_matrix: np.array
-        A matrix representing the rotation.
+        A matrix representing the rotation in cartesian coordinates.
     """
 
     # This implementation is based on a very insightful stackoverflow
     # comment
     # https://math.stackexchange.com/questions/197772/generalized-rotation-matrix-in-n-dimensional-space-around-n-2-unit-vector#comment453048_197778
     
-    u = np.asarray(u)
-    v = np.asarray(v)
+    u = cartesianize(np.asarray(u))
+    v = cartesianize(np.asarray(v))
 
     ndim = u.size
 

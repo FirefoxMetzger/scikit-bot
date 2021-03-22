@@ -45,9 +45,9 @@ def transform(new_frame: np.array) -> np.array:
     new_frame = np.asarray(new_frame)
     alpha, beta, gamma = - new_frame[3:]
 
-    rot_x = rotation_matrix(alpha, (0, 1, 0), (0, 0, 1))
-    rot_y = rotation_matrix(beta, (1, 0, 0), (0, 0, 1))
-    rot_z = rotation_matrix(gamma, (1, 0, 0), (0, 1, 0))
+    rot_x = rotation_matrix(alpha, (0, 1, 0, 1), (0, 0, 1, 1))
+    rot_y = rotation_matrix(beta, (1, 0, 0, 1), (0, 0, 1, 1))
+    rot_z = rotation_matrix(gamma, (1, 0, 0, 1), (0, 1, 0, 1))
     
     # Note: apply inverse rotation
     rot = np.matmul(rot_z, np.matmul(rot_y, rot_x))
@@ -100,9 +100,9 @@ def inverse_transform(old_frame: np.array) -> np.array:
     old_frame = np.asarray(old_frame)
     alpha, beta, gamma = old_frame[3:]
 
-    rot_x = rotation_matrix(alpha, (0, 1, 0), (0, 0, 1))
-    rot_y = rotation_matrix(beta, (1, 0, 0), (0, 0, 1))
-    rot_z = rotation_matrix(gamma, (1, 0, 0), (0, 1, 0))
+    rot_x = rotation_matrix(alpha, (0, 1, 0, 1), (0, 0, 1, 1))
+    rot_y = rotation_matrix(beta, (1, 0, 0, 1), (0, 0, 1, 1))
+    rot_z = rotation_matrix(gamma, (1, 0, 0, 1), (0, 1, 0, 1))
 
     transform = np.eye(4)
     transform[:3, :3] = np.matmul(rot_x, np.matmul(rot_y, rot_z))
