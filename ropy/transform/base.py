@@ -3,8 +3,7 @@ from math import sin, cos
 
 
 def homogenize(cartesian_vector: np.array) -> np.array:
-    """
-    Convert a vector from cartesian coordinates into homogeneous coordinates.
+    """Convert a vector from cartesian coordinates into homogeneous coordinates.
 
     Parameters
     ----------
@@ -26,8 +25,7 @@ def homogenize(cartesian_vector: np.array) -> np.array:
 
 
 def cartesianize(homogeneous_vector: np.array) -> np.array:
-    """
-    Convert a vector from homogeneous coordinates to cartesian coordinates.
+    """Convert a vector from homogeneous coordinates to cartesian coordinates.
 
     Parameters
     ----------
@@ -45,8 +43,7 @@ def cartesianize(homogeneous_vector: np.array) -> np.array:
 
 
 def normalize_scale(vector: np.array) -> np.array:
-    """
-    Return an equivalent homogeneous vector with scale set to 1.
+    """Return an equivalent homogeneous vector with scale set to 1.
 
     Parameters
     ----------
@@ -66,8 +63,7 @@ def normalize_scale(vector: np.array) -> np.array:
 
 
 def rotation_matrix(angle: float, u: np.array, v: np.array) -> np.array:
-    """
-    Returns a matrix rotating the span of u and v by the given angle.
+    """Returns a matrix rotating the span of u and v by the given angle.
 
     Parameters
     ----------

@@ -7,8 +7,7 @@ from .coordinates import transform
 
 
 def camera_frustum(hfov: float, image_shape: Tuple[int, int]) -> np.array:
-    """
-    Compute a projection matrix from a viewing frustum.
+    """Compute a projection matrix from a viewing frustum.
 
     Given a perspective camera system with known horizontal vield of view
     (``hfov``) and pixel density (``image_shape``), compute a transformation

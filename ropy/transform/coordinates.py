@@ -3,8 +3,7 @@ import numpy as np
 from .base import rotation_matrix
 
 def transform(new_frame: np.array) -> np.array:
-    """
-    Compute the homogeneous transformation matrix from the current coordinate
+    """Compute the homogeneous transformation matrix from the current coordinate
     system into a new coordinate system.
 
     Given the pose of the new reference frame ``new_frame`` in the current
@@ -60,8 +59,7 @@ def transform(new_frame: np.array) -> np.array:
 
 
 def inverse_transform(old_frame: np.array) -> np.array:
-    """
-    Compute the homogeneous transformation matrix from the current coordinate
+    """Compute the homogeneous transformation matrix from the current coordinate
     system into the old coordinate system.
 
     Given the pose of the current reference frame in the old reference frame
@@ -112,8 +110,7 @@ def inverse_transform(old_frame: np.array) -> np.array:
 
 
 def transform_between(old_frame: np.array, new_frame: np.array) -> np.array:
-    """
-    Compute the homogeneous transformation matrix between two frames.
+    """Compute the homogeneous transformation matrix between two frames.
 
     ``transform_between(old_frame, new_frame)`` computes the
     transformation from the corrdinate system with pose ``old_frame`` to
