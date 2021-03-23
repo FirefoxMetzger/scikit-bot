@@ -27,8 +27,12 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
+        sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb_release -cs` main" > /etc/apt/sources.list.d/gazebo-stable.list'
+        wget http://packages.osrfoundation.org/gazebo.key -O - | sudo apt-key add -
+        apt-get update
+        apt-get install ignition-dome
         python -m pip install --upgrade pip
-        pip install -e .[testing]
+        pip install -e .[testing,ignition]
     - name: Execute tests
       run: |
         coverage run -m pytest -v
