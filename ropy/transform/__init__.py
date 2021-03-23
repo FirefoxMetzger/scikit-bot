@@ -10,38 +10,14 @@ cartesian coordinates). You can transform a vector between to homogeneous
 corrdinates using ``transform.homogenize``, and you can transform a vector back
 to cartesian coordinages using ``transform.cartesianize``.
 
-Space Conversion
-----------------
-
-Helper functions to convert vectors between cartesian and homogeneous vector
-spaces.
-
 .. autofunction:: ropy.transform.homogenize 
 .. autofunction:: ropy.transform.cartesianize
-
-
-Base
-----
-
-Basic functions used as building blocks by higher-level submodules.
 
 .. automodule:: ropy.transform.base
     :members:
 
-Coordinates
------------
-
-Functions to transform between coordinate systems. 
-
-
 .. automodule:: ropy.transform.coordinates
     :members:
-
-
-Projections
------------
-
-Functions to compute perspective transformations
 
 .. automodule:: ropy.transform.projections 
     :members:

@@ -4,10 +4,22 @@ import socket
 import os
 import pwd
 
-class IgnSubscriber:
+class Subscriber:
+    """Subscribe and listen to Ignition messages.
+
+    Ignition uses ZMQ_ to pass around protocol buffers as means of
+    communication. This subscriber enabels python to receive copies of these
+    buffers. For more information on the messages published by ignition, and how
+    it works, check out the `Ign-Msgs documentation`_ as well as the
+    `Ign-Transport documentation`_.
+
+
+    .. _ZMQ: https://zeromq.org/
+    .. _`Ign-Msgs documentation`: https://ignitionrobotics.org/api/msgs/6.4/index.html
+    .. _`Ign-Transport documentation`: https://ignitionrobotics.org/api/transport/9.1/index.html
+    """
     def __init__(self, topic: str, *, parser = None):
-        """
-        Initialize a new subscriber for the given topic.
+        """Initialize a new subscriber for the given topic.
 
         Creates an object that uses a context manager to subscribe to
         ign-transport topics and receive messages from it.
@@ -22,7 +34,7 @@ class IgnSubscriber:
         
         Returns
         -------
-        self : IgnSubscriber
+        self : Subscriber
             A object that can subscribe to ign-transport within a context
             manager
 
@@ -39,8 +51,7 @@ class IgnSubscriber:
         self.socket.subscribe(f"@/{host_name}:{user_name}@{topic}")
 
     def recv(self, blocking=True, timeout=1000) -> tuple:
-        """
-        Receive a message from the topic
+        """Receive a message from the topic
 
         Parameters
         ----------
@@ -54,8 +65,8 @@ class IgnSubscriber:
 
         Returns
         -------
-        msg : Tuple
-            The received message.
+        msg : PyObject
+            The received message, or if a parser was registered, the result of the parser.
         """
 
         self.socket.setsockopt(zmq.RCVTIMEO, timeout)

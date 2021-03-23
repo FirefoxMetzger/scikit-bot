@@ -36,6 +36,7 @@ extensions = [
 
 html_show_sourcelink = False
 set_type_checking_flag = True
+autodoc_mock_imports = ["betterproto"]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
