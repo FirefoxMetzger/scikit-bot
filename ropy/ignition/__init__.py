@@ -28,9 +28,34 @@ which is a part of gym-ignition_.
     :members:
     :special-members: __init__
 
+.. automodule:: ropy.ignition.messages
+
+:mod:`ropy.ignition.messages`
+
+``ropy`` provides python bindings to all Ignition messages. Messages are build
+from the protocol buffer templates found in Ign-Msgs_. This allows you to decode
+messages sent by the subscriber.
+
+To build the bindings yourself, run
+
+.. code-block:: bash
+
+    git clone https://github.com/ignitionrobotics/ign-msgs.git
+    mkdir ign-bindings
+    protoc -I ign-msgs/proto/ --python_betterproto_out=ign-bindings ign-msgs/proto/ignition/msgs/*
+
+This will produce a file called `ignition/msgs.py` in the chosen output location
+which can be used to decode messages.
+
+Members of ``ropy.ignition.messages`` are not documented here (the class is
+fully auto-generated). Instead, an overview can be found in the `Ignition
+documentation`_.
+
 .. _gym-ignition: https://github.com/robotology/gym-ignition
 .. _ScenarIO: https://robotology.github.io/gym-ignition/master/motivations/why_gym_ignition.html
 .. _Ignition: https://ignitionrobotics.org/home
+.. _`Ign-Msgs`: https://github.com/ignitionrobotics/ign-msgs
+.. _`Ignition documentation`: https://ignitionrobotics.org/api/msgs/6.4/index.html
 """
 
 from . import msgs as messages

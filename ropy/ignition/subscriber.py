@@ -61,7 +61,7 @@ class Subscriber:
         timeout : int
             Time (in ms) to wait for a message to arrive. If the time is
             exceeded, an IOError will be raised. Will wait indefinitely if set
-            to `-1`.
+            to `-1`. This only works if ``blocking=True``.
 
         Returns
         -------
