@@ -7,12 +7,12 @@ def _homogenize(cartesian_vector: np.array) -> np.array:
 
     Parameters
     ----------
-    cartesian_vector: np.array
+    cartesian_vector : np.array
         The vector to be converted.
 
     Returns
     -------
-    homogeneous_vector: np.array
+    homogeneous_vector : np.array
         The vector in homogeneous coordinates.
 
     """
@@ -29,12 +29,12 @@ def _cartesianize(homogeneous_vector: np.array) -> np.array:
 
     Parameters
     ----------
-    homogeneous_vector: np.array
+    homogeneous_vector : np.array
         The vector in homogeneous coordinates.
 
     Returns
     -------
-    cartesian_vector: np.array
+    cartesian_vector : np.array
         The vector to be converted.
 
     """
@@ -47,12 +47,12 @@ def normalize_scale(vector: np.array) -> np.array:
 
     Parameters
     ----------
-    vector: np.array
+    vector : np.array
         The vector (in homogeneous coordinates) to be scale-normalized.
-    
+
     Returns
     -------
-    vector: np.array
+    vector : np.array
         An equivalent vector with scale component set to 1.
 
     """
@@ -67,35 +67,35 @@ def rotation_matrix(angle: float, u: np.array, v: np.array) -> np.array:
 
     Parameters
     ----------
-    angle: float
+    angle : float
         The amount (in radians) by which to rotate the plane.
-    u: np.array
+    u : np.array
         One of two orthonormal basis vectors (u,v) that span the plane
         in which the rotation takes place. The vector is given in
         homogeneous coordinates.
-    v: np.array
+    v : np.array
         One of the two orthonormal basis vectors (u,v) that span the plane
         in which the rotation takes place. The vector is given in
         homogeneous coordinates.
 
     Returns
     -------
-    rotation_matrix: np.array
+    rotation_matrix : np.array
         A matrix representing the rotation in cartesian coordinates.
     """
 
     # This implementation is based on a very insightful stackoverflow
     # comment
     # https://math.stackexchange.com/questions/197772/generalized-rotation-matrix-in-n-dimensional-space-around-n-2-unit-vector#comment453048_197778
-    
+
     u = _cartesianize(np.asarray(u))
     v = _cartesianize(np.asarray(v))
 
     ndim = u.size
 
     rotation_matrix = np.eye(ndim)
-    rotation_matrix += sin(angle)*(np.outer(v, u)-np.outer(u, v))
-    rotation_matrix += (cos(angle) - 1)*(np.outer(u, u)+np.outer(v, v))
+    rotation_matrix += sin(angle) * (np.outer(v, u) - np.outer(u, v))
+    rotation_matrix += (cos(angle) - 1) * (np.outer(u, u) + np.outer(v, v))
 
     return rotation_matrix
 

@@ -16,7 +16,7 @@ def camera_frustum(hfov: float, image_shape: Tuple[int, int]) -> np.array:
     In more detail this takes point in (3d) world space that is described in the
     camera's coordinate system (using scale-normalized homogeneous coordinates)
     and projects it onto the camera's (2d) image that is described in the
-    image's coordinate system (using homogeneous coordinates). 
+    image's coordinate system (using homogeneous coordinates).
 
     The camera's coordinate system follows the robot joint convention. This
     means that it is assumed that the x-axis is pointing forward (in the
@@ -30,14 +30,14 @@ def camera_frustum(hfov: float, image_shape: Tuple[int, int]) -> np.array:
 
     Parameters
     ----------
-    hfov: float 
+    hfov : float
         The camera's horizontal field of view in radians within the
         interval (0, 2pi) image_shape: Tuple[int, int] The shape of the image
         produced by the camera as ``(height, width)``.
 
     Returns
     -------
-    projection_matrix: np.array 
+    projection_matrix : np.array
         The matrix describing the projection.
 
     Notes
@@ -48,29 +48,22 @@ def camera_frustum(hfov: float, image_shape: Tuple[int, int]) -> np.array:
 
     height, width = image_shape
     aspect_ratio = width / height
-    scale = 2 * tan(hfov/2)
+    scale = 2 * tan(hfov / 2)
 
     # translate to origin of image frame
-    translation = np.array([
-        [1, 0, 0, 0],
-        [-tan(hfov/2), 1, 0, 0],
-        [-tan(hfov/2)/aspect_ratio, 0, 1, 0],
-        [0, 0, 0, 1]
-    ])
+    translation = np.array(
+        [
+            [1, 0, 0, 0],
+            [-tan(hfov / 2), 1, 0, 0],
+            [-tan(hfov / 2) / aspect_ratio, 0, 1, 0],
+            [0, 0, 0, 1],
+        ]
+    )
 
     # rotate to image frame
-    rotate_frame = np.array([
-        [0, -1, 0, 0],
-        [0, 0, -1, 0],
-        [1, 0, 0, 0],
-        [0, 0, 0, 1]
-    ])
+    rotate_frame = np.array([[0, -1, 0, 0], [0, 0, -1, 0], [1, 0, 0, 0], [0, 0, 0, 1]])
 
     # project to 2D
-    camera_matrix = np.array([
-        [width, 0, 0, 0],
-        [0, width, 0, 0],
-        [0, 0, scale, 0]
-    ])
+    camera_matrix = np.array([[width, 0, 0, 0], [0, width, 0, 0], [0, 0, scale, 0]])
 
     return np.matmul(camera_matrix, np.matmul(rotate_frame, translation))

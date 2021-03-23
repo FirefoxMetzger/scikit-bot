@@ -2,6 +2,7 @@ import numpy as np
 
 from .base import rotation_matrix
 
+
 def transform(new_frame: np.array) -> np.array:
     """Compute the homogeneous transformation matrix from the current coordinate
     system into a new coordinate system.
@@ -18,7 +19,7 @@ def transform(new_frame: np.array) -> np.array:
 
     Parameters
     ----------
-    new_frame: np.array
+    new_frame : np.array
         The pose of the new coordinate system's origin. This is a 6-dimensional
         vector consisting of the origin's position and the frame's orientation
         (xyz Euler Angles): [x, y, z, alpha, beta, gamma].
@@ -42,18 +43,18 @@ def transform(new_frame: np.array) -> np.array:
     # https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.transform.Rotation.from_euler.html
 
     new_frame = np.asarray(new_frame)
-    alpha, beta, gamma = - new_frame[3:]
+    alpha, beta, gamma = -new_frame[3:]
 
     rot_x = rotation_matrix(alpha, (0, 1, 0, 1), (0, 0, 1, 1))
     rot_y = rotation_matrix(beta, (1, 0, 0, 1), (0, 0, 1, 1))
     rot_z = rotation_matrix(gamma, (1, 0, 0, 1), (0, 1, 0, 1))
-    
+
     # Note: apply inverse rotation
     rot = np.matmul(rot_z, np.matmul(rot_y, rot_x))
 
     transform = np.eye(4)
     transform[:3, :3] = rot
-    transform[:3, 3] = - np.matmul(rot, new_frame[:3])
+    transform[:3, 3] = -np.matmul(rot, new_frame[:3])
 
     return transform
 
@@ -72,7 +73,7 @@ def inverse_transform(old_frame: np.array) -> np.array:
 
     Parameters
     ----------
-    old_frame: {np.array, None}
+    old_frame : {np.array, None}
         The pose of the old coordinate system's origin. This is a 6-dimensional
         vector consisting of the origin's position and the frame's orientation
         (xyz Euler Angles): [x, y, z, alpha, beta, gamma].
@@ -123,11 +124,11 @@ def transform_between(old_frame: np.array, new_frame: np.array) -> np.array:
 
     Parameters
     ----------
-    old_frame: np.array
+    old_frame : np.array
         The pose of the old coordinate system's origin. This is a 6-dimensional
         vector consisting of the origin's position and the frame's orientation
         (xyz Euler Angles): [x, y, z, alpha, beta, gamma].
-    new_frame: np.array
+    new_frame : np.array
         The pose of the new coordinate system's origin. This is a 6-dimensional
         vector consisting of the origin's position and the frame's orientation
         (xyz Euler Angles): [x, y, z, alpha, beta, gamma].
