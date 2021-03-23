@@ -58,5 +58,5 @@ documentation`_.
 .. _`Ignition documentation`: https://ignitionrobotics.org/api/msgs/6.4/index.html
 """
 
-from . import msgs as messages
+from . import messages
 from .subscriber import Subscriber
