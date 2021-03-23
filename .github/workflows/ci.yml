@@ -34,3 +34,9 @@ jobs:
     - name: Execute tests
       run: |
         coverage run -m pytest -v
+    - name: Upload coverage to Codecov
+      run: |
+        curl -s https://codecov.io/bash | bash
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+      shell: bash
