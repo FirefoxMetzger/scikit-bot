@@ -17,9 +17,9 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'ropy'
-copyright = '2021, Sebastian Wallkötter'
-author = 'Sebastian Wallkötter'
+project = "ropy"
+copyright = "2021, Sebastian Wallkötter"
+author = "Sebastian Wallkötter"
 
 
 # -- General configuration ---------------------------------------------------
@@ -28,10 +28,10 @@ author = 'Sebastian Wallkötter'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    'sphinx.ext.autodoc',
-    'numpydoc',
-    'sphinx.ext.viewcode',
-    'sphinx_autodoc_typehints'
+    "sphinx.ext.autodoc",
+    "numpydoc",
+    "sphinx.ext.viewcode",
+    "sphinx_autodoc_typehints",
 ]
 
 html_show_sourcelink = False
@@ -39,7 +39,7 @@ set_type_checking_flag = True
 autodoc_mock_imports = ["betterproto", "zmq"]
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
+templates_path = ["_templates"]
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
@@ -56,4 +56,4 @@ html_theme = "default"
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+html_static_path = ["_static"]

@@ -1,0 +1,11 @@
+coverage:
+    status:
+        # coverage of the current PR/commit
+        patch:
+            default:
+                target: 100%
+        # coverage of the full project
+        project:
+            default: 
+                target: auto
+comment: false

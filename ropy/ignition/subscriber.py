@@ -4,6 +4,7 @@ import socket
 import os
 import pwd
 
+
 class Subscriber:
     """Subscribe and listen to Ignition messages.
 
@@ -18,7 +19,8 @@ class Subscriber:
     .. _`Ign-Msgs documentation`: https://ignitionrobotics.org/api/msgs/6.4/index.html
     .. _`Ign-Transport documentation`: https://ignitionrobotics.org/api/transport/9.1/index.html
     """
-    def __init__(self, topic: str, *, parser = None):
+
+    def __init__(self, topic: str, *, parser=None):
         """Initialize a new subscriber for the given topic.
 
         Creates an object that uses a context manager to subscribe to
@@ -31,7 +33,7 @@ class Subscriber:
         parser : function
             A function that deserializes the message. If None, the raw message
             will be returned.
-        
+
         Returns
         -------
         self : Subscriber
@@ -90,14 +92,19 @@ class Subscriber:
         # to make ign realize that something is listening to the topic tracking
         # issue: https://github.com/ignitionrobotics/ign-transport/issues/225
         self.echo_subscriber = subprocess.Popen(
-            ["ign", "topic", "-e", "-t", self.topic], 
-            stdout=open(os.devnull, 'w')
+            ["ign", "topic", "-e", "-t", self.topic], stdout=open(os.devnull, "w")
         )
 
         # this is a bad hack and should be implemented by talking the
         # ign-transport discovery protocol
         result = subprocess.check_output(f"ign topic -i -t {self.topic}", shell=True)
-        self.address = result.decode("utf-8").split("\n")[1].split(",")[0].replace("\t", "").replace(" ", "")
+        self.address = (
+            result.decode("utf-8")
+            .split("\n")[1]
+            .split(",")[0]
+            .replace("\t", "")
+            .replace(" ", "")
+        )
 
         if not self.address:
             self.echo_subscriber.terminate()

@@ -27,4 +27,6 @@ to cartesian coordinages using ``transform.cartesianize``.
 from .base import _homogenize as homogenize
 from .base import _cartesianize as cartesianize
 
-from . import (base, coordinates, projections)
+from . import base, coordinates, projections
+
+__all__ = [homogenize, cartesianize, base, coordinates, projections]
