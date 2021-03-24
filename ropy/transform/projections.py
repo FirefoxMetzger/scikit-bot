@@ -34,6 +34,8 @@ def camera_frustum(hfov: float, image_shape: Tuple[int, int]) -> np.array:
         The camera's horizontal field of view in radians within the
         interval (0, 2pi) image_shape: Tuple[int, int] The shape of the image
         produced by the camera as ``(height, width)``.
+    image_shape : Tuple[int, int]
+        The number of pixels in the image given as a (height, width) tuple.
 
     Returns
     -------
