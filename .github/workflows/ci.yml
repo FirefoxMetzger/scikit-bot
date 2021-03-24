@@ -14,7 +14,8 @@ jobs:
         with:
           args: ". --check"
 
-  build:
+  test:
+    name: "CPython ${{ matrix.python-version }}"
     runs-on: ubuntu-latest
     strategy:
       matrix:
