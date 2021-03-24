@@ -29,4 +29,4 @@ from .base import _cartesianize as cartesianize
 
 from . import base, coordinates, projections
 
-__all__ = [homogenize, cartesianize, base, coordinates, projections]
+__all__ = ["homogenize", "cartesianize", "base", "coordinates", "projections"]

@@ -1,11 +1,12 @@
 .. _api-reference:
+
 API Reference
 =============
 
 Ropy is structured into a set of independent modules which you can import via
 
-- :mod:`ropy.transform`
-- :mod:`ropy.ignition`
+- :mod:`ropy.transform` Coordinate transformations and projections.
+- :mod:`ropy.ignition` Interface with Ignitionrobotics_ libraries.
 
 Some modules have additional dependencies on top of the scipy stack. To
 use these modules you will have to install ropy with the respective extra
@@ -20,3 +21,5 @@ these in it's module-level documentation.
 
 .. automodule:: ropy.transform
 .. automodule:: ropy.ignition
+
+.. _Ignitionrobotics: https://ignitionrobotics.org/
