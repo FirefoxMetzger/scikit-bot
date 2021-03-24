@@ -7,6 +7,9 @@ import psutil
 def test_subscriber():
     gazebo = subprocess.Popen(["ign", "gazebo", "shapes.sdf", "-r", "-s"])
 
+    # wait for gazebo to start
+    time.sleep(5)
+
     with ign.Subscriber("/clock") as clock:
         msg = clock.recv()
 
