@@ -19,3 +19,4 @@ def test_subscriber():
     for c in pobj.children(recursive=True):
         c.kill()
     pobj.kill()
+    gazebo.terminate()
