@@ -35,9 +35,9 @@ def spline(
         control points are equally spaced within ``[t_min, t_max]`` unless
         ``t_control`` is given explicitly.
     t_control : np.array, None
-        A sequence of increasing floats determining the position of the control
-        points along the trajectory. None by default, which results in an
-        equidistant spacing of points. If set, the following inequality must
+        A sequence of strictly increasing floats determining the position of the
+        control points along the trajectory. None by default, which results in
+        an equidistant spacing of points. If set, the following inequality must
         hold ``t_control[0] <= t_min <= t_max <= t_control[-1]``.
     degree : int
         The degree of the spline; uneven numbers are preferred. The resulting
