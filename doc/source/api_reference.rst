@@ -6,6 +6,7 @@ API Reference
 Ropy is structured into a set of independent modules which you can import via
 
 - :mod:`ropy.transform` Coordinate transformations and projections.
+- :mod:`ropy.trajectory` Create parameterized curves.
 - :mod:`ropy.ignition` Interface with Ignitionrobotics_ libraries.
 
 Some modules have additional dependencies on top of the scipy stack. To
@@ -21,5 +22,6 @@ these in it's module-level documentation.
 
 .. automodule:: ropy.transform
 .. automodule:: ropy.ignition
+.. automodule:: ropy.trajectory
 
 .. _Ignitionrobotics: https://ignitionrobotics.org/
