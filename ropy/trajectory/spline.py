@@ -33,12 +33,12 @@ def spline(
         dimension of the array is interpreted as batch dimension and the
         remaining dimensions are used to interpolate between. By default,
         control points are equally spaced within ``[t_min, t_max]`` unless
-        ``t_k`` is given.
+        ``t_control`` is given explicitly.
     t_control : np.array, None
         A sequence of increasing floats determining the position of the control
         points along the trajectory. None by default, which results in an
         equidistant spacing of points. If set, the following inequality must
-        hold ``t_k[0] <= t_min <= t_max <= t_k[-1]``.
+        hold ``t_control[0] <= t_min <= t_max <= t_control[-1]``.
     degree : int
         The degree of the spline; uneven numbers are preferred. The resulting
         spline is k times continously differentiable.
