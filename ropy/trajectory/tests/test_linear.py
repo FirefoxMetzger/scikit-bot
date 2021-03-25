@@ -17,7 +17,7 @@ def test_even_spacing(t, t_out, t_min, t_max):
         [[1, 2, 3], [2, 3, 4], [3, 4, 5], [4, 5, 6], [5, 6, 7], [6, 7, 8]]
     )
 
-    estimate = rtj.linear(t, control_points, t_min=t_min, t_max=t_max)
+    estimate = rtj.linear_trajectory(t, control_points, t_min=t_min, t_max=t_max)
     assert np.allclose(estimate, t_out)
 
 
@@ -34,5 +34,5 @@ def test_custom_spacing(t, t_out, t_k):
         [[1, 2, 3], [2, 3, 4], [3, 4, 5], [4, 5, 6], [5, 6, 7], [6, 7, 8]]
     )
 
-    estimate = rtj.linear(t, control_points, t_control=t_k)
+    estimate = rtj.linear_trajectory(t, control_points, t_control=t_k)
     assert np.allclose(estimate, t_out)

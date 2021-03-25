@@ -2,17 +2,17 @@ import numpy as np
 from scipy.interpolate import interp1d
 
 
-def linear(t, control_points, *, t_control=None, t_min=0, t_max=1):
+def linear_trajectory(t, control_points, *, t_control=None, t_min=0, t_max=1):
     """Evaluate the trajectory given by control_points at t using linear
     interpolation.
 
-    ``linear`` constructs a piece-wise linear trajectory using the given control
-    points and then evaluates the resulting trajectory at ``t``. By default,
-    control points are spaced out evenly in the interval ``[t_min, t_max]``
-    where ``t=t_min`` results in ``control_points[0]`` and ``t=t_max`` results
-    in ``control_poins[-1]``. Alternatively, the spacing of control points can
-    be set via ``t_control``. In this case, the inequality ``t_control[0] <=
-    t_min <= t_max <= t_control[-1]`` must hold.
+    ``linear_trajectory`` constructs a piece-wise linear trajectory using the
+    given control points and then evaluates the resulting trajectory at ``t``.
+    By default, control points are spaced out evenly in the interval ``[t_min,
+    t_max]`` where ``t=t_min`` results in ``control_points[0]`` and ``t=t_max``
+    results in ``control_poins[-1]``. Alternatively, the spacing of control
+    points can be set via ``t_control``. In this case, the inequality
+    ``t_control[0] <= t_min <= t_max <= t_control[-1]`` must hold.
 
     Parameters
     ----------

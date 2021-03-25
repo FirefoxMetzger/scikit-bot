@@ -14,7 +14,7 @@ combined positions and velocities.
 
 """
 
-from .spline import spline
-from .linear import linear
+from .spline import spline_trajectory
+from .linear import linear_trajectory
 
-__all__ = ["spline", "linear"]
+__all__ = ["spline_trajectory", "linear_trajectory"]
