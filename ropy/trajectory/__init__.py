@@ -9,8 +9,8 @@ trajectory may represent a sequence of positions in world space, but it may just
 as well represent a sequence of poses in joint space, or a sequence of
 combined positions and velocities.
 
-.. autofunction:: ropy.trajectory.linear
-.. autofunction:: ropy.trajectory.spline
+.. autofunction:: ropy.trajectory.linear_trajectory
+.. autofunction:: ropy.trajectory.spline_trajectory
 
 """
 
