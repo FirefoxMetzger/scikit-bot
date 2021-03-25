@@ -53,5 +53,5 @@ def linear(t, control_points, *, t_control=None, t_min=0, t_max=1):
         t_control = np.asarray(t_control)
 
     position = interp1d(t_control, control_points, axis=0)(t)
-    
+
     return position
