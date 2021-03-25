@@ -14,11 +14,8 @@ Install with Ignition Support
 -----------------------------
 
 To use ``ropy`` together with Ignition_, you first have to install Ignition
-following the official instructions::
-
-    https://ignitionrobotics.org/docs/dome
-
-Then you can install ``ropy`` with additional dependencies
+following the `official instruction`_. Then you can install
+``ropy`` with additional dependencies
 
 .. code-block:: bash
 
@@ -26,6 +23,8 @@ Then you can install ``ropy`` with additional dependencies
     cd ropy
     pip install -e .[ignition]
 
+**Note**: This also works incrementally, meaning that you can do this on
+top of an existing ropy installation.
 
 Building the Docs locally
 -------------------------
@@ -38,3 +37,4 @@ Building the Docs locally
     sphinx-build -b html doc/source doc/build
 
 .. _Ignition: https://ignitionrobotics.org/home
+.. _`official instruction`: https://ignitionrobotics.org/docs/dome
