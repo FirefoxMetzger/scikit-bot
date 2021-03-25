@@ -34,5 +34,5 @@ def test_custom_spacing(t, t_out, t_k):
         [[1, 2, 3], [2, 3, 4], [3, 4, 5], [4, 5, 6], [5, 6, 7], [6, 7, 8]]
     )
 
-    estimate = rtj.spline(t, control_points, t_k=t_k)
+    estimate = rtj.spline(t, control_points, t_control=t_k)
     assert np.allclose(estimate, t_out)
