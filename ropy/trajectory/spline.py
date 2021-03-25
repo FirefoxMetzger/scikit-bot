@@ -53,6 +53,11 @@ def spline(
     position : np.array
         The value of the trajectory at position ``t``.
 
+    Notes
+    -----
+    The dimension of the space embedding the trajectory must be less than 12,
+    i.e. ``<= 11``, due to limitations in scipy.
+
     """
     t = np.asarray(t)
     control_points = np.asarray(control_points)
