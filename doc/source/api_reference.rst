@@ -21,7 +21,7 @@ to use ``ropy.ignition``. Whenever a module has additional requirements it will 
 these in it's module-level documentation.
 
 .. automodule:: ropy.transform
-.. automodule:: ropy.ignition
 .. automodule:: ropy.trajectory
+.. automodule:: ropy.ignition
 
 .. _Ignitionrobotics: https://ignitionrobotics.org/
