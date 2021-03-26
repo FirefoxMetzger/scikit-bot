@@ -10,23 +10,22 @@ cartesian coordinates). You can transform a vector between to homogeneous
 corrdinates using ``transform.homogenize``, and you can transform a vector back
 to cartesian coordinages using ``transform.cartesianize``.
 
-.. autofunction:: ropy.transform.homogenize 
-.. autofunction:: ropy.transform.cartesianize
-
-.. automodule:: ropy.transform.base
-    :members:
-
-.. automodule:: ropy.transform.coordinates
-    :members:
-
-.. automodule:: ropy.transform.projections 
-    :members:
-
 """
 
-from .base import _homogenize as homogenize
-from .base import _cartesianize as cartesianize
+from .base import homogenize
+from .base import cartesianize
+from .base import normalize_scale
 
-from . import base, coordinates, projections
+from .coordinates import transform, inverse_transform, transform_between
 
-__all__ = ["homogenize", "cartesianize", "base", "coordinates", "projections"]
+from .projections import perspective_frustum
+
+
+__all__ = [
+    "homogenize",
+    "cartesianize",
+    "transform",
+    "inverse_transform",
+    "transform_between",
+    "perspective_frustum",
+]

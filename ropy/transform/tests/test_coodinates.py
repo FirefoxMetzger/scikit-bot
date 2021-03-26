@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-import ropy.transform as tf
+import ropy.transform as rtf
 
 
 @pytest.mark.parametrize(
@@ -13,9 +13,9 @@ import ropy.transform as tf
     ],
 )
 def test_transform(vector_in, frame, vector_out):
-    vector_A = tf.homogenize(vector_in)
-    vector_B = np.matmul(tf.coordinates.transform(frame), vector_A)
-    vector_B = tf.cartesianize(vector_B)
+    vector_A = rtf.homogenize(vector_in)
+    vector_B = np.matmul(rtf.transform(frame), vector_A)
+    vector_B = rtf.cartesianize(vector_B)
 
     assert np.allclose(vector_B, vector_out)
 
@@ -29,9 +29,9 @@ def test_transform(vector_in, frame, vector_out):
     ],
 )
 def test_inverse_transform(vector_in, frame, vector_out):
-    vector_A = tf.homogenize(vector_in)
-    vector_B = np.matmul(tf.coordinates.inverse_transform(frame), vector_A)
-    vector_B = tf.cartesianize(vector_B)
+    vector_A = rtf.homogenize(vector_in)
+    vector_B = np.matmul(rtf.inverse_transform(frame), vector_A)
+    vector_B = rtf.cartesianize(vector_B)
 
     assert np.allclose(vector_B, vector_out)
 
@@ -48,9 +48,9 @@ def test_inverse_transform(vector_in, frame, vector_out):
     ],
 )
 def test_transform_between(vector_in, frame_A, frame_B, vector_out):
-    vector_A = tf.homogenize(vector_in)
-    vector_B = np.matmul(tf.coordinates.transform_between(frame_A, frame_B), vector_A)
-    vector_B = tf.cartesianize(vector_B)
+    vector_A = rtf.homogenize(vector_in)
+    vector_B = np.matmul(rtf.transform_between(frame_A, frame_B), vector_A)
+    vector_B = rtf.cartesianize(vector_B)
 
     assert np.allclose(vector_B, vector_out)
 
@@ -65,6 +65,6 @@ def test_transform_between(vector_in, frame_A, frame_B, vector_out):
     ],
 )
 def test_identity(frame):
-    A = tf.coordinates.transform(frame)
-    B = tf.coordinates.inverse_transform(frame)
+    A = rtf.transform(frame)
+    B = rtf.inverse_transform(frame)
     assert np.allclose(np.matmul(B, A), np.eye(4))

@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-import ropy.transform as tf
+import ropy.transform as rtf
 
 
 @pytest.mark.parametrize(
@@ -15,15 +15,15 @@ import ropy.transform as tf
     ],
 )
 def test_frustum_project(point_in, fov, im_shape, point_out):
-    projection = tf.projections.camera_frustum(fov, im_shape)
+    projection = rtf.perspective_frustum(fov, im_shape)
 
-    point_cam = tf.homogenize(point_in)
+    point_cam = rtf.homogenize(point_in)
     point_px = np.matmul(projection, point_cam)
 
     # this line is not needed here, but it makes sense to touch
     # it during this test
-    point_px = tf.base.normalize_scale(point_px)
+    point_px = rtf.normalize_scale(point_px)
 
-    point_px = tf.cartesianize(point_px)
+    point_px = rtf.cartesianize(point_px)
 
     assert np.allclose(point_px, point_out)
