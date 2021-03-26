@@ -2,12 +2,12 @@ import numpy as np
 from math import sin, cos
 
 
-def _homogenize(cartesian_vector: np.array) -> np.array:
+def _homogenize(vector: np.array) -> np.array:
     """Convert a vector from cartesian coordinates into homogeneous coordinates.
 
     Parameters
     ----------
-    cartesian_vector : np.array
+    vector : np.array
         The vector to be converted.
 
     Returns
@@ -15,21 +15,31 @@ def _homogenize(cartesian_vector: np.array) -> np.array:
     homogeneous_vector : np.array
         The vector in homogeneous coordinates.
 
-    """
-    cartesian_vector = np.asarray(cartesian_vector)
 
-    shape = cartesian_vector.shape
+    Examples
+    --------
+
+    >>> import ropy.transform as rtf
+    >>> import numpy as np
+    >>> cartesian_vector = np.array((1, 2, 3))
+    >>> rtf.homogenize(cartesian_vector)
+    array([1., 2., 3., 1.])
+
+    """
+    vector = np.asarray(vector)
+
+    shape = vector.shape
     homogeneous_vector = np.ones((*shape[:-1], shape[-1] + 1))
-    homogeneous_vector[..., :-1] = cartesian_vector
+    homogeneous_vector[..., :-1] = vector
     return homogeneous_vector
 
 
-def _cartesianize(homogeneous_vector: np.array) -> np.array:
+def _cartesianize(vector: np.array) -> np.array:
     """Convert a vector from homogeneous coordinates to cartesian coordinates.
 
     Parameters
     ----------
-    homogeneous_vector : np.array
+    vector : np.array
         The vector in homogeneous coordinates.
 
     Returns
@@ -37,9 +47,26 @@ def _cartesianize(homogeneous_vector: np.array) -> np.array:
     cartesian_vector : np.array
         The vector to be converted.
 
-    """
+    Examples
+    --------
 
-    return homogeneous_vector[..., :-1] / homogeneous_vector[..., -1]
+    >>> import numpy as np
+    >>> import ropy.transform as rtf
+    >>> rtf.cartesianize(np.array((1, 2, 3, 41)))
+    array([1., 2., 3.])
+    >>> rtf.cartesianize((2, 0, 2, 2))
+    array([1., 0., 1.])
+    >>> rtf.cartesianize((2, 0, 2, 1))
+    array([2., 0., 2.])
+    >>> rtf.cartesianize((2, 0, 2, 2*np.sqrt(2)))
+    array([0.70710678, 0.        , 0.70710678])
+    >>> np.array((2, 0, 2)) / np.linalg.norm(np.array(( 2, 0, 2)))
+    array([0.70710678, 0.        , 0.70710678])
+
+    """
+    vector = np.asarray(vector)
+
+    return vector[..., :-1] / vector[..., -1]
 
 
 def normalize_scale(vector: np.array) -> np.array:
@@ -54,6 +81,20 @@ def normalize_scale(vector: np.array) -> np.array:
     -------
     vector : np.array
         An equivalent vector with scale component set to 1.
+
+    Examples
+    --------
+
+    >>> import numpy as np
+    >>> import ropy.transform as rtf
+    >>> cartesian = np.array((1, 2, 3))
+    >>> length = np.linalg.norm(cartesian)
+    >>> length
+    3.7416573867739413
+    >>> cartesian / length
+    array([0.26726124, 0.53452248, 0.80178373])
+    >>> rtf.base.normalize_scale((1, 2, 3, length))
+    array([0.26726124, 0.53452248, 0.80178373, 1.        ])
 
     """
 
