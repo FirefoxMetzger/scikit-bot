@@ -68,19 +68,21 @@ def spline_trajectory(
 
     Examples
     --------
-    Approximation of a Circle
 
-    >>> import numpy as np
-    >>> import matplotlib.pyplot as plt
-    >>> from ropy.trajectory import spline_trajectory
-    >>> t1 = np.linspace(0, 2*np.pi, 10)
-    >>> control_points = np.stack((np.cos(t1), np.sin(t1)), axis=1)
-    >>> t2 = np.linspace(0, 2*np.pi, 100)
-    >>> trajectory = spline_trajectory(t2, control_points, t_min=0, t_max=2*np.pi)
-    >>> fig, ax = plt.subplots()
-    >>> ax.plot(trajectory[:,0], trajectory[:,1], control_points[:,0], control_points[:,1], 'o')
-    >>> fig.legend(('Trajectory', 'Control Points'))
-    >>> plt.show()
+    .. plot::
+        :include-source:
+
+        >>> import numpy as np
+        >>> import matplotlib.pyplot as plt
+        >>> from ropy.trajectory import spline_trajectory
+        >>> t1 = np.linspace(0, 2*np.pi, 10)
+        >>> control_points = np.stack((np.cos(t1), np.sin(t1)), axis=1)
+        >>> t2 = np.linspace(0, 2*np.pi, 100)
+        >>> trajectory = spline_trajectory(t2, control_points, t_min=0, t_max=2*np.pi)
+        >>> fig, ax = plt.subplots()
+        >>> ax.plot(trajectory[:,0], trajectory[:,1], control_points[:,0], control_points[:,1], 'o')
+        >>> fig.legend(('Trajectory', 'Control Points'))
+        >>> plt.show()
 
     """
     t = np.asarray(t)

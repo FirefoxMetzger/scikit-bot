@@ -32,6 +32,7 @@ extensions = [
     "numpydoc",
     "sphinx.ext.viewcode",
     "sphinx_autodoc_typehints",
+    "matplotlib.sphinxext.plot_directive",
 ]
 
 html_show_sourcelink = False
