@@ -21,7 +21,7 @@ def spline_trajectory(
     results in ``control_points[0]`` and ``t=t_max`` results in
     ``control_poins[-1]``. Alternatively, the spacing of control points can be
     set manually by specifying ``t_k``. In this case, the inequality
-    ``t_control[0] <= t_min <= t_max <= t_control[-1]`` must hold.
+    ``t_control[0] <= t_min < t_max <= t_control[-1]`` must hold.
 
     Parameters
     ----------
@@ -38,7 +38,7 @@ def spline_trajectory(
         A sequence of strictly increasing floats determining the position of the
         control points along the trajectory. None by default, which results in
         an equidistant spacing of points. If set, the following inequality must
-        hold ``t_control[0] <= t_min <= t_max <= t_control[-1]``.
+        hold ``t_control[0] <= t_min < t_max <= t_control[-1]``.
     degree : int
         The degree of the spline; uneven numbers are preferred. The resulting
         spline is k times continously differentiable.

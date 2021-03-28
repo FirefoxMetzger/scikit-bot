@@ -12,7 +12,7 @@ def linear_trajectory(t, control_points, *, t_control=None, t_min=0, t_max=1):
     t_max]`` where ``t=t_min`` results in ``control_points[0]`` and ``t=t_max``
     results in ``control_poins[-1]``. Alternatively, the spacing of control
     points can be set via ``t_control``. In this case, the inequality
-    ``t_control[0] <= t_min <= t_max <= t_control[-1]`` must hold.
+    ``t_control[0] <= t_min < t_max <= t_control[-1]`` must hold.
 
     Parameters
     ----------
@@ -29,7 +29,7 @@ def linear_trajectory(t, control_points, *, t_control=None, t_min=0, t_max=1):
         A sequence of strictly increasing floats determining the position of the
         control points along the trajectory. None by default, which results in
         an equidistant spacing of points. If set, the following inequality must
-        hold ``t_control[0] <= t_min <= t_max <= t_control[-1]``.
+        hold ``t_control[0] <= t_min < t_max <= t_control[-1]``.
     t_min : float
         Minimum value of the trajectories parametrization. Must be smaller than
         ``t_max``.
