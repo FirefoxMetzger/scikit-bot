@@ -61,6 +61,27 @@ def spline_trajectory(
     please open an issue; a workaround is to split the trajectory into chunks
     of less than 11 dimensions each.
 
+    Repeated evaluation of single points on the trajectory, i.e. repeatedly
+    calling this function with scalar ``t``, is possible, but will repeatedly
+    reconstruct the trajectory, which can lead to unnecessary slowdown. For
+    better performance, it is preferred to use an array-like t.
+
+    Examples
+    --------
+    Approximation of a Circle
+    
+    >>> import numpy as np
+    >>> import matplotlib.pyplot as plt
+    >>> from ropy.trajectory import spline_trajectory
+    >>> t1 = np.linspace(0, 2*np.pi, 10)
+    >>> control_points = np.stack((np.cos(t1), np.sin(t1)), axis=1)
+    >>> t2 = np.linspace(0, 2*np.pi, 100)
+    >>> trajectory = spline_trajectory(t2, control_points, t_min=0, t_max=2*np.pi)
+    >>> fig, ax = plt.subplots()
+    >>> ax.plot(trajectory[:,0], trajectory[:,1], control_points[:,0], control_points[:,1], 'o')
+    >>> fig.legend(('Trajectory', 'Control Points'))
+    >>> plt.show()
+
     """
     t = np.asarray(t)
     control_points = np.asarray(control_points)
@@ -71,4 +92,4 @@ def spline_trajectory(
         t_control = np.asarray(t_control)
 
     tck, u = splprep(control_points.T, u=t_control, s=0, ub=t_min, ue=t_max, k=degree)
-    return np.stack(splev(t, tck, ext=2), axis=0)
+    return np.stack(splev(t, tck, ext=2), axis=-1)
