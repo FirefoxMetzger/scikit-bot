@@ -38,12 +38,12 @@ If you encounter difficulties during the setup, feel free to create a `new issue
 
 Before you submit a PR make sure all tests pass, that all code is covered by tests,
 that you follow our code-style conventions, and that the documentation builds without
-errors. Here is how to perform each task.
+errors. Here is how to perform each task (in the projects root directory).
 
-- Run all tests: Call ``pytest`` in the root directoy.
-- Coverage: Call ``coverage run -m pytest .`` followed by ``coverage report`` in the root directory.
-- Code-Style: Call ``black .`` in the root directory.
-- Docs: Call ``sphinx-build -b html doc/source doc/build`` in the root directory.
+- Run all tests: ``pytest``
+- Coverage: ``coverage run -m pytest .`` followed by ``coverage report``
+- Code-Style: ``black .``
+- Docs: ``sphinx-build -b html doc/source doc/build``
 
 
 .. _Ignition: https://ignitionrobotics.org/home
