@@ -52,7 +52,7 @@ def spline_trajectory(
     Returns
     -------
     position : np.array
-        The value of the trajectory at position ``t``.
+        The value of the trajectory at ``t``.
 
     Notes
     -----
@@ -64,7 +64,7 @@ def spline_trajectory(
     Repeated evaluation of single points on the trajectory, i.e. repeatedly
     calling this function with scalar ``t``, is possible, but will repeatedly
     reconstruct the trajectory, which can lead to unnecessary slowdown. For
-    better performance, it is preferred to use an array-like t.
+    better performance, it is preferred to use an array-like ``t``.
 
     Examples
     --------

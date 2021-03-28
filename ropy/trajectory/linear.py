@@ -40,14 +40,14 @@ def linear_trajectory(t, control_points, *, t_control=None, t_min=0, t_max=1):
     Returns
     -------
     position : np.array
-        The value of the trajectory at position ``t``.
+        The value of the trajectory at ``t``.
 
     Notes
     -----
     Repeated evaluation of single points on the trajectory, i.e. repeatedly
     calling this function with a scalar ``t``, is possible, but will repeatedly
     reconstruct the trajectory, which can lead to unnecessary slowdown. For
-    better performance, it is preferred to use an array-like t.
+    better performance, it is preferred to use an array-like ``t``.
 
     Examples
     --------
