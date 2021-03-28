@@ -52,7 +52,7 @@ def linear_trajectory(t, control_points, *, t_control=None, t_min=0, t_max=1):
     Examples
     --------
     Approximation of a Circle
-    
+
     >>> import numpy as np
     >>> import matplotlib.pyplot as plt
     >>> from ropy.trajectory import linear_trajectory

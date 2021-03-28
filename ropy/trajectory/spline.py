@@ -69,7 +69,7 @@ def spline_trajectory(
     Examples
     --------
     Approximation of a Circle
-    
+
     >>> import numpy as np
     >>> import matplotlib.pyplot as plt
     >>> from ropy.trajectory import spline_trajectory
