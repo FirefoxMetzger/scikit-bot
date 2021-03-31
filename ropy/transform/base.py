@@ -104,25 +104,41 @@ def normalize_scale(vector: np.array) -> np.array:
 
 
 def rotation_matrix(angle: float, u: np.array, v: np.array) -> np.array:
-    """Returns a matrix rotating the span of u and v by the given angle.
+    """Return a rotation matrix to rotate by angle in the plane span by u and v.
+
+    The function creates a N-dimensional rotation matrix that rotates a point by
+    a set angle inside an oriented plane. The plane is defined by the two basis
+    vectors u and v and the (positive) direction of rotation is from u to v.
+
+    For example, if ``u=(1,0,0,1)`` (the x-axis) and ``v=(0,1,0,1)`` (the
+    y-axis) then the resulting matrix rotates vectors counter-clockwise around
+    the z-axis, i.e., it rotates vectors in the x-y plane.
 
     Parameters
     ----------
     angle : float
         The amount (in radians) by which to rotate the plane.
     u : np.array
-        One of two orthonormal basis vectors (u,v) that span the plane
-        in which the rotation takes place. The vector is given in
-        homogeneous coordinates.
+        The first basis vectors (u,v) spanning the plane of
+        rotation. The vector is given in homogeneous coordinates.
     v : np.array
-        One of the two orthonormal basis vectors (u,v) that span the plane
-        in which the rotation takes place. The vector is given in
-        homogeneous coordinates.
+        The second basis vectors (u,v) that span the plane of rotation. The
+        vector is given in homogeneous coordinates.
 
     Returns
     -------
     rotation_matrix : np.array
-        A matrix representing the rotation in cartesian coordinates.
+        A matrix representing the rotation in homogeneous coordinates.
+
+    Notes
+    -----
+    If u and v are not orthonormal, the resulting matrix is no longer a pure
+    rotation.
+
+    Examples
+    --------
+
+
     """
 
     # This implementation is based on a very insightful stackoverflow
@@ -138,7 +154,10 @@ def rotation_matrix(angle: float, u: np.array, v: np.array) -> np.array:
     rotation_matrix += sin(angle) * (np.outer(v, u) - np.outer(u, v))
     rotation_matrix += (cos(angle) - 1) * (np.outer(u, u) + np.outer(v, v))
 
-    return rotation_matrix
+    homogeneous_rotation = np.eye(ndim+1)
+    homogeneous_rotation[:-1,:-1] = rotation_matrix
+
+    return homogeneous_rotation
 
 
 # other candidates for base functions:
