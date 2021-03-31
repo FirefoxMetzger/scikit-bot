@@ -4,6 +4,8 @@ import socket
 import os
 import pwd
 
+from . import messages
+
 
 class Subscriber:
     """Subscribe and listen to Ignition messages.
@@ -31,8 +33,11 @@ class Subscriber:
         topic : str
             The name of the topic to subscribe to as shown by `ign topic -l`.
         parser : function
-            A function that deserializes the message. If None, the raw message
-            will be returned.
+            A function that deserializes the message. The signature of the parser function
+            is ``fn(zmq_message) -> result`` where zmq_message is a 3-tuple of the form
+            (zmq_topic, protobuf_message, message_type). If None, the subscriber
+            will use a default parser that converts ``protobuf_message`` into a
+            ``ropy.ignition.message.<message_type>`` data object.
 
         Returns
         -------
@@ -45,12 +50,17 @@ class Subscriber:
         self.socket = context.socket(zmq.SUB)
         self.topic = topic
 
-        self.parser = parser
-
         # this could be streamlined by speaking the ign-transport discovery protcol
         host_name = socket.gethostname()
         user_name = pwd.getpwuid(os.getuid())[0]
         self.socket.subscribe(f"@/{host_name}:{user_name}@{topic}")
+
+        if parser is None:
+            self.parser = lambda msg: getattr(
+                messages, msg[3].decode("utf-8").split(".")[-1]
+            )().parse(msg[2])
+        else:
+            self.parser = parser
 
     def recv(self, blocking=True, timeout=1000) -> tuple:
         """Receive a message from the topic
@@ -68,7 +78,9 @@ class Subscriber:
         Returns
         -------
         msg : PyObject
-            The received message, or if a parser was registered, the result of the parser.
+            If a parser was specified during instantiation, returns the result
+            of the parser. Otherwise it will use the default parser and return a
+            ``ropy.ignition.messages.<message_type>`` data object.
         """
 
         self.socket.setsockopt(zmq.RCVTIMEO, timeout)
@@ -81,10 +93,9 @@ class Subscriber:
         except zmq.Again:
             raise IOError(f"Topic {self.topic} did not send a message.")
 
-        if self.parser is not None:
-            msg = self.parser(msg)
+        result = self.parser(msg)
 
-        return msg
+        return result
 
     def __enter__(self):
         # weird hack to encourage ign-transport to actually publish camera

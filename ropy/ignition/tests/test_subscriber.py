@@ -27,7 +27,7 @@ def test_subscriber_raw(ign_instance):
     with ign.Subscriber("/clock") as clock:
         msg = clock.recv()
 
-    assert msg is not None
+    assert msg.sim.sec == 0 and msg.sim.nsec == 0
 
 
 def test_subscriber_parse(ign_instance):
