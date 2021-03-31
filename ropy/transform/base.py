@@ -137,7 +137,19 @@ def rotation_matrix(angle: float, u: np.array, v: np.array) -> np.array:
 
     Examples
     --------
+    .. plot::
+        :include-source:
 
+        >>> import numpy as np
+        >>> import matplotlib.pyplot as plt
+        >>> import ropy.transform as rtf
+        >>> rotation = rtf.base.rotation_matrix(np.pi/4, (1, 0, 1), (0, 1, 1))
+        >>> points = rtf.homogenize(np.array([[1, 1], [1, -1], [-1, 1], [-1, -1]]))
+        >>> points_rotated = np.matmul(rotation, points.T)
+        >>> fig, ax = plt.subplots()
+        >>> ax.plot(points[:, 0], points[:, 1], points_rotated[0], points_rotated[1])
+        >>> ax.legend(["Original", "Rotated 45°"])
+        >>> fig.show()
 
     """
 
