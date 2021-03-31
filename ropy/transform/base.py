@@ -93,7 +93,7 @@ def normalize_scale(vector: np.array) -> np.array:
     3.7416573867739413
     >>> cartesian / length
     array([0.26726124, 0.53452248, 0.80178373])
-    >>> rtf.base.normalize_scale((1, 2, 3, length))
+    >>> rtf.base.normalize_scale((*cartesian, length))
     array([0.26726124, 0.53452248, 0.80178373, 1.        ])
 
     """
