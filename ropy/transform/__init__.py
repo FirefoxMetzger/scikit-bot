@@ -29,5 +29,5 @@ __all__ = [
     "inverse_transform",
     "transform_between",
     "perspective_frustum",
-    "rotation_matrix"
+    "rotation_matrix",
 ]

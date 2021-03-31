@@ -166,8 +166,8 @@ def rotation_matrix(angle: float, u: np.array, v: np.array) -> np.array:
     rotation_matrix += sin(angle) * (np.outer(v, u) - np.outer(u, v))
     rotation_matrix += (cos(angle) - 1) * (np.outer(u, u) + np.outer(v, v))
 
-    homogeneous_rotation = np.eye(ndim+1)
-    homogeneous_rotation[:-1,:-1] = rotation_matrix
+    homogeneous_rotation = np.eye(ndim + 1)
+    homogeneous_rotation[:-1, :-1] = rotation_matrix
 
     return homogeneous_rotation
 
