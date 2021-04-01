@@ -20,8 +20,8 @@ def linear_trajectory(
     By default, control points are spaced out evenly in the interval ``[t_min,
     t_max]`` where ``t=t_min`` results in ``control_points[0]`` and ``t=t_max``
     results in ``control_poins[-1]``. Alternatively, the spacing of control
-    points can be set via ``t_control``. In this case, the inequality
-    ``t_control[0] <= t_min < t_max <= t_control[-1]`` must hold.
+    points can be controlled manually by specifying ``t_control``, which
+    implicitly specifies ``t_min`` and ``t_max``.
 
     Parameters
     ----------
@@ -37,14 +37,15 @@ def linear_trajectory(
     t_control : np.array, None
         A sequence of strictly increasing floats determining the position of the
         control points along the trajectory. None by default, which results in
-        an equidistant spacing of points. If set, the following inequality must
-        hold ``t_control[0] <= t_min < t_max <= t_control[-1]``.
+        an equidistant spacing of points.
     t_min : float
         Minimum value of the trajectories parametrization. Must be smaller than
-        ``t_max``.
+        ``t_max``.If ``t_control`` is set, this value is ignored in favor of
+        ``t_min=t_control[0]`
     t_max : float
         Maximum value of the trajectories parametrization. Must be larger than
-        ``t_min``.
+        ``t_min``. If ``t_control`` is set, this value is ignored in favor of
+        ``t_max=t_control[-1]``.
 
     Returns
     -------
@@ -86,6 +87,8 @@ def linear_trajectory(
         t_control = np.linspace(t_min, t_max, len(control_points), dtype=np.float_)
     else:
         t_control = np.asarray(t_control)
+        t_min = t_control[0]
+        t_max = t_control[1]
 
     position = interp1d(t_control, control_points, axis=0)(t)
 
