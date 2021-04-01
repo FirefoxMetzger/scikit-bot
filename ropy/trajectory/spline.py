@@ -1,12 +1,12 @@
 import numpy as np
 from scipy.interpolate import splprep, splev
-
+from numpy.typing import ArrayLike
 
 def spline_trajectory(
-    t: np.array,
-    control_points: np.array,
+    t: ArrayLike,
+    control_points: ArrayLike,
     *,
-    t_control: np.array = None,
+    t_control: ArrayLike = None,
     degree: int = 3,
     t_min: float = 0,
     t_max: float = 1
