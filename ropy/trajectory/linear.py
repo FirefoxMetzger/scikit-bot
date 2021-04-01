@@ -1,8 +1,16 @@
 import numpy as np
 from scipy.interpolate import interp1d
+from numpy.typing import ArrayLike
 
 
-def linear_trajectory(t, control_points, *, t_control=None, t_min=0, t_max=1):
+def linear_trajectory(
+    t: ArrayLike,
+    control_points: ArrayLike,
+    *,
+    t_control: ArrayLike = None,
+    t_min: float = 0,
+    t_max: float = 1
+) -> np.array:
     """Evaluate the trajectory given by control_points at t using linear
     interpolation.
 
