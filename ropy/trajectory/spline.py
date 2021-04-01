@@ -52,6 +52,10 @@ def spline_trajectory(
         Maximum value of the trajectories parametrization. Must be larger than
         ``t_min``. If ``t_control`` is set, this value is ignored in favor of
         ``t_max=t_control[-1]``.
+    derivative : int
+        The derivative of the interpolated trajectory to compute. For example,
+        ``derivative=2`` differentiates the trajectory twice with respect to
+        ``t`` and then evaluates the derivative at the given ``t``.
 
     Returns
     -------
