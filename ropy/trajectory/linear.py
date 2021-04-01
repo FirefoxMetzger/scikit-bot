@@ -1,13 +1,14 @@
 import numpy as np
 from scipy.interpolate import interp1d
 from numpy.typing import ArrayLike
+from typing import Optional
 
 
 def linear_trajectory(
     t: ArrayLike,
     control_points: ArrayLike,
     *,
-    t_control: ArrayLike = None,
+    t_control: Optional[ArrayLike] = None,
     t_min: float = 0,
     t_max: float = 1
 ) -> np.array:
