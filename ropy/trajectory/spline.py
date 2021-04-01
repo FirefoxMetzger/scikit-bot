@@ -3,6 +3,7 @@ from scipy.interpolate import splprep, splev
 from numpy.typing import ArrayLike
 from typing import Optional
 
+
 def spline_trajectory(
     t: ArrayLike,
     control_points: ArrayLike,
@@ -10,7 +11,8 @@ def spline_trajectory(
     t_control: Optional[ArrayLike] = None,
     degree: int = 3,
     t_min: float = 0,
-    t_max: float = 1
+    t_max: float = 1,
+    derivative: int = 0,
 ) -> np.array:
     """Evaluate the trajectory given by control_points at t using B-spline
     interpolation.
@@ -21,8 +23,8 @@ def spline_trajectory(
     are spaced out evenly in the interval ``[t_min, t_max]`` where ``t=t_min``
     results in ``control_points[0]`` and ``t=t_max`` results in
     ``control_poins[-1]``. Alternatively, the spacing of control points can be
-    set manually by specifying ``t_k``. In this case, the inequality
-    ``t_control[0] <= t_min < t_max <= t_control[-1]`` must hold.
+    set manually by specifying ``t_control``, which implicitly specifies
+    ``t_min`` and ``t_max``.
 
     Parameters
     ----------
@@ -38,17 +40,18 @@ def spline_trajectory(
     t_control : np.array, None
         A sequence of strictly increasing floats determining the position of the
         control points along the trajectory. None by default, which results in
-        an equidistant spacing of points. If set, the following inequality must
-        hold ``t_control[0] <= t_min < t_max <= t_control[-1]``.
+        an equidistant spacing of points.
     degree : int
         The degree of the spline; uneven numbers are preferred. The resulting
         spline is k times continously differentiable.
     t_min : float
         Minimum value of the trajectories parametrization. Must be smaller than
-        ``t_max``.
+        ``t_max``. If ``t_control`` is set, this value is ignored in favor of
+        ``t_min=t_control[0]``
     t_max : float
         Maximum value of the trajectories parametrization. Must be larger than
-        ``t_min``.
+        ``t_min``. If ``t_control`` is set, this value is ignored in favor of
+        ``t_max=t_control[-1]``.
 
     Returns
     -------
@@ -93,6 +96,8 @@ def spline_trajectory(
         t_control = np.linspace(t_min, t_max, len(control_points), dtype=np.float_)
     else:
         t_control = np.asarray(t_control)
+        t_min = t_control[0]
+        t_max = t_control[-1]
 
     tck, u = splprep(control_points.T, u=t_control, s=0, ub=t_min, ue=t_max, k=degree)
-    return np.stack(splev(t, tck, ext=2), axis=-1)
+    return np.stack(splev(t, tck, der=derivative, ext=2), axis=-1)

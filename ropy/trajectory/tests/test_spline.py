@@ -36,3 +36,13 @@ def test_custom_spacing(t, t_out, t_k):
 
     estimate = rtj.spline_trajectory(t, control_points, t_control=t_k)
     assert np.allclose(estimate, t_out)
+
+
+def test_derivative():
+    x = np.linspace(0, 2, 10)
+    y = (x ** 2)[:, None]
+    t = np.linspace(0, 2, 100)
+    dy = (2 * t)[:, None]
+    estimate = rtj.spline_trajectory(t, y, t_control=x, derivative=1)
+
+    assert np.allclose(estimate, dy)
