@@ -21,3 +21,15 @@ enabling rapid prototyping.
   new [feature request](https://github.com/FirefoxMetzger/ropy/issues) and -
   after we figured out where the feature should go - you can submit a PR for
   exactly this feature.
+
+**Note:** Ropy is currently in v0.0.1 and the API is experimental. Functions may
+appear and dissapear without notice or warning. Stability will start with v0.1,
+at which point changes to the API will undergo the usual versioning and
+depreciation cycle. Depreciations will trigger a warning and will be removed
+after two version-minor increments or a version-major increment (which ever
+happens later).
+
+If you do find any part of the API particularly useful in its current form, please
+leave a note in the issue section (and a comment on what could be improved).
+Feedback like this helps maturing the API more quickly. This way, we can keep
+the things that are useful and improve the things that aren't.
