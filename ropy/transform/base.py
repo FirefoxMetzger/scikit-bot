@@ -1,5 +1,7 @@
 import numpy as np
 from math import sin, cos
+from numpy.core.records import array
+from numpy.typing import ArrayLike
 
 
 def homogenize(vector: np.array) -> np.array:
@@ -172,6 +174,150 @@ def rotation_matrix(angle: float, u: np.array, v: np.array) -> np.array:
     return homogeneous_rotation
 
 
-# other candidates for base functions:
-# https://www.javatpoint.com/computer-graphics-homogeneous-coordinates
-# (mainly for my own reference)
+def scale(vector: ArrayLike, scalar: ArrayLike):
+    """ Scale each dimension of a homogeneous vector individually.
+
+    Multiplies each dimension of the homogeneous vector ``vector`` with
+    the matching dimension of the cartesian vector ``scalar``. If necessary,
+    ``scalar`` will be broadcasted.
+
+    Parameters
+    ----------
+    vector : ArrayLike
+        A homogeneous vector to be scaled.
+    scalar : ArrayLike
+        A cartesian vector representing the amount by which to scale each dimension.
+
+    Returns
+    -------
+    scaled : ArrayLike
+        A homogeneous vector where each dimension is scaled by scalar.
+
+    """
+    vector = np.asarray(vector)
+
+    scaled = vector
+    scaled[:-1] *= scalar
+
+    return scaled
+
+
+def scale_uniform(vector: ArrayLike, scalar: float):
+    """ Scale a homogeneous vector by a scalar.
+
+    Multiplies the scale portion of the homogeneous vector by scalar.
+    This is faster (and potentially more accurate) than ``scale`` if each
+    dimension is scaled by the same amount.
+
+    Parameters
+    ----------
+    vector : ArrayLike
+        A homogeneous vector to be scaled.
+    scalar : float
+        The amount by which to scale.
+
+    Returns
+    -------
+    scaled : ArrayLike
+        A homogeneous vector where each dimension is scaled by scalar.
+
+    """
+    vector = np.asarray(vector)
+
+    scaled = vector
+    scaled[-1] *= scalar
+
+    return scaled
+
+
+def translate(vector: ArrayLike, u: ArrayLike):
+    """ Translate a vector along u.
+
+    Parameters
+    ----------
+    vector : ArrayLike
+        The vector to be translated.
+    u : ArrayLike
+        A vector describing the translation.
+
+    Returns
+    -------
+    translated_vector : ArrayLike
+        The translated vector.
+
+    Notes
+    -----
+    Exists for completeness. It may be cleaner to simply write 
+    ``vector + u`` instead.
+
+    """
+
+    return vector + u
+
+
+def rotate(vector: ArrayLike, u: ArrayLike, v: ArrayLike):
+    """ Rotate a vector in the u,v plane
+
+    Rotates a vector by reflecting it twice. The plane of rotation
+    is given by the u-v-plane and the angle of rotation is two times
+    the angle from u to v.
+
+    Parameters
+    ----------
+    vector : ArrayLike
+        The vector to be rotated.
+    u : ArrayLike
+        The first of the two axes defining the plane of rotation
+    v : ArrayLike
+        The second of the two axes defining the plane of rotation
+
+    Returns
+    -------
+    rotated_vector : np.array
+        The vector rotated in the u-v-plane by two times the angle
+        from u to v.
+
+    Notes
+    -----
+    The angle of rotation is given by the angle between the two vectors that
+    define the plane of rotation. The orientation of the rotation is from u
+    towards v, and the amount of rotation is twice the angle.
+
+    The scale of u and/or v does not influence the rotation.
+
+    """
+
+    vector = np.asarray(vector)
+    u = np.asarray(u)
+    v = np.asarray(v)
+
+    # implemented as rotation by two reflections
+    return reflect(reflect(vector, u), v)
+
+def reflect(vector: ArrayLike, u: ArrayLike):
+    """ Reflect a vector along a line defined by vector u.
+
+    Parameters
+    ----------
+    vector : ArrayLike
+        The vector to be reflected.
+    u : ArrayLike
+        The direction along which the reflection takes place.
+
+    Returns
+    -------
+    reflected_vector : ArrayLike
+        The reflected vector.
+
+    Notes
+    -----
+    The length of u does not influence the result of the reflection.
+
+    """
+
+    # from: https://en.wikipedia.org/wiki/Reflection_(mathematics)#Reflection_through_a_hyperplane_in_n_dimensions
+    vector = np.asarray(vector)
+    u = np.asarray(u)
+
+    return vector - 2 * np.dot(vector, u)/np.dot(u, u) * u
+
