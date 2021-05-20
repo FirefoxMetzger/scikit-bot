@@ -12,10 +12,17 @@ to cartesian coordinages using ``transform.cartesianize``.
 
 """
 
-from .base import homogenize
-from .base import cartesianize
-from .base import normalize_scale
-from .base import rotation_matrix
+from .base import (
+    homogenize,
+    cartesianize,
+    normalize_scale,
+    rotation_matrix,
+    translate,
+    rotate,
+    reflect,
+    shear,
+    scale
+)
 
 from .coordinates import transform, inverse_transform, transform_between
 
@@ -30,4 +37,9 @@ __all__ = [
     "transform_between",
     "perspective_frustum",
     "rotation_matrix",
+    "translate",
+    "rotate",
+    "reflect",
+    "shear",
+    "scale"
 ]
