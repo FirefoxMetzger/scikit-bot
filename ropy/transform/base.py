@@ -174,7 +174,7 @@ def rotation_matrix(angle: float, u: np.array, v: np.array) -> np.array:
     return homogeneous_rotation
 
 
-def scale(vector: ArrayLike, scalar: ArrayLike):
+def scale(vector: ArrayLike, scalar: ArrayLike) -> np.array:
     """ Scale each dimension of a homogeneous vector individually.
 
     Multiplies each dimension of the homogeneous vector ``vector`` with
@@ -230,14 +230,14 @@ def scale_uniform(vector: ArrayLike, scalar: float):
     return scaled
 
 
-def translate(vector: ArrayLike, u: ArrayLike):
-    """ Translate a vector along u.
+def translate(vector: ArrayLike, direction: ArrayLike) -> np.array:
+    """ Translate a vector along direction.
 
     Parameters
     ----------
     vector : ArrayLike
         The vector to be translated.
-    u : ArrayLike
+    direction : ArrayLike
         A vector describing the translation.
 
     Returns
@@ -248,15 +248,15 @@ def translate(vector: ArrayLike, u: ArrayLike):
     Notes
     -----
     Exists for completeness. It may be cleaner to simply write 
-    ``vector + u`` instead.
+    ``vector + direction`` instead.
 
     """
 
-    return vector + u
+    return vector + direction
 
 
-def rotate(vector: ArrayLike, u: ArrayLike, v: ArrayLike):
-    """ Rotate a vector in the u,v plane
+def rotate(vector: ArrayLike, u: ArrayLike, v: ArrayLike) -> np.array:
+    """ Rotate a vector in the u,v plane.
 
     Rotates a vector by reflecting it twice. The plane of rotation
     is given by the u-v-plane and the angle of rotation is two times
@@ -294,14 +294,14 @@ def rotate(vector: ArrayLike, u: ArrayLike, v: ArrayLike):
     # implemented as rotation by two reflections
     return reflect(reflect(vector, u), v)
 
-def reflect(vector: ArrayLike, u: ArrayLike):
-    """ Reflect a vector along a line defined by vector u.
+def reflect(vector: ArrayLike, direction: ArrayLike) -> np.array:
+    """ Reflect a vector along a line defined by direction.
 
     Parameters
     ----------
     vector : ArrayLike
         The vector to be reflected.
-    u : ArrayLike
+    direction : ArrayLike
         The direction along which the reflection takes place.
 
     Returns
@@ -311,13 +311,48 @@ def reflect(vector: ArrayLike, u: ArrayLike):
 
     Notes
     -----
-    The length of u does not influence the result of the reflection.
+    The length of direction does not influence the result of the reflection.
 
     """
 
     # from: https://en.wikipedia.org/wiki/Reflection_(mathematics)#Reflection_through_a_hyperplane_in_n_dimensions
     vector = np.asarray(vector)
-    u = np.asarray(u)
+    direction = np.asarray(direction)
 
-    return vector - 2 * np.dot(vector, u)/np.dot(u, u) * u
+    return vector - 2 * np.dot(vector, direction)/np.dot(direction, direction) * direction
 
+
+def shear(vector: ArrayLike, direction: ArrayLike, amount: ArrayLike) -> np.array:
+    """ Displaces a vector along direction by the scalar product of vector and amount.
+
+    A shear displaces a vector in a fixed direction by the vector's scalar
+    projection onto a second vector (amount) scaled by the length of that second
+    vector. If amount and direction are orthogonal, the result is a shear. If
+    amount and direction are parallel, the result is a stretch.
+
+    Parameters
+    ----------
+    vector : ArrayLike
+        The vector to be sheared.
+    direction : ArrayLike
+        The direction along which to apply the shear.
+    amount : ArrayLike
+        The axis that determines the amount to shear by.
+
+    Returns
+    -------
+    sheared : np.Array
+        The sheared vector.
+
+    Notes
+    -----
+    If direction is not normalized the resulting shear factor will be scaled by
+    the length (euclidian norm) of direction.
+
+    """
+
+    vector = np.asarray(vector)
+    direction = np.asarray(direction)
+    amount = np.asarray(amount)
+
+    return vector + np.dot(vector, amount) * direction
