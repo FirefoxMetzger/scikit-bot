@@ -1,6 +1,150 @@
+from __future__ import annotations  # life's too short for comments
 import numpy as np
+from numpy.core.records import array
+from numpy.typing import ArrayLike
+from typing import List, Callable
 
 from .base import rotation_matrix
+from .base import translate, rotate
+
+
+class Link:
+    """A directional relationship between two Frames
+
+    An abstract class that describes a transformation from a parent frame into a
+    child frame. Its default use is to express a vector given in the parent
+    frame using the child frame.
+
+    Properties
+    ----------
+    transformation : np.array
+        A affine matrix describing the transformation from the parent frame to
+        the child frame.
+
+    Methods
+    -------
+    transform(x)
+        Expresses the vector x (assumed to be given in the parent's frame) in
+        the child's frame.
+
+
+    """
+
+    def __init__(self, parent: Frame, child: Frame):
+        self.parent: Frame = parent
+        self.child: Frame = child
+
+    def transform(self, x: ArrayLike) -> np.array:
+        """Transform x (given in parent frame) into the child frame.
+
+        Parameters
+        ----------
+        x : ArrayLike
+            The vector expressed in the parent's frame
+
+        Returns
+        -------
+        y : ArrayLike
+            The vector expressed in the child's frame
+
+        """
+        raise NotImplementedError
+
+    @property
+    def transformation(self) -> np.array:
+        """The transformation matrix mapping the parent to the child frame."""
+        raise NotImplementedError
+
+
+class Frame:
+    """A frame representing a coordinate system.
+
+    Each coordinate frame is a node in a directed graph where edges (type Link)
+    describe transformations between different frames. Its default use is to
+    transform coordinates between different coordinate frames.
+
+    Methods
+    -------
+    transform(x, to_frame)
+        Express the vector x - assumed to be in this frame - in the coordinate
+        frame to_frame. If it is not possible to find a transformation between
+        this frame and to_frame a RuntimeError will be raised.
+    get_transformation_matrix(to_frame)
+        Computes (and returns) the transformation matrix between this frame
+        and to_frame.
+    add_link(edge)
+        Add a new transformation from this frame to another frame to the list of known
+        transformations.
+
+    """
+
+    def __init__(self, ndim):
+        self._links: List[Link] = list()
+        self.ndim: int = ndim
+
+    def transform(self, x: ArrayLike, to_frame: Frame, *, _ignore_frames: List[Frame]=None) -> np.array:
+        x_new = x
+        for link in self._get_transform_chain(to_frame, _ignore_frames):
+            x_new = link.transform(x_new)
+
+        return x_new
+
+    def get_transformation_matrix(self, to_frame: Frame, *, _ignore_frames: List[Frame]=None) -> np.array:
+        tf_matrix = np.eye(self.dim)
+        for link in self._get_transform_chain(to_frame, _ignore_frames):
+            tf_matrix = link.transformation @ tf_matrix
+
+        return tf_matrix
+
+    def add_link(self, edge: Link):
+        self._links.append(edge)
+
+    def _get_transform_chain(self, to_frame: Frame, visited: List[Frame]=None) -> List[Link]:
+        if to_frame is self:
+            return []
+
+
+        if visited is None:
+            visited = [self]
+        else:
+            visited.append(self)
+
+        for link in self._links:
+            child = link.child
+            if child in visited:
+                continue
+
+            try:
+                new_links = child._get_transform_chain(to_frame, visited=visited)
+            except RuntimeError:
+                continue
+            
+            return [link] + new_links
+
+
+        raise RuntimeError(
+                "Did not find a transformation chain to the target frame found."
+            )
+
+
+class FixedLink(Link):
+    def __init__(self, parent: Frame, child: Frame, transformation:Callable[[ArrayLike], np.array], **kwargs):
+        super().__init__(parent, child, **kwargs)
+
+        self._transform = transformation
+
+        mapped_basis = list()
+        for basis in np.eye(parent.ndim):
+            mapped_basis.append(transformation(basis))
+        
+        self._tf_matrix = np.column_stack(mapped_basis)
+
+    def transform(self, x: ArrayLike) -> np.array:
+        return self._transform(x)
+
+    @property
+    def transformation(self) -> np.array:
+        return self._tf_matrix
 
 
 def transform(new_frame: np.array) -> np.array:
