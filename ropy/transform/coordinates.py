@@ -209,7 +209,32 @@ class Frame:
 
 
 class FixedLink(Link):
+    """ A link representing a fixed transformation.
+
+    A fixed link has no parameters and remains constant after it has been
+    initialized.
+
+    Methods
+    -------
+    FixedLink(parent, child, transformation)
+        Initialize a new fixed link. Transformation is a callable that transforms a vector 
+        from the parent frame to the child frame.
+
+    """
+
     def __init__(self, parent: Frame, child: Frame, transformation:Callable[[ArrayLike], np.array], **kwargs):
+        """Initialize a new fixed link.
+
+        Parameters
+        ----------
+        parent : Frame
+            The frame in which vectors are specified.
+        child : Frame
+            The frame into which this link transforms vectors.
+        transfomration : Callable[[ArrayLike], np.array]
+            A callable that takes a vector - in the parent frame - as input and returns the vector in the child frame.
+        """
+
         super().__init__(parent, child, **kwargs)
 
         self._transform = transformation
