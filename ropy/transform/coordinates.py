@@ -82,24 +82,105 @@ class Frame:
         self._links: List[Link] = list()
         self.ndim: int = ndim
 
-    def transform(self, x: ArrayLike, to_frame: Frame, *, _ignore_frames: List[Frame]=None) -> np.array:
+    def transform(self, x: ArrayLike, to_frame: Frame, *, ignore_frames: List[Frame]=None) -> np.array:
+        """ Express the vector x in to_frame.
+
+        Parameters
+        ----------
+        x : ArrayLike
+            A vector expressed in this frame.
+        to_frame : Frame
+            The frame in which x should be expressed.
+        ignore_frames : Frame
+            Any frames that should be ignored when searching for a suitable transformation chain.
+
+        Returns
+        -------
+        x_new : np.array
+            The vector x expressed to_frame.
+
+        Raises
+        ------
+        RuntimeError
+            If no suitable chain of transformations can be found, a RuntimeError is raised.
+
+        """
+
         x_new = x
-        for link in self._get_transform_chain(to_frame, _ignore_frames):
+        for link in self._get_transform_chain(to_frame, ignore_frames):
             x_new = link.transform(x_new)
 
         return x_new
 
-    def get_transformation_matrix(self, to_frame: Frame, *, _ignore_frames: List[Frame]=None) -> np.array:
+    def get_transformation_matrix(self, to_frame: Frame, *, ignore_frames: List[Frame]=None) -> np.array:
+        """ Compute the transformation matrix mapping from this frame into to_frame.
+
+        Parameters
+        ----------
+        to_frame : Frame
+            The frame in which x should be expressed.
+        ignore_frames : Frame
+            Any frames that should be ignored when searching for a suitable transformation chain.
+
+        Returns
+        -------
+        tf_matrix : np.array
+            The matrix describing the transformation.
+
+        Raises
+        ------
+        RuntimeError
+            If no suitable chain of transformations can be found, a RuntimeError is raised.
+
+        """
+
         tf_matrix = np.eye(self.dim)
-        for link in self._get_transform_chain(to_frame, _ignore_frames):
+        for link in self._get_transform_chain(to_frame, ignore_frames):
             tf_matrix = link.transformation @ tf_matrix
 
         return tf_matrix
 
-    def add_link(self, edge: Link):
+    def add_link(self, edge: Link) -> None:
+        """ Add an edge to the frame graph.
+
+        The edge is directional and points from this frame to another (possibliy identical) frame.
+
+        Parameters
+        ----------
+        edge : Link
+            The transformation to add to the graph.
+
+        Raises
+        ------
+        ValueError
+            If the edge doesn't have this frame as parent.
+
+        """
+
+        if not edge.parent is self:
+            raise ValueError("Can not add edge. This frame is not the edge's parent.")
         self._links.append(edge)
 
     def _get_transform_chain(self, to_frame: Frame, visited: List[Frame]=None) -> List[Link]:
+        """ Find a chain of transformations from this frame to to_frame.
+
+        This function performs a recursive depth-first search on the frame graph defined by this
+        frame and its (recursively) connected links. Previously visited frames are pruned to avoid
+        cycles.
+
+        Parameters
+        ----------
+        to_frame : Frame
+            The frame to reach.
+        visited : List[Frame]
+            The frames that were already checked
+
+        Returns
+        -------
+        chain : List[Link]
+            A list of links that can transform from this frame to to_frame.
+
+        """
         if to_frame is self:
             return []
 
