@@ -24,7 +24,7 @@ from .base import (
     scale
 )
 
-from .coordinates import transform, inverse_transform, transform_between
+from .coordinates import (transform, inverse_transform, transform_between, Frame, Link, FixedLink)
 
 from .projections import perspective_frustum
 
@@ -41,5 +41,8 @@ __all__ = [
     "rotate",
     "reflect",
     "shear",
-    "scale"
+    "scale",
+    "Frame",
+    "Link",
+    "FixedLink"
 ]

@@ -134,7 +134,7 @@ class Frame:
 
         """
 
-        tf_matrix = np.eye(self.dim)
+        tf_matrix = np.eye(self.ndim + 1)
         for link in self._get_transform_chain(to_frame, ignore_frames):
             tf_matrix = link.transformation @ tf_matrix
 
@@ -204,7 +204,7 @@ class Frame:
 
 
         raise RuntimeError(
-                "Did not find a transformation chain to the target frame found."
+                "Did not find a transformation chain to the target frame."
             )
 
 
@@ -222,7 +222,7 @@ class FixedLink(Link):
 
     """
 
-    def __init__(self, parent: Frame, child: Frame, transformation:Callable[[ArrayLike], np.array], **kwargs):
+    def __init__(self, parent: Frame, child: Frame, transformation:Callable[[ArrayLike], np.array]):
         """Initialize a new fixed link.
 
         Parameters
@@ -235,15 +235,23 @@ class FixedLink(Link):
             A callable that takes a vector - in the parent frame - as input and returns the vector in the child frame.
         """
 
-        super().__init__(parent, child, **kwargs)
+        super().__init__(parent, child)
 
         self._transform = transformation
 
         mapped_basis = list()
         for basis in np.eye(parent.ndim):
             mapped_basis.append(transformation(basis))
+
+        offset = transformation(np.zeros(parent.ndim))
+        import pdb; pdb.set_trace()
         
-        self._tf_matrix = np.column_stack(mapped_basis)
+        tf_matrix = np.column_stack(mapped_basis) - offset[:, None]
+
+        self._tf_matrix = np.zeros((child.ndim + 1, parent.ndim + 1))
+        self._tf_matrix[:-1, :-1] = tf_matrix
+        self._tf_matrix[:-1, -1] = offset
+        self._tf_matrix[-1, -1] = 1
 
     def transform(self, x: ArrayLike) -> np.array:
         return self._transform(x)
@@ -251,6 +259,35 @@ class FixedLink(Link):
     @property
     def transformation(self) -> np.array:
         return self._tf_matrix
+
+
+class RotationalJoint(Link):
+    def __init__(self, parent: Frame, child: Frame, u: ArrayLike, v: ArrayLike):
+        super().__init__(parent, child)
+
+        u = np.asarray(u)
+        v = np.asarray(v)
+
+        u_normal = u / np.linalg.norm(u)
+        v_normal = v / np.linalg.norm(v)
+
+        self._angle = 2* np.arctran2(np.abs(u_normal + v_normal), np.abs(u_normal - v_normal))
+        self._u = u_normal
+        self._v = v_normal
+
+    def transform(self, x: ArrayLike) -> np.array:
+        return rotate(x, self._u, self._v)
+
+    @property
+    def angle(self):
+        return self._angle
+
+    @angle.setter
+    def angle(self, angle):
+        raise NotImplementedError
+
+        self._angle = angle
+        self._v = some_vector
 
 
 def transform(new_frame: np.array) -> np.array:
