@@ -18,6 +18,8 @@ def test_1d_robot():
     tool_frame.add_link(arm)
     ellbow_frame.add_link(rtf.affine.Inverse(arm))
 
+    assert np.allclose(arm.direction, (1, 0))
+
     joint.angle = 0
     tool_pos = tool_frame.transform((0, 0), to_frame=world_frame)
     assert np.allclose(tool_pos, (1, 0))

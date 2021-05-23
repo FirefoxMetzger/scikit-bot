@@ -128,6 +128,29 @@ class Fixed(AffineLink):
 
 
 class PlanarRotation(AffineLink):
+    """A link representing a planar rotation.
+
+    The plane of rotation is described by the two vectors (u, v). The initial
+    angle of rotation is twice the angle between u and v (measured from u to v)
+    and can be modified by setting the angle explicitly, e.g. ``link.angle =
+    np.pi``. The angle is measured in radians.
+
+    Attributes
+    ----------
+    angle : float
+        The amount (in radians) to rotate. A positive angle rotates u towards v.
+
+    Methods
+    -------
+    PlanarRotation(parent, child, u, v)
+        Create a new link that rotates a vector in the u-v-plane.
+
+    Notes
+    -----
+    This class implements __inverse_transform__, so you can get a syncronized inverse
+    link via ``inverse_link = ropy.transform.affine.Inverse(link)``.
+    """
+
     def __init__(self, parent: Frame, child: Frame, u: ArrayLike, v: ArrayLike) -> None:
         super(AffineLink, self).__init__(parent, child)
 
@@ -164,8 +187,35 @@ class PlanarRotation(AffineLink):
 
 
 class Translation(AffineLink):
+    """A link representing a translation.
+
+    Attributes
+    ----------
+    direction : np.ndarray
+        The direction in which vectors are translated.
+
+    Methods
+    -------
+    Translation(parent, child, direction)
+        Create a new link that translates vectors in the given direction
+
+    Notes
+    -----
+    This class implements __inverse_transform__, so you can get a syncronized inverse
+    link via ``inverse_link = ropy.transform.affine.Inverse(link)``.
+
+    """
+
     def __init__(self, parent: Frame, child: Frame, direction: ArrayLike) -> None:
         super().__init__(parent, child)
+        self.direction = direction
+
+    @property
+    def direction(self) -> np.ndarray:
+        return self._offset
+
+    @direction.setter
+    def direction(self, direction: ArrayLike) -> None:
         self._offset = np.asarray(direction)
 
         self._update_transformation_matrix()
