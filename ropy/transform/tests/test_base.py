@@ -8,7 +8,7 @@ def test_missing_tf_matrix():
     camera_frame = rtf.Frame(3)
 
     link = rtf.affine.Fixed(world_frame, camera_frame, lambda x: x)
-    
+
     with pytest.raises(ValueError):
         rtf.affine.Inverse(link)
 
@@ -20,7 +20,6 @@ def test_chain_resolution():
         # "degenerate" links that track path cost
         link = rtf.affine.Fixed(frames[idxA], frames[idxB], lambda x: x + 1)
         frames[idxA].add_link(link)
-
 
     def undirectional(idxA, idxB):
         directional(idxA, idxB)
@@ -46,7 +45,6 @@ def test_chain_resolution():
     # no path exists
     with pytest.raises(RuntimeError):
         frames[1].transform((0), frames[9])
-
 
     cost = frames[0].transform(0, frames[7], ignore_frames=[frames[5]])
     assert cost == 3

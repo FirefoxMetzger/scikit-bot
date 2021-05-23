@@ -54,12 +54,11 @@ def test_matrix_identity():
     assert np.allclose(link_mat @ link_inv_mat, np.eye(4))
     assert np.allclose(link_inv_mat @ link_mat, np.eye(4))
 
-    link.angle = np.pi/2
-    assert link.angle == np.pi/2
+    link.angle = np.pi / 2
+    assert link.angle == np.pi / 2
 
     link_mat = world_frame.get_transformation_matrix(camera_frame)
     link_inv_mat = camera_frame.get_transformation_matrix(world_frame)
 
     assert np.allclose(link_mat @ link_inv_mat, np.eye(4))
     assert np.allclose(link_inv_mat @ link_mat, np.eye(4))
-

@@ -9,8 +9,13 @@ import pytest
         ((1, 1), (0, 1), (1, 0), (1, 2)),
         ((1, 1, 0), (0, 0, 1), (1, 0, 0), (1, 1, 1)),
         ((1, 1, 0), (0, 0, 1), (1, 1, 0), (1, 1, 2)),
-        ((1, 1, 1, 0, 0, 0), (0, 0, 0, 0, 1, 1), (1, 1, 0, 0, 0, 0), (1, 1, 1, 0, 2, 2))
-    ]
+        (
+            (1, 1, 1, 0, 0, 0),
+            (0, 0, 0, 0, 1, 1),
+            (1, 1, 0, 0, 0, 0),
+            (1, 1, 1, 0, 2, 2),
+        ),
+    ],
 )
 def test_shear(vector, direction, amount, expected):
     result = rtf.shear(vector, direction, amount)
@@ -22,8 +27,8 @@ def test_shear(vector, direction, amount, expected):
     [
         ((1, 1), (1, 2), (1, 2)),
         ((1, 1, 0), (1, 2, 3), (1, 2, 0)),
-        ((1, 1, 1, 0, 0, 0), (0, 0, 0, 0, 1, 1), (0, 0, 0, 0, 0, 0))
-    ]
+        ((1, 1, 1, 0, 0, 0), (0, 0, 0, 0, 1, 1), (0, 0, 0, 0, 0, 0)),
+    ],
 )
 def test_scale(vector, scalar, expected):
     result = rtf.scale(vector, scalar)
