@@ -54,6 +54,6 @@ def test_invalid_parent():
     frames = [rtf.Frame(1) for _ in range(2)]
 
     link = rtf.affine.Fixed(frames[0], frames[1], lambda x: x)
-    
+
     with pytest.raises(ValueError):
         frames[1].add_link(link)

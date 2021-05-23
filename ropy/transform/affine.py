@@ -183,5 +183,5 @@ __all__ = [
     "Translation",
     "PlanarRotation",
     "Fixed",
-    "Inverse"
+    "Inverse",
 ]

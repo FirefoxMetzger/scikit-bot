@@ -41,7 +41,6 @@ def test_inverse_transform():
     assert np.allclose(result, (1, 0, 0))
 
 
-
 def test_matrix_identity():
     world_frame = rtf.Frame(3)
     camera_frame = rtf.Frame(3)

@@ -417,10 +417,9 @@ __all__ = [
     "Frame",
     "Link",
     "InverseLink",
-
     # legacy methods (to be refactored)
     "homogenize",
     "cartesianize",
     "normalize_scale",
-    "rotation_matrix"
+    "rotation_matrix",
 ]
