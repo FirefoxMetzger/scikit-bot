@@ -22,8 +22,8 @@ common) transformations, e.g. `ropy.transform.reflect`.
 Examples
 --------
 
-
 Manual construction of a 1D robot arm
+
 >>> import ropy.transform as rtf
 >>> import numpy as np
 >>> # define the frames
