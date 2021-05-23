@@ -4,59 +4,33 @@ from numpy.typing import ArrayLike
 
 
 def scale(vector: ArrayLike, scalar: ArrayLike) -> np.ndarray:
-    """Scale each dimension of a homogeneous vector individually.
+    """Scale each dimension of a vector.
 
-    Multiplies each dimension of the homogeneous vector ``vector`` with
-    the matching dimension of the cartesian vector ``scalar``. If necessary,
-    ``scalar`` will be broadcasted.
+    Multiplies each dimension of ``vector`` with the matching dimension of
+    ``scalar``. If necessary, ``scalar`` will be broadcasted.
 
     Parameters
     ----------
     vector : ArrayLike
-        A homogeneous vector to be scaled.
+        A vector to be scaled.
     scalar : ArrayLike
-        A cartesian vector representing the amount by which to scale each dimension.
+        A vector representing the amount by which to scale each dimension.
 
     Returns
     -------
     scaled : ArrayLike
-        A homogeneous vector where each dimension is scaled by scalar.
+        A vector where each dimension is scaled by scalar.
+
+    Notes
+    -----
+    Exists for completeness. It may be cleaner to simply write
+    ``vector * direction`` instead.
 
     """
     vector = np.asarray(vector)
+    scalar = np.asarray(scalar)
 
-    scaled = vector
-    scaled[:-1] *= scalar
-
-    return scaled
-
-
-def scale_uniform(vector: ArrayLike, scalar: float) -> np.ndarray:
-    """Scale a homogeneous vector by a scalar.
-
-    Multiplies the scale portion of the homogeneous vector by scalar.
-    This is faster (and potentially more accurate) than ``scale`` if each
-    dimension is scaled by the same amount.
-
-    Parameters
-    ----------
-    vector : ArrayLike
-        A homogeneous vector to be scaled.
-    scalar : float
-        The amount by which to scale.
-
-    Returns
-    -------
-    scaled : ArrayLike
-        A homogeneous vector where each dimension is scaled by scalar.
-
-    """
-    vector = np.asarray(vector)
-
-    scaled = vector
-    scaled[-1] *= scalar
-
-    return scaled
+    return scalar * vector
 
 
 def translate(vector: ArrayLike, direction: ArrayLike) -> np.ndarray:
