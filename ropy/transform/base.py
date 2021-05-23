@@ -217,10 +217,45 @@ class Link:
         """
         raise NotImplementedError
 
-    @property
-    def transformation(self) -> np.ndarray:
-        """The transformation matrix mapping the parent to the child frame."""
+    def __inverse_transform__(self, x: ArrayLike) -> np.ndarray:
+        """Transform x (given in the child frame) into the parent frame.
+        
+        Parameters
+        ----------
+        x : ArrayLike
+            The vector expressed in the childs's frame
+
+        Returns
+        -------
+        y : ArrayLike
+            The vector expressed in the parents's frame
+
+        """
         raise NotImplementedError
+
+
+class InverseLink(Link):
+    """A link between two frames based on the inverse of an existing Link.
+
+    This class can be constructed from any link that implements
+    __inverse_transform__. It is a tight wrapper around the original link and
+    shares any parameters. Accordingly, if the original link updates, so will
+    this link.
+    
+    """
+
+    def __init__(self, link: Link) -> None:
+        try:
+            link.__inverse_transform__(np.zeros(link.child.ndim))
+        except NotImplementedError:
+            raise ValueError("Link doesn't implement __inverse_transform__.") from None
+
+        super().__init__(link.child, link.parent)
+
+        self._forward_link = link
+
+    def transform(self, x: ArrayLike) -> np.ndarray:
+        return self._forward_link.__inverse_transform__(x)
 
 
 class Frame:

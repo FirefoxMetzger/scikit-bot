@@ -3,9 +3,9 @@ from typing import Callable
 import numpy as np
 import math
 
-from .coordinates import Frame, Link
+from .base import Frame, Link, InverseLink
 from ._utils import vector_project, angle_between
-from .base import translate, rotate
+from .functions import translate, rotate
 
 
 class AffineLink(Link):
@@ -33,27 +33,57 @@ class AffineLink(Link):
         super().__init__(parent, child)
 
         self._tf_matrix = None
+        self._inverse_tf_matrix = None
+
 
     @property
     def transformation(self) -> np.ndarray:
+        """The transformation matrix mapping the parent to the child frame."""
         if self._tf_matrix is None:
             raise RuntimeError("Transformation Matrix not initialized.")
 
         return self._tf_matrix
 
-    def _update_transformation_matrix(self):
+    @property
+    def _inverse_transformation(self) -> np.ndarray:
+        """The inverse transformation matrix mapping the child to the parent frame."""
+        raise NotImplementedError
+
+    def _update_transformation_matrix(self) -> None:
         mapped_basis = list()
         for basis in np.eye(self.parent.ndim):
             mapped_basis.append(self.transform(basis))
-
         offset = self.transform(np.zeros(self.parent.ndim))
         
-        tf_matrix = np.column_stack(mapped_basis) - offset[:, None]
-
         self._tf_matrix = np.zeros((self.child.ndim + 1, self.parent.ndim + 1))
-        self._tf_matrix[:-1, :-1] = tf_matrix
+        self._tf_matrix[:-1, :-1] = np.column_stack(mapped_basis) - offset[:, None]
         self._tf_matrix[:-1, -1] = offset
         self._tf_matrix[-1, -1] = 1
+
+    def _update_inverse_transformation_matrix(self) -> None:
+        mapped_basis = list()
+        for basis in np.eye(self.child.ndim):
+            mapped_basis.append(self.__inverse_transform__(basis))
+        offset = self.__inverse_transform__(np.zeros(self.child.ndim))
+
+        self._inverse_tf_matrix = np.zeros((self.child.ndim + 1, self.parent.ndim + 1))
+        self._inverse_tf_matrix[:-1, :-1] = np.column_stack(mapped_basis) - offset[:, None]
+        self._inverse_tf_matrix[:-1, -1] = offset
+        self._inverse_tf_matrix[-1, -1] = 1
+
+
+class Inverse(InverseLink):
+    def __init__(self, link: AffineLink) -> None:
+        super().__init__(link)
+        self._forward_link: AffineLink
+
+    @property
+    def transformation(self) -> np.ndarray:
+        """The transformation matrix mapping the parent to the child frame."""
+        if self._forward_link._inverse_tf_matrix is None:
+            raise RuntimeError("Inverse transformation matrix not initialized.")
+
+        return self._forward_link._inverse_tf_matrix
 
 
 class Fixed(AffineLink):
@@ -67,6 +97,10 @@ class Fixed(AffineLink):
     Fixed(parent, child, transformation)
         Initialize a new affine link. ``transformation`` is a callable that
         transforms a vector from the parent frame to the child frame.
+
+    Notes
+    -----
+    This function does not implement __inverse_transform__.
 
     """
 
@@ -82,10 +116,12 @@ class Fixed(AffineLink):
         transfomration : Callable[[ArrayLike], np.ndarray]
             A callable that takes a vector - in the parent frame - as input and
             returns the vector in the child frame.
+
         """
 
         super().__init__(parent, child)
         self._transform = transformation
+        self._update_transformation_matrix()
 
     def transform(self, x: ArrayLike) -> np.ndarray:
         return self._transform(x)
@@ -100,18 +136,20 @@ class PlanarRotation(AffineLink):
 
         self._u = u
         self._v = v
-        self._angle = 2* angle_between(u, v)
+        self._angle = 2 * angle_between(u, v)
 
-        u_orthogonal = u - vector_project(u, v)
+        u_orthogonal = v - vector_project(v, u)
         self._u_ortho = u_orthogonal / np.linalg.norm(u_orthogonal)
+
+        self._update_transformation_matrix()
+        self._update_inverse_transformation_matrix()
         
 
     def transform(self, x: ArrayLike) -> np.ndarray:
         return rotate(x, self._u, self._v)
 
-    @property
-    def transformation(self) -> np.ndarray:
-        return super().transformation
+    def __inverse_transform__(self, x: ArrayLike) -> np.ndarray:
+        return rotate(x, self._v, self._u)
 
     @property
     def angle(self):
@@ -120,4 +158,22 @@ class PlanarRotation(AffineLink):
     @angle.setter
     def angle(self, angle):
         self._angle = angle
-        self._v = math.cos(angle)*self._u + math.sin(angle) * self._u_ortho
+        self._v = math.cos(angle/2)*self._u + math.sin(angle/2) * self._u_ortho
+
+        self._update_transformation_matrix()
+        self._update_inverse_transformation_matrix()
+
+
+class Translation(AffineLink):
+    def __init__(self, parent: Frame, child: Frame, direction: ArrayLike) -> None:
+        super().__init__(parent, child)
+        self._offset = np.asarray(direction)
+
+        self._update_transformation_matrix()
+        self._update_inverse_transformation_matrix()
+
+    def transform(self, x: ArrayLike) -> np.ndarray:
+        return translate(x, self._offset)
+
+    def __inverse_transform__(self, x: ArrayLike) -> np.ndarray:
+        return translate(x, - self._offset)
