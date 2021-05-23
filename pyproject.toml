@@ -11,3 +11,9 @@ build-backend = "setuptools.build_meta"
         "./ropy/ignition/messages.py",
         "*tests*"
     ]
+
+    exclude_lines = [
+        "pragma: no cover",
+        "raise NotImplementedError"
+    ]
+        

@@ -6,7 +6,7 @@ import numpy as np
 from .coordinates import transform
 
 
-def perspective_frustum(hfov: float, image_shape: Tuple[int, int]) -> np.array:
+def perspective_frustum(hfov: float, image_shape: Tuple[int, int]) -> np.ndarray:
     """Compute a projection matrix (3D -> 2D) from a viewing frustum.
 
     Given a perspective camera system with known horizontal vield of view
@@ -39,7 +39,7 @@ def perspective_frustum(hfov: float, image_shape: Tuple[int, int]) -> np.array:
 
     Returns
     -------
-    projection_matrix : np.array
+    projection_matrix : np.ndarray
         The matrix describing the projection.
 
     Notes

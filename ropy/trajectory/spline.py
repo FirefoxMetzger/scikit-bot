@@ -13,7 +13,7 @@ def spline_trajectory(
     t_min: float = 0,
     t_max: float = 1,
     derivative: int = 0,
-) -> np.array:
+) -> np.ndarray:
     """Evaluate the trajectory given by control_points at t using B-spline
     interpolation.
 
@@ -28,16 +28,16 @@ def spline_trajectory(
 
     Parameters
     ----------
-    t : np.array
+    t : np.ndarray
         An array containing positions at which to evaluate the trajectory.
         Elements of ``t`` must be within ``[t_min, t_max]``.
-    control_points : np.array
+    control_points : np.ndarray
         A batch of control points used to construct the trajectory. The first
         dimension of the array is interpreted as batch dimension and the
         remaining dimensions are used to interpolate between. By default,
         control points are equally spaced within ``[t_min, t_max]`` unless
         ``t_control`` is given explicitly.
-    t_control : np.array, None
+    t_control : np.ndarray, None
         A sequence of strictly increasing floats determining the position of the
         control points along the trajectory. None by default, which results in
         an equidistant spacing of points.
@@ -59,7 +59,7 @@ def spline_trajectory(
 
     Returns
     -------
-    position : np.array
+    position : np.ndarray
         The value of the trajectory at ``t``.
 
     Notes
