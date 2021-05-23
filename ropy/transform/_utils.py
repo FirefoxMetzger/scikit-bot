@@ -28,13 +28,14 @@ def angle_between(a: ArrayLike, b: ArrayLike) -> float:
     a = np.linalg.norm(a)
     b = np.linalg.norm(b)
 
-    if a >= b:
-        flipped = 1
-    else:
-        flipped = -1
+    flipped = 1
+
+    if a < b:
+        flipped *= -1
         a, b = b, a
 
     if c > b:
+        flipped *= -1
         mu = b - (a - c)
     else:
         mu = c - (a - b)
