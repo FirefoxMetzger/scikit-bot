@@ -4,7 +4,7 @@ from numpy.core.records import array
 from numpy.typing import ArrayLike
 
 
-def homogenize(vector: np.array) -> np.array:
+def homogenize(vector: ArrayLike) -> np.ndarray:
     """Convert a vector from cartesian coordinates into homogeneous coordinates.
 
     Parameters
@@ -36,7 +36,7 @@ def homogenize(vector: np.array) -> np.array:
     return homogeneous_vector
 
 
-def cartesianize(vector: np.array) -> np.array:
+def cartesianize(vector: ArrayLike) -> np.ndarray:
     """Convert a vector from homogeneous coordinates to cartesian coordinates.
 
     Parameters
@@ -71,7 +71,7 @@ def cartesianize(vector: np.array) -> np.array:
     return vector[..., :-1] / vector[..., -1]
 
 
-def normalize_scale(vector: np.array) -> np.array:
+def normalize_scale(vector: ArrayLike) -> np.ndarray:
     """Return an equivalent homogeneous vector with scale set to 1.
 
     Parameters
@@ -105,7 +105,7 @@ def normalize_scale(vector: np.array) -> np.array:
     return vector / vector[-1]
 
 
-def rotation_matrix(angle: float, u: np.array, v: np.array) -> np.array:
+def rotation_matrix(angle: float, u: ArrayLike, v: ArrayLike) -> np.ndarray:
     """Return a rotation matrix to rotate by angle in the plane span by u and v.
 
     The function creates a N-dimensional rotation matrix that rotates a point by
@@ -174,7 +174,7 @@ def rotation_matrix(angle: float, u: np.array, v: np.array) -> np.array:
     return homogeneous_rotation
 
 
-def scale(vector: ArrayLike, scalar: ArrayLike) -> np.array:
+def scale(vector: ArrayLike, scalar: ArrayLike) -> np.ndarray:
     """Scale each dimension of a homogeneous vector individually.
 
     Multiplies each dimension of the homogeneous vector ``vector`` with
@@ -202,7 +202,7 @@ def scale(vector: ArrayLike, scalar: ArrayLike) -> np.array:
     return scaled
 
 
-def scale_uniform(vector: ArrayLike, scalar: float):
+def scale_uniform(vector: ArrayLike, scalar: float) -> np.ndarray:
     """Scale a homogeneous vector by a scalar.
 
     Multiplies the scale portion of the homogeneous vector by scalar.
@@ -230,7 +230,7 @@ def scale_uniform(vector: ArrayLike, scalar: float):
     return scaled
 
 
-def translate(vector: ArrayLike, direction: ArrayLike) -> np.array:
+def translate(vector: ArrayLike, direction: ArrayLike) -> np.ndarray:
     """Translate a vector along direction.
 
     Parameters
@@ -255,7 +255,7 @@ def translate(vector: ArrayLike, direction: ArrayLike) -> np.array:
     return vector + direction
 
 
-def rotate(vector: ArrayLike, u: ArrayLike, v: ArrayLike) -> np.array:
+def rotate(vector: ArrayLike, u: ArrayLike, v: ArrayLike) -> np.ndarray:
     """Rotate a vector in the u,v plane.
 
     Rotates a vector by reflecting it twice. The plane of rotation
@@ -295,7 +295,7 @@ def rotate(vector: ArrayLike, u: ArrayLike, v: ArrayLike) -> np.array:
     return reflect(reflect(vector, u), v)
 
 
-def reflect(vector: ArrayLike, direction: ArrayLike) -> np.array:
+def reflect(vector: ArrayLike, direction: ArrayLike) -> np.ndarray:
     """Reflect a vector along a line defined by direction.
 
     Parameters
@@ -326,7 +326,7 @@ def reflect(vector: ArrayLike, direction: ArrayLike) -> np.array:
     )
 
 
-def shear(vector: ArrayLike, direction: ArrayLike, amount: ArrayLike) -> np.array:
+def shear(vector: ArrayLike, direction: ArrayLike, amount: ArrayLike) -> np.ndarray:
     """Displaces a vector along direction by the scalar product of vector and amount.
 
     A shear displaces a vector in a fixed direction by the vector's scalar
