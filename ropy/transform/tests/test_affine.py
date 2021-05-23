@@ -1,3 +1,4 @@
+import pytest
 import ropy.transform as rtf
 import numpy as np
 
@@ -36,3 +37,29 @@ def test_fixed_link():
 
     frame1.add_link(rtf.affine.Fixed(frame1, frame2, lambda x: np.asarray(x) + 3))
     frame2.add_link(rtf.affine.Fixed(frame2, frame3, flip_projection))
+
+
+def test_matrix_identity():
+    world_frame = rtf.Frame(3)
+    camera_frame = rtf.Frame(3)
+
+    link = rtf.affine.PlanarRotation(world_frame, camera_frame, (0, 1, 0), (0, 0, 1))
+    inv_link = rtf.affine.Inverse(link)
+    world_frame.add_link(link)
+    camera_frame.add_link(inv_link)
+
+    link_mat = world_frame.get_transformation_matrix(camera_frame)
+    link_inv_mat = camera_frame.get_transformation_matrix(world_frame)
+
+    assert np.allclose(link_mat @ link_inv_mat, np.eye(4))
+    assert np.allclose(link_inv_mat @ link_mat, np.eye(4))
+
+    link.angle = np.pi/2
+    assert link.angle == np.pi/2
+
+    link_mat = world_frame.get_transformation_matrix(camera_frame)
+    link_inv_mat = camera_frame.get_transformation_matrix(world_frame)
+
+    assert np.allclose(link_mat @ link_inv_mat, np.eye(4))
+    assert np.allclose(link_inv_mat @ link_mat, np.eye(4))
+

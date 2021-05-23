@@ -38,9 +38,6 @@ class AffineLink(Link):
     @property
     def transformation(self) -> np.ndarray:
         """The transformation matrix mapping the parent to the child frame."""
-        if self._tf_matrix is None:
-            raise RuntimeError("Transformation Matrix not initialized.")
-
         return self._tf_matrix
 
     @property
@@ -81,9 +78,6 @@ class Inverse(InverseLink):
     @property
     def transformation(self) -> np.ndarray:
         """The transformation matrix mapping the parent to the child frame."""
-        if self._forward_link._inverse_tf_matrix is None:
-            raise RuntimeError("Inverse transformation matrix not initialized.")
-
         return self._forward_link._inverse_tf_matrix
 
 
