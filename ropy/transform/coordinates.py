@@ -7,7 +7,6 @@ from numpy.typing import ArrayLike
 from .base import rotation_matrix
 
 
-
 def transform(new_frame: ArrayLike) -> np.ndarray:
     """Compute the homogeneous transformation matrix from the current coordinate
     system into a new coordinate system.

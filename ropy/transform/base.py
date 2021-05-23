@@ -219,7 +219,7 @@ class Link:
 
     def __inverse_transform__(self, x: ArrayLike) -> np.ndarray:
         """Transform x (given in the child frame) into the parent frame.
-        
+
         Parameters
         ----------
         x : ArrayLike
@@ -241,7 +241,7 @@ class InverseLink(Link):
     __inverse_transform__. It is a tight wrapper around the original link and
     shares any parameters. Accordingly, if the original link updates, so will
     this link.
-    
+
     """
 
     def __init__(self, link: Link) -> None:
@@ -284,8 +284,10 @@ class Frame:
         self._links: List[Link] = list()
         self.ndim: int = ndim
 
-    def transform(self, x: ArrayLike, to_frame: Frame, *, ignore_frames: List[Frame]=None) -> np.ndarray:
-        """ Express the vector x in to_frame.
+    def transform(
+        self, x: ArrayLike, to_frame: Frame, *, ignore_frames: List[Frame] = None
+    ) -> np.ndarray:
+        """Express the vector x in to_frame.
 
         Parameters
         ----------
@@ -314,8 +316,10 @@ class Frame:
 
         return x_new
 
-    def get_transformation_matrix(self, to_frame: Frame, *, ignore_frames: List[Frame]=None) -> np.ndarray:
-        """ Compute the transformation matrix mapping from this frame into to_frame.
+    def get_transformation_matrix(
+        self, to_frame: Frame, *, ignore_frames: List[Frame] = None
+    ) -> np.ndarray:
+        """Compute the transformation matrix mapping from this frame into to_frame.
 
         Parameters
         ----------
@@ -343,7 +347,7 @@ class Frame:
         return tf_matrix
 
     def add_link(self, edge: Link) -> None:
-        """ Add an edge to the frame graph.
+        """Add an edge to the frame graph.
 
         The edge is directional and points from this frame to another (possibliy identical) frame.
 
@@ -363,8 +367,10 @@ class Frame:
             raise ValueError("Can not add edge. This frame is not the edge's parent.")
         self._links.append(edge)
 
-    def _get_transform_chain(self, to_frame: Frame, visited: List[Frame]=None) -> List[Link]:
-        """ Find a chain of transformations from this frame to to_frame.
+    def _get_transform_chain(
+        self, to_frame: Frame, visited: List[Frame] = None
+    ) -> List[Link]:
+        """Find a chain of transformations from this frame to to_frame.
 
         This function performs a recursive depth-first search on the frame graph defined by this
         frame and its (recursively) connected links. Previously visited frames are pruned to avoid
@@ -386,7 +392,6 @@ class Frame:
         if to_frame is self:
             return []
 
-
         if visited is None:
             visited = [self]
         else:
@@ -401,11 +406,7 @@ class Frame:
                 new_links = child._get_transform_chain(to_frame, visited=visited)
             except RuntimeError:
                 continue
-            
+
             return [link] + new_links
 
-
-        raise RuntimeError(
-                "Did not find a transformation chain to the target frame."
-            )
-
+        raise RuntimeError("Did not find a transformation chain to the target frame.")

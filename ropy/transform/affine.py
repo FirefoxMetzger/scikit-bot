@@ -35,7 +35,6 @@ class AffineLink(Link):
         self._tf_matrix = None
         self._inverse_tf_matrix = None
 
-
     @property
     def transformation(self) -> np.ndarray:
         """The transformation matrix mapping the parent to the child frame."""
@@ -54,7 +53,7 @@ class AffineLink(Link):
         for basis in np.eye(self.parent.ndim):
             mapped_basis.append(self.transform(basis))
         offset = self.transform(np.zeros(self.parent.ndim))
-        
+
         self._tf_matrix = np.zeros((self.child.ndim + 1, self.parent.ndim + 1))
         self._tf_matrix[:-1, :-1] = np.column_stack(mapped_basis) - offset[:, None]
         self._tf_matrix[:-1, -1] = offset
@@ -67,7 +66,9 @@ class AffineLink(Link):
         offset = self.__inverse_transform__(np.zeros(self.child.ndim))
 
         self._inverse_tf_matrix = np.zeros((self.child.ndim + 1, self.parent.ndim + 1))
-        self._inverse_tf_matrix[:-1, :-1] = np.column_stack(mapped_basis) - offset[:, None]
+        self._inverse_tf_matrix[:-1, :-1] = (
+            np.column_stack(mapped_basis) - offset[:, None]
+        )
         self._inverse_tf_matrix[:-1, -1] = offset
         self._inverse_tf_matrix[-1, -1] = 1
 
@@ -87,7 +88,7 @@ class Inverse(InverseLink):
 
 
 class Fixed(AffineLink):
-    """ A link representing a affine transformation.
+    """A link representing a affine transformation.
 
     This link corresponds to a affine transformation of the form ``y = Ax+b``.
     It has no parameters and remains constant after it has been initialized.
@@ -104,7 +105,12 @@ class Fixed(AffineLink):
 
     """
 
-    def __init__(self, parent: Frame, child: Frame, transformation:Callable[[ArrayLike], np.ndarray]) -> None:
+    def __init__(
+        self,
+        parent: Frame,
+        child: Frame,
+        transformation: Callable[[ArrayLike], np.ndarray],
+    ) -> None:
         """Initialize a new affine link.
 
         Parameters
@@ -125,7 +131,7 @@ class Fixed(AffineLink):
 
     def transform(self, x: ArrayLike) -> np.ndarray:
         return self._transform(x)
-   
+
 
 class PlanarRotation(AffineLink):
     def __init__(self, parent: Frame, child: Frame, u: ArrayLike, v: ArrayLike) -> None:
@@ -143,7 +149,6 @@ class PlanarRotation(AffineLink):
 
         self._update_transformation_matrix()
         self._update_inverse_transformation_matrix()
-        
 
     def transform(self, x: ArrayLike) -> np.ndarray:
         return rotate(x, self._u, self._v)
@@ -158,7 +163,7 @@ class PlanarRotation(AffineLink):
     @angle.setter
     def angle(self, angle):
         self._angle = angle
-        self._v = math.cos(angle/2)*self._u + math.sin(angle/2) * self._u_ortho
+        self._v = math.cos(angle / 2) * self._u + math.sin(angle / 2) * self._u_ortho
 
         self._update_transformation_matrix()
         self._update_inverse_transformation_matrix()
@@ -176,4 +181,4 @@ class Translation(AffineLink):
         return translate(x, self._offset)
 
     def __inverse_transform__(self, x: ArrayLike) -> np.ndarray:
-        return translate(x, - self._offset)
+        return translate(x, -self._offset)

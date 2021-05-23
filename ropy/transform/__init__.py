@@ -56,11 +56,11 @@ from .functions import (
     rotate,
     reflect,
     shear,
-    scale
+    scale,
 )
 
-from .coordinates import (transform, inverse_transform, transform_between)
-from . import (affine, coordinates, projections)
+from .coordinates import transform, inverse_transform, transform_between
+from . import affine, coordinates, projections
 from .projections import perspective_frustum
 
 
@@ -70,14 +70,12 @@ __all__ = [
     "affine",
     "coordinates",
     "projections",
-
     # basic transformation functions
     "translate",
     "rotate",
     "reflect",
     "shear",
     "scale",
-
     # legacy functions (to be refactored)
     "homogenize",
     "cartesianize",

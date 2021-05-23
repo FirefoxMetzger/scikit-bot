@@ -11,7 +11,7 @@ def test_1d_robot():
     joint = rtf.affine.PlanarRotation(ellbow_frame, world_frame, (1, 0), (0, 1))
     ellbow_frame.add_link(joint)
     world_frame.add_link(rtf.affine.Inverse(joint))
-    
+
     arm = rtf.affine.Translation(tool_frame, ellbow_frame, (1, 0))
     tool_frame.add_link(arm)
     ellbow_frame.add_link(rtf.affine.Inverse(arm))
@@ -19,8 +19,8 @@ def test_1d_robot():
     joint.angle = 0
     tool_pos = tool_frame.transform((0, 0), to_frame=world_frame)
     assert np.allclose(tool_pos, (1, 0))
-    
-    joint.angle = np.pi/2
+
+    joint.angle = np.pi / 2
     tool_pos = tool_frame.transform((0, 0), to_frame=world_frame)
     assert np.allclose(tool_pos, (0, 1))
 
