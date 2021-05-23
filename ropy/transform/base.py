@@ -410,3 +410,17 @@ class Frame:
             return [link] + new_links
 
         raise RuntimeError("Did not find a transformation chain to the target frame.")
+
+
+__all__ = [
+    # Frame Management
+    "Frame",
+    "Link",
+    "InverseLink",
+
+    # legacy methods (to be refactored)
+    "homogenize",
+    "cartesianize",
+    "normalize_scale",
+    "rotation_matrix"
+]

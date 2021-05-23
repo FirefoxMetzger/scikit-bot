@@ -1,3 +1,4 @@
+from ropy.transform.base import Frame
 import pytest
 import ropy.transform as rtf
 import numpy as np
@@ -26,17 +27,19 @@ def test_1d_robot():
     assert np.allclose(tool_pos, (0, 1))
 
 
-def test_fixed_link():
+def test_inverse_transform():
     frame1 = rtf.Frame(3)
     frame2 = rtf.Frame(3)
-    frame3 = rtf.Frame(2)
 
-    def flip_projection(x):
-        x = np.asarray(x)
-        return np.array([-x[2], x[1]])
+    offset = rtf.affine.Translation(frame1, frame2, (0, 1, 0))
+    frame1.add_link(offset)
+    frame2.add_link(rtf.affine.Inverse(offset))
 
-    frame1.add_link(rtf.affine.Fixed(frame1, frame2, lambda x: np.asarray(x) + 3))
-    frame2.add_link(rtf.affine.Fixed(frame2, frame3, flip_projection))
+    result = frame1.transform((1, 0, 0), to_frame=frame2)
+    assert np.allclose(result, (1, 1, 0))
+    result = frame2.transform(result, to_frame=frame1)
+    assert np.allclose(result, (1, 0, 0))
+
 
 
 def test_matrix_identity():
