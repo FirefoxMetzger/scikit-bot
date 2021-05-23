@@ -102,7 +102,7 @@ def rotate(vector: ArrayLike, u: ArrayLike, v: ArrayLike) -> np.ndarray:
 
     Returns
     -------
-    rotated_vector : np.array
+    rotated_vector : np.ndarray
         The vector rotated in the u-v-plane by two times the angle
         from u to v.
 
@@ -174,7 +174,7 @@ def shear(vector: ArrayLike, direction: ArrayLike, amount: ArrayLike) -> np.ndar
 
     Returns
     -------
-    sheared : np.Array
+    sheared : np.ndarray
         The sheared vector.
 
     Notes
