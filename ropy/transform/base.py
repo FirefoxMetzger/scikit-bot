@@ -1,7 +1,8 @@
-import numpy as np
+from __future__ import annotations  # life's too short for comments
 from math import sin, cos
-from numpy.core.records import array
 from numpy.typing import ArrayLike
+from typing import List
+import numpy as np
 
 
 def homogenize(vector: ArrayLike) -> np.ndarray:
@@ -9,12 +10,12 @@ def homogenize(vector: ArrayLike) -> np.ndarray:
 
     Parameters
     ----------
-    vector : np.array
+    vector : np.ndarray
         The vector to be converted.
 
     Returns
     -------
-    homogeneous_vector : np.array
+    homogeneous_vector : np.ndarray
         The vector in homogeneous coordinates.
 
 
@@ -41,12 +42,12 @@ def cartesianize(vector: ArrayLike) -> np.ndarray:
 
     Parameters
     ----------
-    vector : np.array
+    vector : np.ndarray
         The vector in homogeneous coordinates.
 
     Returns
     -------
-    cartesian_vector : np.array
+    cartesian_vector : np.ndarray
         The vector to be converted.
 
     Examples
@@ -76,12 +77,12 @@ def normalize_scale(vector: ArrayLike) -> np.ndarray:
 
     Parameters
     ----------
-    vector : np.array
+    vector : np.ndarray
         The vector (in homogeneous coordinates) to be scale-normalized.
 
     Returns
     -------
-    vector : np.array
+    vector : np.ndarray
         An equivalent vector with scale component set to 1.
 
     Examples
@@ -120,16 +121,16 @@ def rotation_matrix(angle: float, u: ArrayLike, v: ArrayLike) -> np.ndarray:
     ----------
     angle : float
         The amount (in radians) by which to rotate the plane.
-    u : np.array
+    u : np.ndarray
         The first basis vectors (u,v) spanning the plane of
         rotation. The vector is given in homogeneous coordinates.
-    v : np.array
+    v : np.ndarray
         The second basis vectors (u,v) that span the plane of rotation. The
         vector is given in homogeneous coordinates.
 
     Returns
     -------
-    rotation_matrix : np.array
+    rotation_matrix : np.ndarray
         A matrix representing the rotation in homogeneous coordinates.
 
     Notes
@@ -174,189 +175,202 @@ def rotation_matrix(angle: float, u: ArrayLike, v: ArrayLike) -> np.ndarray:
     return homogeneous_rotation
 
 
-def scale(vector: ArrayLike, scalar: ArrayLike) -> np.ndarray:
-    """Scale each dimension of a homogeneous vector individually.
+class Link:
+    """A directional relationship between two Frames
 
-    Multiplies each dimension of the homogeneous vector ``vector`` with
-    the matching dimension of the cartesian vector ``scalar``. If necessary,
-    ``scalar`` will be broadcasted.
+    An abstract class that describes a transformation from a parent frame into a
+    child frame. Its default use is to express a vector given in the parent
+    frame using the child frame.
 
-    Parameters
+    Properties
     ----------
-    vector : ArrayLike
-        A homogeneous vector to be scaled.
-    scalar : ArrayLike
-        A cartesian vector representing the amount by which to scale each dimension.
+    transformation : np.ndarray
+        A affine matrix describing the transformation from the parent frame to
+        the child frame.
 
-    Returns
+    Methods
     -------
-    scaled : ArrayLike
-        A homogeneous vector where each dimension is scaled by scalar.
+    transform(x)
+        Expresses the vector x (assumed to be given in the parent's frame) in
+        the child's frame.
 
-    """
-    vector = np.asarray(vector)
-
-    scaled = vector
-    scaled[:-1] *= scalar
-
-    return scaled
-
-
-def scale_uniform(vector: ArrayLike, scalar: float) -> np.ndarray:
-    """Scale a homogeneous vector by a scalar.
-
-    Multiplies the scale portion of the homogeneous vector by scalar.
-    This is faster (and potentially more accurate) than ``scale`` if each
-    dimension is scaled by the same amount.
-
-    Parameters
-    ----------
-    vector : ArrayLike
-        A homogeneous vector to be scaled.
-    scalar : float
-        The amount by which to scale.
-
-    Returns
-    -------
-    scaled : ArrayLike
-        A homogeneous vector where each dimension is scaled by scalar.
-
-    """
-    vector = np.asarray(vector)
-
-    scaled = vector
-    scaled[-1] *= scalar
-
-    return scaled
-
-
-def translate(vector: ArrayLike, direction: ArrayLike) -> np.ndarray:
-    """Translate a vector along direction.
-
-    Parameters
-    ----------
-    vector : ArrayLike
-        The vector to be translated.
-    direction : ArrayLike
-        A vector describing the translation.
-
-    Returns
-    -------
-    translated_vector : ArrayLike
-        The translated vector.
-
-    Notes
-    -----
-    Exists for completeness. It may be cleaner to simply write
-    ``vector + direction`` instead.
 
     """
 
-    return vector + direction
+    def __init__(self, parent: Frame, child: Frame) -> None:
+        self.parent: Frame = parent
+        self.child: Frame = child
+
+    def transform(self, x: ArrayLike) -> np.ndarray:
+        """Transform x (given in parent frame) into the child frame.
+
+        Parameters
+        ----------
+        x : ArrayLike
+            The vector expressed in the parent's frame
+
+        Returns
+        -------
+        y : ArrayLike
+            The vector expressed in the child's frame
+
+        """
+        raise NotImplementedError
+
+    @property
+    def transformation(self) -> np.ndarray:
+        """The transformation matrix mapping the parent to the child frame."""
+        raise NotImplementedError
 
 
-def rotate(vector: ArrayLike, u: ArrayLike, v: ArrayLike) -> np.ndarray:
-    """Rotate a vector in the u,v plane.
+class Frame:
+    """A frame representing a coordinate system.
 
-    Rotates a vector by reflecting it twice. The plane of rotation
-    is given by the u-v-plane and the angle of rotation is two times
-    the angle from u to v.
+    Each coordinate frame is a node in a directed graph where edges (type Link)
+    describe transformations between different frames. Its default use is to
+    transform coordinates between different coordinate frames.
 
-    Parameters
-    ----------
-    vector : ArrayLike
-        The vector to be rotated.
-    u : ArrayLike
-        The first of the two axes defining the plane of rotation
-    v : ArrayLike
-        The second of the two axes defining the plane of rotation
-
-    Returns
+    Methods
     -------
-    rotated_vector : np.array
-        The vector rotated in the u-v-plane by two times the angle
-        from u to v.
-
-    Notes
-    -----
-    The angle of rotation is given by the angle between the two vectors that
-    define the plane of rotation. The orientation of the rotation is from u
-    towards v, and the amount of rotation is twice the angle.
-
-    The scale of u and/or v does not influence the rotation.
+    transform(x, to_frame)
+        Express the vector x - assumed to be in this frame - in the coordinate
+        frame to_frame. If it is not possible to find a transformation between
+        this frame and to_frame a RuntimeError will be raised.
+    get_transformation_matrix(to_frame)
+        Computes (and returns) the transformation matrix between this frame
+        and to_frame.
+    add_link(edge)
+        Add a new transformation from this frame to another frame to the list of known
+        transformations.
 
     """
 
-    vector = np.asarray(vector)
-    u = np.asarray(u)
-    v = np.asarray(v)
+    def __init__(self, ndim: int) -> None:
+        self._links: List[Link] = list()
+        self.ndim: int = ndim
 
-    # implemented as rotation by two reflections
-    return reflect(reflect(vector, u), v)
+    def transform(self, x: ArrayLike, to_frame: Frame, *, ignore_frames: List[Frame]=None) -> np.ndarray:
+        """ Express the vector x in to_frame.
+
+        Parameters
+        ----------
+        x : ArrayLike
+            A vector expressed in this frame.
+        to_frame : Frame
+            The frame in which x should be expressed.
+        ignore_frames : Frame
+            Any frames that should be ignored when searching for a suitable transformation chain.
+
+        Returns
+        -------
+        x_new : np.ndarray
+            The vector x expressed to_frame.
+
+        Raises
+        ------
+        RuntimeError
+            If no suitable chain of transformations can be found, a RuntimeError is raised.
+
+        """
+
+        x_new = x
+        for link in self._get_transform_chain(to_frame, ignore_frames):
+            x_new = link.transform(x_new)
+
+        return x_new
+
+    def get_transformation_matrix(self, to_frame: Frame, *, ignore_frames: List[Frame]=None) -> np.ndarray:
+        """ Compute the transformation matrix mapping from this frame into to_frame.
+
+        Parameters
+        ----------
+        to_frame : Frame
+            The frame in which x should be expressed.
+        ignore_frames : Frame
+            Any frames that should be ignored when searching for a suitable transformation chain.
+
+        Returns
+        -------
+        tf_matrix : np.ndarray
+            The matrix describing the transformation.
+
+        Raises
+        ------
+        RuntimeError
+            If no suitable chain of transformations can be found, a RuntimeError is raised.
+
+        """
+
+        tf_matrix = np.eye(self.ndim + 1)
+        for link in self._get_transform_chain(to_frame, ignore_frames):
+            tf_matrix = link.transformation @ tf_matrix
+
+        return tf_matrix
+
+    def add_link(self, edge: Link) -> None:
+        """ Add an edge to the frame graph.
+
+        The edge is directional and points from this frame to another (possibliy identical) frame.
+
+        Parameters
+        ----------
+        edge : Link
+            The transformation to add to the graph.
+
+        Raises
+        ------
+        ValueError
+            If the edge doesn't have this frame as parent.
+
+        """
+
+        if not edge.parent is self:
+            raise ValueError("Can not add edge. This frame is not the edge's parent.")
+        self._links.append(edge)
+
+    def _get_transform_chain(self, to_frame: Frame, visited: List[Frame]=None) -> List[Link]:
+        """ Find a chain of transformations from this frame to to_frame.
+
+        This function performs a recursive depth-first search on the frame graph defined by this
+        frame and its (recursively) connected links. Previously visited frames are pruned to avoid
+        cycles.
+
+        Parameters
+        ----------
+        to_frame : Frame
+            The frame to reach.
+        visited : List[Frame]
+            The frames that were already checked
+
+        Returns
+        -------
+        chain : List[Link]
+            A list of links that can transform from this frame to to_frame.
+
+        """
+        if to_frame is self:
+            return []
 
 
-def reflect(vector: ArrayLike, direction: ArrayLike) -> np.ndarray:
-    """Reflect a vector along a line defined by direction.
+        if visited is None:
+            visited = [self]
+        else:
+            visited.append(self)
 
-    Parameters
-    ----------
-    vector : ArrayLike
-        The vector to be reflected.
-    direction : ArrayLike
-        The direction along which the reflection takes place.
+        for link in self._links:
+            child = link.child
+            if child in visited:
+                continue
 
-    Returns
-    -------
-    reflected_vector : ArrayLike
-        The reflected vector.
-
-    Notes
-    -----
-    The length of direction does not influence the result of the reflection.
-
-    """
-
-    # from: https://en.wikipedia.org/wiki/Reflection_(mathematics)#Reflection_through_a_hyperplane_in_n_dimensions
-    vector = np.asarray(vector)
-    direction = np.asarray(direction)
-
-    return (
-        vector
-        - 2 * np.dot(vector, direction) / np.dot(direction, direction) * direction
-    )
+            try:
+                new_links = child._get_transform_chain(to_frame, visited=visited)
+            except RuntimeError:
+                continue
+            
+            return [link] + new_links
 
 
-def shear(vector: ArrayLike, direction: ArrayLike, amount: ArrayLike) -> np.ndarray:
-    """Displaces a vector along direction by the scalar product of vector and amount.
+        raise RuntimeError(
+                "Did not find a transformation chain to the target frame."
+            )
 
-    A shear displaces a vector in a fixed direction by the vector's scalar
-    projection onto a second vector (amount) scaled by the length of that second
-    vector. If amount and direction are orthogonal, the result is a shear. If
-    amount and direction are parallel, the result is a stretch.
-
-    Parameters
-    ----------
-    vector : ArrayLike
-        The vector to be sheared.
-    direction : ArrayLike
-        The direction along which to apply the shear.
-    amount : ArrayLike
-        The axis that determines the amount to shear by.
-
-    Returns
-    -------
-    sheared : np.Array
-        The sheared vector.
-
-    Notes
-    -----
-    If direction is not normalized the resulting shear factor will be scaled by
-    the length (euclidian norm) of direction.
-
-    """
-
-    vector = np.asarray(vector)
-    direction = np.asarray(direction)
-    amount = np.asarray(amount)
-
-    return vector + np.dot(vector, amount) * direction

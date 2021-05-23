@@ -13,10 +13,15 @@ to cartesian coordinages using ``transform.cartesianize``.
 """
 
 from .base import (
+    Frame,
     homogenize,
     cartesianize,
     normalize_scale,
     rotation_matrix,
+)
+
+from .functions import (
+    # basic transformations
     translate,
     rotate,
     reflect,
@@ -24,12 +29,24 @@ from .base import (
     scale
 )
 
-from .coordinates import (transform, inverse_transform, transform_between, Frame, Link, FixedLink)
-
+from .coordinates import (transform, inverse_transform, transform_between)
+from . import affine
 from .projections import perspective_frustum
 
 
 __all__ = [
+    # Core Classes for Frame Management
+    "Frame"
+    "affine"
+
+    # basic transformation functions
+    "translate",
+    "rotate",
+    "reflect",
+    "shear",
+    "scale",
+
+    # legacy functions (to be refactored)
     "homogenize",
     "cartesianize",
     "transform",
@@ -37,12 +54,4 @@ __all__ = [
     "transform_between",
     "perspective_frustum",
     "rotation_matrix",
-    "translate",
-    "rotate",
-    "reflect",
-    "shear",
-    "scale",
-    "Frame",
-    "Link",
-    "FixedLink"
 ]
