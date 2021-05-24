@@ -157,8 +157,8 @@ class PlanarRotation(AffineLink):
         u = np.asarray(u)
         v = np.asarray(v)
 
-        self._u = u
-        self._v = v
+        self._u = u / np.linalg.norm(u)
+        self._v = v / np.linalg.norm(v)
         self._angle = 2 * angle_between(u, v)
 
         u_orthogonal = v - vector_project(v, u)
@@ -174,11 +174,11 @@ class PlanarRotation(AffineLink):
         return rotate(x, self._v, self._u)
 
     @property
-    def angle(self):
+    def angle(self) -> float:
         return self._angle
 
     @angle.setter
-    def angle(self, angle):
+    def angle(self, angle: float) -> None:
         self._angle = angle
         self._v = math.cos(angle / 2) * self._u + math.sin(angle / 2) * self._u_ortho
 
@@ -206,26 +206,44 @@ class Translation(AffineLink):
 
     """
 
-    def __init__(self, parent: Frame, child: Frame, direction: ArrayLike) -> None:
+    def __init__(
+        self, parent: Frame, child: Frame, direction: ArrayLike, *, amount: float = 1
+    ) -> None:
         super().__init__(parent, child)
-        self.direction = direction
+
+        self._amount = amount
+        self._direction = np.asarray(direction)
+
+        self._update_transformation_matrix()
+        self._update_inverse_transformation_matrix()
 
     @property
     def direction(self) -> np.ndarray:
-        return self._offset
+        return self._direction
 
     @direction.setter
     def direction(self, direction: ArrayLike) -> None:
-        self._offset = np.asarray(direction)
+        self._direction = np.asarray(direction)
+
+        self._update_transformation_matrix()
+        self._update_inverse_transformation_matrix()
+
+    @property
+    def amount(self) -> float:
+        return self._amount
+
+    @amount.setter
+    def amount(self, amount: float) -> None:
+        self._amount = amount
 
         self._update_transformation_matrix()
         self._update_inverse_transformation_matrix()
 
     def transform(self, x: ArrayLike) -> np.ndarray:
-        return translate(x, self._offset)
+        return translate(x, self._amount * self._direction)
 
     def __inverse_transform__(self, x: ArrayLike) -> np.ndarray:
-        return translate(x, -self._offset)
+        return translate(x, -self._amount * self._direction)
 
 
 __all__ = [
