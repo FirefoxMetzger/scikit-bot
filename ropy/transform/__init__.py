@@ -67,6 +67,7 @@ from .projections import perspective_frustum
 __all__ = [
     # Core Classes for Frame Management
     "Frame",
+    "Link",
     "affine",
     "coordinates",
     "projections",
