@@ -44,6 +44,7 @@ Manual construction of a 1D robot arm
 
 from .base import (
     Frame,
+    Link,
     homogenize,
     cartesianize,
     normalize_scale,
