@@ -1,4 +1,3 @@
-from ropy.transform.base import Frame
 import pytest
 import ropy.transform as rtf
 import numpy as np
@@ -66,3 +65,32 @@ def test_matrix_identity():
 
     assert np.allclose(link_mat @ link_inv_mat, np.eye(4))
     assert np.allclose(link_inv_mat @ link_mat, np.eye(4))
+
+
+def test_translation_amount():
+    frameA = rtf.Frame(2)
+    frameB = rtf.Frame(2)
+    point = np.array((0, 1), dtype=np.float_)
+
+    link = rtf.affine.Translation(frameA, frameB, (1, 0))
+    assert link.amount == 1
+
+    frameA.add_link(link)
+
+    point_in_B = np.array((1, 1), dtype=np.float_)
+    assert np.allclose(frameA.transform(point, frameB), point_in_B)
+
+    link.amount = 0
+    assert np.allclose(frameA.transform(point, frameB), point)
+
+
+def test_translation_direction():
+    frameA = rtf.Frame(2)
+    frameB = rtf.Frame(2)
+    point = np.array((0, 1), dtype=np.float_)
+
+    link = rtf.affine.Translation(frameA, frameB, (1, 0))
+    assert np.allclose(link.direction, (1, 0))
+
+    link.direction = (0, 1)
+    assert np.allclose(link.direction, (0, 1))
