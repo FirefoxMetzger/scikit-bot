@@ -14,7 +14,9 @@ def test_chain_resolution():
 
     def directional(idxA, idxB):
         # "degenerate" links that track path cost
-        rtf.CustomLink(1, 1, lambda x: x + 1)(frames[idxA], frames[idxB])
+        rtf.CustomLink(1, 1, lambda x: x + 1)(
+            frames[idxA], frames[idxB], add_inverse=False
+        )
 
     def undirectional(idxA, idxB):
         rtf.CustomLink(1, 1, lambda x: x + 1)(frames[idxA], frames[idxB])
