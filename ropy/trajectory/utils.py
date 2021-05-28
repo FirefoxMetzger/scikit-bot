@@ -2,7 +2,7 @@ import numpy as np
 from numpy.typing import ArrayLike
 
 
-def integral(control_points: ArrayLike, t: ArrayLike = None, *, axis: int = 0) -> float:
+def integral(control_points: ArrayLike, t: ArrayLike, *, axis: int = 0) -> float:
     """Estimate the integral along a curve.
 
     Estimates the integral of a time-parameterized curve along the chosen axis.
@@ -14,8 +14,7 @@ def integral(control_points: ArrayLike, t: ArrayLike = None, *, axis: int = 0) -
     control_points : ArrayLike
         The values of the curve at time points t.
     t : ArrayLike
-        The time points at which the curve was evaluated. If None, it will be
-        set to ``np.linspace(0, 1, control_points.shape[axis])``.
+        The time points at which the curve was evaluated.
     axis : int
         The axis along which to integrate. All other axes are
         treated as batch dimensions.
@@ -34,11 +33,7 @@ def integral(control_points: ArrayLike, t: ArrayLike = None, *, axis: int = 0) -
     # This implementation uses the trapezoidal rule
 
     control_points = np.asarray(control_points)
-
-    if t is None:
-        t = np.linspace(0, 1, control_points.shape[axis])
-    else:
-        t = np.asarray(t)
+    t = np.asarray(t)
 
     f_range = np.arange(control_points.shape[axis] - 1)
     f_lower = np.take(control_points, f_range, axis=axis)
@@ -54,7 +49,7 @@ def integral(control_points: ArrayLike, t: ArrayLike = None, *, axis: int = 0) -
 
 
 def cumulative_integral(
-    control_points: ArrayLike, t: ArrayLike = None, *, axis: int = 0
+    control_points: ArrayLike, t: ArrayLike, *, axis: int = 0
 ) -> np.ndarray:
     """Estimate the cumulative integral along a curve.
 
@@ -68,8 +63,7 @@ def cumulative_integral(
     control_points : ArrayLike
         The values of the curve at time points t.
     t : ArrayLike
-        The time points at which the curve was evaluated. If None, it will be
-        set to ``np.linspace(0, 1, control_points.shape[axis])``.
+        The time points at which the curve was evaluated.
     axis : int
         The axis along which to integrate. All other axes are
         treated as batch dimensions.
@@ -88,11 +82,7 @@ def cumulative_integral(
     # This implementation uses the trapezoidal rule
 
     control_points = np.asarray(control_points)
-
-    if t is None:
-        t = np.linspace(0, 1, control_points.shape[axis])
-    else:
-        t = np.asarray(t)
+    t = np.asarray(t)
 
     f_k = np.zeros_like(control_points)
 
