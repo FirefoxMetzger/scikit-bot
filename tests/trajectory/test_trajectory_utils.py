@@ -17,6 +17,7 @@ def test_integration(t, f, expected):
     estimate = trj.utils.integral(f_val, t)
     assert np.isclose(estimate, expected)
 
+
 def test_cumulative_integration():
     t = np.linspace(0, 5, 200)
     f = lambda x: x

@@ -100,3 +100,6 @@ def cumulative_integral(
     delta_t = np.insert(delta_t, 0, 0, axis=axis)
 
     return np.cumsum(f_k * delta_t, axis=axis)
+
+
+__all__ = ["integral", "cumulative_integral"]
