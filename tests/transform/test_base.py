@@ -4,13 +4,9 @@ import pytest
 
 
 def test_missing_tf_matrix():
-    world_frame = rtf.Frame(3)
-    camera_frame = rtf.Frame(3)
-
-    link = rtf.affine.Fixed(world_frame, camera_frame, lambda x: x)
-
+    link = rtf.CustomLink(3, 3, lambda x: x)
     with pytest.raises(ValueError):
-        rtf.affine.Inverse(link)
+        link.invert()
 
 
 def test_chain_resolution():
@@ -18,12 +14,11 @@ def test_chain_resolution():
 
     def directional(idxA, idxB):
         # "degenerate" links that track path cost
-        link = rtf.affine.Fixed(frames[idxA], frames[idxB], lambda x: x + 1)
-        frames[idxA].add_link(link)
+        rtf.CustomLink(1, 1, lambda x: x + 1)(frames[idxA], frames[idxB])
 
     def undirectional(idxA, idxB):
-        directional(idxA, idxB)
-        directional(idxB, idxA)
+        rtf.CustomLink(1, 1, lambda x: x + 1)(frames[idxA], frames[idxB])
+        rtf.CustomLink(1, 1, lambda x: x + 1)(frames[idxB], frames[idxA])
 
     undirectional(0, 2)
     undirectional(3, 2)
@@ -48,12 +43,3 @@ def test_chain_resolution():
 
     cost = frames[0].transform(0, frames[7], ignore_frames=[frames[5]])
     assert cost == 3
-
-
-def test_invalid_parent():
-    frames = [rtf.Frame(1) for _ in range(2)]
-
-    link = rtf.affine.Fixed(frames[0], frames[1], lambda x: x)
-
-    with pytest.raises(ValueError):
-        frames[1].add_link(link)

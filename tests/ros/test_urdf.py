@@ -8,7 +8,7 @@ import pytest
 def test_frame_graph(compi_robot):
     frames: Dict[str, rtf.Frame]
     frames, links = compi_robot
-    tf = frames["link6"].get_transformation_matrix(frames["linkmount"])
+    tf = frames["link6"].get_affine_matrix(frames["linkmount"])
     expected = np.array([[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 1.124], [0, 0, 0, 1]])
 
     np.allclose(tf, expected)
@@ -26,7 +26,7 @@ def test_without_origin():
         </robot>
         """
     frames, _ = pyros.create_frame_graph(urdf)
-    link1_to_link0 = frames["link0"].get_transformation_matrix(frames["link1"])
+    link1_to_link0 = frames["link0"].get_affine_matrix(frames["link1"])
     np.allclose(link1_to_link0, np.eye(4))
 
 
@@ -43,7 +43,7 @@ def test_with_empty_origin():
     </robot>
     """
     frames, _ = pyros.create_frame_graph(urdf)
-    link1_to_link0 = frames["link0"].get_transformation_matrix(frames["link1"])
+    link1_to_link0 = frames["link0"].get_affine_matrix(frames["link1"])
     np.allclose(link1_to_link0, np.eye(4))
 
 
@@ -55,7 +55,7 @@ def test_joint_angles(compi_robot):
     for i in range(1, 7):
         links[f"joint{i}"].angle = 0.1 * i
 
-    tf = frames["link6"].get_transformation_matrix(frames["linkmount"])
+    tf = frames["link6"].get_affine_matrix(frames["linkmount"])
     np.allclose(
         tf,
         np.array(
@@ -73,7 +73,7 @@ def test_fixed_joint(compi_robot):
     frames: Dict[str, rtf.Frame]
     frames, _ = compi_robot
 
-    tf = frames["tcp"].get_transformation_matrix(frames["linkmount"])
+    tf = frames["tcp"].get_affine_matrix(frames["linkmount"])
     np.allclose(
         tf, np.array([[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 1.174], [0, 0, 0, 1]])
     )
@@ -83,8 +83,8 @@ def test_multiple_parents(two_parents):
     frames: Dict[str, rtf.Frame]
     frames, _ = two_parents
 
-    tf1 = frames["parent0"].get_transformation_matrix(frames["child"])
-    tf2 = frames["parent1"].get_transformation_matrix(frames["child"])
+    tf1 = frames["parent0"].get_affine_matrix(frames["child"])
+    tf2 = frames["parent1"].get_affine_matrix(frames["child"])
     np.allclose(tf1[0, 3], tf2[1, 3])
 
 
@@ -94,7 +94,7 @@ def test_prismatic_joint(simple_prismatic):
     frames, links = simple_prismatic
 
     links["joint"].amount = 5.33
-    tf = frames["parent"].get_transformation_matrix(frames["child"])
+    tf = frames["parent"].get_affine_matrix(frames["child"])
 
     np.allclose(
         tf, np.array([[1, 0, 0, 5.33], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]])

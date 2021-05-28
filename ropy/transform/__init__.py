@@ -45,6 +45,7 @@ Manual construction of a 1D robot arm
 from .base import (
     Frame,
     Link,
+    CustomLink,
     homogenize,
     cartesianize,
     normalize_scale,
@@ -69,6 +70,7 @@ __all__ = [
     # Core Classes for Frame Management
     "Frame",
     "Link",
+    "CustomLink",
     "affine",
     "coordinates",
     "projections",

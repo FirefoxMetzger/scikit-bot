@@ -1,15 +1,13 @@
-from ropy.transform.base import Link
 from xml.etree import ElementTree
 from scipy.spatial.transform import Rotation
 from typing import Dict, List, Tuple
 import numpy as np
 
-from ...transform import Frame
-from ...transform.affine import Translation, PlanarRotation, Inverse
+from ... import transform as rtf
 from ...transform._utils import rotvec_to_reflections
 
 
-def create_frame_graph(urdf: str) -> Tuple[Dict[str, Frame], Dict[str, Link]]:
+def create_frame_graph(urdf: str) -> Tuple[Dict[str, rtf.Frame], Dict[str, rtf.Link]]:
     """Create a frame graph from a URDF string.
 
     Parameters
@@ -40,9 +38,9 @@ def create_frame_graph(urdf: str) -> Tuple[Dict[str, Frame], Dict[str, Link]]:
 
     for child in tree:
         if child.tag == "link":
-            frames[child.attrib["name"]] = Frame(3)
+            frames[child.attrib["name"]] = rtf.Frame(3, name=child.attrib["name"])
         elif child.tag == "joint":
-            frames[child.attrib["name"]] = Frame(3)
+            frames[child.attrib["name"]] = rtf.Frame(3, name=child.attrib["name"])
             links_to_process.append(child)
 
     for link in links_to_process:
@@ -77,36 +75,29 @@ def create_frame_graph(urdf: str) -> Tuple[Dict[str, Frame], Dict[str, Link]]:
         # link parent -> joint
         rotation = Rotation.from_euler("xyz", frame_rotation)
         if rotation.magnitude() > 0:
-            intermediate_frame = Frame(3)
-            frame_link = Translation(frame_parent, intermediate_frame, frame_offset)
-            frame_parent.add_link(frame_link)
-            intermediate_frame.add_link(Inverse(frame_link))
+            intermediate_frame = rtf.Frame(3)
+            intermediate_frame = rtf.affine.Translation(frame_offset)(frame_parent)
 
             u, v = rotvec_to_reflections(
                 rotation.as_rotvec(), angle=rotation.magnitude()
             )
-            frame_link = PlanarRotation(intermediate_frame, frame_joint, u, v)
-            intermediate_frame.add_link(frame_link)
-            frame_joint.add_link(Inverse(frame_link))
+            rtf.affine.Rotation(u, v)(intermediate_frame, frame_joint)
         else:
-            frame_link = Translation(frame_parent, frame_joint, frame_offset)
-            frame_parent.add_link(frame_link)
-            frame_joint.add_link(Inverse(frame_link))
+            rtf.affine.Translation(frame_offset)(frame_parent, frame_joint)
 
         # link joint -> child
         if joint_type == "fixed":
-            frame_link = Translation(frame_joint, frame_child, (0, 0, 0))
+            frame_link = rtf.affine.Translation((0, 0, 0))
         elif joint_type == "revolute":
             u, v = rotvec_to_reflections(axis)
-            frame_link = PlanarRotation(frame_joint, frame_child, u, v)
+            frame_link = rtf.affine.Rotation(u, v)
             frame_link.angle = 0.0
         elif joint_type == "prismatic":
-            frame_link = Translation(frame_joint, frame_child, -axis, amount=0)
+            frame_link = rtf.affine.Translation(-axis, amount=0)
         else:
             raise ValueError(f"Unsupported Joint type {joint_type}")
 
-        frame_joint.add_link(frame_link)
-        frame_child.add_link(Inverse(frame_link))
+        frame_link(frame_joint, frame_child)
 
         links[link.attrib["name"]] = frame_link
 

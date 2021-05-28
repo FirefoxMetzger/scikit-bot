@@ -4,20 +4,13 @@ import numpy as np
 
 
 def test_1d_robot():
-
-    world_frame = rtf.Frame(ndim=2)
-    ellbow_frame = rtf.Frame(2)
-    tool_frame = rtf.Frame(2)
-
-    joint = rtf.affine.PlanarRotation(ellbow_frame, world_frame, (1, 0), (0, 1))
-    ellbow_frame.add_link(joint)
-    world_frame.add_link(rtf.affine.Inverse(joint))
-
-    arm = rtf.affine.Translation(tool_frame, ellbow_frame, (1, 0))
-    tool_frame.add_link(arm)
-    ellbow_frame.add_link(rtf.affine.Inverse(arm))
-
+    arm = rtf.affine.Translation((1, 0))
+    joint = rtf.affine.Rotation((1, 0), (0, 1))
     assert np.allclose(arm.direction, (1, 0))
+
+    tool_frame = rtf.Frame(2)
+    ellbow_frame = arm(tool_frame)
+    world_frame = joint(ellbow_frame)
 
     joint.angle = 0
     tool_pos = tool_frame.transform((0, 0), to_frame=world_frame)
@@ -30,11 +23,7 @@ def test_1d_robot():
 
 def test_inverse_transform():
     frame1 = rtf.Frame(3)
-    frame2 = rtf.Frame(3)
-
-    offset = rtf.affine.Translation(frame1, frame2, (0, 1, 0))
-    frame1.add_link(offset)
-    frame2.add_link(rtf.affine.Inverse(offset))
+    frame2 = rtf.affine.Translation((0, 1, 0))(frame1)
 
     result = frame1.transform((1, 0, 0), to_frame=frame2)
     assert np.allclose(result, (1, 1, 0))
@@ -43,16 +32,13 @@ def test_inverse_transform():
 
 
 def test_matrix_identity():
+    link = rtf.affine.Rotation((0, 1, 0), (0, 0, 1))
+
     world_frame = rtf.Frame(3)
-    camera_frame = rtf.Frame(3)
+    camera_frame = link(world_frame)
 
-    link = rtf.affine.PlanarRotation(world_frame, camera_frame, (0, 1, 0), (0, 0, 1))
-    inv_link = rtf.affine.Inverse(link)
-    world_frame.add_link(link)
-    camera_frame.add_link(inv_link)
-
-    link_mat = world_frame.get_transformation_matrix(camera_frame)
-    link_inv_mat = camera_frame.get_transformation_matrix(world_frame)
+    link_mat = world_frame.get_affine_matrix(camera_frame)
+    link_inv_mat = camera_frame.get_affine_matrix(world_frame)
 
     assert np.allclose(link_mat @ link_inv_mat, np.eye(4))
     assert np.allclose(link_inv_mat @ link_mat, np.eye(4))
@@ -60,23 +46,21 @@ def test_matrix_identity():
     link.angle = np.pi / 2
     assert link.angle == np.pi / 2
 
-    link_mat = world_frame.get_transformation_matrix(camera_frame)
-    link_inv_mat = camera_frame.get_transformation_matrix(world_frame)
+    link_mat = world_frame.get_affine_matrix(camera_frame)
+    link_inv_mat = camera_frame.get_affine_matrix(world_frame)
 
     assert np.allclose(link_mat @ link_inv_mat, np.eye(4))
     assert np.allclose(link_inv_mat @ link_mat, np.eye(4))
 
 
 def test_translation_amount():
-    frameA = rtf.Frame(2)
-    frameB = rtf.Frame(2)
-    point = np.array((0, 1), dtype=np.float_)
-
-    link = rtf.affine.Translation(frameA, frameB, (1, 0))
+    link = rtf.affine.Translation((1, 0))
     assert link.amount == 1
 
-    frameA.add_link(link)
+    frameA = rtf.Frame(2)
+    frameB = link(frameA)
 
+    point = np.array((0, 1), dtype=np.float_)
     point_in_B = np.array((1, 1), dtype=np.float_)
     assert np.allclose(frameA.transform(point, frameB), point_in_B)
 
@@ -85,11 +69,7 @@ def test_translation_amount():
 
 
 def test_translation_direction():
-    frameA = rtf.Frame(2)
-    frameB = rtf.Frame(2)
-    point = np.array((0, 1), dtype=np.float_)
-
-    link = rtf.affine.Translation(frameA, frameB, (1, 0))
+    link = rtf.affine.Translation((1, 0))
     assert np.allclose(link.direction, (1, 0))
 
     link.direction = (0, 1)
