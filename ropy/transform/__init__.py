@@ -4,20 +4,19 @@
 
 Manage n-dimensional coordinate transformations via directed graphs.
 
-``ropy.transform`` allows you to express links (transformations) between frames
-(coordinate systems) and transform vectors expressed in one frame into vectors
-expressed in another frame. Each frame is modelled as a node in a directed
-(cyclic) graph and a link is modelled as a directed edge between two nodes. To
-compute a transformation, ``ropy.transform`` searches the graph for a suitable
-transform chain - a sequence of links connecting the frames in question - and
-iteratively applies the resulting chain to a vector. During this search
-``ropy.transform`` assumes that the graph is consistent, i.e., if more than one
-transform chain exists, they will yield the same result (up to numerical error).
+``ropy.transform`` allows you to change the representation of a vector from one
+coordinate system to another, i.e., it transforms the basis of the vector.
+Contrary to similar libraries, this is not limited to 3D or affine
+transformations, but can transform in N dimensions and between different
+dimensions, too. Additionally, you can create chains - more precisely directed
+graphs - of transformations between different frames, which allows you to
+express quite complicated transformations.
 
-If you come from a robotics background,this module is very similar to ROS tf2,
+If you come from a robotics background, this module is very similar to ROS tf2,
 but works in (and between) n-dimensions. This means it naturally includes
-projections - think a camera viewing a scene - and it offers more esoteric (less
-common) transformations, e.g. `ropy.transform.reflect`.
+projections, e.g. world space to pixel space, and it allows you to use more
+esoteric transformations like spherical coordinates, too.
+
 
 Examples
 --------
@@ -26,20 +25,23 @@ Manual construction of a 1D robot arm
 
 >>> import ropy.transform as rtf
 >>> import numpy as np
->>> # define the frames
->>> world_frame = rtf.Frame(ndim=2)
->>> ellbow_frame = rtf.Frame(2)
+>>> arm_link = rtf.affine.Translation((1, 0))
+>>> arm_joint = rtf.affine.Rotation((1, 0), (0, 1))
+
 >>> tool_frame = rtf.Frame(2)
->>> # model the joint
->>> joint = rtf.affine.PlanarRotation(ellbow_frame, world_frame, (1, 0), (0, 1))
->>> # define the links
->>> tool_frame.add_link(rtf.affine.Fixed(tool_frame, ellbow_frame, lambda x: x + np.array((1, 0))))
->>> ellbow_frame.add_link(joint)
->>> # forward kinematics
->>> joint.angle = 0
->>> tool_frame.transform((0, 0), to_frame=world_frame)
->>> joint.angle = np.pi/2
->>> tool_frame.transform((0, 0), to_frame=world_frame)
+>>> ellbow_frame = arm_link(tool_frame)
+>>> world_frame = arm_joint(ellbow_frame)
+
+>>> arm_joint.angle = 0
+>>> tool_pos = tool_frame.transform((0, 0), to_frame=world_frame)
+>>> assert np.allclose(tool_pos, (1, 0))
+
+>>> arm_joint.angle = np.pi / 2
+>>> tool_pos = tool_frame.transform((0, 0), to_frame=world_frame)
+>>> assert np.allclose(tool_pos, (0, 1))
+
+As with any other repository, you can always find more examples by exploring
+the accompanying unit tests.
 """
 
 from .base import (
