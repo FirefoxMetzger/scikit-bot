@@ -12,7 +12,7 @@ def vector_project(a: ArrayLike, b: ArrayLike) -> np.ndarray:
     return np.dot(a, b) / np.dot(b, b) * b
 
 
-def angle_between(vec_a: ArrayLike, vec_b: ArrayLike) -> float:
+def angle_between(vec_a: ArrayLike, vec_b: ArrayLike, *, axis=-1) -> np.ndarray:
     """Computes the signed angle from a to b (in a right-handed frame)
 
     Notes
@@ -24,30 +24,24 @@ def angle_between(vec_a: ArrayLike, vec_b: ArrayLike) -> float:
     vec_a = np.asarray(vec_a)
     vec_b = np.asarray(vec_b)
 
-    len_c = np.linalg.norm(vec_a - vec_b)
-    len_a = np.linalg.norm(vec_a)
-    len_b = np.linalg.norm(vec_b)
+    len_c = np.linalg.norm(vec_a - vec_b, axis=axis)
+    len_a = np.linalg.norm(vec_a, axis=axis)
+    len_b = np.linalg.norm(vec_b, axis=axis)
 
     flipped = 1
+    flipped = np.where(len_a >= len_b, 1, -1)
 
-    if len_a < len_b:
-        flipped *= -1
-        len_a, len_b = len_b, len_a
+    tmp = np.where(len_a >= len_b, len_a, len_b)
+    len_b = np.where(len_a < len_b, len_a, len_b)
+    len_a = tmp
 
-    if len_c > len_b:
-        flipped *= -1
-        mu = len_b - (len_a - len_c)
-    else:
-        mu = len_c - (len_a - len_b)
+    flipped = np.where(len_c > len_b, -flipped, flipped)
+    mu = np.where(len_c > len_b, len_b - (len_a - len_c), len_c - (len_a - len_b))
 
     numerator = ((len_a - len_b) + len_c) * mu
     denominator = (len_a + (len_b + len_c)) * ((len_a - len_c) + len_b)
 
-    if denominator == 0 and numerator > 0:
-        return flipped * np.pi
-
-    angle = 2 * atan(sqrt(numerator / denominator))
-
+    angle = np.where(denominator != 0, 2 * atan(sqrt(numerator / denominator)), np.pi)
     return flipped * angle
 
 
