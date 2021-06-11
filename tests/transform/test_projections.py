@@ -27,3 +27,18 @@ def test_frustum_project(point_in, fov, im_shape, point_out):
     point_px = rtf.cartesianize(point_px)
 
     assert np.allclose(point_px, point_out)
+
+
+@pytest.mark.parametrize(
+    "point_in, fov, im_shape, point_out",
+    [
+        ((1, 0, 0), np.pi / 3, (240, 320), (160, 120)),
+        ((3.5, 0, 0), np.pi / 2, (240, 320), (160, 120)),
+        ((1, 0, 0), 1.5 * np.pi, (480, 640), (320, 240)),
+        ((1, 1, 480 / 640), 1.5 * np.pi, (480, 640), (640, 480)),
+        ((1, -1, -480 / 640), 1.5 * np.pi, (480, 640), (0, 0)),
+    ],
+)
+def test_perspective_transform(point_in, fov, im_shape, point_out):
+    proj = rtf.projections.PerspectiveProjection(fov, im_shape)
+    assert np.allclose(proj.transform(point_in), point_out)
