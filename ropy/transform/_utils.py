@@ -1,5 +1,5 @@
 import numpy as np
-from math import sqrt, atan, sin, cos
+from math import sin, cos
 from numpy.typing import ArrayLike
 
 
@@ -12,7 +12,7 @@ def vector_project(a: ArrayLike, b: ArrayLike) -> np.ndarray:
     return np.dot(a, b) / np.dot(b, b) * b
 
 
-def angle_between(vec_a: ArrayLike, vec_b: ArrayLike, *, axis=-1) -> np.ndarray:
+def angle_between(vec_a: ArrayLike, vec_b: ArrayLike, *, axis: int = -1) -> np.ndarray:
     """Computes the signed angle from a to b (in a right-handed frame)
 
     Notes
@@ -21,28 +21,54 @@ def angle_between(vec_a: ArrayLike, vec_b: ArrayLike, *, axis=-1) -> np.ndarray:
     https://scicomp.stackexchange.com/a/27694
     """
 
-    vec_a = np.asarray(vec_a)
-    vec_b = np.asarray(vec_b)
+    vec_a = np.asarray(vec_a)[None, :]
+    vec_b = np.asarray(vec_b)[None, :]
+
+    if axis >= 0:
+        axis += 1
 
     len_c = np.linalg.norm(vec_a - vec_b, axis=axis)
     len_a = np.linalg.norm(vec_a, axis=axis)
     len_b = np.linalg.norm(vec_b, axis=axis)
 
-    flipped = 1
-    flipped = np.where(len_a >= len_b, 1, -1)
-
-    tmp = np.where(len_a >= len_b, len_a, len_b)
-    len_b = np.where(len_a < len_b, len_a, len_b)
+    mask = len_a >= len_b
+    tmp = np.where(mask, len_a, len_b)
+    np.putmask(len_b, ~mask, len_a)
     len_a = tmp
 
-    flipped = np.where(len_c > len_b, -flipped, flipped)
-    mu = np.where(len_c > len_b, len_b - (len_a - len_c), len_c - (len_a - len_b))
+    mask = len_c > len_b
+    mu = np.where(mask, len_b - (len_a - len_c), len_c - (len_a - len_b))
 
     numerator = ((len_a - len_b) + len_c) * mu
     denominator = (len_a + (len_b + len_c)) * ((len_a - len_c) + len_b)
 
-    angle = np.where(denominator != 0, 2 * atan(sqrt(numerator / denominator)), np.pi)
-    return flipped * angle
+    mask = denominator != 0
+    angle = np.divide(numerator, denominator, where=mask)
+    np.sqrt(angle, out=angle)
+    np.arctan(angle, out=angle)
+    angle *= 2
+    np.putmask(angle, ~mask, np.pi)
+    return angle[0]
+
+
+# def rotation_direction(vec_a: ArrayLike, vec_b: ArrayLike, *, axis=-1):
+#     vec_a = np.asarray(vec_a)[None, :]
+#     vec_b = np.asarray(vec_b)[None, :]
+
+#     vec_a = np.moveaxis(vec_a, axis, -1)
+#     vec_b = np.moveaxis(vec_b, axis, -1)
+
+#     joint_shape = np.broadcast_shapes(vec_a.shape, vec_b.shape)
+#     vec_a = np.broadcast_to(vec_a, joint_shape)
+#     vec_b = np.broadcast_to(vec_b, joint_shape)
+
+#     rotation_projection = np.stack((vec_a, vec_b), axis=-2)
+#     u, _, v = np.linalg.svd(rotation_projection)
+#     directions = np.sign(np.linalg.det(u)*np.linalg.det(v))
+
+#     directions = np.moveaxis(directions, -1, axis)
+
+#     return directions
 
 
 def rotvec_to_reflections(rotvec: ArrayLike, *, angle: float = None) -> np.ndarray:
