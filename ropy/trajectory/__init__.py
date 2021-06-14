@@ -1,6 +1,5 @@
 """
-:mod:`ropy.trajectory`
-========================
+Interpolation of parameterized curves.
 
 A collection of functions to compute positions along parameterized trajectories.
 Here, trajectories are not limited to 3-dimensional space. Instead, they are

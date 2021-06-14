@@ -1,7 +1,4 @@
 """
-:mod:`ropy.transform`
-=====================
-
 Manage n-dimensional coordinate transformations via directed graphs.
 
 ``ropy.transform`` allows you to change the representation of a vector from one

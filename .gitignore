@@ -1,5 +1,6 @@
 __pycache__/
 doc/build/
+doc/source/_autosummary
 .vscode/
 
 *.egg-info

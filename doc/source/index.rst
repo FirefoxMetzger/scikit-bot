@@ -1,15 +1,15 @@
 Ropy Documentation
 ===================
 
-You have found to the ``ropy`` documentation. You can find API documentation and
-examples here.
-
 .. toctree::
    :maxdepth: 1
 
    install
    examples
    api_reference
+
+You have found to the ``ropy`` documentation. You can find API documentation and
+examples here.
 
 Ropy is a robotics library that aims to address the large heterogeneity of code
 in the robotics community by providing a selection of commonly used algorithms

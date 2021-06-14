@@ -1,6 +1,5 @@
 """
-:mod:`ropy.ignition`
-====================
+Interface with Ignitionrobotics_ libraries.
 
 To use ``ropy.ignition``, you have to install the latest version of
 Ignition_. In addition, you have to install
@@ -56,6 +55,7 @@ documentation`_.
 .. _Ignition: https://ignitionrobotics.org/home
 .. _`Ign-Msgs`: https://github.com/ignitionrobotics/ign-msgs
 .. _`Ignition documentation`: https://ignitionrobotics.org/api/msgs/6.4/index.html
+.. _Ignitionrobotics: https://ignitionrobotics.org/
 """
 
 from . import messages

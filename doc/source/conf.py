@@ -10,9 +10,9 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-# import os
-# import sys
-# sys.path.insert(0, os.path.abspath(".."))
+import os
+import sys
+sys.path.insert(0, os.path.abspath("..\\..\\ropy"))
 
 
 # -- Project information -----------------------------------------------------
@@ -31,12 +31,14 @@ extensions = [
     "sphinx.ext.autodoc",
     "numpydoc",
     "sphinx.ext.viewcode",
+    "sphinx.ext.autosummary",
     "sphinx_autodoc_typehints",
     "matplotlib.sphinxext.plot_directive",
 ]
 
 html_show_sourcelink = False
 set_type_checking_flag = True
+autosummary_generate = True
 autodoc_mock_imports = ["betterproto", "zmq"]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -52,7 +54,7 @@ exclude_patterns = []
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = "default"
+html_theme = "pydata_sphinx_theme"
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
