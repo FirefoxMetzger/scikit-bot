@@ -1,37 +1,46 @@
 """
 Interface with Ignitionrobotics_ libraries.
 
-To use ``ropy.ignition``, you have to install the latest version of
-Ignition_. In addition, you have to install
-additional dependencies via
 
-.. code-block:: bash
+.. note::
 
-    pip install -e .[ignition]
+    To use :mod:`ropy.ignition`, you have to install the latest version of
+    Ignition_. In addition, you have to install
+    additional dependencies via
 
--------
+    .. code-block:: bash
 
-A collection of functions to ease interfacing with the Ignition software stack.
-Ignition is a collection of libraries that, when combined, produce a general
-purpose simulator for robotic applications called Ignition Gazebo. Ignition
-Gazebo superseeds Gazebo and, among many other improvements, it is written as a
-simulation library instead of being a stand-alone application. This allows for
-dynamic control of all aspects of the simulation as well as full introspection.
+        pip install -e .[ignition]
+
+:mod:`ropy.ignition` is a collection of functions to ease interfacing with the
+Ignition software stack. Ignition is a collection of libraries that, when
+combined, produce a general purpose simulator for robotic applications called
+Ignition Gazebo. Ignition Gazebo superseeds Gazebo and, among many other
+improvements, it is written as a simulation library instead of being a
+stand-alone application. This allows for dynamic control of all aspects of the
+simulation as well as full introspection.
 
 Note that this module does not contain python bindings for ignition (and it does
 not aim to do so). If you are looking for bindings check out
 ScenarIO_,
 which is a part of gym-ignition_.
 
-.. autoclass:: ropy.ignition.Subscriber
-    :members:
-    :special-members: __init__
+
+Functions
+---------
+
+.. autosummary::
+    :toctree:
+
+    ropy.ignition.Subscriber
+
 
 .. automodule:: ropy.ignition.messages
 
 :mod:`ropy.ignition.messages`
+-----------------------------
 
-``ropy`` provides python bindings to all Ignition messages. Messages are build
+:mod:`ropy` provides python bindings to all Ignition messages. Messages are build
 from the protocol buffer templates found in Ign-Msgs_. This allows you to decode
 messages sent by the subscriber.
 

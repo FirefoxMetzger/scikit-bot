@@ -2,7 +2,7 @@ Ropy Documentation
 ===================
 
 .. toctree::
-   :maxdepth: 1
+   :hidden:
 
    install
    examples
