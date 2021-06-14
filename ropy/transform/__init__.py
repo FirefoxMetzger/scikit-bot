@@ -39,6 +39,37 @@ Manual construction of a 1D robot arm
 
 As with any other repository, you can always find more examples by exploring
 the accompanying unit tests.
+
+
+Basic functions
+---------------
+
+.. autosummary::
+    :toctree:
+
+    Frame
+    Link
+    CustomLink
+
+
+Affine Transformations
+----------------------
+
+.. autosummary::
+    :toctree:
+
+    Translation
+    Rotation
+
+
+Affine Projections
+------------------
+
+.. autosummary::
+    :toctree:
+
+    PerspectiveProjection
+
 """
 
 from .base import (
@@ -61,18 +92,25 @@ from .functions import (
 )
 
 from .coordinates import transform, inverse_transform, transform_between
-from . import affine, coordinates, projections
+from . import coordinates, projections
 from .projections import perspective_frustum
 
+from .affine import Translation, Rotation, Inverse
+from .projections import PerspectiveProjection
 
 __all__ = [
     # Core Classes for Frame Management
     "Frame",
     "Link",
     "CustomLink",
-    "affine",
     "coordinates",
     "projections",
+    # Affine Links
+    "Translation",
+    "Rotation",
+    "Inverse",
+    # Projections
+    "PerspectiveProjection",
     # basic transformation functions
     "translate",
     "rotate",

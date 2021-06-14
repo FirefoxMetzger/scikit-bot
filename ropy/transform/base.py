@@ -506,18 +506,3 @@ class CustomLink(Link):
 
     def transform(self, x: ArrayLike) -> np.ndarray:
         return self._transform(x)
-
-
-__all__ = [
-    # Frame Management
-    "Frame",
-    "Link",
-    "InverseLink",
-    # Basic Links
-    "Custom"
-    # legacy methods (to be refactored)
-    "homogenize",
-    "cartesianize",
-    "normalize_scale",
-    "rotation_matrix",
-]
