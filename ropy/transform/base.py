@@ -182,18 +182,11 @@ class Link:
     child frame. Its default use is to express a vector given in the parent
     frame using the child frame.
 
-    Properties
+    Attributes
     ----------
     transformation : np.ndarray
         A affine matrix describing the transformation from the parent frame to
         the child frame.
-
-    Methods
-    -------
-    transform(x)
-        Expresses the vector x (assumed to be given in the parent's frame) in
-        the child's frame.
-
 
     """
 
@@ -240,10 +233,16 @@ class Link:
         return child
 
     def invert(self) -> Frame:
+        """Returns a new link that is the inverse of this link.
+
+        The links share parameters, i.e., if the transform of a link changes,
+        the transform of its inverse does also.
+        """
         return InvertLink(self)
 
     def transform(self, x: ArrayLike) -> np.ndarray:
-        """Transform x (given in parent frame) into the child frame.
+        """Expresses the vector x (assumed to be given in the parent's frame) in
+        the child's frame.
 
         Parameters
         ----------
@@ -276,12 +275,17 @@ class Link:
 
 
 class InvertLink(Link):
-    """A link between two frames based on the inverse of an existing Link.
+    """Inverse of an existing Link.
 
     This class can be constructed from any link that implements
     __inverse_transform__. It is a tight wrapper around the original link and
     shares any parameters. Accordingly, if the original link updates, so will
     this link.
+
+    Parameters
+    ----------
+    link : Link
+        The link to be inverted. It must implement __inverse_transform__.
 
     """
 
@@ -300,24 +304,20 @@ class InvertLink(Link):
 
 
 class Frame:
-    """A frame representing a coordinate system.
+    """Representation of a coordinate system.
 
-    Each coordinate frame is a node in a directed graph where edges (type Link)
-    describe transformations between different frames. Its default use is to
-    transform coordinates between different coordinate frames.
+    Each coordinate frame is a node in a directed graph where edges
+    (:class:`ropy.transform.Link`) describe transformations between frames. This
+    transformation is not limited to neighbours, but works between any two
+    frames that share a chain of links pointing from a parent to the
+    (grand-)child.
 
-    Methods
-    -------
-    transform(x, to_frame)
-        Express the vector x - assumed to be in this frame - in the coordinate
-        frame to_frame. If it is not possible to find a transformation between
-        this frame and to_frame a RuntimeError will be raised.
-    get_affine_matrix(to_frame)
-        Computes (and returns) the transformation matrix between this frame
-        and to_frame.
-    add_link(edge)
-        Add a new transformation from this frame to another frame to the list of known
-        transformations.
+    Parameters
+    ----------
+    ndim : int
+        Number of coordinate dimensions.
+    name : str
+        The name of this coordinate frame. Defaults to ``None``.
 
     """
 
@@ -335,14 +335,23 @@ class Frame:
     ) -> np.ndarray:
         """Express the vector x in to_frame.
 
+        Express the vector x - assumed to be in this frame - in the coordinate
+        frame to_frame. If it is not possible to find a transformation between
+        this frame and to_frame a RuntimeError will be raised.
+
         Parameters
         ----------
         x : ArrayLike
             A vector expressed in this frame.
-        to_frame : Frame
-            The frame in which x should be expressed.
+        to_frame : Frame, str
+            The frame in which x should be expressed. If it is a string,
+            :func:`~transform` will search for a child frame with the given
+            string as name. In case of duplicate names in a frame graph, the
+            first one found is used.
         ignore_frames : Frame
-            Any frames that should be ignored when searching for a suitable transformation chain.
+            Any frames that should be ignored when searching for a suitable
+            transformation chain. Note that this currently does not support
+            string aliases.
 
         Returns
         -------
@@ -365,7 +374,7 @@ class Frame:
     def get_affine_matrix(
         self, to_frame: Union[Frame, str], *, ignore_frames: List[Frame] = None
     ) -> np.ndarray:
-        """Compute the affine transformation matrix from frame into to_frame.
+        """Affine transformation matrix to ``to_frame`` (if existant).
 
         Parameters
         ----------
@@ -390,7 +399,9 @@ class Frame:
         -----
         The affine transformation matrix between two frames only exists if the
         transformation chain is linear in ``self.ndim+1`` dimensions. Requesting
-        a non-existing affine matrix will raise an Exception.
+        a non-existing affine matrix will raise an Exception. In practice, this
+        means that each link along the transformation chain needs to support
+        creation of an affine matrix.
 
         """
 
@@ -410,11 +421,8 @@ class Frame:
         ----------
         edge : Link
             The transformation to add to the graph.
-
-        Raises
-        ------
-        ValueError
-            If the edge doesn't have this frame as parent.
+        child : Frame
+            The frame that following this link leads to.
 
         """
 
@@ -440,6 +448,10 @@ class Frame:
         -------
         chain : List[Link]
             A list of links that can transform from this frame to to_frame.
+
+        Notes
+        -----
+        DFS (depth-first search) does not guarantee the shortest chain to be returned.
 
         """
         if to_frame is self or self.name == to_frame:
@@ -467,17 +479,23 @@ class Frame:
 class CustomLink(Link):
     """A link representing a custom transformation.
 
-    This link represents an arbitrary transformation between two frames.
+    Initialize a new link from the callable ``transformation`` that transforms a
+    vector from the parent frame to the child frame. This link can represent
+    arbitrary transformations between two frames.
 
-    Methods
-    -------
-    CustomLink(parent_dim, child_dim, transformation)
-        Initialize a new link from the callable ``transformation`` that
-        transforms a vector from the parent frame to the child frame.
+    Parameters
+    ----------
+    parent : Frame
+        The frame in which vectors are specified.
+    child : Frame
+        The frame into which this link transforms vectors.
+    transfomration : Callable[[ArrayLike], np.ndarray]
+        A callable that takes a vector - in the parent frame - as input and
+        returns the vector in the child frame.
 
     Notes
     -----
-    This function does not implement __inverse_transform__.
+    This function does not implement :func:`Link.__inverse_transform__`.
 
     """
 
@@ -487,19 +505,7 @@ class CustomLink(Link):
         child: Frame,
         transformation: Callable[[ArrayLike], np.ndarray],
     ) -> None:
-        """Initialize a new affine link.
-
-        Parameters
-        ----------
-        parent : Frame
-            The frame in which vectors are specified.
-        child : Frame
-            The frame into which this link transforms vectors.
-        transfomration : Callable[[ArrayLike], np.ndarray]
-            A callable that takes a vector - in the parent frame - as input and
-            returns the vector in the child frame.
-
-        """
+        """Initialize a new custom link."""
 
         super().__init__(parent, child)
         self._transform = transformation

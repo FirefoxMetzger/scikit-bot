@@ -45,10 +45,12 @@ Basic functions
 ---------------
 
 .. autosummary::
+    :template: transform_class.rst
     :toctree:
 
     Frame
     Link
+    InvertLink
     CustomLink
 
 
@@ -56,6 +58,7 @@ Affine Transformations
 ----------------------
 
 .. autosummary::
+    :template: transform_class.rst
     :toctree:
 
     Translation
@@ -66,6 +69,7 @@ Affine Projections
 ------------------
 
 .. autosummary::
+    :template: transform_class.rst
     :toctree:
 
     PerspectiveProjection
@@ -76,6 +80,7 @@ from .base import (
     Frame,
     Link,
     CustomLink,
+    InvertLink,
     homogenize,
     cartesianize,
     normalize_scale,
@@ -103,6 +108,7 @@ __all__ = [
     "Frame",
     "Link",
     "CustomLink",
+    "InvertLink",
     "coordinates",
     "projections",
     # Affine Links

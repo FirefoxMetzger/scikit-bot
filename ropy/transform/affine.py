@@ -17,18 +17,18 @@ class AffineLink(Link):
 
     The main utility of this class is that it computes the corresponding
     transformation matrix once ``self.transform`` is known.
+
+    Parameters
+    ----------
+    parent : int
+        The frame in which vectors are specified.
+    child : int
+        The frame into which this link transforms vectors.
+
     """
 
     def __init__(self, parent_dim: int, child_dim: int) -> None:
-        """Initialize a new affine link.
-
-        Parameters
-        ----------
-        parent : int
-            The frame in which vectors are specified.
-        child : int
-            The frame into which this link transforms vectors.
-        """
+        """Initialize a new affine link."""
 
         super().__init__(parent_dim, child_dim)
 
@@ -70,6 +70,7 @@ class AffineLink(Link):
         self._inverse_tf_matrix[-1, -1] = 1
 
     def invert(self) -> Frame:
+        """Return a new Link that is the inverse of this link."""
         return Inverse(self)
 
 
@@ -91,16 +92,6 @@ class Rotation(AffineLink):
     angle of rotation is twice the angle between u and v (measured from u to v)
     and can be modified by setting the angle explicitly, e.g. ``link.angle =
     np.pi``. The angle is measured in radians.
-
-    Attributes
-    ----------
-    angle : float
-        The amount (in radians) to rotate. A positive angle rotates u towards v.
-
-    Methods
-    -------
-    Rotation(u, v)
-        Create a new link that rotates a vector in the u-v-plane.
 
     Notes
     -----
@@ -134,6 +125,7 @@ class Rotation(AffineLink):
 
     @property
     def angle(self) -> float:
+        """The magnitude of the rotation (in radians)."""
         return self._angle
 
     @angle.setter
@@ -148,19 +140,17 @@ class Rotation(AffineLink):
 class Translation(AffineLink):
     """A link representing a translation.
 
-    Attributes
-    ----------
-    direction : np.ndarray
-        The direction in which vectors are translated.
 
-    Methods
-    -------
-    Translation(direction)
-        Create a new link that translates vectors in the given direction
+    Parameters
+    ----------
+    direction : ArrayLike
+        The vector describing the translation.
+    amount : float
+        A scalar indicating by how much to scale ``direction``. Default is 1.
 
     Notes
     -----
-    This class implements __inverse_transform__, so you can get a syncronized inverse
+    This class implements :func:`Link.__inverse_transform__`. You can get a syncronized inverse
     link via ``inverse_link = ropy.transform.affine.Inverse(link)``.
 
     """
@@ -180,6 +170,7 @@ class Translation(AffineLink):
 
     @property
     def direction(self) -> np.ndarray:
+        """The direction in which vectors are translated."""
         return self._direction
 
     @direction.setter
@@ -191,6 +182,7 @@ class Translation(AffineLink):
 
     @property
     def amount(self) -> float:
+        """The amount by which to scale the direction vector."""
         return self._amount
 
     @amount.setter
