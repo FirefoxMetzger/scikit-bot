@@ -15,9 +15,9 @@ enabling rapid prototyping.
 - Got an **idea for a new feature** or spotted something that is missing? Submit
   a [feature request](https://github.com/FirefoxMetzger/ropy/issues).
 - Want to **contribute code**? Awesome! We are very happy about PRs. You can
-  check open issues - may I suggest a [good first
-  issue](https://github.com/FirefoxMetzger/ropy/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
-  - for an overview of what is currently needed. Alternatively, you can submit a
+  check open issues (may I suggest a [good first
+  issue](https://github.com/FirefoxMetzger/ropy/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22))
+  for an overview of what is currently needed. Alternatively, you can submit a
   new [feature request](https://github.com/FirefoxMetzger/ropy/issues) and -
   after we figured out where the feature should go - you can submit a PR for
   exactly this feature.
