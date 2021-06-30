@@ -12,7 +12,7 @@ def ign_instance():
     gazebo = subprocess.Popen(["ign", "gazebo", "shapes.sdf", "-s"])
 
     # wait for gazebo to start
-    time.sleep(3)
+    time.sleep(5)
 
     yield
 
