@@ -13,8 +13,9 @@
 import os
 import sys
 from pathlib import Path
+import ropy.transform as rtf
 
-sys.path.insert(0, Path(__file__).parents[2])
+# sys.path.insert(0, Path(__file__).parents[2])
 
 
 # -- Project information -----------------------------------------------------
