@@ -3,7 +3,7 @@ import setuptools
 install_requires = ["numpy == 1.20.3", "scipy == 1.6.1"]
 
 extras_require = {
-    "ignition": ["pyzmq == 22.0.3", "betterproto == 1.2.5", "psutil == 5.8.0"],
+    "ignition": ["pyzmq == 22.1.0", "betterproto == 1.2.5", "psutil == 5.8.0"],
     "docs": [
         "sphinx == 3.5.3",
         "numpydoc == 1.1.0",
