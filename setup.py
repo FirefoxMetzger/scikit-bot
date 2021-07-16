@@ -8,7 +8,7 @@ extras_require = {
         "sphinx == 3.5.3",
         "numpydoc == 1.1.0",
         "sphinx-autodoc-typehints == 1.12.0",
-        "matplotlib == 3.3.4",
+        "matplotlib == 3.4.2",
         "pydata-sphinx-theme == 0.6.3",
     ],
     "linting": ["flake8 == 3.9.0", "black == 21.7b0"],
