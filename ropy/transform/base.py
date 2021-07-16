@@ -188,6 +188,11 @@ class Link:
         A affine matrix describing the transformation from the parent frame to
         the child frame.
 
+    Notes
+    -----
+    :attr:`Link.transformation` may raise a ``NotImplementedError`` if the link
+    doesn't support affine transformation matrices, or if the matrix doesn't exist.
+
     """
 
     def __init__(self, parent_dim: int, child_dim: int) -> None:
@@ -400,8 +405,8 @@ class Frame:
         The affine transformation matrix between two frames only exists if the
         transformation chain is linear in ``self.ndim+1`` dimensions. Requesting
         a non-existing affine matrix will raise an Exception. In practice, this
-        means that each link along the transformation chain needs to support
-        creation of an affine matrix.
+        means that each link along the transformation chain needs to implement
+        :attr:`ropy.transform.Link.transformation`.
 
         """
 
