@@ -1,6 +1,37 @@
 import setuptools
 
+install_requires = [
+    "numpy == 1.20.3",
+    "scipy == 1.6.1"
+]
+
+extras_require = {
+    "ignition": [
+        "pyzmq == 22.0.3",
+        "betterproto == 1.2.5",
+        "psutil == 5.8.0"
+    ],
+    "docs": [
+        "sphinx == 3.5.3",
+        "numpydoc == 1.1.0",
+        "sphinx-autodoc-typehints == 1.11.1",
+        "matplotlib == 3.3.4",
+        "pydata-sphinx-theme == 0.6.3"
+    ],
+    "linting": [
+        "flake8 == 3.9.0",
+        "black == 20.8b1"
+    ],
+    "testing": [
+        "pytest == 6.2.2",
+        "coverage[toml] == 5.5"
+    ]
+}
+
 # Note: This is a shim, because I am used to developing
 # under pip install -e . which PEP517 doesn't support (yet?)
 if __name__ == "__main__":
-    setuptools.setup()
+    setuptools.setup(
+        install_requires=install_requires,
+        extras_require = extras_require
+    )
