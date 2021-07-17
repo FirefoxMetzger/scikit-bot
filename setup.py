@@ -11,7 +11,7 @@ extras_require = {
         "matplotlib == 3.4.2",
         "pydata-sphinx-theme == 0.6.3",
     ],
-    "linting": ["flake8 == 3.9.0", "black == 21.7b0"],
+    "linting": ["flake8 == 3.9.2", "black == 21.7b0"],
     "testing": ["pytest == 6.2.2", "coverage[toml] == 5.5"],
 }
 
