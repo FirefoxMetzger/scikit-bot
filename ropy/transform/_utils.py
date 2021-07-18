@@ -3,13 +3,27 @@ from math import sin, cos
 from numpy.typing import ArrayLike
 
 
-def vector_project(a: ArrayLike, b: ArrayLike) -> np.ndarray:
-    """Returns the component of a along b."""
+def vector_project(a: ArrayLike, b: ArrayLike, *, axis=-1) -> np.ndarray:
+    """Returns the components of each a along each b."""
 
     a = np.asarray(a)
     b = np.asarray(b)
 
-    return np.dot(a, b) / np.dot(b, b) * b
+    numerator = np.tensordot(a, b, axes=[axis, axis])
+    numerator = np.expand_dims(numerator, axis)
+
+    denominator = np.sum(b * b, axis=axis, keepdims=True)
+    denominator = np.expand_dims(denominator, [x for x in range(a.ndim - 1)])
+
+    b = np.expand_dims(b, [x for x in range(a.ndim - 1)])
+
+    return numerator / denominator * b
+
+
+def scalar_project(a: ArrayLike, b: ArrayLike, *, axis=-1) -> np.ndarray:
+    """Returns the length of the components of each a along each b."""
+
+    return np.linalg.norm(vector_project(a, b, axis=axis), axis=axis)
 
 
 def angle_between(vec_a: ArrayLike, vec_b: ArrayLike, *, axis: int = -1) -> np.ndarray:
