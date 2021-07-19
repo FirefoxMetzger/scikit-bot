@@ -33,6 +33,7 @@ Functions
     :toctree:
 
     ropy.ignition.Subscriber
+    ropy.ignition.FrustumProjection
 
 
 .. automodule:: ropy.ignition.messages
@@ -69,5 +70,6 @@ documentation`_.
 
 from . import messages
 from .subscriber import Subscriber
+from .transformations import FrustumProjection
 
-__all__ = ["messages", "Subscriber"]
+__all__ = ["messages", "Subscriber", "FrustumProjection"]
