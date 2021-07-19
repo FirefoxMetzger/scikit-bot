@@ -1,10 +1,10 @@
 import numpy as np
-from numpy.core.records import array
-from numpy.lib.function_base import angle
 from numpy.typing import ArrayLike
 
 
-from .base import rotation_matrix
+from .base import rotation_matrix, Frame
+from .affine import Translation
+from .utils3d import EulerRotation
 
 
 def transform(new_frame: ArrayLike) -> np.ndarray:
@@ -41,26 +41,16 @@ def transform(new_frame: ArrayLike) -> np.ndarray:
     transformations and then apply them to a vector afterwards.
 
     """
-
-    # Note: this is a naive implementation, but avoids a scipy dependency
-    # if scipy does get introduced later, it can be substituted by
-    # https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.transform.Rotation.from_euler.html
-
     new_frame = np.asarray(new_frame)
-    alpha, beta, gamma = -new_frame[3:]
 
-    rot_x = rotation_matrix(alpha, (0, 1, 0, 1), (0, 0, 1, 1))[:-1, :-1]
-    rot_y = rotation_matrix(beta, (1, 0, 0, 1), (0, 0, 1, 1))[:-1, :-1]
-    rot_z = rotation_matrix(gamma, (1, 0, 0, 1), (0, 1, 0, 1))[:-1, :-1]
-
-    # Note: apply inverse rotation
-    rot = np.matmul(rot_z, np.matmul(rot_y, rot_x))
-
-    transform = np.eye(4)
-    transform[:3, :3] = rot
-    transform[:3, 3] = -np.matmul(rot, new_frame[:3])
-
-    return transform
+    child = Frame(3)
+    if np.any(new_frame[3:] != 0):
+        tmp = EulerRotation("xyz", new_frame[3:])(child)
+    else: 
+        tmp = child
+    parent = Translation(new_frame[:3])(tmp)
+    
+    return parent.get_affine_matrix(child)
 
 
 def inverse_transform(old_frame: ArrayLike) -> np.ndarray:
@@ -101,17 +91,15 @@ def inverse_transform(old_frame: ArrayLike) -> np.ndarray:
     # https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.transform.Rotation.from_euler.html
 
     old_frame = np.asarray(old_frame)
-    alpha, beta, gamma = old_frame[3:]
 
-    rot_x = rotation_matrix(alpha, (0, 1, 0, 1), (0, 0, 1, 1))[:-1, :-1]
-    rot_y = rotation_matrix(beta, (1, 0, 0, 1), (0, 0, 1, 1))[:-1, :-1]
-    rot_z = rotation_matrix(gamma, (1, 0, 0, 1), (0, 1, 0, 1))[:-1, :-1]
-
-    transform = np.eye(4)
-    transform[:3, :3] = rot_x @ np.matmul(rot_y, rot_z)
-    transform[:3, 3] = old_frame[:3]
-
-    return transform
+    child = Frame(3)
+    if np.any(old_frame[3:] != 0):
+        tmp = EulerRotation("xyz", old_frame[3:])(child)
+    else: 
+        tmp = child
+    parent = Translation(old_frame[:3])(tmp)
+    
+    return child.get_affine_matrix(parent)
 
 
 def transform_between(old_frame: ArrayLike, new_frame: ArrayLike) -> np.ndarray:

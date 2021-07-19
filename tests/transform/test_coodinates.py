@@ -8,8 +8,8 @@ import ropy.transform as rtf
     "vector_in,frame,vector_out",
     [
         ((1, 2, 3), (1, 2, 3, 0, 0, 0), (0, 0, 0)),
-        ((1, 0, 0), (0, 0, 0, 0, 0, np.pi / 2), (0, -1, 0)),
-        ((0, 1, 0), (0, 0, 0, np.pi / 2, 0, np.pi / 2), (0, 0, -1)),
+        ((1, 0, 0), (0, 0, 0, 0, 0, -np.pi / 2), (0, -1, 0)),
+        ((0, 1, 0), (0, 0, 0, -np.pi / 2, 0, -np.pi / 2), (0, 0, -1)),
     ],
 )
 def test_transform(vector_in, frame, vector_out):
@@ -24,8 +24,8 @@ def test_transform(vector_in, frame, vector_out):
     "vector_in,frame,vector_out",
     [
         ((0, 0, 0), (1, 2, 3, 0, 0, 0), (1, 2, 3)),
-        ((0, -1, 0), (0, 0, 0, 0, 0, np.pi / 2), (1, 0, 0)),
-        ((0, 0, -1), (0, 0, 0, np.pi / 2, 0, np.pi / 2), (0, 1, 0)),
+        ((0, -1, 0), (0, 0, 0, 0, 0, -np.pi / 2), (1, 0, 0)),
+        ((0, 0, -1), (0, 0, 0, -np.pi / 2, 0, -np.pi / 2), (0, 1, 0)),
     ],
 )
 def test_inverse_transform(vector_in, frame, vector_out):
@@ -41,7 +41,7 @@ def test_inverse_transform(vector_in, frame, vector_out):
     [
         (
             (0, np.sqrt(2), 0),
-            (0, 0, 0, 0, 0, -np.pi / 4),
+            (0, 0, 0, 0, 0, np.pi / 4),
             (1, 1, 0, 0, 0, 0),
             (0, 0, 0),
         ),
