@@ -1,4 +1,3 @@
-from typing import Tuple
 from math import tan
 import numpy as np
 from numpy.typing import ArrayLike
@@ -13,7 +12,11 @@ class FrustumProjection(Link):
     
     This link computes the 2D camera/pixel position of a point in 3D (world)
     space. The projection's center point is located in the origin and the camera
-    is pointing along the positive z-axis.
+    is pointing along the positive z-axis. The origin of the pixel frame is
+    located at the top left corner of the image with the y-axis pointing down
+    and the x-axis pointing right. Points along the z-axis are projected into 
+    the center of the image (``image_shape/2``).
+
 
     Parameters
     ----------
@@ -22,13 +25,19 @@ class FrustumProjection(Link):
         pi (180°).
     image_shape : ArrayLike
         The shape (height, width) of the image plane in pixels.
+
+    See Also
+    --------
+    :class:``ropy.ignition.FrustumProjection``
     
     Notes
     -----
     This function assumes that ``hfov`` is less than pi (180°).
 
-    Points outside the viewing frustum will still be projected; however, their values lie
-    outside the applicable pixel range.
+    Points outside the viewing frustum will still be projected. While most will
+    be mapped into points outside of ``image_shape``, points on the backside of
+    the camera may alias with points inside the image. In this case special care
+    must be taken.
     """
 
     def __init__(self, hfov: float, image_shape: ArrayLike) -> None:
@@ -51,5 +60,3 @@ class FrustumProjection(Link):
         x_projected = self.proj.transform(x)
         x_transformed = self.tf.transform(x_projected)
         return x_transformed
-
-
