@@ -47,7 +47,7 @@ def scalar_project(a: ArrayLike, b: ArrayLike, *, axis: int = -1) -> np.ndarray:
 
 
 def angle_between(vec_a: ArrayLike, vec_b: ArrayLike, *, axis: int = -1) -> np.ndarray:
-    """Computes the signed angle from a to b (in a right-handed frame)
+    """Computes the angle from a to b (in a right-handed frame)
 
     Notes
     -----
