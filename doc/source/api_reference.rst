@@ -11,6 +11,7 @@ Ropy is structured into a set of independent modules which you can import via
     ropy.transform
     ropy.trajectory
     ropy.ignition
+    ropy.ros
 
 Some modules have additional dependencies on top of the scipy stack. To
 use these modules you will have to install ropy with the respective extra

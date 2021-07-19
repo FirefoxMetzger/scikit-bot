@@ -21,6 +21,10 @@ def create_frame_graph(urdf: str) -> Tuple[Dict[str, rtf.Frame], Dict[str, rtf.L
     links : Dict[str, Frames]
         A dict of links in the graph. Names are chosen based on joint names.
 
+    See Also
+    --------
+    :mod:`ropy.transform`
+
     Notes
     -----
     ``frames[jointName]`` will return the joint's frame that is attached to the
