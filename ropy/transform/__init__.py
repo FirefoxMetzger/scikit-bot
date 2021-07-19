@@ -63,10 +63,12 @@ Affine Transformations
 
     Translation
     Rotation
+    EulerRotation
+    QuaternionRotation
 
 
-Affine Projections
-------------------
+Projections
+-----------
 
 .. autosummary::
     :template: transform_class.rst
@@ -103,7 +105,7 @@ from .projections import perspective_frustum
 
 from .affine import Translation, Rotation, Inverse
 from .projections import PerspectiveProjection
-from .utils3d import FrustumProjection
+from .utils3d import FrustumProjection, EulerRotation, QuaternionRotation
 
 __all__ = [
     # Core Classes for Frame Management
@@ -116,6 +118,8 @@ __all__ = [
     # Affine Links
     "Translation",
     "Rotation",
+    "EulerRotation",
+    "QuaternionRotation",
     "Inverse",
     # Projections
     "PerspectiveProjection",

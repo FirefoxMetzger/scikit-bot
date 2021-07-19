@@ -4,7 +4,6 @@ from typing import Dict, List, Tuple
 import numpy as np
 
 from ... import transform as rtf
-from ...transform._utils import rotvec_to_reflections
 
 
 def create_frame_graph(urdf: str) -> Tuple[Dict[str, rtf.Frame], Dict[str, rtf.Link]]:
@@ -78,10 +77,7 @@ def create_frame_graph(urdf: str) -> Tuple[Dict[str, rtf.Frame], Dict[str, rtf.L
             intermediate_frame = rtf.Frame(3)
             intermediate_frame = rtf.affine.Translation(frame_offset)(frame_parent)
 
-            u, v = rotvec_to_reflections(
-                rotation.as_rotvec(), angle=rotation.magnitude()
-            )
-            rtf.affine.Rotation(u, v)(intermediate_frame, frame_joint)
+            rtf.EulerRotation("xyz", frame_rotation)(intermediate_frame, frame_joint)
         else:
             rtf.affine.Translation(frame_offset)(frame_parent, frame_joint)
 
@@ -89,8 +85,7 @@ def create_frame_graph(urdf: str) -> Tuple[Dict[str, rtf.Frame], Dict[str, rtf.L
         if joint_type == "fixed":
             frame_link = rtf.affine.Translation((0, 0, 0))
         elif joint_type == "revolute":
-            u, v = rotvec_to_reflections(axis)
-            frame_link = rtf.affine.Rotation(u, v)
+            frame_link = rtf.EulerRotation("xyz", frame_rotation)
             frame_link.angle = 0.0
         elif joint_type == "prismatic":
             frame_link = rtf.affine.Translation(-axis, amount=0)
