@@ -86,7 +86,7 @@ class Inverse(InvertLink):
 
 
 class Rotation(AffineLink):
-    """A link representing a planar rotation.
+    """A link representing a planar rotation in N-D.
 
     The plane of rotation is described by two vectors (u, v). The initial
     angle of rotation is twice the angle between u and v (measured from u to v)
@@ -138,7 +138,7 @@ class Rotation(AffineLink):
 
 
 class Translation(AffineLink):
-    """A link representing a translation.
+    """A link representing a translation in N-D.
 
 
     Parameters
