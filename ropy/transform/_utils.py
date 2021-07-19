@@ -5,7 +5,7 @@ from numpy.typing import ArrayLike
 
 def vector_project(a: ArrayLike, b: ArrayLike, *, axis: int = -1) -> np.ndarray:
     """Returns the components of each a along each b.
-    
+
     Parameters
     ----------
     a : ArrayLike
@@ -19,7 +19,7 @@ def vector_project(a: ArrayLike, b: ArrayLike, *, axis: int = -1) -> np.ndarray:
     -------
     result : ndarray
         A batch of vectors of shape [a.batch_dims, b.batch_dims].
-    
+
     """
 
     a = np.asarray(a)

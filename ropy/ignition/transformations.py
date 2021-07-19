@@ -43,15 +43,13 @@ class FrustumProjection(Link):
         image_shape = np.asarray(image_shape)
 
         aspect_ratio = image_shape[1] / image_shape[0]
-        amounts = np.array([
-            [1/(tan(hfov / 2)), 0, 0],
-            [aspect_ratio * 1/(tan(hfov / 2)), 0, 0]
-        ])
+        amounts = np.array(
+            [[1 / (tan(hfov / 2)), 0, 0], [aspect_ratio * 1 / (tan(hfov / 2)), 0, 0]]
+        )
         directions = np.array([[0, 2 / image_shape[0], 0], [0, 0, 2 / image_shape[1]]])
 
         self.proj = NDPerspectiveProjection(directions, amounts, axis=-1)
-        self.tf = Translation(image_shape/2)
-
+        self.tf = Translation(image_shape / 2)
 
     def transform(self, x: ArrayLike) -> np.ndarray:
         x_projected = self.proj.transform(x)
