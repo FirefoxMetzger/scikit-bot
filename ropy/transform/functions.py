@@ -132,7 +132,10 @@ def reflect(vector: ArrayLike, direction: ArrayLike, *, axis=-1) -> np.ndarray:
 
     return vector - 2 * tmp1 / tmp2 * direction
 
-def shear(vector: ArrayLike, direction: ArrayLike, amount: ArrayLike, *, axis=-1) -> np.ndarray:
+
+def shear(
+    vector: ArrayLike, direction: ArrayLike, amount: ArrayLike, *, axis=-1
+) -> np.ndarray:
     """Displaces a vector along direction by the scalar product of vector and amount.
 
     A shear displaces a vector in a fixed direction by the vector's scalar

@@ -44,6 +44,7 @@ def test_angle_betwee_axis():
 
     assert np.allclose(result, np.pi / 2)
 
+
 @pytest.mark.parametrize(
     ("vec_A", "vec_B", "expected"),
     [
@@ -72,6 +73,7 @@ def test_vector_projection(vec_A, vec_B, expected):
 def test_scalar_projection(vec_A, vec_B, expected):
     result = scalar_project(vec_A, vec_B)
     assert np.allclose(result, expected)
+
 
 # @pytest.mark.parametrize(
 #     ("v1", "v2", "expected"),

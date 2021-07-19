@@ -506,13 +506,13 @@ class CustomLink(Link):
 
     def __init__(
         self,
-        parent: Frame,
-        child: Frame,
+        parent_dim: int,
+        child_dim: int,
         transformation: Callable[[ArrayLike], np.ndarray],
     ) -> None:
         """Initialize a new custom link."""
 
-        super().__init__(parent, child)
+        super().__init__(parent_dim, child_dim)
         self._transform = transformation
 
     def transform(self, x: ArrayLike) -> np.ndarray:

@@ -42,3 +42,17 @@ def test_frustum_project(point_in, fov, im_shape, point_out):
 def test_perspective_transform(point_in, fov, im_shape, point_out):
     proj = rtf.projections.PerspectiveProjection(fov, im_shape)
     assert np.allclose(proj.transform(point_in), point_out)
+
+
+@pytest.mark.parametrize(
+    "parent_coords, child_coords, direction, amount",
+    [
+        ((1, 1, 0), 1, (1, 0, 0), (0, 1, 0)),
+        ((1, 1), 0.25, (4, 0), (0, 1)),
+        ((4, 1), 1, (4, 0), (0, 1)),
+    ],
+)
+def test_1d_projections(parent_coords, child_coords, direction, amount):
+    proj = rtf.projections.NDPerspectiveProjection(direction, amount)
+    result = proj.transform(parent_coords)
+    assert np.allclose(result, child_coords)

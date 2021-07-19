@@ -3,8 +3,24 @@ from math import sin, cos
 from numpy.typing import ArrayLike
 
 
-def vector_project(a: ArrayLike, b: ArrayLike, *, axis=-1) -> np.ndarray:
-    """Returns the components of each a along each b."""
+def vector_project(a: ArrayLike, b: ArrayLike, *, axis: int = -1) -> np.ndarray:
+    """Returns the components of each a along each b.
+    
+    Parameters
+    ----------
+    a : ArrayLike
+        A batch of vectors to be projected.
+    b : ArrayLike
+        A batch of vectors that are being projected onto.
+    axis : int
+        The data axis of the batches, i.e., along which axis to compute.
+
+    Returns
+    -------
+    result : ndarray
+        A batch of vectors of shape [a.batch_dims, b.batch_dims].
+    
+    """
 
     a = np.asarray(a)
     b = np.asarray(b)
@@ -20,10 +36,14 @@ def vector_project(a: ArrayLike, b: ArrayLike, *, axis=-1) -> np.ndarray:
     return numerator / denominator * b
 
 
-def scalar_project(a: ArrayLike, b: ArrayLike, *, axis=-1) -> np.ndarray:
+def scalar_project(a: ArrayLike, b: ArrayLike, *, axis: int = -1) -> np.ndarray:
     """Returns the length of the components of each a along each b."""
 
-    return np.linalg.norm(vector_project(a, b, axis=axis), axis=axis)
+    projected = vector_project(a, b, axis=axis)
+    magnitude = np.linalg.norm(projected, axis=axis)
+    sign = np.sign(np.sum(projected * b, axis=axis))
+
+    return sign * magnitude
 
 
 def angle_between(vec_a: ArrayLike, vec_b: ArrayLike, *, axis: int = -1) -> np.ndarray:

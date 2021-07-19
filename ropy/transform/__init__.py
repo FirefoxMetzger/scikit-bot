@@ -102,6 +102,7 @@ from .projections import perspective_frustum
 
 from .affine import Translation, Rotation, Inverse
 from .projections import PerspectiveProjection
+from .utils3d import FrustumProjection
 
 __all__ = [
     # Core Classes for Frame Management
