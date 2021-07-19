@@ -42,6 +42,7 @@ class EulerRotation(Rotation):
             tmp_vector = np.array((0, 1, 0), dtype=np.float_)
 
         vec_u = tmp_vector - vector_project(tmp_vector, rotvec)
+        vec_u /= np.linalg.norm(vec_u)
         basis2 = np.cross(vec_u, rotvec)
         basis2 /= np.linalg.norm(basis2)
 
@@ -88,6 +89,7 @@ class QuaternionRotation(Rotation):
             tmp_vector = np.array((0, 1, 0), dtype=np.float_)
 
         vec_u = tmp_vector - vector_project(tmp_vector, rotvec)
+        vec_u /= np.linalg.norm(vec_u)
         basis2 = np.cross(vec_u, rotvec)
         basis2 /= np.linalg.norm(basis2)
 
