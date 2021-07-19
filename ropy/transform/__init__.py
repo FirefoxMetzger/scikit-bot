@@ -73,6 +73,7 @@ Affine Projections
     :toctree:
 
     PerspectiveProjection
+    FrustumProjection
 
 """
 
@@ -118,6 +119,7 @@ __all__ = [
     "Inverse",
     # Projections
     "PerspectiveProjection",
+    "FrustumProjection",
     # basic transformation functions
     "translate",
     "rotate",

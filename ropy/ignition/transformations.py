@@ -3,12 +3,12 @@ import numpy as np
 from numpy.typing import ArrayLike
 
 from ..transform.base import Link
-from ..transform.projections import NDPerspectiveProjection
+from ..transform.projections import PerspectiveProjection
 from ..transform.affine import Translation
 
 
 class FrustumProjection(Link):
-    """Frustum based intrinsic camera transformation (world2px)
+    """Frustum based intrinsic camera transformation
 
     This links behavior is identical to
     :class:`ropy.transform.FrustumProjection`; however, here the camera points
@@ -26,7 +26,7 @@ class FrustumProjection(Link):
 
     See Also
     --------
-    :class:``ropy.transform.FrustumProjection``
+    :class:`ropy.transform.FrustumProjection`
 
     Notes
     -----
@@ -48,7 +48,7 @@ class FrustumProjection(Link):
         )
         directions = np.array([[0, 2 / image_shape[0], 0], [0, 0, 2 / image_shape[1]]])
 
-        self.proj = NDPerspectiveProjection(directions, amounts, axis=-1)
+        self.proj = PerspectiveProjection(directions, amounts, axis=-1)
         self.tf = Translation(image_shape / 2)
 
     def transform(self, x: ArrayLike) -> np.ndarray:
