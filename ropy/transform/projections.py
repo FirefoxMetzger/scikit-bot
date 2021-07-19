@@ -74,7 +74,7 @@ def perspective_frustum(hfov: float, image_shape: Tuple[int, int]) -> np.ndarray
 
 
 class PerspectiveProjection(AffineLink):
-    """A link representing perspective projection in N-D.
+    """Perspective projection in N-D.
 
     This link projects a N dimensional frame onto an M dimensional frame.
     In it's most common use this corresponds to a central projection, e.g.,
