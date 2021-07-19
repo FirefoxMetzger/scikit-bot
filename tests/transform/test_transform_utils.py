@@ -2,6 +2,7 @@ from math import exp
 import numpy as np
 import ropy.transform._utils as util
 from ropy.transform._utils import angle_between
+from ropy.transform._utils import vector_project, scalar_project
 import pytest
 
 
@@ -42,6 +43,36 @@ def test_angle_betwee_axis():
     result = angle_between(vec_a, vec_b, axis=0)
 
     assert np.allclose(result, np.pi / 2)
+
+
+@pytest.mark.parametrize(
+    ("vec_A", "vec_B", "expected"),
+    [
+        ((1, 0), (0, 2), (0, 0)),
+        ((1, 0, 0), (0, 1, 0), (0, 0, 0)),
+        ((1, 0, 0), ((0, 1, 0), (1, 0, 0)), ((0, 0, 0), (1, 0, 0))),
+        (((1, 0), (2, 0), (3, 0), (0, 1)), (0, 1), ((0, 0), (0, 0), (0, 0), (0, 1))),
+        (((1, 0), (1, 1)), ((1, 0), (0, 1)), (((1, 0), (0, 0)), ((1, 0), (0, 1)))),
+    ],
+)
+def test_vector_projection(vec_A, vec_B, expected):
+    result = vector_project(vec_A, vec_B)
+    assert np.allclose(result, expected)
+
+
+@pytest.mark.parametrize(
+    ("vec_A", "vec_B", "expected"),
+    [
+        ((1, 0), (0, 2), 0),
+        ((1, 0, 0), (0, 1, 0), 0),
+        ((1, 0, 0), ((0, 1, 0), (1, 0, 0)), (0, 1)),
+        (((1, 0), (2, 0), (3, 0), (0, 1)), (0, 1), (0, 0, 0, 1)),
+        (((1, 0), (1, 1)), ((1, 0), (0, 1)), ((1, 0), (1, 1))),
+    ],
+)
+def test_scalar_projection(vec_A, vec_B, expected):
+    result = scalar_project(vec_A, vec_B)
+    assert np.allclose(result, expected)
 
 
 # @pytest.mark.parametrize(

@@ -24,7 +24,7 @@ def scale(vector: ArrayLike, scalar: ArrayLike) -> np.ndarray:
     Notes
     -----
     Exists for completeness. It may be cleaner to simply write
-    ``vector * direction`` instead.
+    ``scalar * vector`` instead.
 
     """
     vector = np.asarray(vector)
@@ -58,7 +58,7 @@ def translate(vector: ArrayLike, direction: ArrayLike) -> np.ndarray:
     return vector + direction
 
 
-def rotate(vector: ArrayLike, u: ArrayLike, v: ArrayLike) -> np.ndarray:
+def rotate(vector: ArrayLike, u: ArrayLike, v: ArrayLike, *, axis=-1) -> np.ndarray:
     """Rotate a vector in the u,v plane.
 
     Rotates a vector by reflecting it twice. The plane of rotation
@@ -73,6 +73,8 @@ def rotate(vector: ArrayLike, u: ArrayLike, v: ArrayLike) -> np.ndarray:
         The first of the two axes defining the plane of rotation
     v : ArrayLike
         The second of the two axes defining the plane of rotation
+    axis : int
+        The axis along which to compute the reflection. Default: -1.
 
     Returns
     -------
@@ -95,10 +97,10 @@ def rotate(vector: ArrayLike, u: ArrayLike, v: ArrayLike) -> np.ndarray:
     v = np.asarray(v)
 
     # implemented as rotation by two reflections
-    return reflect(reflect(vector, u), v)
+    return reflect(reflect(vector, u, axis=axis), v, axis=axis)
 
 
-def reflect(vector: ArrayLike, direction: ArrayLike) -> np.ndarray:
+def reflect(vector: ArrayLike, direction: ArrayLike, *, axis=-1) -> np.ndarray:
     """Reflect a vector along a line defined by direction.
 
     Parameters
@@ -106,7 +108,9 @@ def reflect(vector: ArrayLike, direction: ArrayLike) -> np.ndarray:
     vector : ArrayLike
         The vector to be reflected.
     direction : ArrayLike
-        The direction along which the reflection takes place.
+        The vector describing the direction along which the reflection takes place.
+    axis : int
+        The axis along which to compute the reflection. Default: -1.
 
     Returns
     -------
@@ -123,13 +127,15 @@ def reflect(vector: ArrayLike, direction: ArrayLike) -> np.ndarray:
     vector = np.asarray(vector)
     direction = np.asarray(direction)
 
-    return (
-        vector
-        - 2 * np.dot(vector, direction) / np.dot(direction, direction) * direction
-    )
+    tmp1 = np.sum(vector * direction, axis=axis)
+    tmp2 = np.sum(direction * direction, axis=axis)
+
+    return vector - 2 * tmp1 / tmp2 * direction
 
 
-def shear(vector: ArrayLike, direction: ArrayLike, amount: ArrayLike) -> np.ndarray:
+def shear(
+    vector: ArrayLike, direction: ArrayLike, amount: ArrayLike, *, axis=-1
+) -> np.ndarray:
     """Displaces a vector along direction by the scalar product of vector and amount.
 
     A shear displaces a vector in a fixed direction by the vector's scalar
@@ -145,6 +151,8 @@ def shear(vector: ArrayLike, direction: ArrayLike, amount: ArrayLike) -> np.ndar
         The direction along which to apply the shear.
     amount : ArrayLike
         The axis that determines the amount to shear by.
+    axis : int
+        The axis along with to compute the shear.
 
     Returns
     -------
@@ -162,4 +170,6 @@ def shear(vector: ArrayLike, direction: ArrayLike, amount: ArrayLike) -> np.ndar
     direction = np.asarray(direction)
     amount = np.asarray(amount)
 
-    return vector + np.dot(vector, amount) * direction
+    tmp1 = np.sum(vector * amount, axis=axis)
+
+    return vector + tmp1 * direction

@@ -33,14 +33,13 @@ Functions
     :toctree:
 
     ropy.ignition.Subscriber
+    ropy.ignition.FrustumProjection
 
 
-.. automodule:: ropy.ignition.messages
+Messages
+--------
 
-:mod:`ropy.ignition.messages`
------------------------------
-
-:mod:`ropy` provides python bindings to all Ignition messages. Messages are build
+Ropy provides python bindings to all Ignition messages. Messages are build
 from the protocol buffer templates found in Ign-Msgs_. This allows you to decode
 messages sent by the subscriber.
 
@@ -69,5 +68,6 @@ documentation`_.
 
 from . import messages
 from .subscriber import Subscriber
+from .transformations import FrustumProjection
 
-__all__ = ["messages", "Subscriber"]
+__all__ = ["messages", "Subscriber", "FrustumProjection"]
