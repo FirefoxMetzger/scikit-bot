@@ -18,6 +18,7 @@ sys.path.insert(0, str(Path(__file__).parents[2]))
 
 # weird hacks to test that ropy exists in RTD
 import ropy
+import ropy.transform
 
 
 # -- Project information -----------------------------------------------------
