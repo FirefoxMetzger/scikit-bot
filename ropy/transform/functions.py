@@ -2,6 +2,8 @@ import numpy as np
 from math import sin, cos
 from numpy.typing import ArrayLike
 
+from ._utils import vector_project
+
 
 def scale(vector: ArrayLike, scalar: ArrayLike) -> np.ndarray:
     """Scale each dimension of a vector.
@@ -130,7 +132,7 @@ def reflect(vector: ArrayLike, direction: ArrayLike, *, axis=-1) -> np.ndarray:
     tmp1 = np.sum(vector * direction, axis=axis)
     tmp2 = np.sum(direction * direction, axis=axis)
 
-    return vector - 2 * tmp1 / tmp2 * direction
+    return vector - 2 * vector_project(vector, direction, axis=axis)
 
 
 def shear(

@@ -1,5 +1,4 @@
 import numpy as np
-from math import sin, cos
 from numpy.typing import ArrayLike
 
 
