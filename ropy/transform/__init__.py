@@ -84,10 +84,6 @@ from .base import (
     Link,
     CustomLink,
     InvertLink,
-    homogenize,
-    cartesianize,
-    normalize_scale,
-    rotation_matrix,
 )
 
 from .functions import (
@@ -98,10 +94,6 @@ from .functions import (
     shear,
     scale,
 )
-
-from .coordinates import transform, inverse_transform, transform_between
-from . import coordinates, projections
-from .projections import perspective_frustum
 
 from .affine import Translation, Rotation, Inverse
 from .projections import PerspectiveProjection
@@ -130,12 +122,4 @@ __all__ = [
     "reflect",
     "shear",
     "scale",
-    # legacy functions (to be refactored)
-    "homogenize",
-    "cartesianize",
-    "transform",
-    "inverse_transform",
-    "transform_between",
-    "perspective_frustum",
-    "rotation_matrix",
 ]
