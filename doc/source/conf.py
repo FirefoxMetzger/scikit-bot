@@ -17,7 +17,7 @@ from pathlib import Path
 sys.path.insert(0, Path(__file__).parents[2])
 
 # weird hacks to test that ropy exists in RTD
-import ropy
+# import ropy
 
 
 # -- Project information -----------------------------------------------------
