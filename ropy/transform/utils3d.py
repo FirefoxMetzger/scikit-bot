@@ -46,7 +46,7 @@ class EulerRotation(Rotation):
         basis2 = np.cross(vec_u, rotvec)
         basis2 /= np.linalg.norm(basis2)
 
-        vec_v = cos(angle / 2) * vec_u + sin(angle / 2) * basis2
+        vec_v = cos(angle / 2) * vec_u - sin(angle / 2) * basis2
 
         super().__init__(vec_u, vec_v)
 
@@ -93,7 +93,7 @@ class QuaternionRotation(Rotation):
         basis2 = np.cross(vec_u, rotvec)
         basis2 /= np.linalg.norm(basis2)
 
-        vec_v = cos(angle / 2) * vec_u + sin(angle / 2) * basis2
+        vec_v = cos(angle / 2) * vec_u - sin(angle / 2) * basis2
 
         super().__init__(vec_u, vec_v)
 

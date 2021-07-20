@@ -105,7 +105,7 @@ class Rotation(AffineLink):
 
         frame_dim = len(u)
 
-        super(AffineLink, self).__init__(frame_dim, frame_dim)
+        super().__init__(frame_dim, frame_dim)
 
         self._u = u / np.linalg.norm(u)
         self._v = v / np.linalg.norm(v)
@@ -131,6 +131,9 @@ class Rotation(AffineLink):
     @angle.setter
     def angle(self, angle: float) -> None:
         self._angle = angle
+
+        # Note: this might rotate in the opposite direction
+        # will have to keep an eye on it.
         self._v = math.cos(angle / 2) * self._u + math.sin(angle / 2) * self._u_ortho
 
         self._update_transformation_matrix()
