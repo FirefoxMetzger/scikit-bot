@@ -17,7 +17,7 @@ formats:
 python:
    install:
     - method: pip
-      path: ..
+      path: .
       extra_requirements:
         - docs
    system_packages: True
