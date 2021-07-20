@@ -8,7 +8,7 @@ import ropy.transform as rtf
 @pytest.mark.parametrize(
     "sequence, angles, degrees",
     [
-        ("xyz", (0, 0, np.pi/4), False),
+        ("xyz", (0, 0, np.pi / 4), False),
         ("xyz", (0, 0, 45), True),
         ("xyz", (0, 0, 90), True),
         ("XZY", (45, 180, 90), True),
@@ -33,10 +33,10 @@ def test_EulerRotation(sequence, angles, degrees):
     "sequence, quaternion",
     [
         ("xyzw", (0, 1, 0, np.pi)),
-        ("xyzw", (1, 0, 0, np.pi/2)),
+        ("xyzw", (1, 0, 0, np.pi / 2)),
         ("xyzw", (1, 1, 0, np.pi)),
         ("wxyz", (np.pi, 0, 1, 0)),
-        ("wxyz", (np.pi/2, 1, 1, 1)),
+        ("wxyz", (np.pi / 2, 1, 1, 1)),
     ],
 )
 def test_QuaternionRotation(sequence, quaternion):
@@ -56,10 +56,10 @@ def test_QuaternionRotation(sequence, quaternion):
     assert np.allclose(result, expected)
 
 
-
 def test_QuaternionRotation_invalid_sequence():
     with pytest.raises(ValueError):
         rtf.QuaternionRotation((0, 0, 0, 1), sequence="xwyz")
+
 
 @pytest.mark.parametrize(
     "point_in, fov, im_shape, point_out",
