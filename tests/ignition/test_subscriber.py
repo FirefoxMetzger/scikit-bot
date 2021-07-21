@@ -3,7 +3,10 @@ import subprocess
 import time
 import psutil
 import pytest
+import shutil
 
+
+HAS_IGN = False if shutil.which("ign") is None else True
 
 @pytest.fixture
 def ign_instance():
@@ -23,6 +26,7 @@ def ign_instance():
     gazebo.terminate()
 
 
+@pytest.mark.skipif(not HAS_IGN, reason="Ignition executable not found.")
 def test_subscriber_raw(ign_instance):
     with ign.Subscriber("/clock") as clock:
         msg = clock.recv()
@@ -30,6 +34,7 @@ def test_subscriber_raw(ign_instance):
     assert msg.sim.sec == 0 and msg.sim.nsec == 0
 
 
+@pytest.mark.skipif(not HAS_IGN, reason="Ignition executable not found.")
 def test_subscriber_parse(ign_instance):
     def parse_clock(msg):
         return ign.messages.Clock().parse(msg[2])
@@ -40,12 +45,14 @@ def test_subscriber_parse(ign_instance):
     assert msg.sim.sec == 0 and msg.sim.nsec == 0
 
 
+@pytest.mark.skipif(not HAS_IGN, reason="Ignition executable not found.")
 def test_subscriber_noblock(ign_instance):
     with pytest.raises(IOError):
         with ign.Subscriber("/clock") as clock:
             msg = clock.recv(blocking=False)
 
 
+@pytest.mark.skipif(not HAS_IGN, reason="Ignition executable not found.")
 def test_subscriber_address_error():
     with pytest.raises(IOError):
         with ign.Subscriber("/clock") as clock:
