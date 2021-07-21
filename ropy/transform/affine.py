@@ -177,8 +177,8 @@ class Rotation(AffineLink):
         # will have to keep an eye on it.
         self._v = math.cos(angle / 2) * self._u + math.sin(angle / 2) * self._u_ortho
 
-        self._update_transformation_matrix()
-        self._update_inverse_transformation_matrix()
+        self._update_transformation_matrix(self._u.shape)
+        self._update_inverse_transformation_matrix(self._u.shape)
 
 
 class Translation(AffineLink):
@@ -199,18 +199,18 @@ class Translation(AffineLink):
 
     """
 
-    def __init__(self, direction: ArrayLike, *, amount: float = 1) -> None:
+    def __init__(self, direction: ArrayLike, *, amount: float = 1, axis : int = -1) -> None:
         direction = np.asarray(direction)
 
         frame_dim = len(direction)
 
-        super().__init__(frame_dim, frame_dim)
+        super().__init__(frame_dim, frame_dim, axis=axis)
 
         self._amount = amount
         self._direction = np.asarray(direction)
 
-        self._update_transformation_matrix()
-        self._update_inverse_transformation_matrix()
+        self._update_transformation_matrix(self._direction.shape)
+        self._update_inverse_transformation_matrix(self._direction.shape)
 
     @property
     def direction(self) -> np.ndarray:
@@ -221,8 +221,8 @@ class Translation(AffineLink):
     def direction(self, direction: ArrayLike) -> None:
         self._direction = np.asarray(direction)
 
-        self._update_transformation_matrix()
-        self._update_inverse_transformation_matrix()
+        self._update_transformation_matrix(self._direction.shape)
+        self._update_inverse_transformation_matrix(self._direction.shape)
 
     @property
     def amount(self) -> float:
@@ -233,8 +233,8 @@ class Translation(AffineLink):
     def amount(self, amount: float) -> None:
         self._amount = amount
 
-        self._update_transformation_matrix()
-        self._update_inverse_transformation_matrix()
+        self._update_transformation_matrix(self._direction.shape)
+        self._update_inverse_transformation_matrix(self._direction.shape)
 
     def transform(self, x: ArrayLike) -> np.ndarray:
         return translate(x, self._amount * self._direction)
