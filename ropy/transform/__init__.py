@@ -65,6 +65,7 @@ Affine Transformations
     Rotation
     EulerRotation
     QuaternionRotation
+    RotvecRotation
 
 
 Projections
@@ -97,7 +98,12 @@ from .functions import (
 
 from .affine import Translation, Rotation, Inverse
 from .projections import PerspectiveProjection
-from .utils3d import FrustumProjection, EulerRotation, QuaternionRotation
+from .utils3d import (
+    FrustumProjection,
+    EulerRotation,
+    QuaternionRotation,
+    RotvecRotation,
+)
 
 __all__ = [
     # Core Classes for Frame Management
@@ -112,6 +118,7 @@ __all__ = [
     "Rotation",
     "EulerRotation",
     "QuaternionRotation",
+    "RotvecRotation",
     "Inverse",
     # Projections
     "PerspectiveProjection",

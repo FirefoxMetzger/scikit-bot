@@ -78,9 +78,7 @@ def create_frame_graph(urdf: str) -> Tuple[Dict[str, rtf.Frame], Dict[str, rtf.L
         # link parent -> joint
         rotation = Rotation.from_euler("xyz", frame_rotation)
         if rotation.magnitude() > 0:
-            intermediate_frame = rtf.Frame(3)
             intermediate_frame = rtf.affine.Translation(frame_offset)(frame_parent)
-
             rtf.EulerRotation("xyz", frame_rotation)(intermediate_frame, frame_joint)
         else:
             rtf.affine.Translation(frame_offset)(frame_parent, frame_joint)
@@ -89,6 +87,7 @@ def create_frame_graph(urdf: str) -> Tuple[Dict[str, rtf.Frame], Dict[str, rtf.L
         if joint_type == "fixed":
             frame_link = rtf.affine.Translation((0, 0, 0))
         elif joint_type == "revolute":
+
             frame_link = rtf.EulerRotation("xyz", frame_rotation)
             frame_link.angle = 0.0
         elif joint_type == "prismatic":

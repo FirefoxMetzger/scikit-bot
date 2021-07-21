@@ -1,4 +1,4 @@
-from math import tan, sin, cos
+from math import tan
 import numpy as np
 from numpy.typing import ArrayLike
 from scipy.spatial.transform import Rotation as scipy_rotation
@@ -9,7 +9,72 @@ from .affine import Translation, Rotation
 from ._utils import angle_between, vector_project
 
 
-class EulerRotation(Rotation):
+class RotvecRotation(Rotation):
+    """Rotation based on rotation vector in 3D.
+
+    Parameters
+    ----------
+    rotvec : ArrayLike
+        The vector around which points are rotated.
+    angle : ArrayLike
+        The magnitude of the rotation. If None, the length of ``vector`` will be
+        used.
+    degrees : bool
+        If True, angle is assumed to be in degrees. Default is False.
+    axis : int
+        The axis along which to to compute. Default: -1.
+
+    Notes
+    -----
+    Batch dimensions of ``rotvec`` and ``angle`` must be broadcastable.
+    """
+
+    def __init__(
+        self,
+        rotvec: ArrayLike,
+        *,
+        angle: ArrayLike = None,
+        degrees: bool = False,
+        axis: int = -1
+    ) -> None:
+
+        rotvec = np.asarray(rotvec)
+        rotvec = np.moveaxis(rotvec, axis, -1)
+
+        if angle is None:
+            angle = np.linalg.norm(rotvec, axis=axis)
+            angle = np.moveaxis(angle, axis, -1)
+        else:
+            angle = np.asarray(angle)
+            if angle.ndim > 0:
+                angle = np.moveaxis(angle, axis, -1)
+
+        if degrees:  # make radians
+            angle = angle / 360 * 2 * np.pi
+
+        # arbitrary vector that isn't parallel to rotvec
+        alternativeA = np.zeros_like(rotvec)
+        alternativeA[..., :] = (1, 0, 0)
+        alternativeB = np.zeros_like(rotvec)
+        alternativeB[..., :] = (0, 1, 0)
+
+        enclosing_angle = np.abs(angle_between(alternativeA, rotvec))[..., None]
+        switch_vectors = (enclosing_angle < (np.pi / 4)) | (
+            abs(enclosing_angle - np.pi) < (np.pi / 4)
+        )
+        arbitrary_vector = np.where(switch_vectors, alternativeB, alternativeA)
+
+        vec_u = arbitrary_vector - vector_project(arbitrary_vector, rotvec)
+        vec_u /= np.linalg.norm(vec_u, axis=-1, keepdims=True)
+        basis2 = np.cross(vec_u, rotvec, axisa=-1, axisb=-1, axisc=-1)
+        basis2 /= np.linalg.norm(basis2, axis=-1, keepdims=True)
+
+        vec_v = np.cos(angle / 2) * vec_u - np.sin(angle / 2) * basis2
+
+        super().__init__(vec_u, vec_v)
+
+
+class EulerRotation(RotvecRotation):
     """Rotation based on Euler angles in 3D.
 
     Parameters
@@ -25,33 +90,22 @@ class EulerRotation(Rotation):
         listed in ``sequence``.
     degrees : bool
         If True, angles are assumed to be in degrees. Default is False.
+    axis : int
+        The axis along which to to compute. Default: -1.
     """
 
     def __init__(
-        self, sequence: str, angles: ArrayLike, *, degrees: bool = False
+        self, sequence: str, angles: ArrayLike, *, degrees: bool = False, axis: int = -1
     ) -> None:
         rot = scipy_rotation.from_euler(sequence, angles, degrees)
 
         rotvec = rot.as_rotvec()
         angle = rot.magnitude()
 
-        # arbitrary vector that isn't parallel to rotvec
-        tmp_vector = np.array((1, 0, 0), dtype=np.float_)
-        enclosing_angle = abs(angle_between(tmp_vector, rotvec))
-        if enclosing_angle < np.pi / 4 or abs(enclosing_angle - np.pi) < np.pi / 4:
-            tmp_vector = np.array((0, 1, 0), dtype=np.float_)
-
-        vec_u = tmp_vector - vector_project(tmp_vector, rotvec)
-        vec_u /= np.linalg.norm(vec_u)
-        basis2 = np.cross(vec_u, rotvec)
-        basis2 /= np.linalg.norm(basis2)
-
-        vec_v = cos(angle / 2) * vec_u - sin(angle / 2) * basis2
-
-        super().__init__(vec_u, vec_v)
+        super().__init__(rotvec, angle=angle, axis=axis)
 
 
-class QuaternionRotation(Rotation):
+class QuaternionRotation(RotvecRotation):
     """Rotation based on Quaternions in 3D.
 
     Parameters
@@ -62,9 +116,13 @@ class QuaternionRotation(Rotation):
     sequence : str
         Specifies the order of parameters in the quaternion. Possible values are
         ``"xyzw"`` (default), i.e., scalar-last, or "wxyz", i.e., scalar-first.
+    axis : int
+        The axis along which to to compute. Default: -1.
     """
 
-    def __init__(self, quaternion: ArrayLike, *, sequence: str = "xyzw") -> None:
+    def __init__(
+        self, quaternion: ArrayLike, *, sequence: str = "xyzw", axis: int = -1
+    ) -> None:
 
         quaternion = np.asarray(quaternion)
 
@@ -82,20 +140,7 @@ class QuaternionRotation(Rotation):
         rotvec = rot.as_rotvec()
         angle = rot.magnitude()
 
-        # arbitrary vector that isn't parallel to rotvec
-        tmp_vector = np.array((1, 0, 0), dtype=np.float_)
-        enclosing_angle = abs(angle_between(tmp_vector, rotvec))
-        if enclosing_angle < np.pi / 4 or abs(enclosing_angle - np.pi) < np.pi / 4:
-            tmp_vector = np.array((0, 1, 0), dtype=np.float_)
-
-        vec_u = tmp_vector - vector_project(tmp_vector, rotvec)
-        vec_u /= np.linalg.norm(vec_u)
-        basis2 = np.cross(vec_u, rotvec)
-        basis2 /= np.linalg.norm(basis2)
-
-        vec_v = cos(angle / 2) * vec_u - sin(angle / 2) * basis2
-
-        super().__init__(vec_u, vec_v)
+        super().__init__(rotvec, angle=angle, axis=axis)
 
 
 class FrustumProjection(Link):

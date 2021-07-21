@@ -24,16 +24,20 @@ class AffineLink(Link):
         The frame in which vectors are specified.
     child : int
         The frame into which this link transforms vectors.
+    axis : int
+        The axis along which computation takes place. All other axes are considered
+        batch dimensions.
 
     """
 
-    def __init__(self, parent_dim: int, child_dim: int) -> None:
+    def __init__(self, parent_dim: int, child_dim: int, *, axis: int = -1) -> None:
         """Initialize a new affine link."""
 
         super().__init__(parent_dim, child_dim)
 
         self._tf_matrix = None
         self._inverse_tf_matrix = None
+        self._axis = axis
 
     @property
     def affine_matrix(self) -> np.ndarray:
@@ -45,29 +49,57 @@ class AffineLink(Link):
         """The inverse transformation matrix mapping the child to the parent frame."""
         raise NotImplementedError
 
-    def _update_transformation_matrix(self) -> None:
+    def _update_transformation_matrix(self, shape: ArrayLike = None) -> None:
+        if shape is None:
+            shape = np.array((self.parent_dim,))
+
+        shape = np.asarray(shape)
+        reoreded_shape = np.moveaxis(shape, self._axis, -1)
+
         mapped_basis = list()
         for basis in np.eye(self.parent_dim):
-            mapped_basis.append(self.transform(basis))
-        offset = self.transform(np.zeros(self.parent_dim))
+            batch_vector = np.zeros(reoreded_shape)
+            batch_vector[..., :] = basis
+            batch_vector = np.moveaxis(batch_vector, -1, self._axis)
+            mapped = self.transform(basis)
+            mapped = np.moveaxis(mapped, self._axis, -1)
+            mapped_basis.append(mapped)
+        mapped_basis = np.stack(mapped_basis, axis=-2)
+        offset = self.transform(np.zeros(shape))
+        offset = np.moveaxis(offset, self._axis, -1)
 
-        self._tf_matrix = np.zeros((self.child_dim + 1, self.parent_dim + 1))
-        self._tf_matrix[:-1, :-1] = np.column_stack(mapped_basis) - offset[:, None]
-        self._tf_matrix[:-1, -1] = offset
-        self._tf_matrix[-1, -1] = 1
+        self._tf_matrix = np.zeros(
+            (*reoreded_shape[:-1], self.child_dim + 1, self.parent_dim + 1)
+        )
+        self._tf_matrix[..., :-1, :-1] = mapped_basis - offset[..., None]
+        self._tf_matrix[..., :-1, -1] = offset
+        self._tf_matrix[..., -1, -1] = 1
 
-    def _update_inverse_transformation_matrix(self) -> None:
+    def _update_inverse_transformation_matrix(self, shape: ArrayLike = None) -> None:
+        if shape is None:
+            shape = np.array((self.child_dim,))
+
+        shape = np.asarray(shape)
+        reoreded_shape = np.moveaxis(shape, self._axis, -1)
+
         mapped_basis = list()
         for basis in np.eye(self.child_dim):
-            mapped_basis.append(self.__inverse_transform__(basis))
-        offset = self.__inverse_transform__(np.zeros(self.child_dim))
+            batch_vector = np.zeros(reoreded_shape)
+            batch_vector[..., :] = basis
+            batch_vector = np.moveaxis(batch_vector, -1, self._axis)
+            mapped = self.__inverse_transform__(basis)
+            mapped = np.moveaxis(mapped, self._axis, -1)
+            mapped_basis.append(mapped)
+        mapped_basis = np.stack(mapped_basis, axis=-2)
+        offset = self.__inverse_transform__(np.zeros(shape))
+        offset = np.moveaxis(offset, self._axis, -1)
 
-        self._inverse_tf_matrix = np.zeros((self.child_dim + 1, self.parent_dim + 1))
-        self._inverse_tf_matrix[:-1, :-1] = (
-            np.column_stack(mapped_basis) - offset[:, None]
+        self._inverse_tf_matrix = np.zeros(
+            (*reoreded_shape[:-1], self.child_dim + 1, self.parent_dim + 1)
         )
-        self._inverse_tf_matrix[:-1, -1] = offset
-        self._inverse_tf_matrix[-1, -1] = 1
+        self._inverse_tf_matrix[..., :-1, :-1] = mapped_basis - offset[..., None]
+        self._inverse_tf_matrix[..., :-1, -1] = offset
+        self._inverse_tf_matrix[..., -1, -1] = 1
 
     def invert(self) -> Frame:
         """Return a new Link that is the inverse of this link."""
@@ -108,11 +140,11 @@ class Rotation(AffineLink):
 
     """
 
-    def __init__(self, u: ArrayLike, v: ArrayLike) -> None:
+    def __init__(self, u: ArrayLike, v: ArrayLike, *, axis: int = -1) -> None:
         u = np.asarray(u)
         v = np.asarray(v)
 
-        frame_dim = len(u)
+        frame_dim = u.shape[axis]
 
         super().__init__(frame_dim, frame_dim)
 
@@ -123,8 +155,8 @@ class Rotation(AffineLink):
         u_orthogonal = v - vector_project(v, u)
         self._u_ortho = u_orthogonal / np.linalg.norm(u_orthogonal)
 
-        self._update_transformation_matrix()
-        self._update_inverse_transformation_matrix()
+        self._update_transformation_matrix(shape=u.shape)
+        self._update_inverse_transformation_matrix(shape=u.shape)
 
     def transform(self, x: ArrayLike) -> np.ndarray:
         return rotate(x, self._u, self._v)

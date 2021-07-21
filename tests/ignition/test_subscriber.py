@@ -8,6 +8,7 @@ import shutil
 
 HAS_IGN = False if shutil.which("ign") is None else True
 
+
 @pytest.fixture
 def ign_instance():
     """Start a gazebo instance to test subscription"""
