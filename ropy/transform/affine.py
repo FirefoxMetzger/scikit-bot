@@ -49,10 +49,7 @@ class AffineLink(Link):
         """The inverse transformation matrix mapping the child to the parent frame."""
         raise NotImplementedError
 
-    def _update_transformation_matrix(self, shape: ArrayLike = None) -> None:
-        if shape is None:
-            shape = np.array((self.parent_dim,))
-
+    def _update_transformation_matrix(self, shape: ArrayLike) -> None:
         shape = np.asarray(shape)
         reoreded_shape = np.moveaxis(shape, self._axis, -1)
 
@@ -76,9 +73,6 @@ class AffineLink(Link):
         self._tf_matrix[..., -1, -1] = 1
 
     def _update_inverse_transformation_matrix(self, shape: ArrayLike = None) -> None:
-        if shape is None:
-            shape = np.array((self.child_dim,))
-
         shape = np.asarray(shape)
         reoreded_shape = np.moveaxis(shape, self._axis, -1)
 
