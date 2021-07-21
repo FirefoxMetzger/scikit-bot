@@ -37,7 +37,7 @@ class PerspectiveProjection(AffineLink):
         A batch of vectors indicating the direction along which to measure
         distance from the projection center. Its shape must match
         ``directions.shape``. Often all amount vectors are pairwise linearly
-        dependent, e.g., they all point in the direction a camera is facing. 
+        dependent, e.g., they all point in the direction a camera is facing.
     axis : int
         The axis along which the projection is computed. It's length is equal to
         the number of dimensions in the parent frame.
@@ -66,14 +66,19 @@ class PerspectiveProjection(AffineLink):
     a camera with a certain number of pixels then the length of the direction vector would
     reflect this.
 
-    The length of a single amount vector determines the scaling of distance. For example, if 
+    The length of a single amount vector determines the scaling of distance. For example, if
     you have a camera with a certain focal lengths (fx, fy) then the length of the amount vector
     would reflect this.
 
     """
 
     def __init__(
-        self, directions: ArrayLike, amounts: ArrayLike, *, axis: int = -1, subspace_axis:int = -2
+        self,
+        directions: ArrayLike,
+        amounts: ArrayLike,
+        *,
+        axis: int = -1,
+        subspace_axis: int = -2
     ) -> None:
         self.directions = np.asarray(directions)
         self.amounts = np.asarray(amounts)
@@ -117,7 +122,7 @@ class PerspectiveProjection(AffineLink):
         """
         x = np.asarray(x, dtype=np.float64)
         x = np.moveaxis(x, self._axis, -1)
-        
+
         # make x broadcastable with amounts/directions
         x = np.expand_dims(x, -2)
 

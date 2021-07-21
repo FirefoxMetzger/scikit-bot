@@ -15,18 +15,17 @@ import ropy.transform as rtf
         ((1, 1, 0), 180, True, -1),
         ((0, 0, 1), 0, False, -1),
         ((0, 0, 90), None, True, -1),
-        ((0, 0, np.pi/3), None, False, -1),
+        ((0, 0, np.pi / 3), None, False, -1),
     ],
 )
 def test_RotvecRotation(rotvec, angle, degrees, axis):
     in_vectors = np.eye(3)
 
-
     rot = rtf.RotvecRotation(rotvec, angle=angle, degrees=degrees, axis=axis)
     result = rot.transform(in_vectors)
 
     rotvec = np.asarray(rotvec, dtype=np.float_)
-    
+
     if angle is not None:
         angle = np.asarray(angle)
         rotvec *= angle / np.linalg.norm(rotvec, axis=axis)
@@ -43,7 +42,7 @@ def test_RotvecRotation(rotvec, angle, degrees, axis):
     "rotvec, angle, degrees, axis",
     [
         ((((1, 0, 0), (0, 1, 0)),), np.pi / 2, False, -1),
-        ((((1, 0, 0), (0, 1, 0)),), ((np.pi / 2, np.pi/3),), False, -1),
+        ((((1, 0, 0), (0, 1, 0)),), ((np.pi / 2, np.pi / 3),), False, -1),
         (np.eye(3).reshape(3, 1, 3), np.pi / 2, False, 0),
     ],
 )

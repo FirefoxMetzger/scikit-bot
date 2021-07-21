@@ -193,7 +193,9 @@ class Translation(AffineLink):
 
     """
 
-    def __init__(self, direction: ArrayLike, *, amount: float = 1, axis : int = -1) -> None:
+    def __init__(
+        self, direction: ArrayLike, *, amount: float = 1, axis: int = -1
+    ) -> None:
         direction = np.asarray(direction)
 
         frame_dim = len(direction)
