@@ -42,12 +42,12 @@ class RotvecRotation(Rotation):
         rotvec = np.moveaxis(rotvec, axis, -1)
 
         if angle is None:
-            angle = np.linalg.norm(rotvec, axis=axis)
+            angle = np.linalg.norm(rotvec, axis=axis, keepdims=True)
             angle = np.moveaxis(angle, axis, -1)
         else:
             angle = np.asarray(angle)
             if angle.ndim > 0:
-                angle = np.moveaxis(angle, axis, -1)
+                angle = np.moveaxis(angle, axis, -1)[..., None]
 
         if degrees:  # make radians
             angle = angle / 360 * 2 * np.pi

@@ -14,18 +14,23 @@ import ropy.transform as rtf
         ((0, 0, 1), 43, True, -1),
         ((1, 1, 0), 180, True, -1),
         ((0, 0, 1), 0, False, -1),
+        ((0, 0, 90), None, True, -1),
+        ((0, 0, np.pi/3), None, False, -1),
     ],
 )
 def test_RotvecRotation(rotvec, angle, degrees, axis):
     in_vectors = np.eye(3)
 
-    rotvec = np.asarray(rotvec, dtype=np.float_)
-    angle = np.asarray(angle)
 
     rot = rtf.RotvecRotation(rotvec, angle=angle, degrees=degrees, axis=axis)
     result = rot.transform(in_vectors)
 
-    rotvec *= angle / np.linalg.norm(rotvec, axis=axis)
+    rotvec = np.asarray(rotvec, dtype=np.float_)
+    
+    if angle is not None:
+        angle = np.asarray(angle)
+        rotvec *= angle / np.linalg.norm(rotvec, axis=axis)
+
     rotvec = np.moveaxis(rotvec, axis, -1)
     scipy_rot = ScipyRotation.from_rotvec(rotvec, degrees)
     expected = scipy_rot.apply(in_vectors)
@@ -38,6 +43,7 @@ def test_RotvecRotation(rotvec, angle, degrees, axis):
     "rotvec, angle, degrees, axis",
     [
         ((((1, 0, 0), (0, 1, 0)),), np.pi / 2, False, -1),
+        ((((1, 0, 0), (0, 1, 0)),), ((np.pi / 2, np.pi/3),), False, -1),
         (np.eye(3).reshape(3, 1, 3), np.pi / 2, False, 0),
     ],
 )
@@ -51,8 +57,9 @@ def test_vectorized_RotvecRotation(rotvec, angle, degrees, axis):
     rot = rtf.RotvecRotation(rotvec, angle=angle, degrees=degrees, axis=axis)
     result = rot.transform(in_vectors)
 
-    rotvec *= angle / np.linalg.norm(rotvec, axis=axis, keepdims=True)
     rotvec = np.moveaxis(rotvec, axis, -1)
+    scaling = angle / np.linalg.norm(rotvec, axis=-1)
+    rotvec *= scaling[..., None]
     scipy_rot = ScipyRotation.from_rotvec(rotvec[0], degrees)
     batch = list()
     for vec in in_vectors:
