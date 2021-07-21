@@ -69,9 +69,9 @@ class RotvecRotation(Rotation):
         basis2 = np.cross(vec_u, rotvec, axisa=-1, axisb=-1, axisc=-1)
         basis2 /= np.linalg.norm(basis2, axis=-1, keepdims=True)
 
-        vec_v = np.cos(angle / 2) * vec_u - np.sin(angle / 2) * basis2
+        super().__init__(vec_u, basis2)
 
-        super().__init__(vec_u, vec_v)
+        self.angle = angle
 
 
 class EulerRotation(RotvecRotation):
