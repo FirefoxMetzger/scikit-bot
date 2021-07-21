@@ -129,9 +129,6 @@ def reflect(vector: ArrayLike, direction: ArrayLike, *, axis=-1) -> np.ndarray:
     vector = np.asarray(vector)
     direction = np.asarray(direction)
 
-    tmp1 = np.sum(vector * direction, axis=axis)
-    tmp2 = np.sum(direction * direction, axis=axis)
-
     return vector - 2 * vector_project(vector, direction, axis=axis)
 
 

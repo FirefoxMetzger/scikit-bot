@@ -93,6 +93,15 @@ class Rotation(AffineLink):
     and can be modified by setting the angle explicitly, e.g. ``link.angle =
     np.pi``. The angle is measured in radians.
 
+    Parameters
+    ----------
+    u : ArrayLike
+        The first vector defining the plane of rotation. The angle is mesured
+        from here.
+    v : ArrayLike
+        The second vector defining the plane of rotation. The angle is measured
+        to here, i.e., from u to v.
+
     Notes
     -----
     Implements __inverse_transform__.

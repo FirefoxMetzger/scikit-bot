@@ -19,28 +19,30 @@ def vector_project(a: ArrayLike, b: ArrayLike, *, axis: int = -1) -> np.ndarray:
     result : ndarray
         A batch of vectors of shape [a.batch_dims, b.batch_dims].
 
+
+    Notes
+    -----
+    The function assumes that a and b are broadcastable.
+
     """
 
     a = np.asarray(a)
     b = np.asarray(b)
 
-    numerator = np.tensordot(a, b, axes=[axis, axis])
-    numerator = np.expand_dims(numerator, axis)
-
+    numerator = np.sum(a * b, axis=axis, keepdims=True)
     denominator = np.sum(b * b, axis=axis, keepdims=True)
-    denominator = np.expand_dims(denominator, [x for x in range(a.ndim - 1)])
-
-    b = np.expand_dims(b, [x for x in range(a.ndim - 1)])
 
     return numerator / denominator * b
 
 
-def scalar_project(a: ArrayLike, b: ArrayLike, *, axis: int = -1) -> np.ndarray:
+def scalar_project(
+    a: ArrayLike, b: ArrayLike, *, axis: int = -1, keepdims=False
+) -> np.ndarray:
     """Returns the length of the components of each a along each b."""
 
     projected = vector_project(a, b, axis=axis)
-    magnitude = np.linalg.norm(projected, axis=axis)
-    sign = np.sign(np.sum(projected * b, axis=axis))
+    magnitude = np.linalg.norm(projected, axis=axis, keepdims=keepdims)
+    sign = np.sign(np.sum(projected * b, axis=axis, keepdims=keepdims))
 
     return sign * magnitude
 

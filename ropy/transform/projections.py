@@ -59,20 +59,30 @@ class PerspectiveProjection(AffineLink):
             A batch of vectors expressed in the child's frame. The child frame runs
             along ``axis`` specified in the constructor.
 
+        Notes
+        -----
+        This function requires the batch dimensions of ``x``, ``amounts``, and
+        ``directions`` to be broadcastable. To make an example assume a
+        projection from N dimensions to M dimensions. In the trivial case
+        (single vector, single projection) there are no batch dimensions; shapes
+        are what you'd expect: ``x.shape=(N,)``, ``amounts.shape = (M, N)``,
+        ``directions.shape=(M, N)``. In the case of a batch of vectors and a
+        single projection, batch dimensions must be broadcastable:
+        ``x.shape=(batch, N)``, ``amounts.shape = (1, M, N)``,
+        ``directions.shape=(1, M, N)``. In the case of a single single vector
+        and multiple projections the same rule applies: ``x.shape=(1, N)``,
+        ``amounts.shape = (batch, M, N)``, ``directions.shape=(batch, M, N)``.
+        Other combinations are - of course - possible, too.
         """
         x = np.asarray(x, dtype=np.float64)
         x = np.moveaxis(x, self.axis, -1)
-
-        # match shapes of all involved tensors final shape is
-        # (x_batch.shape, directions_batch.shape, axis)
-        amounts = np.expand_dims(self.amounts, [y for y in range(x.ndim - 1)])
-        directions = np.expand_dims(self.directions, [y for y in range(x.ndim - 1)])
+        x = np.expand_dims(x, -2)  # make broadcastable with amounts/directions
 
         scaling = scalar_project(x, self.amounts, axis=-1)
-        scaling /= np.linalg.norm(amounts, axis=-1)
+        scaling /= np.linalg.norm(self.amounts, axis=-1)
 
         projected = scalar_project(x, self.directions, axis=-1)
-        projected /= scaling * np.linalg.norm(directions, axis=-1)
+        projected /= scaling * np.linalg.norm(self.directions, axis=-1)
 
         return projected
 
