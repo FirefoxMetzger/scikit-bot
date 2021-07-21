@@ -11,16 +11,43 @@ from ._utils import scalar_project
 class PerspectiveProjection(AffineLink):
     """Perspective projection in N-D.
 
-    This link projects a N dimensional frame onto an M dimensional frame.
-    In it's most common use this corresponds to a central projection, e.g.,
-    the projection of coordinates in a 3D world frame down to a 2D camera frame.
+    This link projects a N dimensional frame onto an M dimensional frame. Using
+    the parent's origin as the center of projection. In its most common use
+    this corresponds to a central projection, e.g., the projection of
+    coordinates in a 3D world frame down to a 2D camera frame.
 
     This link computes the projection using pairs of ``directions`` and
-    ``amounts`` (both batches of vectors). To compute a coordinate of a vector
-    in the projected space the vector is first scalar projected onto the amount
-    (vector). Then direction is scaled proportional to the value of this scalar
-    projection. Finally, the vector is vector projected onto the desired
-    direction.
+    ``amounts`` (both batches of vectors). To compute each coordinate of a
+    vector in the projected space the vector is first scalar projected onto the
+    amount (vector). This determines distance from the projection's center. Then
+    the vector is scalar projected onto the direction (vector) and the
+    result is scaled (anti-)proportional to the distance from the projection's
+    center.
+
+    Parameters
+    ----------
+    directions : ArrayLike
+        A batch of (subspace-)vectors onto which points will be projected. The
+        vectors run along ``axis`` and the subspace runs along
+        ``subspace_axis``. All other dimensions are considered batch dimensions.
+        Often this is a normal basis of the projection's subspace, e.g., the
+        the x and y axes of a camera's image plane expressed in the parent
+        frame.
+    amounts : ArrayLike
+        A batch of vectors indicating the direction along which to measure
+        distance from the projection center. Its shape must match
+        ``directions.shape``. Often all amount vectors are pairwise linearly
+        dependent, e.g., they all point in the direction a camera is facing. 
+    axis : int
+        The axis along which the projection is computed. It's length is equal to
+        the number of dimensions in the parent frame.
+    subspace_axis : int
+        The axis along which different directions and amounts are stacked. It's
+        length is equal to the number of dimensions in the child frame. Note
+        that this axis _must_ be present, even if vectors are projected down to
+        1D; in this case, the this axis has length 1.
+
+
 
     Methods
     -------
@@ -29,20 +56,34 @@ class PerspectiveProjection(AffineLink):
         the child's frame.
 
 
+    See Also
+    --------
+    :class:`ropy.transform.FrustumProjection`, :class:`ropy.ignition.FrustumProjection`
+
+    Notes
+    -----
+    The length of a single direction vector rescales this axis. For example, if you have
+    a camera with a certain number of pixels then the length of the direction vector would
+    reflect this.
+
+    The length of a single amount vector determines the scaling of distance. For example, if 
+    you have a camera with a certain focal lengths (fx, fy) then the length of the amount vector
+    would reflect this.
+
     """
 
     def __init__(
-        self, directions: ArrayLike, amounts: ArrayLike, *, axis: int = -1
+        self, directions: ArrayLike, amounts: ArrayLike, *, axis: int = -1, subspace_axis:int = -2
     ) -> None:
         self.directions = np.asarray(directions)
         self.amounts = np.asarray(amounts)
-        self.axis = axis
 
         # make data axis the last axis (more efficient and easier to handle)
-        self.directions = np.moveaxis(self.directions, axis, -1)
-        self.amounts = np.moveaxis(self.amounts, axis, -1)
+        # also make subspace axis the second last axis
+        self.directions = np.moveaxis(self.directions, [subspace_axis, axis], [-2, -1])
+        self.amounts = np.moveaxis(self.amounts, [subspace_axis, axis], [-2, -1])
 
-        super().__init__(self.directions.shape[axis], self.directions.ndim)
+        super().__init__(self.directions.shape[axis], self.directions.ndim, axis=axis)
 
     def transform(self, x: ArrayLike) -> np.ndarray:
         """Transform x (given in parent frame) into the child frame.
@@ -75,8 +116,10 @@ class PerspectiveProjection(AffineLink):
         Other combinations are - of course - possible, too.
         """
         x = np.asarray(x, dtype=np.float64)
-        x = np.moveaxis(x, self.axis, -1)
-        x = np.expand_dims(x, -2)  # make broadcastable with amounts/directions
+        x = np.moveaxis(x, self._axis, -1)
+        
+        # make x broadcastable with amounts/directions
+        x = np.expand_dims(x, -2)
 
         scaling = scalar_project(x, self.amounts, axis=-1)
         scaling /= np.linalg.norm(self.amounts, axis=-1)

@@ -7,9 +7,9 @@ import ropy.transform as rtf
 @pytest.mark.parametrize(
     "parent_coords, child_coords, direction, amount",
     [
-        ((1, 1, 0), 1, (1, 0, 0), (0, 1, 0)),
-        ((1, 1), 0.25, (4, 0), (0, 1)),
-        ((4, 1), 1, (4, 0), (0, 1)),
+        ((1, 1, 0), 1, ((1, 0, 0),), ((0, 1, 0),)),
+        ((1, 1), 0.25, ((4, 0),), ((0, 1),)),
+        ((4, 1), 1, ((4, 0),), ((0, 1),)),
     ],
 )
 def test_1d_projections(parent_coords, child_coords, direction, amount):
