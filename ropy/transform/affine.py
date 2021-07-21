@@ -1,7 +1,6 @@
 from numpy.typing import ArrayLike
 from typing import Callable
 import numpy as np
-import math
 
 from .base import Frame, Link, InvertLink
 from ._utils import vector_project, angle_between
@@ -167,9 +166,7 @@ class Rotation(AffineLink):
     def angle(self, angle: float) -> None:
         self._angle = angle
 
-        # Note: this might rotate in the opposite direction
-        # will have to keep an eye on it.
-        self._v = math.cos(angle / 2) * self._u + math.sin(angle / 2) * self._u_ortho
+        self._v = np.cos(angle / 2) * self._u - np.sin(angle / 2) * self._u_ortho
 
         self._update_transformation_matrix(self._u.shape)
         self._update_inverse_transformation_matrix(self._u.shape)

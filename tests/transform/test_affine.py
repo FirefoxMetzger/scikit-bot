@@ -18,7 +18,7 @@ def test_1d_robot():
 
     joint.angle = np.pi / 2
     tool_pos = tool_frame.transform((0, 0), to_frame=world_frame)
-    assert np.allclose(tool_pos, (0, 1))
+    assert np.allclose(tool_pos, (0, -1))
 
 
 def test_inverse_transform():
