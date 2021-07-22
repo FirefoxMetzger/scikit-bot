@@ -63,11 +63,12 @@ class AffineLink(Link):
         mapped_basis = np.stack(mapped_basis, axis=-2)
         offset = self.transform(np.zeros(shape))
         offset = np.moveaxis(offset, self._axis, -1)
+        offset_remove = np.expand_dims(offset, -2)
 
         self._tf_matrix = np.zeros(
             (*reoreded_shape[:-1], self.child_dim + 1, self.parent_dim + 1)
         )
-        self._tf_matrix[..., :-1, :-1] = mapped_basis - offset[..., None]
+        self._tf_matrix[..., :-1, :-1] = mapped_basis - offset_remove
         self._tf_matrix[..., :-1, -1] = offset
         self._tf_matrix[..., -1, -1] = 1
 
