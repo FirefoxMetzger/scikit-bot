@@ -5,7 +5,7 @@ install_requires = ["numpy == 1.20.0", "scipy == 1.7.0"]
 extras_require = {
     "ignition": ["pyzmq == 22.1.0", "betterproto == 1.2.5", "psutil == 5.8.0"],
     "docs": [
-        "sphinx == 4.1.1",
+        "sphinx == 4.1.2",
         "numpydoc == 1.1.0",
         "sphinx-autodoc-typehints == 1.12.0",
         "matplotlib == 3.4.2",
