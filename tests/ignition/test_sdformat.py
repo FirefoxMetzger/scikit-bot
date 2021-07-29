@@ -1,15 +1,25 @@
 from pathlib import Path
 import numpy as np
+import pytest
+from xsdata.exceptions import ParserError
+from xml.etree.ElementTree import ParseError as ETreeParseError
 
 import ropy.ignition as ign
 
 
-def test_sdformat():
-    # actually no assert right now, but a stub for me to debug the parser
-    with open(Path(__file__).parent / "panda_world.sdf", "r") as file:
-        sdf_string = file.read()
+def test_valid_parsing(valid_sdf_string):
+    """
+    Test is successful if it doesn't produce an error. This isn't super amazing
+    so it might be refactored once I have more sophisticated tests. Meanwhile it
+    hits on quite a few edge cases of the SDFormat that need to be handled
+    correctly.
+    """
+    ign.parse_sdf(valid_sdf_string)
 
-    foo = ign.create_frame_graph(sdf_string)
+
+def test_invalid_parsing(invalid_sdf_string):
+    with pytest.raises(ParserError):
+        ign.parse_sdf(invalid_sdf_string)
 
 
 def test_light(light_sdf):

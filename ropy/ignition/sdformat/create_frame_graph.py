@@ -7,7 +7,7 @@ import requests
 from urllib.parse import urlparse
 from pathlib import Path
 
-from .. import transform as rtf
+from ... import transform as rtf
 
 
 def _xpath_from_elements(elements:List[ElementTree.Element]) -> str:

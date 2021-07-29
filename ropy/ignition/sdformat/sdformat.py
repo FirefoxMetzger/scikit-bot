@@ -4,6 +4,7 @@ from xsdata.formats.dataclass.parsers import XmlParser
 from xsdata.formats.dataclass.parsers.config import ParserConfig
 from xsdata.formats.dataclass.serializers import XmlSerializer
 from xsdata.formats.dataclass.serializers.config import SerializerConfig
+from xsdata.exceptions import ParserError as XSDataParserError
 import io
 from typing import Dict, Callable
 
@@ -21,12 +22,16 @@ _parser_roots = {
     "1.5": SDFv15,
     "1.6": SDFv16,
     "1.7": SDFv17,
-    "1.8": SDFv18
+    "1.8": SDFv18,
 }
 
 # recommended to reuse the same parser context
 # see: https://xsdata.readthedocs.io/en/latest/xml.html
 xml_ctx = XmlContext()
+
+
+class ParseError(XSDataParserError):
+    pass
 
 
 def get_sdf_version(sdf: str, default: str = "1.8"):
@@ -42,26 +47,30 @@ def get_sdf_version(sdf: str, default: str = "1.8"):
 
     Notes
     -----
-    This function only checks the root tag and does not parse the entire file.
+    This function only checks the root tag and does not parse the entire string.
 
     """
 
-    root = ElementTree.fromstring(sdf)
+    parser = ElementTree.iterparse(io.StringIO(sdf), events=("start",))
+
+    _, root = next(parser)
 
     if root.tag != "sdf":
-        raise ValueError("SDF root element not found.")
+        raise ParseError("SDF root element not found.")
 
     if "version" in root.attrib:
         version = root.attrib["version"]
         if version not in _parser_roots.keys():
-            raise ValueError(f"Invalid version: {version}")
+            raise ParseError(f"Invalid version: {version}")
         return root.attrib["version"]
     else:
         return default
 
 
-def parse_sdf(sdf: str, sdf_version:str=None, custom_constructor:Dict[str, Callable]=None):
-    """ Convert an XML string into a sdformat.models tree.
+def parse_sdf(
+    sdf: str, sdf_version: str = None, custom_constructor: Dict[str, Callable] = None
+):
+    """Convert an XML string into a sdformat.models tree.
 
     Parameters
     ----------
@@ -85,12 +94,11 @@ def parse_sdf(sdf: str, sdf_version:str=None, custom_constructor:Dict[str, Calla
     """
 
     def class_factory(clazz, params):
-        tag_name:str = clazz.Meta.name
+        tag_name: str = clazz.Meta.name
         if tag_name in custom_constructor:
             return custom_constructor[tag_name](**params)
 
         return clazz, params
-
 
     if sdf_version is None:
         version = get_sdf_version(sdf)
@@ -98,17 +106,17 @@ def parse_sdf(sdf: str, sdf_version:str=None, custom_constructor:Dict[str, Calla
         version = sdf_version
 
     root_class = _parser_roots[version]
-    
-    if root_class is None:
-        raise RuntimeError(f"Ropy currently doesnt support SDFormat v{version}")
 
-    sdf_parser =XmlParser(ParserConfig(class_factory=class_factory), context=xml_ctx)
+    if root_class is None:
+        raise ParseError(f"Ropy currently doesnt support SDFormat v{version}")
+
+    sdf_parser = XmlParser(ParserConfig(), context=xml_ctx)
 
     return sdf_parser.from_string(sdf, root_class)
 
 
 def serialize_sdf(root_element) -> str:
-    """ Serialize a SDFormat object to an XML string.
+    """Serialize a SDFormat object to an XML string.
 
     Parameters
     ----------
