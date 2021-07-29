@@ -34,6 +34,7 @@ Functions
 
     ropy.ignition.Subscriber
     ropy.ignition.FrustumProjection
+    ropy.ignition.create_frame_graph
 
 
 Messages
@@ -69,5 +70,7 @@ documentation`_.
 from . import messages
 from .subscriber import Subscriber
 from .transformations import FrustumProjection
+from .sdformat.create_frame_graph import create_frame_graph
+from .sdformat.sdformat import get_sdf_version
 
-__all__ = ["messages", "Subscriber", "FrustumProjection"]
+__all__ = ["messages", "Subscriber", "FrustumProjection", "create_frame_graph", "get_sdf_version"]
