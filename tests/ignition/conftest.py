@@ -144,6 +144,7 @@ def valid_sdf_string(request):
         "world_complete.sdf",
         "shapes.sdf",
         "includes.sdf",
+        "invalid_version.sdf"
     ]
 )
 def invalid_sdf_string(request):
