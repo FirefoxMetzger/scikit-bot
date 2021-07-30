@@ -37,8 +37,35 @@ Functions
     ropy.ignition.create_frame_graph
 
 
-Messages
---------
+SDFormat XML
+------------
+
+Ropy features a DOM-style parser and serializer for SDFormat XML. You can load
+any valid SDFormat v1.5 or newer file and ropy will construct a class tree out of it.
+Similarily, you can create objects that represent SDF elements and ropy can serialize
+them into SDF. 
+
+While the parser is imported together with ``ropy.ignition``, the individual
+models are imported on demand. This is done to keep import times low and
+(moreso) because versions are not backwards compatible. For example, the
+bindings for v1.8 can not parse v1.6 SDFormat XML. As a result, you will have to
+explicitly import the bindings you wish to use if you need/want to manipulate
+them explicitly. For example, if you want to import SDFormat v1.8 bindings you
+can use::
+
+    import ropy.ignition.sdformat.models.v18 as sdf_bindings
+
+You can find documentation of the parser and the bindings for each version below:
+
+.. autosummary::
+    :toctree:
+
+    ropy.ignition.sdformat
+    ropy.ignition.sdformat.models.v15
+
+
+Ignition Messages
+-----------------
 
 Ropy provides python bindings to all Ignition messages. Messages are build
 from the protocol buffer templates found in Ign-Msgs_. This allows you to decode

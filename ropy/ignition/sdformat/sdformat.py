@@ -139,7 +139,7 @@ def dumps(root_element, *, format=False) -> str:
     Parameters
     ----------
     root_element : object
-        An instance of ropy.ignition.models.vXX.SDF. XX represents the SDFormat
+        An instance of ``ropy.ignition.models.vXX.Sdf``. XX represents the SDFormat
         version and can be any version currently supported by ropy.
     format : bool
         If true, add indentation and linebreaks to the output to increase human
