@@ -89,6 +89,9 @@ def loads(
         callable. This is useful for doing pre- or post-initialization of
         classes or to replace them with subclasses.
 
+        Note: This feature is currently disabled. It will become available
+        with the next release of xsData.
+
     Returns
     -------
     SdfRoot : object
@@ -97,14 +100,15 @@ def loads(
 
     """
 
-    if custom_constructor is None:
-        custom_constructor = dict()
+    # Disabled until xsData upgrades to the next version
+    # if custom_constructor is None:
+    #     custom_constructor = dict()
 
-    def custom_class_factory(clazz, params):
-        if clazz in custom_constructor:
-            return custom_constructor[clazz](**params)
+    # def custom_class_factory(clazz, params):
+    #     if clazz in custom_constructor:
+    #         return custom_constructor[clazz](**params)
 
-        return clazz(**params)
+    #     return clazz(**params)
 
     if sdf_version is None:
         version = get_version(sdf)
@@ -116,9 +120,11 @@ def loads(
     if root_class is None:
         raise ParseError(f"Ropy currently doesnt support SDFormat v{version}")
 
-    sdf_parser = XmlParser(
-        ParserConfig(class_factory=custom_class_factory), context=xml_ctx
-    )
+    # Disabled until xsData upgrades to the next version
+    # sdf_parser = XmlParser(
+    #     ParserConfig(class_factory=custom_class_factory), context=xml_ctx
+    # )
+    sdf_parser = XmlParser(ParserConfig(), xml_ctx)
 
     return sdf_parser.from_string(sdf, root_class)
 

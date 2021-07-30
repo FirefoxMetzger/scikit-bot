@@ -22,6 +22,7 @@ def test_invalid_parsing(invalid_sdf_string):
         ign.sdformat.loads(invalid_sdf_string)
 
 
+@pytest.mark.skip(reason="Currently disabled.")
 def test_custom_constructor(valid_sdf_string):
     @dataclass
     class NewPose:
@@ -69,3 +70,10 @@ def test_light(light_sdf):
     result = frames["/sdf/point_light"].transform((0, 0, 0), "/sdf")
     expected = (0, 2, 2)
     assert np.allclose(result, expected)
+
+
+def test_unsupported_sdf_version():
+    sdf = ""
+
+    with pytest.raises(ParserError):
+        ign.sdformat.loads(sdf, "1.0")
