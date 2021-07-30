@@ -36,16 +36,13 @@ class ParseError(XSDataParserError):
     pass
 
 
-def get_version(sdf: str, default: str = "1.8"):
+def get_version(sdf: str):
     """Returns the version of a SDF string.
 
     Parameters
     ----------
     sdf : str
         The SDFormat XML to be parsed.
-    default : str
-        If no version is specified, the default value is returned instead. It is
-        equal to the latest SDF version supported by ropy.
 
     Notes
     -----
@@ -66,7 +63,7 @@ def get_version(sdf: str, default: str = "1.8"):
             raise ParseError(f"Invalid version: {version}")
         return root.attrib["version"]
     else:
-        return default
+        raise ParseError("SDF doesnt specify a version.")
 
 
 def loads(

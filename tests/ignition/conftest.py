@@ -44,7 +44,6 @@ def sdf_string(request):
         "world_frame_relative_to.sdf",
         "whitespace.sdf",
         "flattened_test_nested_model_with_frames.sdf",
-        "empty_noversion.sdf",
         "empty_road_sph_coords.sdf",
         "world_nested_frame.sdf",
         "joint_complete.sdf",
@@ -145,6 +144,7 @@ def valid_sdf_string(request):
         "includes.sdf",
         "invalid_version.sdf",
         "nested_multiple_elements_error_world.sdf",
+        "empty_noversion.sdf",
     ]
 )
 def invalid_sdf_string(request):
