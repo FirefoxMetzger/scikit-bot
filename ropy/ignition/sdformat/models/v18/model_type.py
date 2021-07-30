@@ -152,14 +152,14 @@ class ModelType:
             "required": True,
         }
     )
-    canonical_link: Optional[str] = field(
-        default=None,
+    canonical_link: str = field(
+        default="",
         metadata={
             "type": "Attribute",
         }
     )
-    placement_frame: Optional[str] = field(
-        default=None,
+    placement_frame: str = field(
+        default="",
         metadata={
             "type": "Attribute",
         }

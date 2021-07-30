@@ -149,12 +149,11 @@ class ImuType:
             value: Optional[str] = field(
                 default=None,
                 metadata={
-                    "required": True,
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
                 }
             )
-            parent_frame: Optional[str] = field(
-                default=None,
+            parent_frame: str = field(
+                default="",
                 metadata={
                     "type": "Attribute",
                 }
@@ -174,12 +173,11 @@ class ImuType:
             value: Optional[str] = field(
                 default=None,
                 metadata={
-                    "required": True,
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
                 }
             )
-            parent_frame: Optional[str] = field(
-                default=None,
+            parent_frame: str = field(
+                default="",
                 metadata={
                     "type": "Attribute",
                 }

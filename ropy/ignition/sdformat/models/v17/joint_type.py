@@ -191,12 +191,11 @@ class JointType:
             value: Optional[str] = field(
                 default=None,
                 metadata={
-                    "required": True,
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
                 }
             )
-            expressed_in: Optional[str] = field(
-                default=None,
+            expressed_in: str = field(
+                default="",
                 metadata={
                     "type": "Attribute",
                 }
@@ -359,12 +358,11 @@ class JointType:
             value: Optional[str] = field(
                 default=None,
                 metadata={
-                    "required": True,
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
                 }
             )
-            expressed_in: Optional[str] = field(
-                default=None,
+            expressed_in: str = field(
+                default="",
                 metadata={
                     "type": "Attribute",
                 }

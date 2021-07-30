@@ -262,10 +262,7 @@ class MaterialType:
                     'object' or 'tangent'
                 """
                 value: Optional[str] = field(
-                    default=None,
-                    metadata={
-                        "required": True,
-                    }
+                    default=None
                 )
                 type: str = field(
                     default="tangent",
@@ -354,10 +351,7 @@ class MaterialType:
                     'object' or 'tangent'
                 """
                 value: Optional[str] = field(
-                    default=None,
-                    metadata={
-                        "required": True,
-                    }
+                    default=None
                 )
                 type: str = field(
                     default="tangent",

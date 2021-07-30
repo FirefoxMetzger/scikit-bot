@@ -107,10 +107,7 @@ class ModelType:
             axis: Index of the axis.
             """
             value: Optional[float] = field(
-                default=None,
-                metadata={
-                    "required": True,
-                }
+                default=None
             )
             axis: Optional[int] = field(
                 default=None,

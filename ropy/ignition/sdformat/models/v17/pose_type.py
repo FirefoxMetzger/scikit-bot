@@ -18,12 +18,11 @@ class PoseType:
     value: Optional[str] = field(
         default=None,
         metadata={
-            "required": True,
             "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
         }
     )
-    relative_to: Optional[str] = field(
-        default=None,
+    relative_to: str = field(
+        default="",
         metadata={
             "type": "Attribute",
         }

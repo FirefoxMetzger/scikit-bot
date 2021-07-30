@@ -36,8 +36,8 @@ class FrameType:
             "required": True,
         }
     )
-    attached_to: Optional[str] = field(
-        default=None,
+    attached_to: str = field(
+        default="",
         metadata={
             "type": "Attribute",
         }

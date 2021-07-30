@@ -6,12 +6,14 @@ from xsdata.formats.dataclass.serializers import XmlSerializer
 from xsdata.formats.dataclass.serializers.config import SerializerConfig
 from xsdata.exceptions import ParserError as XSDataParserError
 import io
-from typing import Dict, Callable
+from typing import Dict, Callable, Type, TypeVar
 
 from .models.v15 import Sdf as SDFv15
 from .models.v16 import Sdf as SDFv16
 from .models.v17 import Sdf as SDFv17
 from .models.v18 import Sdf as SDFv18
+
+T = TypeVar("T")
 
 # available SDF elements by version
 _parser_roots = {
@@ -68,7 +70,9 @@ def get_sdf_version(sdf: str, default: str = "1.8"):
 
 
 def parse_sdf(
-    sdf: str, sdf_version: str = None, custom_constructor: Dict[str, Callable] = None
+    sdf: str,
+    sdf_version: str = None,
+    custom_constructor: Dict[Type[T], Callable] = None,
 ):
     """Convert an XML string into a sdformat.models tree.
 
@@ -80,10 +84,10 @@ def parse_sdf(
         The SDFormat version to use while parsing. If None (default) it will
         automatically determine the version from the <sdf> element. If specified
         the given version will be used instead.
-    custom_constructor : Dict[str, Callable]
-        Tag-wise overwrite of the default class factory. If an SDF element's tag matches
-        an element in overwrite.keys() then callable will replace the default class
-        constructor.
+    custom_constructor : Dict[Type[T], Callable]
+        Overwrite the default constructor for a certain model class with
+        callable. This is useful for doing pre- or post-initialization of
+        classes or to replace them with subclasses.
 
     Returns
     -------
@@ -93,12 +97,14 @@ def parse_sdf(
 
     """
 
-    def class_factory(clazz, params):
-        tag_name: str = clazz.Meta.name
-        if tag_name in custom_constructor:
-            return custom_constructor[tag_name](**params)
+    if custom_constructor is None:
+        custom_constructor = dict()
 
-        return clazz, params
+    def custom_class_factory(clazz, params):
+        if clazz in custom_constructor:
+            return custom_constructor[clazz](**params)
+
+        return clazz(**params)
 
     if sdf_version is None:
         version = get_sdf_version(sdf)
@@ -110,7 +116,9 @@ def parse_sdf(
     if root_class is None:
         raise ParseError(f"Ropy currently doesnt support SDFormat v{version}")
 
-    sdf_parser = XmlParser(ParserConfig(), context=xml_ctx)
+    sdf_parser = XmlParser(
+        ParserConfig(class_factory=custom_class_factory), context=xml_ctx
+    )
 
     return sdf_parser.from_string(sdf, root_class)
 

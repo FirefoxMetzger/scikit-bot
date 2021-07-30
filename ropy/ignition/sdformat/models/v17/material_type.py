@@ -290,10 +290,7 @@ class MaterialType:
                     'object' or 'tangent'
                 """
                 value: Optional[str] = field(
-                    default=None,
-                    metadata={
-                        "required": True,
-                    }
+                    default=None
                 )
                 type: str = field(
                     default="tangent",
@@ -311,10 +308,7 @@ class MaterialType:
                 uv_set: Index of the texture coordinate set to use.
                 """
                 value: Optional[str] = field(
-                    default=None,
-                    metadata={
-                        "required": True,
-                    }
+                    default=None
                 )
                 uv_set: int = field(
                     default=0,
@@ -413,10 +407,7 @@ class MaterialType:
                     'object' or 'tangent'
                 """
                 value: Optional[str] = field(
-                    default=None,
-                    metadata={
-                        "required": True,
-                    }
+                    default=None
                 )
                 type: str = field(
                     default="tangent",
@@ -434,10 +425,7 @@ class MaterialType:
                 uv_set: Index of the texture coordinate set to use.
                 """
                 value: Optional[str] = field(
-                    default=None,
-                    metadata={
-                        "required": True,
-                    }
+                    default=None
                 )
                 uv_set: int = field(
                     default=0,

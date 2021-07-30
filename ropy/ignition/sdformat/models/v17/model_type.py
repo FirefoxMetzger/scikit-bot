@@ -144,8 +144,8 @@ class ModelType:
             "required": True,
         }
     )
-    canonical_link: Optional[str] = field(
-        default=None,
+    canonical_link: str = field(
+        default="",
         metadata={
             "type": "Attribute",
         }
