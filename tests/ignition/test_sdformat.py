@@ -76,4 +76,4 @@ def test_unsupported_sdf_version():
     sdf = ""
 
     with pytest.raises(ParserError):
-        ign.sdformat.loads(sdf, "1.0")
+        ign.sdformat.loads(sdf, version="1.0")

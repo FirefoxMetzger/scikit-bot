@@ -67,8 +67,8 @@ def get_version(sdf: str):
 
 
 def loads(
-    sdf: str,
-    sdf_version: str = None,
+    sdf: str, *,
+    version: str = None,
     custom_constructor: Dict[Type[T], Callable] = None,
 ):
     """Convert an XML string into a sdformat.models tree.
@@ -84,16 +84,18 @@ def loads(
     custom_constructor : Dict[Type[T], Callable]
         Overwrite the default constructor for a certain model class with
         callable. This is useful for doing pre- or post-initialization of
-        classes or to replace them with subclasses.
-
-        Note: This feature is currently disabled. It will become available
-        with the next release of xsData.
+        bound classes or to replace them entirely.
 
     Returns
     -------
     SdfRoot : object
-        An instance of ropy.ignition.models.vXX.SDF where XX corresponds to the
+        An instance of ``ropy.ignition.models.vXX.Sdf`` where XX corresponds to the
         version of the SDFormat XML.
+
+    Notes
+    -----
+    ``custom_constructure`` is currently disabled and has no effect. It will
+    become available with xsData v21.8.
 
     """
 
@@ -107,10 +109,10 @@ def loads(
 
     #     return clazz(**params)
 
-    if sdf_version is None:
+    if version is None:
         version = get_version(sdf)
     else:
-        version = sdf_version
+        version = version
 
     root_class = _parser_roots[version]
 
