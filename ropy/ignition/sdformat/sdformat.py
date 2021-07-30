@@ -126,6 +126,11 @@ def loads(
     # )
     sdf_parser = XmlParser(ParserConfig(), xml_ctx)
 
+    try:
+        sdf_parser.from_string(sdf, root_class)
+    except ElementTree.ParseError as e:
+        raise ParseError("Invalid XML.") from e
+
     return sdf_parser.from_string(sdf, root_class)
 
 
