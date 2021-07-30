@@ -20,6 +20,7 @@ class InertialType:
     pose: A position(x,y,z) and orientation(roll, pitch yaw) with
         respect to the specified frame.
     """
+
     class Meta:
         name = "inertialType"
 
@@ -28,28 +29,28 @@ class InertialType:
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     inertia: List["InertialType.Inertia"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     frame: List[FrameType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     pose: List[PoseType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
 
     @dataclass
@@ -59,40 +60,40 @@ class InertialType:
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         ixy: List[float] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         ixz: List[float] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         iyy: List[float] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         iyz: List[float] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         izz: List[float] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )

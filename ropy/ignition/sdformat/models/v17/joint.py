@@ -9,5 +9,6 @@ class Joint(JointType):
     By default, the pose of a joint is expressed in the child link
     frame.
     """
+
     class Meta:
         name = "joint"

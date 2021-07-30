@@ -7,5 +7,6 @@ class Ellipsoid(EllipsoidType):
     """
     Ellipsoid shape.
     """
+
     class Meta:
         name = "ellipsoid"

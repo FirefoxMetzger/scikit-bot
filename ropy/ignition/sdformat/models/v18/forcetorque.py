@@ -7,5 +7,6 @@ class ForceTorque(ForceTorqueType):
     """
     These elements are specific to the force torque sensor.
     """
+
     class Meta:
         name = "force_torque"

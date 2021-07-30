@@ -31,6 +31,7 @@ class GeometryType:
     polyline: Defines an extruded polyline shape
     sphere: Sphere shape
     """
+
     class Meta:
         name = "geometryType"
 
@@ -39,75 +40,75 @@ class GeometryType:
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     box: List[BoxType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     capsule: List[CapsuleType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     cylinder: List[CylinderType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     ellipsoid: List[EllipsoidType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     heightmap: List[HeightmapType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     image: List[ImageType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     mesh: List[MeshType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     plane: List[PlaneType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     polyline: List[PolylineType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     sphere: List[SphereType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )

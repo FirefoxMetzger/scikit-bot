@@ -18,6 +18,7 @@ class AirPressureType:
         a ground plane with a Z height of zero.
     pressure: Noise parameters for the pressure data.
     """
+
     class Meta:
         name = "air_pressureType"
 
@@ -26,14 +27,14 @@ class AirPressureType:
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     pressure: List["AirPressureType.Pressure"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
 
     @dataclass
@@ -43,10 +44,11 @@ class AirPressureType:
         ----------
         noise: The properties of a sensor noise model.
         """
+
         noise: List[NoiseType] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )

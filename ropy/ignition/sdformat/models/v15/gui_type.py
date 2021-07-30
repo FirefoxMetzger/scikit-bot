@@ -17,6 +17,7 @@ class GuiType:
         as a child of world, model, and sensor.
     fullscreen:
     """
+
     class Meta:
         name = "guiType"
 
@@ -25,20 +26,20 @@ class GuiType:
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     plugin: List[PluginType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     fullscreen: bool = field(
         default=False,
         metadata={
             "type": "Attribute",
-        }
+        },
     )
 
     @dataclass
@@ -55,47 +56,48 @@ class GuiType:
             respect to the specified frame.
         name:
         """
+
         view_controller: List[str] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         projection_type: List[str] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         track_visual: List["GuiType.Camera.TrackVisual"] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         frame: List[FrameType] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         pose: List[PoseType] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         name: Optional[str] = field(
             default=None,
             metadata={
                 "type": "Attribute",
                 "required": True,
-            }
+            },
         )
 
         @dataclass
@@ -105,19 +107,19 @@ class GuiType:
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             min_dist: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             max_dist: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )

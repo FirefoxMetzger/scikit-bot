@@ -7,5 +7,6 @@ class Imu(ImuType):
     """
     These elements are specific to the IMU sensor.
     """
+
     class Meta:
         name = "imu"

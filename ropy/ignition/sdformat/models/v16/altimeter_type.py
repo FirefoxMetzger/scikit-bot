@@ -13,6 +13,7 @@ class AltimeterType:
     vertical_position: Noise parameters for vertical position
     vertical_velocity: Noise parameters for vertical velocity
     """
+
     class Meta:
         name = "altimeterType"
 
@@ -21,14 +22,14 @@ class AltimeterType:
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     vertical_velocity: List["AltimeterType.VerticalVelocity"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
 
     @dataclass
@@ -38,12 +39,13 @@ class AltimeterType:
         ----------
         noise: The properties of a sensor noise model.
         """
+
         noise: List[NoiseType] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
 
     @dataclass
@@ -53,10 +55,11 @@ class AltimeterType:
         ----------
         noise: The properties of a sensor noise model.
         """
+
         noise: List[NoiseType] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )

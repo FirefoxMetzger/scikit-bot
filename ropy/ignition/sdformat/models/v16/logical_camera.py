@@ -9,5 +9,6 @@ class LogicalCamera(LogicalCameraType):
     A logical camera reports objects that fall within a frustum.
     Computation should be performed on the CPU.
     """
+
     class Meta:
         name = "logical_camera"

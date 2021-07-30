@@ -7,5 +7,6 @@ class Polyline(PolylineType):
     """
     Defines an extruded polyline shape.
     """
+
     class Meta:
         name = "polyline"

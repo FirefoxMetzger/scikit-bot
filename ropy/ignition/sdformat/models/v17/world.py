@@ -8,5 +8,6 @@ class World(WorldType):
     The world element encapsulates an entire world description including:
     models, scene, physics, and plugins.
     """
+
     class Meta:
         name = "world"

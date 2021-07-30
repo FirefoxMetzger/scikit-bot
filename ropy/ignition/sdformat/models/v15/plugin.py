@@ -8,5 +8,6 @@ class Plugin(PluginType):
 
     It can exist as a child of world, model, and sensor.
     """
+
     class Meta:
         name = "plugin"

@@ -7,5 +7,6 @@ class Physics(PhysicsType):
     """
     The physics tag specifies the type and properties of the dynamics engine.
     """
+
     class Meta:
         name = "physics"

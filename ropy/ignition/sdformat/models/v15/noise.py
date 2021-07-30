@@ -7,5 +7,6 @@ class Noise(NoiseType):
     """
     The properties of a sensor noise model.
     """
+
     class Meta:
         name = "noise"

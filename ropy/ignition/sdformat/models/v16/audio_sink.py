@@ -7,5 +7,6 @@ class AudioSink(AudioSinkType):
     """
     An audio sink.
     """
+
     class Meta:
         name = "audio_sink"

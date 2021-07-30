@@ -7,5 +7,6 @@ class Link(LinkType):
     """
     Link state.
     """
+
     class Meta:
         name = "link"

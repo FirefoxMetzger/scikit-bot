@@ -7,5 +7,6 @@ class Transceiver(TransceiverType):
     """
     These elements are specific to a wireless transceiver.
     """
+
     class Meta:
         name = "transceiver"

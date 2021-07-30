@@ -12,6 +12,7 @@ class PoseType:
     value:
     relative_to: Name of frame relative to which the pose is applied.
     """
+
     class Meta:
         name = "poseType"
 
@@ -19,11 +20,11 @@ class PoseType:
         default=None,
         metadata={
             "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-        }
+        },
     )
     relative_to: str = field(
         default="",
         metadata={
             "type": "Attribute",
-        }
+        },
     )

@@ -31,6 +31,7 @@ class ActorType:
         as a child of world, model, and sensor.
     name: A unique name for the actor.
     """
+
     class Meta:
         name = "actorType"
 
@@ -39,56 +40,56 @@ class ActorType:
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     animation: List["ActorType.Animation"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     script: List["ActorType.Script"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     pose: List[PoseType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     link: List[LinkType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     joint: List[JointType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     plugin: List[PluginType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     name: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )
 
     @dataclass
@@ -99,19 +100,20 @@ class ActorType:
         filename: Path to skin file, accepted formats: COLLADA, BVH.
         scale: Scale the skin's size.
         """
+
         filename: List[str] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         scale: List[float] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
 
     @dataclass
@@ -126,33 +128,34 @@ class ActorType:
             X.
         name: Unique name for animation.
         """
+
         filename: List[str] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         scale: List[float] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         interpolate_x: List[bool] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         name: Optional[str] = field(
             default=None,
             metadata={
                 "type": "Attribute",
                 "required": True,
-            }
+            },
         )
 
     @dataclass
@@ -173,33 +176,34 @@ class ActorType:
         trajectory: The trajectory contains a series of keyframes to be
             followed.
         """
+
         loop: List[bool] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         delay_start: List[float] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         auto_start: List[bool] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         trajectory: List["ActorType.Script.Trajectory"] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
 
         @dataclass
@@ -217,32 +221,33 @@ class ActorType:
                 of one will cause the animation to stick to the
                 keyframes.
             """
+
             waypoint: List["ActorType.Script.Trajectory.Waypoint"] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             id: Optional[int] = field(
                 default=None,
                 metadata={
                     "type": "Attribute",
                     "required": True,
-                }
+                },
             )
             type: Optional[str] = field(
                 default=None,
                 metadata={
                     "type": "Attribute",
                     "required": True,
-                }
+                },
             )
             tension: float = field(
                 default=0.0,
                 metadata={
                     "type": "Attribute",
-                }
+                },
             )
 
             @dataclass
@@ -255,12 +260,13 @@ class ActorType:
                 pose: The pose which should be reached at the given
                     time.
                 """
+
                 time: List[float] = field(
                     default_factory=list,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 pose: List[str] = field(
                     default_factory=list,
@@ -268,5 +274,5 @@ class ActorType:
                         "type": "Element",
                         "namespace": "",
                         "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-                    }
+                    },
                 )

@@ -46,6 +46,7 @@ class ModelType:
     name: A unique name for the model. This name must not match another
         model in the world.
     """
+
     class Meta:
         name = "modelType"
 
@@ -54,91 +55,91 @@ class ModelType:
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     self_collide: List[bool] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     allow_auto_disable: List[bool] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     include: List["ModelType.Include"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     model: List["ModelType"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     enable_wind: List[bool] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     frame: List[FrameType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     pose: List[PoseType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     link: List[LinkType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     joint: List[JointType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     plugin: List[PluginType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     gripper: List[GripperType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     name: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )
 
     @dataclass
@@ -154,12 +155,13 @@ class ModelType:
         name: Override the name of the included model.
         static: Override the static value of the included model.
         """
+
         uri: List[str] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         pose: List[str] = field(
             default_factory=list,
@@ -167,19 +169,19 @@ class ModelType:
                 "type": "Element",
                 "namespace": "",
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-            }
+            },
         )
         name: List[str] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         static: List[bool] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )

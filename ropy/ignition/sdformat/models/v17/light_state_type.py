@@ -14,6 +14,7 @@ class LightType:
         respect to the frame named in the relative_to attribute.
     name: Name of the light
     """
+
     class Meta:
         name = "lightType"
 
@@ -22,12 +23,12 @@ class LightType:
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     name: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )

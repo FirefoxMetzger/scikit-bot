@@ -17,6 +17,7 @@ class ImuType:
         linear acceleration, which is expressed in meters per second
         squared
     """
+
     class Meta:
         name = "imuType"
 
@@ -25,21 +26,21 @@ class ImuType:
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     angular_velocity: List["ImuType.AngularVelocity"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     linear_acceleration: List["ImuType.LinearAcceleration"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
 
     @dataclass
@@ -112,26 +113,27 @@ class ImuType:
             the IMU reference frame's X-axis. grav_dir_x is  defined in
             the coordinate frame as defined by the parent_frame element.
         """
+
         localization: List[str] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         custom_rpy: List["ImuType.OrientationReferenceFrame.CustomRpy"] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         grav_dir_x: List["ImuType.OrientationReferenceFrame.GravDirX"] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
 
         @dataclass
@@ -146,17 +148,18 @@ class ImuType:
                 "world" frame. If left empty, use the sensor's own local
                 frame.
             """
+
             value: Optional[str] = field(
                 default=None,
                 metadata={
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-                }
+                },
             )
             parent_frame: str = field(
                 default="",
                 metadata={
                     "type": "Attribute",
-                }
+                },
             )
 
         @dataclass
@@ -170,17 +173,18 @@ class ImuType:
                 Gazebo Link name or the special reserved "world" frame.
                 If left empty, use the sensor's own local frame.
             """
+
             value: Optional[str] = field(
                 default=None,
                 metadata={
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-                }
+                },
             )
             parent_frame: str = field(
                 default="",
                 metadata={
                     "type": "Attribute",
-                }
+                },
             )
 
     @dataclass
@@ -192,26 +196,27 @@ class ImuType:
         y: Angular velocity about the Y axis
         z: Angular velocity about the Z axis
         """
+
         x: List["ImuType.AngularVelocity.X"] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         y: List["ImuType.AngularVelocity.Y"] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         z: List["ImuType.AngularVelocity.Z"] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
 
         @dataclass
@@ -221,12 +226,13 @@ class ImuType:
             ----------
             noise: The properties of a sensor noise model.
             """
+
             noise: List[NoiseType] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
 
         @dataclass
@@ -236,12 +242,13 @@ class ImuType:
             ----------
             noise: The properties of a sensor noise model.
             """
+
             noise: List[NoiseType] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
 
         @dataclass
@@ -251,12 +258,13 @@ class ImuType:
             ----------
             noise: The properties of a sensor noise model.
             """
+
             noise: List[NoiseType] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
 
     @dataclass
@@ -268,26 +276,27 @@ class ImuType:
         y: Linear acceleration about the Y axis
         z: Linear acceleration about the Z axis
         """
+
         x: List["ImuType.LinearAcceleration.X"] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         y: List["ImuType.LinearAcceleration.Y"] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         z: List["ImuType.LinearAcceleration.Z"] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
 
         @dataclass
@@ -297,12 +306,13 @@ class ImuType:
             ----------
             noise: The properties of a sensor noise model.
             """
+
             noise: List[NoiseType] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
 
         @dataclass
@@ -312,12 +322,13 @@ class ImuType:
             ----------
             noise: The properties of a sensor noise model.
             """
+
             noise: List[NoiseType] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
 
         @dataclass
@@ -327,10 +338,11 @@ class ImuType:
             ----------
             noise: The properties of a sensor noise model.
             """
+
             noise: List[NoiseType] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )

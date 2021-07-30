@@ -7,5 +7,6 @@ class Cylinder(CylinderType):
     """
     Cylinder shape.
     """
+
     class Meta:
         name = "cylinder"

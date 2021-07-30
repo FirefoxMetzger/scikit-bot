@@ -25,6 +25,7 @@ class CollisionType:
     name: Unique name for the collision element within the scope of the
         parent link.
     """
+
     class Meta:
         name = "collisionType"
 
@@ -33,47 +34,47 @@ class CollisionType:
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     max_contacts: List[int] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     frame: List[FrameType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     pose: List[PoseType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     geometry: List[GeometryType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     surface: List[SurfaceType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     name: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )

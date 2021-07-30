@@ -7,5 +7,6 @@ class Plane(PlaneType):
     """
     Plane shape.
     """
+
     class Meta:
         name = "plane"

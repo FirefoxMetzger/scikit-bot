@@ -9,5 +9,6 @@ class Visual(VisualType):
     This element specifies the shape of the object (box, cylinder, etc.)
     for visualization purposes.
     """
+
     class Meta:
         name = "visual"

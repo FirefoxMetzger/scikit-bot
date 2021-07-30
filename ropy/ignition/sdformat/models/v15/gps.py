@@ -7,5 +7,6 @@ class Gps(GpsType):
     """
     These elements are specific to the GPS sensor.
     """
+
     class Meta:
         name = "gps"

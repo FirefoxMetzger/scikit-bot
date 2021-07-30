@@ -121,7 +121,7 @@ def sdf_string(request):
         "nested_model.sdf",
         "empty_axis.sdf",
         "placement_frame_missing_pose.sdf",
-        "nested_multiple_elements_error_world.sdf"
+        "nested_multiple_elements_error_world.sdf",
     ]
 )
 def valid_sdf_string(request):
@@ -144,7 +144,7 @@ def valid_sdf_string(request):
         "world_complete.sdf",
         "shapes.sdf",
         "includes.sdf",
-        "invalid_version.sdf"
+        "invalid_version.sdf",
     ]
 )
 def invalid_sdf_string(request):

@@ -10,5 +10,6 @@ class Sdf(SdfType):
     A user of multiple worlds could run parallel instances of
     simulation, or offer selection of a world at runtime.
     """
+
     class Meta:
         name = "sdf"

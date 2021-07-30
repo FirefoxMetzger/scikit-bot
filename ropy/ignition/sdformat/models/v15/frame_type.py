@@ -15,6 +15,7 @@ class FrameType:
     name: Name of the frame. This name must not match another frame
         defined inside the parent that this frame is attached to.
     """
+
     class Meta:
         name = "frameType"
 
@@ -23,12 +24,12 @@ class FrameType:
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     name: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )

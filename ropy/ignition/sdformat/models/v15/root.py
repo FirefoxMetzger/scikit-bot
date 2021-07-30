@@ -7,5 +7,6 @@ class Sdf(SdfType):
     """
     SDFormat base element.
     """
+
     class Meta:
         name = "sdf"

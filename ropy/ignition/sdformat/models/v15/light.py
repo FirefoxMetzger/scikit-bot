@@ -7,5 +7,6 @@ class Light(LightType):
     """
     The light element describes a light source.
     """
+
     class Meta:
         name = "light"

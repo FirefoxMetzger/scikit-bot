@@ -7,5 +7,6 @@ class Lidar(LidarType):
     """
     These elements are specific to the lidar sensor.
     """
+
     class Meta:
         name = "lidar"

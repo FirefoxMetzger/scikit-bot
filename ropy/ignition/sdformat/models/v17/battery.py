@@ -7,5 +7,6 @@ class Battery(BatteryType):
     """
     Description of a battery.
     """
+
     class Meta:
         name = "battery"

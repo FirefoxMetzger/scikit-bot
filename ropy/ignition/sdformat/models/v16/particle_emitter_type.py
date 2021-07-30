@@ -73,6 +73,7 @@ class ParticleEmitterType:
     type: The type of a particle emitter. One of "box", "cylinder",
         "ellipsoid", or "point".
     """
+
     class Meta:
         name = "particle_emitterType"
 
@@ -81,14 +82,14 @@ class ParticleEmitterType:
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     duration: List[float] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     size: List[str] = field(
         default_factory=list,
@@ -96,7 +97,7 @@ class ParticleEmitterType:
             "type": "Element",
             "namespace": "",
             "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-        }
+        },
     )
     particle_size: List[str] = field(
         default_factory=list,
@@ -104,42 +105,42 @@ class ParticleEmitterType:
             "type": "Element",
             "namespace": "",
             "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-        }
+        },
     )
     lifetime: List[float] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     rate: List[float] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     min_velocity: List[float] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     max_velocity: List[float] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     scale_rate: List[float] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     color_start: List[str] = field(
         default_factory=list,
@@ -147,7 +148,7 @@ class ParticleEmitterType:
             "type": "Element",
             "namespace": "",
             "pattern": r"(\s*\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){3}\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s*",
-        }
+        },
     )
     color_end: List[str] = field(
         default_factory=list,
@@ -155,54 +156,54 @@ class ParticleEmitterType:
             "type": "Element",
             "namespace": "",
             "pattern": r"(\s*\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){3}\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s*",
-        }
+        },
     )
     color_range_image: List[str] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     topic: List[str] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     particle_scatter_ratio: List[float] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     pose: List[PoseType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     material: List[MaterialType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     name: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )
     type: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )

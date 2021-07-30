@@ -7,5 +7,6 @@ class Sphere(SphereType):
     """
     Sphere shape.
     """
+
     class Meta:
         name = "sphere"

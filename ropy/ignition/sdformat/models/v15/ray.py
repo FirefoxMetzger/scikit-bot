@@ -7,5 +7,6 @@ class Ray(RayType):
     """
     These elements are specific to the ray (laser) sensor.
     """
+
     class Meta:
         name = "ray"

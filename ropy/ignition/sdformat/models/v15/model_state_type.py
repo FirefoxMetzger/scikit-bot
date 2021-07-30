@@ -20,6 +20,7 @@ class ModelType:
     link: Link state
     name: Name of the model
     """
+
     class Meta:
         name = "modelType"
 
@@ -28,42 +29,42 @@ class ModelType:
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     model: List["ModelType"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     frame: List[FrameType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     pose: List[PoseType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     link: List[LinkType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     name: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )
 
     @dataclass
@@ -74,19 +75,20 @@ class ModelType:
         angle: Angle of an axis
         name: Name of the joint
         """
+
         angle: List["ModelType.Joint.Angle"] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         name: Optional[str] = field(
             default=None,
             metadata={
                 "type": "Attribute",
                 "required": True,
-            }
+            },
         )
 
         @dataclass
@@ -97,13 +99,12 @@ class ModelType:
             value:
             axis: Index of the axis.
             """
-            value: Optional[float] = field(
-                default=None
-            )
+
+            value: Optional[float] = field(default=None)
             axis: Optional[int] = field(
                 default=None,
                 metadata={
                     "type": "Attribute",
                     "required": True,
-                }
+                },
             )

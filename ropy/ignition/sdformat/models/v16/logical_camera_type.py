@@ -17,6 +17,7 @@ class LogicalCameraType:
         This is the angle between the frustum's vertex and the edges of
         the near or far plane.
     """
+
     class Meta:
         name = "logical_cameraType"
 
@@ -25,26 +26,26 @@ class LogicalCameraType:
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     far: List[float] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     aspect_ratio: List[float] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     horizontal_fov: List[float] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )

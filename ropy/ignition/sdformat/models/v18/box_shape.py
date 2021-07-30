@@ -7,5 +7,6 @@ class Box(BoxType):
     """
     Box shape.
     """
+
     class Meta:
         name = "box"

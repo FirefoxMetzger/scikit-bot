@@ -12,6 +12,7 @@ class PoseType:
     value:
     frame: Name of frame which the pose is defined relative to.
     """
+
     class Meta:
         name = "poseType"
 
@@ -19,11 +20,11 @@ class PoseType:
         default=None,
         metadata={
             "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-        }
+        },
     )
     frame: str = field(
         default="",
         metadata={
             "type": "Attribute",
-        }
+        },
     )

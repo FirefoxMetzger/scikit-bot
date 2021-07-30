@@ -7,5 +7,6 @@ class Sonar(SonarType):
     """
     These elements are specific to the sonar sensor.
     """
+
     class Meta:
         name = "sonar"

@@ -30,6 +30,7 @@ class MaterialType:
         capability). It is also recommended to use the same workflow for
         all materials in the world.
     """
+
     class Meta:
         name = "materialType"
 
@@ -38,21 +39,21 @@ class MaterialType:
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     shader: List["MaterialType.Shader"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     lighting: List[bool] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     ambient: List[str] = field(
         default_factory=list,
@@ -60,7 +61,7 @@ class MaterialType:
             "type": "Element",
             "namespace": "",
             "pattern": r"(\s*\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){3}\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s*",
-        }
+        },
     )
     diffuse: List[str] = field(
         default_factory=list,
@@ -68,7 +69,7 @@ class MaterialType:
             "type": "Element",
             "namespace": "",
             "pattern": r"(\s*\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){3}\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s*",
-        }
+        },
     )
     specular: List[str] = field(
         default_factory=list,
@@ -76,7 +77,7 @@ class MaterialType:
             "type": "Element",
             "namespace": "",
             "pattern": r"(\s*\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){3}\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s*",
-        }
+        },
     )
     emissive: List[str] = field(
         default_factory=list,
@@ -84,14 +85,14 @@ class MaterialType:
             "type": "Element",
             "namespace": "",
             "pattern": r"(\s*\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){3}\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s*",
-        }
+        },
     )
     pbr: List["MaterialType.Pbr"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
 
     @dataclass
@@ -102,19 +103,20 @@ class MaterialType:
         uri: URI of the material script file
         name: Name of the script within the script file
         """
+
         uri: List[str] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         name: List[str] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
 
     @dataclass
@@ -126,19 +128,20 @@ class MaterialType:
         type: vertex, pixel, normal_map_object_space,
             normal_map_tangent_space
         """
+
         normal_map: List[str] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         type: Optional[str] = field(
             default=None,
             metadata={
                 "type": "Attribute",
                 "required": True,
-            }
+            },
         )
 
     @dataclass
@@ -149,19 +152,20 @@ class MaterialType:
         metal: PBR using the Metallic/Roughness workflow.
         specular: PBR using the Specular/Glossiness workflow.
         """
+
         metal: List["MaterialType.Pbr.Metal"] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         specular: List["MaterialType.Pbr.Specular"] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
 
         @dataclass
@@ -188,68 +192,69 @@ class MaterialType:
                 'type' attribute
             emissive_map: Filename of the emissive map.
             """
+
             albedo_map: List[str] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             roughness_map: List[str] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             roughness: List[str] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             metalness_map: List[str] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             metalness: List[str] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             environment_map: List[str] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             ambient_occlusion_map: List[str] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             normal_map: List["MaterialType.Pbr.Metal.NormalMap"] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             emissive_map: List[str] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
 
             @dataclass
@@ -261,14 +266,13 @@ class MaterialType:
                 type: The space that the normals are in. Values are:
                     'object' or 'tangent'
                 """
-                value: Optional[str] = field(
-                    default=None
-                )
+
+                value: Optional[str] = field(default=None)
                 type: str = field(
                     default="tangent",
                     metadata={
                         "type": "Attribute",
-                    }
+                    },
                 )
 
         @dataclass
@@ -291,54 +295,55 @@ class MaterialType:
                 'type' attribute
             emissive_map: Filename of the emissive map.
             """
+
             albedo_map: List[str] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             specular_map: List[str] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             glossiness_map: List[str] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             glossiness: List[str] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             ambient_occlusion_map: List[str] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             normal_map: List["MaterialType.Pbr.Specular.NormalMap"] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             emissive_map: List[str] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
 
             @dataclass
@@ -350,12 +355,11 @@ class MaterialType:
                 type: The space that the normals are in. Values are:
                     'object' or 'tangent'
                 """
-                value: Optional[str] = field(
-                    default=None
-                )
+
+                value: Optional[str] = field(default=None)
                 type: str = field(
                     default="tangent",
                     metadata={
                         "type": "Attribute",
-                    }
+                    },
                 )

@@ -7,5 +7,6 @@ class Contact(ContactType):
     """
     These elements are specific to the contact sensor.
     """
+
     class Meta:
         name = "contact"

@@ -14,6 +14,7 @@ class RayType:
     noise: The properties of the noise model that should be applied to
         generated scans
     """
+
     class Meta:
         name = "rayType"
 
@@ -22,21 +23,21 @@ class RayType:
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     range: List["RayType.Range"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     noise: List["RayType.Noise"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
 
     @dataclass
@@ -46,14 +47,14 @@ class RayType:
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         vertical: List["RayType.Scan.Vertical"] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
 
         @dataclass
@@ -71,33 +72,34 @@ class RayType:
             min_angle:
             max_angle: Must be greater or equal to min_angle
             """
+
             samples: List[int] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             resolution: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             min_angle: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             max_angle: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
 
         @dataclass
@@ -115,33 +117,34 @@ class RayType:
             min_angle:
             max_angle: Must be greater or equal to min_angle
             """
+
             samples: List[int] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             resolution: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             min_angle: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             max_angle: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
 
     @dataclass
@@ -153,26 +156,27 @@ class RayType:
         max: The maximum distance for each ray.
         resolution: Linear resolution of each ray.
         """
+
         min: List[float] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         max: List[float] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         resolution: List[float] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
 
     @dataclass
@@ -188,24 +192,25 @@ class RayType:
         stddev: For type "gaussian," the standard deviation of the
             Gaussian distribution from which noise values are drawn.
         """
+
         type: List[str] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         mean: List[float] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         stddev: List[float] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )

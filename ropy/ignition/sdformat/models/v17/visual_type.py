@@ -32,6 +32,7 @@ class VisualType:
     name: Unique name for the visual element within the scope of the
         parent link.
     """
+
     class Meta:
         name = "visualType"
 
@@ -40,70 +41,70 @@ class VisualType:
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     laser_retro: List[float] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     transparency: List[float] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     visibility_flags: List[int] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     meta: List["VisualType.MetaType"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     pose: List[PoseType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     material: List[MaterialType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     geometry: List[GeometryType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     plugin: List[PluginType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     name: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )
 
     @dataclass
@@ -115,10 +116,11 @@ class VisualType:
             number is useful for programs, such as Gazebo, that put
             visuals in different layers for enhanced visualization.
         """
+
         layer: List[int] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )

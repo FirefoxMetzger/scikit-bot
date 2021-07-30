@@ -11,6 +11,7 @@ class SphereType:
     ----------
     radius: radius of the sphere
     """
+
     class Meta:
         name = "sphereType"
 
@@ -19,5 +20,5 @@ class SphereType:
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )

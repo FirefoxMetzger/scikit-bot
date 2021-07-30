@@ -14,6 +14,7 @@ class MeshType:
         specified by the uri
     scale: Scaling factor applied to the mesh
     """
+
     class Meta:
         name = "meshType"
 
@@ -22,14 +23,14 @@ class MeshType:
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     submesh: List["MeshType.Submesh"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     scale: List[str] = field(
         default_factory=list,
@@ -37,7 +38,7 @@ class MeshType:
             "type": "Element",
             "namespace": "",
             "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-        }
+        },
     )
 
     @dataclass
@@ -51,17 +52,18 @@ class MeshType:
             the submesh before the poses from parent links and models
             are applied.
         """
+
         name: List[str] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         center: List[bool] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )

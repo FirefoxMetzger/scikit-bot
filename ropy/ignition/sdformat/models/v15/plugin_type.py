@@ -17,6 +17,7 @@ class PluginType:
         a full path name, the file will be searched for in the
         configuration paths.
     """
+
     class Meta:
         name = "pluginType"
 
@@ -25,19 +26,19 @@ class PluginType:
         metadata={
             "type": "Wildcard",
             "namespace": "##any",
-        }
+        },
     )
     name: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )
     filename: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )

@@ -7,5 +7,6 @@ class Model(ModelType):
     """
     Model state.
     """
+
     class Meta:
         name = "model"

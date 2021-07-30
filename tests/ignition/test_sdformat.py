@@ -24,8 +24,8 @@ def test_invalid_parsing(invalid_sdf_string):
 
 def test_custom_constructor(valid_sdf_string):
     @dataclass
-    class NewPose():
-        value : str
+    class NewPose:
+        value: str
 
         def __post_init__(self):
             try:
@@ -33,11 +33,13 @@ def test_custom_constructor(valid_sdf_string):
             except ValueError:
                 pass
 
-
     if ign.sdformat.get_version(valid_sdf_string) != "1.6":
         return
     else:
-        ign.sdformat.loads(valid_sdf_string, custom_constructor={PoseType: lambda **kwargs: NewPose(**kwargs)})
+        ign.sdformat.loads(
+            valid_sdf_string,
+            custom_constructor={PoseType: lambda **kwargs: NewPose(**kwargs)},
+        )
 
 
 def test_idempotence(valid_sdf_string):
@@ -55,7 +57,6 @@ def test_idempotence(valid_sdf_string):
     serialized_sdf = ign.sdformat.dumps(parsed_sdf)
 
     assert serialized_sdf == normalized_sdf
-
 
 
 def test_light(light_sdf):

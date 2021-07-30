@@ -7,5 +7,6 @@ class Mesh(MeshType):
     """
     Mesh shape.
     """
+
     class Meta:
         name = "mesh"

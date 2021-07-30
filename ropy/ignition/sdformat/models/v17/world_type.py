@@ -52,6 +52,7 @@ class WorldType:
         models will be automatically populated in Gazebo.
     name: Unique name of the world
     """
+
     class Meta:
         name = "worldType"
 
@@ -60,21 +61,21 @@ class WorldType:
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     wind: List["WorldType.Wind"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     include: List["WorldType.Include"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     gravity: List[str] = field(
         default_factory=list,
@@ -82,7 +83,7 @@ class WorldType:
             "type": "Element",
             "namespace": "",
             "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-        }
+        },
     )
     magnetic_field: List[str] = field(
         default_factory=list,
@@ -90,105 +91,105 @@ class WorldType:
             "type": "Element",
             "namespace": "",
             "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-        }
+        },
     )
     atmosphere: List[AtmosphereType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     gui: List[GuiType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     physics: List[PhysicsType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     scene: List[SceneType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     light: List[LightType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     frame: List[FrameType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     model: List[ModelType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     actor: List[ActorType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     plugin: List[PluginType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     road: List[RoadType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     spherical_coordinates: List[SphericalCoordinatesType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     state: List[StateType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     population: List[PopulationType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     name: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )
 
     @dataclass
@@ -200,12 +201,13 @@ class WorldType:
             will use the system's default audio device. Otherwise,
             specify a an audio device file"
         """
+
         device: List[str] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
 
     @dataclass
@@ -215,13 +217,14 @@ class WorldType:
         ----------
         linear_velocity: Linear velocity of the wind.
         """
+
         linear_velocity: List[str] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-            }
+            },
         )
 
     @dataclass
@@ -235,31 +238,32 @@ class WorldType:
         pose: A position(x,y,z) and orientation(roll, pitch yaw) with
             respect to the frame named in the relative_to attribute.
         """
+
         uri: List[str] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         name: List[str] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         static: List[bool] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         pose: List[PoseType] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )

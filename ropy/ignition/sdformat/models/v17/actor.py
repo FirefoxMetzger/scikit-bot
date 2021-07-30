@@ -9,5 +9,6 @@ class Actor(ActorType):
     This includes both global waypoint type animations and skeleton
     animations.
     """
+
     class Meta:
         name = "actor"

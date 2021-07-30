@@ -10,5 +10,6 @@ class Collision(CollisionType):
     link, for example, simpler collision models are often used to reduce
     computation time.
     """
+
     class Meta:
         name = "collision"
