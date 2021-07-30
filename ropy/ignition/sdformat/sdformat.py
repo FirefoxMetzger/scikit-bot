@@ -67,7 +67,8 @@ def get_version(sdf: str):
 
 
 def loads(
-    sdf: str, *,
+    sdf: str,
+    *,
     version: str = None,
     custom_constructor: Dict[Type[T], Callable] = None,
 ):
