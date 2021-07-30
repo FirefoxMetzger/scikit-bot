@@ -1,8 +1,8 @@
-from pathlib import Path
+from dataclasses import dataclass
 import numpy as np
 import pytest
 from xsdata.exceptions import ParserError
-from xml.etree.ElementTree import ParseError as ETreeParseError
+from ropy.ignition.sdformat.models.v16.pose_type import PoseType
 
 import ropy.ignition as ign
 
@@ -14,16 +14,52 @@ def test_valid_parsing(valid_sdf_string):
     hits on quite a few edge cases of the SDFormat that need to be handled
     correctly.
     """
-    ign.parse_sdf(valid_sdf_string)
+    ign.sdformat.loads(valid_sdf_string)
 
 
 def test_invalid_parsing(invalid_sdf_string):
     with pytest.raises(ParserError):
-        ign.parse_sdf(invalid_sdf_string)
+        ign.sdformat.loads(invalid_sdf_string)
+
+
+def test_custom_constructor(valid_sdf_string):
+    @dataclass
+    class NewPose():
+        value : str
+
+        def __post_init__(self):
+            try:
+                self.value = tuple(float(x) for x in self.value.split(" "))
+            except ValueError:
+                pass
+
+
+    if ign.sdformat.get_version(valid_sdf_string) != "1.6":
+        return
+    else:
+        ign.sdformat.loads(valid_sdf_string, custom_constructor={PoseType: lambda **kwargs: NewPose(**kwargs)})
+
+
+def test_idempotence(valid_sdf_string):
+    # serializing twice should be idempotent
+    # the first serialization should normalize the XML
+    # the second pass should make no changes
+
+    # Note: the normalized XML doesn't use new-line
+    # characters.
+
+    parsed_sdf = ign.sdformat.loads(valid_sdf_string)
+    normalized_sdf = ign.sdformat.dumps(parsed_sdf)
+
+    parsed_sdf = ign.sdformat.loads(normalized_sdf)
+    serialized_sdf = ign.sdformat.dumps(parsed_sdf)
+
+    assert serialized_sdf == normalized_sdf
+
 
 
 def test_light(light_sdf):
-    frames, links = ign.create_frame_graph(light_sdf)
+    frames, _ = ign.create_frame_graph(light_sdf)
 
     # check if all frames were created
     assert all(key in frames.keys() for key in ["/sdf", "/sdf/point_light"])

@@ -36,7 +36,7 @@ class ParseError(XSDataParserError):
     pass
 
 
-def get_sdf_version(sdf: str, default: str = "1.8"):
+def get_version(sdf: str, default: str = "1.8"):
     """Returns the version of a SDF string.
 
     Parameters
@@ -69,7 +69,7 @@ def get_sdf_version(sdf: str, default: str = "1.8"):
         return default
 
 
-def parse_sdf(
+def loads(
     sdf: str,
     sdf_version: str = None,
     custom_constructor: Dict[Type[T], Callable] = None,
@@ -107,7 +107,7 @@ def parse_sdf(
         return clazz(**params)
 
     if sdf_version is None:
-        version = get_sdf_version(sdf)
+        version = get_version(sdf)
     else:
         version = sdf_version
 
@@ -123,7 +123,7 @@ def parse_sdf(
     return sdf_parser.from_string(sdf, root_class)
 
 
-def serialize_sdf(root_element) -> str:
+def dumps(root_element, *, format=False) -> str:
     """Serialize a SDFormat object to an XML string.
 
     Parameters
@@ -131,6 +131,10 @@ def serialize_sdf(root_element) -> str:
     root_element : object
         An instance of ropy.ignition.models.vXX.SDF. XX represents the SDFormat
         version and can be any version currently supported by ropy.
+    format : bool
+        If true, add indentation and linebreaks to the output to increase human
+        readability. If false (default) the entire XML will appear as a single
+        line with no spaces between elements.
 
     Returns
     -------
@@ -138,9 +142,6 @@ def serialize_sdf(root_element) -> str:
         A string containing SDFormat XML representing the given input.
 
     """
-    serializer = XmlSerializer(config=SerializerConfig())
-    buffer = io.StringIO()
+    serializer = XmlSerializer(config=SerializerConfig(pretty_print=format))
 
-    serializer.write(buffer, root_element)
-
-    return buffer.read()
+    return serializer.render(root_element)
