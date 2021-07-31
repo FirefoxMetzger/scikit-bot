@@ -27,6 +27,7 @@ class NoiseType:
         measurement from a Gaussian distribution). "gaussian_quantized"
         ("gaussian" plus quantization of outputs (ie. rounding))
     """
+
     class Meta:
         name = "noiseType"
 
@@ -35,40 +36,40 @@ class NoiseType:
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     stddev: List[float] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     bias_mean: List[float] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     bias_stddev: List[float] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     precision: List[float] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     type: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )

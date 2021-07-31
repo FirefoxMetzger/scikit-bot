@@ -21,6 +21,7 @@ class ProjectorType:
         as a child of world, model, and sensor.
     name: Name of the projector
     """
+
     class Meta:
         name = "projectorType"
 
@@ -29,47 +30,47 @@ class ProjectorType:
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     fov: List[float] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     near_clip: List[float] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     far_clip: List[float] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     pose: List[PoseType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     plugin: List[PluginType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     name: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )

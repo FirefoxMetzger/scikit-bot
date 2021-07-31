@@ -18,6 +18,7 @@ class SonarType:
     radius: Radius of the sonar cone at max range. This parameter is
         only used if geometry is "cone".
     """
+
     class Meta:
         name = "sonarType"
 
@@ -26,26 +27,26 @@ class SonarType:
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     min: List[float] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     max: List[float] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     radius: List[float] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )

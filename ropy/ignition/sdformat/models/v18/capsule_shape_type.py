@@ -15,6 +15,7 @@ class CapsuleType:
     length: Length of the cylindrical portion of the capsule along the z
         axis
     """
+
     class Meta:
         name = "capsuleType"
 
@@ -23,12 +24,12 @@ class CapsuleType:
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     length: List[float] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )

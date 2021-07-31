@@ -28,6 +28,7 @@ class SdfType:
     light: The light element describes a light source.
     version: Version number of the SDFormat specification.
     """
+
     class Meta:
         name = "sdfType"
 
@@ -36,33 +37,33 @@ class SdfType:
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     model: List[ModelType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     actor: List[ActorType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     light: List[LightType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     version: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )

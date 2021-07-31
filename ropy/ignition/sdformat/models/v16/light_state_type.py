@@ -18,6 +18,7 @@ class LightType:
         respect to the specified frame.
     name: Name of the light
     """
+
     class Meta:
         name = "lightType"
 
@@ -26,19 +27,19 @@ class LightType:
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     pose: List[PoseType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     name: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )

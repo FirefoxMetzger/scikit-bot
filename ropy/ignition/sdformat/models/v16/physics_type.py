@@ -35,6 +35,7 @@ class PhysicsType:
     type: The type of the dynamics engine. Current options are ode,
         bullet, simbody and dart.  Defaults to ode if left unspecified.
     """
+
     class Meta:
         name = "physicsType"
 
@@ -43,75 +44,75 @@ class PhysicsType:
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     real_time_factor: List[float] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     real_time_update_rate: List[float] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     max_contacts: List[int] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     dart: List["PhysicsType.Dart"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     simbody: List["PhysicsType.Simbody"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     bullet: List["PhysicsType.Bullet"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     ode: List["PhysicsType.Ode"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     name: str = field(
         default="default_physics",
         metadata={
             "type": "Attribute",
-        }
+        },
     )
     default: bool = field(
         default=False,
         metadata={
             "type": "Attribute",
-        }
+        },
     )
     type: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )
 
     @dataclass
@@ -125,19 +126,20 @@ class PhysicsType:
         collision_detector: Specify collision detector for DART to use.
             Can be dart, fcl, bullet or ode.
         """
+
         solver: List["PhysicsType.Dart.Solver"] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         collision_detector: List[str] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
 
         @dataclass
@@ -148,12 +150,13 @@ class PhysicsType:
             solver_type: One of the following types: pgs, dantzig. PGS
                 stands for Projected Gauss-Seidel.
             """
+
             solver_type: List[str] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
 
     @dataclass
@@ -186,33 +189,34 @@ class PhysicsType:
             [rigid] Combining rule e = 0,               e1==e2==0 =
             2*e1*e2/(e1+e2), otherwise
         """
+
         min_step_size: List[float] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         accuracy: List[float] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         max_transient_velocity: List[float] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         contact: List["PhysicsType.Simbody.Contact"] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
 
         @dataclass
@@ -267,68 +271,69 @@ class PhysicsType:
                 velocity at which the max static friction force is
                 reached.  Combining rule: use larger velocity
             """
+
             stiffness: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             dissipation: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             plastic_coef_restitution: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             plastic_impact_velocity: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             static_friction: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             dynamic_friction: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             viscous_friction: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             override_impact_capture_velocity: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             override_stiction_transition_velocity: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
 
     @dataclass
@@ -341,19 +346,20 @@ class PhysicsType:
         solver:
         constraints: Bullet constraint parameters.
         """
+
         solver: List["PhysicsType.Bullet.Solver"] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         constraints: List["PhysicsType.Bullet.Constraints"] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
 
         @dataclass
@@ -370,33 +376,34 @@ class PhysicsType:
                 produces greater accuracy at a performance cost.
             sor: Set the successive over-relaxation parameter.
             """
+
             type: List[str] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             min_step_size: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             iters: List[int] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             sor: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
 
         @dataclass
@@ -425,40 +432,41 @@ class PhysicsType:
                 http://web.archive.org/web/20120430155635/http://bulletphysics.org/mediawiki-1.5.8/index.php/BtContactSolverInfo#Split_Impulse
                 for more information.
             """
+
             cfm: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             erp: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             contact_surface_layer: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             split_impulse: List[bool] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             split_impulse_penetration_threshold: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
 
     @dataclass
@@ -471,19 +479,20 @@ class PhysicsType:
         solver:
         constraints: ODE constraint parameters.
         """
+
         solver: List["PhysicsType.Ode.Solver"] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         constraints: List["PhysicsType.Ode.Constraints"] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
 
         @dataclass
@@ -520,68 +529,69 @@ class PhysicsType:
                 pages/#!/osrf/gazebo/pull-request/1522
                 https://github.com/osrf/gazebo/commit/968dccafdfbfca09c9b3326f855612076fed7e6f
             """
+
             type: List[str] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             min_step_size: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             island_threads: List[int] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             iters: List[int] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             precon_iters: List[int] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             sor: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             thread_position_correction: List[bool] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             use_dynamic_moi_rescaling: List[bool] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             friction_model: List[str] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
 
         @dataclass
@@ -605,31 +615,32 @@ class PhysicsType:
                 problems due to contacts being repeatedly made and
                 broken.
             """
+
             cfm: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             erp: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             contact_max_correcting_vel: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             contact_surface_layer: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
