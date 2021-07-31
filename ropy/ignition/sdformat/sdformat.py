@@ -18,10 +18,10 @@ _parser_roots = {
     "1.2": None,
     "1.3": None,
     "1.4": None,
-    "1.5": "..models.v15",
-    "1.6": "..models.v16",
-    "1.7": "..models.v17",
-    "1.8": "..models.v18",
+    "1.5": "..bindings.v15",
+    "1.6": "..bindings.v16",
+    "1.7": "..bindings.v17",
+    "1.8": "..bindings.v18",
 }
 
 # recommended to reuse the same parser context
