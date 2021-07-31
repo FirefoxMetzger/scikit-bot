@@ -38,7 +38,6 @@ class SphericalCoordinatesType:
         indicates counterclockwise rotation when viewed from top-down
         direction). The angle is specified in degrees.
     """
-
     class Meta:
         name = "spherical_coordinatesType"
 
@@ -47,40 +46,40 @@ class SphericalCoordinatesType:
         metadata={
             "type": "Element",
             "namespace": "",
-        },
+        }
     )
     world_frame_orientation: List[str] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        },
+        }
     )
     latitude_deg: List[float] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        },
+        }
     )
     longitude_deg: List[float] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        },
+        }
     )
     elevation: List[float] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        },
+        }
     )
     heading_deg: List[float] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        },
+        }
     )

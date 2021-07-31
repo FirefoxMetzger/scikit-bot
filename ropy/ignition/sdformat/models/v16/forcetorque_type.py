@@ -7,6 +7,8 @@ __NAMESPACE__ = "sdformat/forcetorque"
 @dataclass
 class ForceTorqueType:
     """
+    These elements are specific to the force torque sensor.
+
     Parameters
     ----------
     frame: Frame in which to report the wrench values. Currently
@@ -23,7 +25,6 @@ class ForceTorqueType:
         "child_to_parent" if the measured wrench is the one applied by
         the child link on the parent link.
     """
-
     class Meta:
         name = "force_torqueType"
 
@@ -32,12 +33,12 @@ class ForceTorqueType:
         metadata={
             "type": "Element",
             "namespace": "",
-        },
+        }
     )
     measure_direction: List[str] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        },
+        }
     )

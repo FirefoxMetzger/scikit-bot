@@ -8,6 +8,8 @@ __NAMESPACE__ = "sdformat/air_pressure"
 @dataclass
 class AirPressureType:
     """
+    These elements are specific to an air pressure sensor.
+
     Parameters
     ----------
     reference_altitude: The initial altitude in meters. This value can
@@ -18,7 +20,6 @@ class AirPressureType:
         a ground plane with a Z height of zero.
     pressure: Noise parameters for the pressure data.
     """
-
     class Meta:
         name = "air_pressureType"
 
@@ -27,28 +28,29 @@ class AirPressureType:
         metadata={
             "type": "Element",
             "namespace": "",
-        },
+        }
     )
     pressure: List["AirPressureType.Pressure"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        },
+        }
     )
 
     @dataclass
     class Pressure:
         """
+        Noise parameters for the pressure data.
+
         Parameters
         ----------
         noise: The properties of a sensor noise model.
         """
-
         noise: List[NoiseType] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            },
+            }
         )

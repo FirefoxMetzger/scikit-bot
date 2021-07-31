@@ -9,7 +9,12 @@ __NAMESPACE__ = "sdformat/collision"
 
 @dataclass
 class CollisionType:
-    """
+    """The collision properties of a link.
+
+    Note that this can be different from the visual properties of a
+    link, for example, simpler collision models are often used to reduce
+    computation time.
+
     Parameters
     ----------
     laser_retro: intensity value returned by laser sensor.
@@ -23,7 +28,6 @@ class CollisionType:
     name: Unique name for the collision element within the scope of the
         parent link.
     """
-
     class Meta:
         name = "collisionType"
 
@@ -32,40 +36,40 @@ class CollisionType:
         metadata={
             "type": "Element",
             "namespace": "",
-        },
+        }
     )
     max_contacts: List[int] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        },
+        }
     )
     pose: List[PoseType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        },
+        }
     )
     geometry: List[GeometryType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        },
+        }
     )
     surface: List[SurfaceType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        },
+        }
     )
     name: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
             "required": True,
-        },
+        }
     )

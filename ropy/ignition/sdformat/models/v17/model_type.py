@@ -13,6 +13,8 @@ __NAMESPACE__ = "sdformat/model"
 @dataclass
 class ModelType:
     """
+    The model element defines a complete robot or any other physical object.
+
     Parameters
     ----------
     static: If set to true, the model is immovable. Otherwise the model
@@ -50,7 +52,6 @@ class ModelType:
         to an empty string, the first link element listed as a child of
         this model is chosen as the canonical link.
     """
-
     class Meta:
         name = "modelType"
 
@@ -59,102 +60,105 @@ class ModelType:
         metadata={
             "type": "Element",
             "namespace": "",
-        },
+        }
     )
     self_collide: List[bool] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        },
+        }
     )
     allow_auto_disable: List[bool] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        },
+        }
     )
     include: List["ModelType.Include"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        },
+        }
     )
     model: List["ModelType"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        },
+        }
     )
     enable_wind: List[bool] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        },
+        }
     )
     frame: List[FrameType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        },
+        }
     )
     pose: List[PoseType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        },
+        }
     )
     link: List[LinkType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        },
+        }
     )
     joint: List[JointType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        },
+        }
     )
     plugin: List[PluginType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        },
+        }
     )
     gripper: List[GripperType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        },
+        }
     )
     name: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
             "required": True,
-        },
+        }
     )
-    canonical_link: str = field(
-        default="",
+    canonical_link: Optional[str] = field(
+        default=None,
         metadata={
             "type": "Attribute",
-        },
+        }
     )
 
     @dataclass
     class Include:
-        """
+        """Include resources from a URI.
+
+        This can be used to nest models.
+
         Parameters
         ----------
         uri: URI to a resource, such as a model
@@ -163,32 +167,31 @@ class ModelType:
         pose: A position(x,y,z) and orientation(roll, pitch yaw) with
             respect to the frame named in the relative_to attribute.
         """
-
         uri: List[str] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            },
+            }
         )
         name: List[str] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            },
+            }
         )
         static: List[bool] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            },
+            }
         )
         pose: List[PoseType] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            },
+            }
         )

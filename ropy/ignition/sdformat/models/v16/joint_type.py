@@ -9,7 +9,11 @@ __NAMESPACE__ = "sdformat/joint"
 
 @dataclass
 class JointType:
-    """
+    """A joint connects two links with kinematic and dynamic properties.
+
+    By default, the pose of a joint is expressed in the child link
+    frame.
+
     Parameters
     ----------
     parent: Name of the parent link
@@ -48,7 +52,6 @@ class JointType:
         freedom, (fixed) a joint with zero degrees of freedom that
         rigidly connects two links.
     """
-
     class Meta:
         name = "jointType"
 
@@ -57,96 +60,99 @@ class JointType:
         metadata={
             "type": "Element",
             "namespace": "",
-        },
+        }
     )
     child: List[str] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        },
+        }
     )
     gearbox_ratio: List[float] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        },
+        }
     )
     gearbox_reference_body: List[str] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        },
+        }
     )
     thread_pitch: List[float] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        },
+        }
     )
     axis: List["JointType.Axis"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        },
+        }
     )
     axis2: List["JointType.Axis2"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        },
+        }
     )
     physics: List["JointType.Physics"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        },
+        }
     )
     frame: List[FrameType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        },
+        }
     )
     pose: List[PoseType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        },
+        }
     )
     sensor: List[SensorType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        },
+        }
     )
     name: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
             "required": True,
-        },
+        }
     )
     type: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
             "required": True,
-        },
+        }
     )
 
     @dataclass
     class Axis:
         """
+        Parameters related to the axis of rotation for revolute joints, the
+        axis of translation for prismatic joints.
+
         Parameters
         ----------
         initial_position: Default joint position for this joint axis.
@@ -163,13 +169,12 @@ class JointType:
             of the joint, particularly useful for simulation.
         limit: specifies the limits of this joint
         """
-
         initial_position: List[float] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            },
+            }
         )
         xyz: List[str] = field(
             default_factory=list,
@@ -177,33 +182,37 @@ class JointType:
                 "type": "Element",
                 "namespace": "",
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-            },
+            }
         )
         use_parent_model_frame: List[bool] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            },
+            }
         )
         dynamics: List["JointType.Axis.Dynamics"] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            },
+            }
         )
         limit: List["JointType.Axis.Limit"] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            },
+            }
         )
 
         @dataclass
         class Dynamics:
-            """
+            """An element specifying physical properties of the joint.
+
+            These values are used to specify modeling properties of the
+            joint, particularly useful for simulation.
+
             Parameters
             ----------
             damping: The physical velocity dependent viscous damping
@@ -213,39 +222,40 @@ class JointType:
                 joint axis.
             spring_stiffness: The spring stiffness for this joint axis.
             """
-
             damping: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                },
+                }
             )
             friction: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                },
+                }
             )
             spring_reference: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                },
+                }
             )
             spring_stiffness: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                },
+                }
             )
 
         @dataclass
         class Limit:
             """
+            specifies the limits of this joint.
+
             Parameters
             ----------
             lower: Specifies the lower joint limit (radians for revolute
@@ -260,53 +270,55 @@ class JointType:
             stiffness: Joint stop stiffness.
             dissipation: Joint stop dissipation.
             """
-
             lower: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                },
+                }
             )
             upper: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                },
+                }
             )
             effort: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                },
+                }
             )
             velocity: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                },
+                }
             )
             stiffness: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                },
+                }
             )
             dissipation: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                },
+                }
             )
 
     @dataclass
     class Axis2:
         """
+        Parameters related to the second axis of rotation for revolute2 joints
+        and universal joints.
+
         Parameters
         ----------
         initial_position: Default joint position for this joint axis.
@@ -323,13 +335,12 @@ class JointType:
             of the joint, particularly useful for simulation.
         limit:
         """
-
         initial_position: List[float] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            },
+            }
         )
         xyz: List[str] = field(
             default_factory=list,
@@ -337,33 +348,37 @@ class JointType:
                 "type": "Element",
                 "namespace": "",
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-            },
+            }
         )
         use_parent_model_frame: List[bool] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            },
+            }
         )
         dynamics: List["JointType.Axis2.Dynamics"] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            },
+            }
         )
         limit: List["JointType.Axis2.Limit"] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            },
+            }
         )
 
         @dataclass
         class Dynamics:
-            """
+            """An element specifying physical properties of the joint.
+
+            These values are used to specify modeling properties of the
+            joint, particularly useful for simulation.
+
             Parameters
             ----------
             damping: The physical velocity dependent viscous damping
@@ -375,34 +390,33 @@ class JointType:
                 joint axis.
             spring_stiffness: The spring stiffness for this joint axis.
             """
-
             damping: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                },
+                }
             )
             friction: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                },
+                }
             )
             spring_reference: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                },
+                }
             )
             spring_stiffness: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                },
+                }
             )
 
         @dataclass
@@ -426,53 +440,54 @@ class JointType:
             dissipation: Joint stop dissipation. Supported physics
                 engines: SimBody.
             """
-
             lower: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                },
+                }
             )
             upper: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                },
+                }
             )
             effort: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                },
+                }
             )
             velocity: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                },
+                }
             )
             stiffness: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                },
+                }
             )
             dissipation: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                },
+                }
             )
 
     @dataclass
     class Physics:
         """
+        Parameters that are specific to a certain physics engine.
+
         Parameters
         ----------
         simbody: Simbody specific parameters
@@ -484,49 +499,51 @@ class JointType:
             provide_feedback under ode is scheduled to be removed in
             SDFormat 1.5.
         """
-
         simbody: List["JointType.Physics.Simbody"] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            },
+            }
         )
         ode: List["JointType.Physics.Ode"] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            },
+            }
         )
         provide_feedback: List[bool] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            },
+            }
         )
 
         @dataclass
         class Simbody:
             """
+            Simbody specific parameters.
+
             Parameters
             ----------
             must_be_loop_joint: Force cut in the multibody graph at this
                 joint.
             """
-
             must_be_loop_joint: List[bool] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                },
+                }
             )
 
         @dataclass
         class Ode:
             """
+            ODE specific parameters.
+
             Parameters
             ----------
             provide_feedback: (DEPRECATION WARNING:  In SDFormat 1.5
@@ -558,83 +575,82 @@ class JointType:
             limit:
             suspension:
             """
-
             provide_feedback: List[bool] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                },
+                }
             )
             cfm_damping: List[bool] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                },
+                }
             )
             implicit_spring_damper: List[bool] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                },
+                }
             )
             fudge_factor: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                },
+                }
             )
             cfm: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                },
+                }
             )
             erp: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                },
+                }
             )
             bounce: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                },
+                }
             )
             max_force: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                },
+                }
             )
             velocity: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                },
+                }
             )
             limit: List["JointType.Physics.Ode.Limit"] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                },
+                }
             )
             suspension: List["JointType.Physics.Ode.Suspension"] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                },
+                }
             )
 
             @dataclass
@@ -646,20 +662,19 @@ class JointType:
                     stop
                 erp: Error reduction parameter used by the joint stop
                 """
-
                 cfm: List[float] = field(
                     default_factory=list,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    },
+                    }
                 )
                 erp: List[float] = field(
                     default_factory=list,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    },
+                    }
                 )
 
             @dataclass
@@ -670,18 +685,17 @@ class JointType:
                 cfm: Suspension constraint force mixing parameter
                 erp: Suspension error reduction parameter
                 """
-
                 cfm: List[float] = field(
                     default_factory=list,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    },
+                    }
                 )
                 erp: List[float] = field(
                     default_factory=list,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    },
+                    }
                 )

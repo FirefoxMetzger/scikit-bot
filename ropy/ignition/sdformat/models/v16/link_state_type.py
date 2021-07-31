@@ -9,6 +9,8 @@ __NAMESPACE__ = "sdformat/link_state"
 @dataclass
 class LinkType:
     """
+    Link state.
+
     Parameters
     ----------
     velocity: Velocity of the link. The x, y, z components of the pose
@@ -29,7 +31,6 @@ class LinkType:
         respect to the specified frame.
     name: Name of the link
     """
-
     class Meta:
         name = "linkType"
 
@@ -39,7 +40,7 @@ class LinkType:
             "type": "Element",
             "namespace": "",
             "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-        },
+        }
     )
     acceleration: List[str] = field(
         default_factory=list,
@@ -47,7 +48,7 @@ class LinkType:
             "type": "Element",
             "namespace": "",
             "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-        },
+        }
     )
     wrench: List[str] = field(
         default_factory=list,
@@ -55,49 +56,50 @@ class LinkType:
             "type": "Element",
             "namespace": "",
             "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-        },
+        }
     )
     collision: List["LinkType.Collision"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        },
+        }
     )
     frame: List[FrameType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        },
+        }
     )
     pose: List[PoseType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        },
+        }
     )
     name: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
             "required": True,
-        },
+        }
     )
 
     @dataclass
     class Collision:
         """
+        Collision state.
+
         Parameters
         ----------
         name: Name of the collision
         """
-
         name: Optional[str] = field(
             default=None,
             metadata={
                 "type": "Attribute",
                 "required": True,
-            },
+            }
         )

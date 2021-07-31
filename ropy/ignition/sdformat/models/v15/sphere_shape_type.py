@@ -7,11 +7,12 @@ __NAMESPACE__ = "sdformat/sphere_shape"
 @dataclass
 class SphereType:
     """
+    Sphere shape.
+
     Parameters
     ----------
     radius: radius of the sphere
     """
-
     class Meta:
         name = "sphereType"
 
@@ -20,5 +21,5 @@ class SphereType:
         metadata={
             "type": "Element",
             "namespace": "",
-        },
+        }
     )

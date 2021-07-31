@@ -8,6 +8,8 @@ __NAMESPACE__ = "sdformat/frame"
 @dataclass
 class FrameType:
     """
+    A frame of reference to which a pose is relative.
+
     Parameters
     ----------
     pose: A position(x,y,z) and orientation(roll, pitch yaw) with
@@ -15,7 +17,6 @@ class FrameType:
     name: Name of the frame. This name must not match another frame
         defined inside the parent that this frame is attached to.
     """
-
     class Meta:
         name = "frameType"
 
@@ -24,12 +25,12 @@ class FrameType:
         metadata={
             "type": "Element",
             "namespace": "",
-        },
+        }
     )
     name: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
             "required": True,
-        },
+        }
     )

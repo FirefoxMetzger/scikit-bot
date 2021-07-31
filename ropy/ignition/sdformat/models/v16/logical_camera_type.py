@@ -6,7 +6,11 @@ __NAMESPACE__ = "sdformat/logical_camera"
 
 @dataclass
 class LogicalCameraType:
-    """
+    """These elements are specific to logical camera sensors.
+
+    A logical camera reports objects that fall within a frustum.
+    Computation should be performed on the CPU.
+
     Parameters
     ----------
     near: Near clipping distance of the view frustum
@@ -17,7 +21,6 @@ class LogicalCameraType:
         This is the angle between the frustum's vertex and the edges of
         the near or far plane.
     """
-
     class Meta:
         name = "logical_cameraType"
 
@@ -26,26 +29,26 @@ class LogicalCameraType:
         metadata={
             "type": "Element",
             "namespace": "",
-        },
+        }
     )
     far: List[float] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        },
+        }
     )
     aspect_ratio: List[float] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        },
+        }
     )
     horizontal_fov: List[float] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        },
+        }
     )

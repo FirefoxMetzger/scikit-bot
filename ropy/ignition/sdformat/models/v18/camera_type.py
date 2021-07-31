@@ -8,6 +8,8 @@ __NAMESPACE__ = "sdformat/camera"
 @dataclass
 class CameraType:
     """
+    These elements are specific to camera sensors.
+
     Parameters
     ----------
     horizontal_fov: Horizontal field of view
@@ -28,7 +30,6 @@ class CameraType:
         respect to the frame named in the relative_to attribute.
     name: An optional name for the camera.
     """
-
     class Meta:
         name = "cameraType"
 
@@ -37,81 +38,83 @@ class CameraType:
         metadata={
             "type": "Element",
             "namespace": "",
-        },
+        }
     )
     image: List["CameraType.Image"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        },
+        }
     )
     clip: List["CameraType.Clip"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        },
+        }
     )
     save: List["CameraType.Save"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        },
+        }
     )
     depth_camera: List["CameraType.DepthCamera"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        },
+        }
     )
     noise: List["CameraType.Noise"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        },
+        }
     )
     distortion: List["CameraType.Distortion"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        },
+        }
     )
     lens: List["CameraType.Lens"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        },
+        }
     )
     visibility_mask: List[int] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        },
+        }
     )
     pose: List[PoseType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        },
+        }
     )
     name: str = field(
         default="__default__",
         metadata={
             "type": "Attribute",
-        },
+        }
     )
 
     @dataclass
     class Image:
         """
+        The image size in pixels and format.
+
         Parameters
         ----------
         width: Width in pixels
@@ -119,56 +122,59 @@ class CameraType:
         format:
             (L8|L16|R_FLOAT16|R_FLOAT32|R8G8B8|B8G8R8|BAYER_RGGB8|BAYER_BGGR8|BAYER_GBRG8|BAYER_GRBG8)
         """
-
         width: List[int] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            },
+            }
         )
         height: List[int] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            },
+            }
         )
         format: List[str] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            },
+            }
         )
 
     @dataclass
     class Clip:
-        """
+        """The near and far clip planes.
+
+        Objects closer or farther than these planes are not rendered.
+
         Parameters
         ----------
         near: Near clipping plane
         far: Far clipping plane
         """
-
         near: List[float] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            },
+            }
         )
         far: List[float] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            },
+            }
         )
 
     @dataclass
     class Save:
         """
+        Enable or disable saving of camera frames.
+
         Parameters
         ----------
         path: The path name which will hold the frame data. If path name
@@ -176,74 +182,80 @@ class CameraType:
             directory.
         enabled: True = saving enabled
         """
-
         path: List[str] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            },
+            }
         )
         enabled: Optional[bool] = field(
             default=None,
             metadata={
                 "type": "Attribute",
                 "required": True,
-            },
+            }
         )
 
     @dataclass
     class DepthCamera:
         """
+        Depth camera parameters.
+
         Parameters
         ----------
         output: Type of output
         clip: The near and far clip planes. Objects closer or farther
             than these planes are not detected by the depth camera.
         """
-
         output: List[str] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            },
+            }
         )
         clip: List["CameraType.DepthCamera.Clip"] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            },
+            }
         )
 
         @dataclass
         class Clip:
-            """
+            """The near and far clip planes.
+
+            Objects closer or farther than these planes are not detected
+            by the depth camera.
+
             Parameters
             ----------
             near: Near clipping plane for depth camera
             far: Far clipping plane for depth camera
             """
-
             near: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                },
+                }
             )
             far: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                },
+                }
             )
 
     @dataclass
     class Noise:
         """
+        The properties of the noise model that should be applied to generated
+        images.
+
         Parameters
         ----------
         type: The type of noise.  Currently supported types are:
@@ -254,32 +266,34 @@ class CameraType:
         stddev: For type "gaussian," the standard deviation of the
             Gaussian distribution from which noise values are drawn.
         """
-
         type: List[str] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            },
+            }
         )
         mean: List[float] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            },
+            }
         )
         stddev: List[float] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            },
+            }
         )
 
     @dataclass
     class Distortion:
-        """
+        """Lens distortion to be applied to camera images.
+
+        See http://en.wikipedia.org/wiki/Distortion_(optics)#Software_correction
+
         Parameters
         ----------
         k1: The radial distortion coefficient k1
@@ -289,41 +303,40 @@ class CameraType:
         p2: The tangential distortion coefficient p2
         center: The distortion center or principal point
         """
-
         k1: List[float] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            },
+            }
         )
         k2: List[float] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            },
+            }
         )
         k3: List[float] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            },
+            }
         )
         p1: List[float] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            },
+            }
         )
         p2: List[float] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            },
+            }
         )
         center: List[str] = field(
             default_factory=list,
@@ -331,12 +344,14 @@ class CameraType:
                 "type": "Element",
                 "namespace": "",
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+)((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-            },
+            }
         )
 
     @dataclass
     class Lens:
         """
+        Lens projection description.
+
         Parameters
         ----------
         type: Type of the lens mapping. Supported values are gnomonical,
@@ -362,53 +377,56 @@ class CameraType:
             (image_width_in_pixels * 0.5) / tan(field_of_view_in_degrees
             * 0.5 * PI/180)
         """
-
         type: List[str] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            },
+            }
         )
         scale_to_hfov: List[bool] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            },
+            }
         )
         custom_function: List["CameraType.Lens.CustomFunction"] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            },
+            }
         )
         cutoff_angle: List[float] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            },
+            }
         )
         env_texture_size: List[int] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            },
+            }
         )
         intrinsics: List["CameraType.Lens.Intrinsics"] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            },
+            }
         )
 
         @dataclass
         class CustomFunction:
-            """
+            """Definition of custom mapping function in a form of
+            r=c1*f*fun(theta/c2 + c3).
+
+            See https://en.wikipedia.org/wiki/Fisheye_lens#Mapping_function
+
             Parameters
             ----------
             c1: Linear scaling constant
@@ -419,46 +437,51 @@ class CameraType:
                 is ignored if 'scale_to_fov' is set to true
             fun: Possible values are 'sin', 'tan' and 'id'
             """
-
             c1: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                },
+                }
             )
             c2: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                },
+                }
             )
             c3: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                },
+                }
             )
             f: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                },
+                }
             )
             fun: List[str] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                },
+                }
             )
 
         @dataclass
         class Intrinsics:
-            """
+            """Camera intrinsic parameters for setting a custom perspective
+            projection matrix (cannot be used with WideAngleCamera since this
+            class uses image stitching from 6 different cameras for achieving a
+            wide field of view).
+
+            The focal lengths can be computed using focal_length_in_pixels = (image_width_in_pixels * 0.5) / tan(field_of_view_in_degrees * 0.5 * PI/180)
+
             Parameters
             ----------
             fx: X focal length (in pixels, overrides horizontal_fov)
@@ -467,39 +490,38 @@ class CameraType:
             cy: Y principal point (in pixels)
             s: XY axis skew
             """
-
             fx: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                },
+                }
             )
             fy: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                },
+                }
             )
             cx: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                },
+                }
             )
             cy: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                },
+                }
             )
             s: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                },
+                }
             )

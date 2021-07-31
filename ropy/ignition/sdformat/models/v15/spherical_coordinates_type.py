@@ -24,7 +24,6 @@ class SphericalCoordinatesType:
         between North and gazebo y axis. The angle is specified in
         degrees.
     """
-
     class Meta:
         name = "spherical_coordinatesType"
 
@@ -33,33 +32,33 @@ class SphericalCoordinatesType:
         metadata={
             "type": "Element",
             "namespace": "",
-        },
+        }
     )
     latitude_deg: List[float] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        },
+        }
     )
     longitude_deg: List[float] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        },
+        }
     )
     elevation: List[float] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        },
+        }
     )
     heading_deg: List[float] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        },
+        }
     )

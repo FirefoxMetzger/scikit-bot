@@ -7,12 +7,13 @@ __NAMESPACE__ = "sdformat/ellipsoid_shape"
 @dataclass
 class EllipsoidType:
     """
+    Ellipsoid shape.
+
     Parameters
     ----------
     radii: The three radii of the ellipsoid. The origin of the ellipsoid
         is in its geometric center (inside the center of the ellipsoid).
     """
-
     class Meta:
         name = "ellipsoidType"
 
@@ -22,5 +23,5 @@ class EllipsoidType:
             "type": "Element",
             "namespace": "",
             "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-        },
+        }
     )

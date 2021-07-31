@@ -11,6 +11,9 @@ __NAMESPACE__ = "sdformat/population"
 @dataclass
 class PopulationType:
     """
+    The population element defines how and where a set of models will be
+    automatically populated in Gazebo.
+
     Parameters
     ----------
     model_count: The number of models to place.
@@ -25,7 +28,6 @@ class PopulationType:
     name: A unique name for the population. This name must not match
         another population in the world.
     """
-
     class Meta:
         name = "populationType"
 
@@ -34,54 +36,56 @@ class PopulationType:
         metadata={
             "type": "Element",
             "namespace": "",
-        },
+        }
     )
     distribution: List["PopulationType.Distribution"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        },
+        }
     )
     box: List[BoxType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        },
+        }
     )
     cylinder: List[CylinderType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        },
+        }
     )
     pose: List[PoseType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        },
+        }
     )
     model: List[ModelType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        },
+        }
     )
     name: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
             "required": True,
-        },
+        }
     )
 
     @dataclass
     class Distribution:
         """
+        Specifies the type of object distribution and its optional parameters.
+
         Parameters
         ----------
         type: Define how the objects will be placed in the specified
@@ -98,27 +102,26 @@ class PopulationType:
         cols: Number of columns in the grid.
         step: Distance between elements of the grid.
         """
-
         type: List[str] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            },
+            }
         )
         rows: List[int] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            },
+            }
         )
         cols: List[int] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            },
+            }
         )
         step: List[str] = field(
             default_factory=list,
@@ -126,5 +129,5 @@ class PopulationType:
                 "type": "Element",
                 "namespace": "",
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-            },
+            }
         )
