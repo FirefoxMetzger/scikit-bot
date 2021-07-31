@@ -1,3 +1,7 @@
+""" Python Bindings for SDFormat v1.5
+
+"""
+
 from .actor import Actor
 from .actor_type import ActorType
 from .altimeter import Altimeter

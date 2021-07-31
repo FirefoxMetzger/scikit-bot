@@ -82,7 +82,10 @@ Currently the following SDFormat versions are supported:
     :toctree:
     :recursive:
 
+    ropy.ignition.sdformat.models.v18
+    ropy.ignition.sdformat.models.v17
     ropy.ignition.sdformat.models.v16
+    ropy.ignition.sdformat.models.v15
 
 Ignition Messages
 -----------------

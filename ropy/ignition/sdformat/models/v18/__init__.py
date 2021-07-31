@@ -1,3 +1,7 @@
+""" Python Bindings for SDFormat v1.8
+
+"""
+
 from .actor import Actor
 from .actor_type import ActorType
 from .air_pressure import AirPressure
