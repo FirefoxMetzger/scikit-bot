@@ -2,7 +2,7 @@ from dataclasses import dataclass
 import numpy as np
 import pytest
 from xsdata.exceptions import ParserError
-from ropy.ignition.sdformat.models.v16.pose_type import PoseType
+from ropy.ignition.sdformat.bindings.v16.pose_type import PoseType
 
 import ropy.ignition as ign
 
