@@ -22,6 +22,7 @@ class StateType:
     light: Light state
     world_name: Name of the world this state applies to
     """
+
     class Meta:
         name = "stateType"
 
@@ -31,7 +32,7 @@ class StateType:
             "type": "Element",
             "namespace": "",
             "pattern": r"\d+ \d+",
-        }
+        },
     )
     wall_time: List[str] = field(
         default_factory=list,
@@ -39,7 +40,7 @@ class StateType:
             "type": "Element",
             "namespace": "",
             "pattern": r"\d+ \d+",
-        }
+        },
     )
     real_time: List[str] = field(
         default_factory=list,
@@ -47,49 +48,49 @@ class StateType:
             "type": "Element",
             "namespace": "",
             "pattern": r"\d+ \d+",
-        }
+        },
     )
     iterations: List[int] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     insertions: List["StateType.Insertions"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     deletions: List["StateType.Deletions"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     model: List[ModelType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     light: List[LightType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     world_name: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )
 
     @dataclass
@@ -102,12 +103,13 @@ class StateType:
         model: The model element defines a complete robot or any other
             physical object.
         """
+
         model: List[ModelTypeModelType] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
 
     @dataclass
@@ -119,10 +121,11 @@ class StateType:
         ----------
         name: The name of a deleted model
         """
+
         name: List[str] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )

@@ -9,6 +9,7 @@ class SurfaceType:
     """
     The surface parameters.
     """
+
     class Meta:
         name = "surfaceType"
 
@@ -17,28 +18,28 @@ class SurfaceType:
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     friction: List["SurfaceType.Friction"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     contact: List["SurfaceType.Contact"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     soft_contact: List["SurfaceType.SoftContact"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
 
     @dataclass
@@ -51,19 +52,20 @@ class SurfaceType:
         threshold: Bounce capture velocity, below which effective
             coefficient of restitution is 0.
         """
+
         restitution_coefficient: List[float] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         threshold: List[float] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
 
     @dataclass
@@ -75,26 +77,27 @@ class SurfaceType:
         ode: ODE friction parameters
         bullet:
         """
+
         torsional: List["SurfaceType.Friction.Torsional"] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         ode: List["SurfaceType.Friction.Ode"] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         bullet: List["SurfaceType.Friction.Bullet"] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
 
         @dataclass
@@ -115,40 +118,41 @@ class SurfaceType:
             surface_radius: Surface radius on the point of contact.
             ode: Torsional friction parameters for ODE
             """
+
             coefficient: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             use_patch_radius: List[bool] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             patch_radius: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             surface_radius: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             ode: List["SurfaceType.Friction.Torsional.Ode"] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
 
             @dataclass
@@ -161,12 +165,13 @@ class SurfaceType:
                 slip: Force dependent slip for torsional friction,
                     between the range of [0..1].
                 """
+
                 slip: List[float] = field(
                     default_factory=list,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
 
         @dataclass
@@ -185,19 +190,20 @@ class SurfaceType:
             slip2: Force dependent slip direction 2 in collision local
                 frame, between the range of [0..1].
             """
+
             mu: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             mu2: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             fdir1: List[str] = field(
                 default_factory=list,
@@ -205,21 +211,21 @@ class SurfaceType:
                     "type": "Element",
                     "namespace": "",
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-                }
+                },
             )
             slip1: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             slip2: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
 
         @dataclass
@@ -234,19 +240,20 @@ class SurfaceType:
             rolling_friction: coefficient of friction in the range of
                 [0..1]
             """
+
             friction: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             friction2: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             fdir1: List[str] = field(
                 default_factory=list,
@@ -254,14 +261,14 @@ class SurfaceType:
                     "type": "Element",
                     "namespace": "",
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-                }
+                },
             )
             rolling_friction: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
 
     @dataclass
@@ -297,54 +304,55 @@ class SurfaceType:
         ode: ODE contact parameters
         bullet: Bullet contact parameters
         """
+
         collide_without_contact: List[bool] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         collide_without_contact_bitmask: List[int] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         collide_bitmask: List[int] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         poissons_ratio: List[float] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         elastic_modulus: List[float] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         ode: List["SurfaceType.Contact.Ode"] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         bullet: List["SurfaceType.Contact.Bullet"] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
 
         @dataclass
@@ -365,47 +373,48 @@ class SurfaceType:
             min_depth: minimum allowable depth before contact correction
                 impulse is applied
             """
+
             soft_cfm: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             soft_erp: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             kp: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             kd: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             max_vel: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             min_depth: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
 
         @dataclass
@@ -429,47 +438,48 @@ class SurfaceType:
                 http://bulletphysics.org/mediawiki-1.5.8/index.php/BtContactSolverInfo#Split_Impulse
                 for more information.
             """
+
             soft_cfm: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             soft_erp: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             kp: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             kd: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             split_impulse: List[bool] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             split_impulse_penetration_threshold: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
 
     @dataclass
@@ -480,12 +490,13 @@ class SurfaceType:
         dart: soft contact pamameters based on paper:
             http://www.cc.gatech.edu/graphics/projects/Sumit/homepage/papers/sigasia11/jain_softcontacts_siga11.pdf
         """
+
         dart: List["SurfaceType.SoftContact.Dart"] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
 
         @dataclass
@@ -505,31 +516,32 @@ class SurfaceType:
             flesh_mass_fraction: Fraction of mass to be distributed
                 among deformable nodes.
             """
+
             bone_attachment: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             stiffness: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             damping: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             flesh_mass_fraction: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )

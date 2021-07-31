@@ -15,6 +15,7 @@ class GpsType:
     position_sensing: Parameters related to GPS position measurement.
     velocity_sensing: Parameters related to GPS position measurement.
     """
+
     class Meta:
         name = "gpsType"
 
@@ -23,14 +24,14 @@ class GpsType:
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     velocity_sensing: List["GpsType.VelocitySensing"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
 
     @dataclass
@@ -45,19 +46,20 @@ class GpsType:
         vertical: Noise parameters for vertical position measurement, in
             units of meters.
         """
+
         horizontal: List["GpsType.PositionSensing.Horizontal"] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         vertical: List["GpsType.PositionSensing.Vertical"] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
 
         @dataclass
@@ -70,12 +72,13 @@ class GpsType:
             ----------
             noise: The properties of a sensor noise model.
             """
+
             noise: List[NoiseType] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
 
         @dataclass
@@ -88,12 +91,13 @@ class GpsType:
             ----------
             noise: The properties of a sensor noise model.
             """
+
             noise: List[NoiseType] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
 
     @dataclass
@@ -108,19 +112,20 @@ class GpsType:
         vertical: Noise parameters for vertical velocity measurement, in
             units of meters/second.
         """
+
         horizontal: List["GpsType.VelocitySensing.Horizontal"] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         vertical: List["GpsType.VelocitySensing.Vertical"] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
 
         @dataclass
@@ -133,12 +138,13 @@ class GpsType:
             ----------
             noise: The properties of a sensor noise model.
             """
+
             noise: List[NoiseType] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
 
         @dataclass
@@ -151,10 +157,11 @@ class GpsType:
             ----------
             noise: The properties of a sensor noise model.
             """
+
             noise: List[NoiseType] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )

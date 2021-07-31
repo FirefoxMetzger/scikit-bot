@@ -8,7 +8,9 @@ versions = ["1.0", "1.2", "1.3", "1.4", "1.5", "1.6", "1.7", "1.8"]
 config = GeneratorConfig.read(Path(__file__).parent / "sdf_bindings_config.xml")
 
 for version in versions:
-    config.output.package = f"ropy.ignition.sdformat.bindings.v{version.replace('.', '')}"
+    config.output.package = (
+        f"ropy.ignition.sdformat.bindings.v{version.replace('.', '')}"
+    )
     source_path = sdf_location / version
 
     uris = [x.as_uri() for x in source_path.iterdir() if x.suffix == ".xsd"]

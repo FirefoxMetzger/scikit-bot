@@ -14,6 +14,7 @@ class BatteryType:
     voltage: Initial voltage in volts.
     name: Unique name for the battery.
     """
+
     class Meta:
         name = "batteryType"
 
@@ -22,12 +23,12 @@ class BatteryType:
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     name: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )

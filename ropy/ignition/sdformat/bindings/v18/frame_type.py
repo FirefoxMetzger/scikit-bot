@@ -21,6 +21,7 @@ class FrameType:
         attached_to attributes of the specified frames must lead to the
         name of a link, a model, or the world frame.
     """
+
     class Meta:
         name = "frameType"
 
@@ -29,18 +30,18 @@ class FrameType:
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     name: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )
     attached_to: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
-        }
+        },
     )

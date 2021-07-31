@@ -26,6 +26,7 @@ class MaterialType:
     emissive: The emissive color of a material specified by set of four
         numbers representing red/green/blue, each in the range of [0,1].
     """
+
     class Meta:
         name = "materialType"
 
@@ -34,21 +35,21 @@ class MaterialType:
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     shader: List["MaterialType.Shader"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     lighting: List[bool] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     ambient: List[str] = field(
         default_factory=list,
@@ -56,7 +57,7 @@ class MaterialType:
             "type": "Element",
             "namespace": "",
             "pattern": r"(\s*\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){3}\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s*",
-        }
+        },
     )
     diffuse: List[str] = field(
         default_factory=list,
@@ -64,7 +65,7 @@ class MaterialType:
             "type": "Element",
             "namespace": "",
             "pattern": r"(\s*\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){3}\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s*",
-        }
+        },
     )
     specular: List[str] = field(
         default_factory=list,
@@ -72,7 +73,7 @@ class MaterialType:
             "type": "Element",
             "namespace": "",
             "pattern": r"(\s*\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){3}\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s*",
-        }
+        },
     )
     emissive: List[str] = field(
         default_factory=list,
@@ -80,7 +81,7 @@ class MaterialType:
             "type": "Element",
             "namespace": "",
             "pattern": r"(\s*\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){3}\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s*",
-        }
+        },
     )
 
     @dataclass
@@ -94,19 +95,20 @@ class MaterialType:
         uri: URI of the material script file
         name: Name of the script within the script file
         """
+
         uri: List[str] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         name: List[str] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
 
     @dataclass
@@ -118,17 +120,18 @@ class MaterialType:
         type: vertex, pixel, normal_map_object_space,
             normal_map_tangent_space
         """
+
         normal_map: List[str] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         type: Optional[str] = field(
             default=None,
             metadata={
                 "type": "Attribute",
                 "required": True,
-            }
+            },
         )

@@ -14,6 +14,7 @@ class CylinderType:
     radius: Radius of the cylinder
     length: Length of the cylinder along the z axis
     """
+
     class Meta:
         name = "cylinderType"
 
@@ -22,12 +23,12 @@ class CylinderType:
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     length: List[float] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )

@@ -16,6 +16,7 @@ class GuiType:
         as a child of world, model, and sensor.
     fullscreen:
     """
+
     class Meta:
         name = "guiType"
 
@@ -24,20 +25,20 @@ class GuiType:
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     plugin: List[PluginType] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     fullscreen: bool = field(
         default=False,
         metadata={
             "type": "Attribute",
-        }
+        },
     )
 
     @dataclass
@@ -53,40 +54,41 @@ class GuiType:
             respect to the frame named in the relative_to attribute.
         name:
         """
+
         view_controller: List[str] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         projection_type: List[str] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         track_visual: List["GuiType.Camera.TrackVisual"] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         pose: List[PoseType] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         name: Optional[str] = field(
             default=None,
             metadata={
                 "type": "Attribute",
                 "required": True,
-            }
+            },
         )
 
         @dataclass
@@ -127,40 +129,41 @@ class GuiType:
                 rotation of the tracked model. This parameter is only
                 used if static and use_model_frame are set to true.
             """
+
             name: List[str] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             min_dist: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             max_dist: List[float] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             static: List[bool] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             use_model_frame: List[bool] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             xyz: List[str] = field(
                 default_factory=list,
@@ -168,12 +171,12 @@ class GuiType:
                     "type": "Element",
                     "namespace": "",
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-                }
+                },
             )
             inherit_yaw: List[bool] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
