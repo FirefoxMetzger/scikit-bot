@@ -7,11 +7,8 @@ from xsdata.formats.dataclass.serializers.config import SerializerConfig
 from xsdata.exceptions import ParserError as XSDataParserError
 import io
 from typing import Dict, Callable, Type, TypeVar
+import importlib
 
-from .models.v15 import Sdf as SDFv15
-from .models.v16 import Sdf as SDFv16
-from .models.v17 import Sdf as SDFv17
-from .models.v18 import Sdf as SDFv18
 
 T = TypeVar("T")
 
@@ -21,10 +18,10 @@ _parser_roots = {
     "1.2": None,
     "1.3": None,
     "1.4": None,
-    "1.5": SDFv15,
-    "1.6": SDFv16,
-    "1.7": SDFv17,
-    "1.8": SDFv18,
+    "1.5": "..models.v15",
+    "1.6": "..models.v16",
+    "1.7": "..models.v17",
+    "1.8": "..models.v18",
 }
 
 # recommended to reuse the same parser context
@@ -115,10 +112,12 @@ def loads(
     else:
         version = version
 
-    root_class = _parser_roots[version]
+    binding_location = _parser_roots[version]
 
-    if root_class is None:
+    if binding_location is None:
         raise ParseError(f"Ropy currently doesnt support SDFormat v{version}")
+
+    bindings = importlib.import_module(binding_location, __name__)
 
     # Disabled until xsData upgrades to the next version
     # sdf_parser = XmlParser(
@@ -127,11 +126,11 @@ def loads(
     sdf_parser = XmlParser(ParserConfig(), xml_ctx)
 
     try:
-        sdf_parser.from_string(sdf, root_class)
+        sdf_parser.from_string(sdf, bindings.Sdf)
     except ElementTree.ParseError as e:
         raise ParseError("Invalid XML.") from e
 
-    return sdf_parser.from_string(sdf, root_class)
+    return sdf_parser.from_string(sdf, bindings.Sdf)
 
 
 def dumps(root_element, *, format=False) -> str:
