@@ -41,6 +41,7 @@ extensions = [
 html_show_sourcelink = False
 set_type_checking_flag = True
 autosummary_generate = True
+
 autodoc_mock_imports = ["betterproto", "zmq", "xsdata"]
 
 numpydoc_show_class_members = False

@@ -29,6 +29,8 @@ which is a part of gym-ignition_.
 Functions
 ---------
 
+.. rubric:: General
+
 .. autosummary::
     :toctree:
 
@@ -36,33 +38,51 @@ Functions
     ropy.ignition.FrustumProjection
     ropy.ignition.create_frame_graph
 
-
-SDFormat XML
-------------
-
-Ropy features a DOM-style parser and serializer for SDFormat XML. You can load
-any valid SDFormat v1.5 or newer file and ropy will construct a class tree out of it.
-Similarily, you can create objects that represent SDF elements and ropy can serialize
-them into SDF. 
-
-While the parser is imported together with ``ropy.ignition``, the individual
-models are imported on demand. This is done to keep import times low and
-(moreso) because versions are not backwards compatible. For example, the
-bindings for v1.8 can not parse v1.6 SDFormat XML. As a result, you will have to
-explicitly import the bindings you wish to use if you need/want to manipulate
-them explicitly. For example, if you want to import SDFormat v1.8 bindings you
-can use::
-
-    import ropy.ignition.sdformat.models.v18 as sdf_bindings
-
-You can find documentation of the parser and the bindings for each version below:
+.. rubric:: SDFormat Bindings
 
 .. autosummary::
     :toctree:
 
-    ropy.ignition.sdformat
-    ropy.ignition.sdformat.models.v15
+    ropy.ignition.sdformat.get_version
+    ropy.ignition.sdformat.loads
+    ropy.ignition.sdformat.dumps
 
+
+SDFormat XML
+------------
+
+.. note::
+    You can find more documentation aboud SDFormat in the `official spec <SdfSpec>`_.
+
+.. note::
+    SDFormat doesn't use SemVer. Ropy will automatically select the correct version
+    when using :func:`ropy.ignition.sdformat.loads`; however, it is imporant that
+    you are mindful of the version you are using.
+
+Ropy features a DOM-style parser and serializer for SDFormat XML. You can load
+many SDFormat versions and ropy will construct a class tree out of it.
+Similarily, you can construct objects that represent SDF elements and ropy can
+serialize them into SDF. 
+
+The API used here mimics the API used by the familiar `JSON parser <json>`_ or
+`YAML parser <yaml>`_. The main difference is that this module returns an object
+tree of dataclass objects, whilst JSON and YAML return dictionaries.
+
+While the parser is imported together with ``ropy.ignition``, the individual
+models are imported on demand. This is done to keep import times low. To use the
+bindings explicitly you must import them explicitly.For example, if you want to
+import SDFormat v1.8 bindings you can use::
+
+    import ropy.ignition.sdformat.models.v18 as sdf_bindings
+
+Currently the following SDFormat versions are supported:
+
+.. autosummary::
+    :template: sdformat_model.rst
+    :toctree:
+    :recursive:
+
+    ropy.ignition.sdformat.models.v16
 
 Ignition Messages
 -----------------
@@ -92,6 +112,9 @@ documentation`_.
 .. _`Ign-Msgs`: https://github.com/ignitionrobotics/ign-msgs
 .. _`Ignition documentation`: https://ignitionrobotics.org/api/msgs/6.4/index.html
 .. _Ignitionrobotics: https://ignitionrobotics.org/
+.. _yaml: https://pyyaml.org/wiki/PyYAMLDocumentation
+.. _json: https://docs.python.org/3/library/json.html
+.. _SdfSpec: http://sdformat.org/spec
 """
 
 from . import messages
