@@ -11,7 +11,7 @@ extras_require = {
         "xsdata==21.7",
     ],
     "docs": [
-        "sphinx == 4.1.1",
+        "sphinx == 4.1.2",
         "numpydoc == 1.1.0",
         "sphinx-autodoc-typehints == 1.12.0",
         "matplotlib == 3.4.2",
