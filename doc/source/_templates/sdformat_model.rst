@@ -1,26 +1,35 @@
-{{ fullname | escape | underline}}
+{% set sdformat_version =  name[0] + name[1] + "." + name[2:] %}
+{% set title =  "SDFormat " + sdformat_version + " Bindings" %}
 
-{% set sdformat_version =  objname[0] + objname[1] + "." + objname[2:] %}
+.. py:module:: {{fullname}}
 
-This are the SDFormat bindings for SDFormat {{ sdformat_version }}. Here, you
-fill find a dataclass for each element that can occur inside a valid SDF. When
-you load SDF via :func:`ropy.ignition.sdformat.loads` ropy will return a tree of
-instances of the classes documented here. 
+{{ title | underline}}
 
-.. note::
-    The entire module and it's documentation are auto-generated. As such, the
-    documentation may be imperfect at times. You may also wish to refer to the
-    `SDFormat spec <http://sdformat.org/spec>`_ for further details on the
-    format.
+.. warning::
+    If you want to use these bindings explicitly, you need to import them
+    first::
+
+        import ropy.ignition.sdformat.bindings.{{name}} as {{name}}
+
+Ropy's SDFormat bindings are realized as a set of dataclasses. Each class
+corresponds to a unique element found within SDFormat XML and has an attribute
+for every attribute and child of the corresponding SDFormat element. Names
+generally match the names used within SDFormat; however, are adapted to python
+convention where needed.
+
+Often, you will not have to interact with these bindings directly. The main
+use-case for doing so is to inject custom logic into the parsing process. For
+example, you may wish to convert all vectors contained in SDF into numpy arrays,
+or you may wish to decompose the :class:`{{name}}.pose.value <ropy.ignition.sdformat.bindings.{{name}}.Pose>` into position and
+rotation elements.
 
 .. currentmodule:: {{ fullname }}
 
-Elements
---------
+.. rubric:: {{ _("Elements") }}
 
 .. autosummary::
     :template: sdformat_element.rst
-    :toctree:
+    :toctree: sdformat_{{ sdformat_version }}
 
 {% for module_name in modules %}
 {% if not module_name.endswith("type") %}
@@ -35,53 +44,3 @@ Elements
     {{ class_path }}
 {% endif %}
 {% endfor %}
- 
-.. automodule:: {{ fullname }}
- 
-    {% block attributes %}
-    {% if attributes %}
-    .. rubric:: {{ _('Module Attributes') }}
- 
-    .. autosummary::
-
-    {% for item in attributes %}
-       {{ item }}
-    {%- endfor %}
-    {% endif %}
-    {% endblock %}
- 
-    {% block functions %}
-    {% if functions %}
-    .. rubric:: {{ _('Functions') }}
- 
-    .. autosummary::
-
-    {% for item in functions %}
-       {{ item }}
-    {%- endfor %}
-    {% endif %}
-    {% endblock %}
- 
-    {% block classes %}
-    {% if classes %}
-    .. rubric:: {{ _('Classes') }}
- 
-    .. autosummary::
-
-    {% for item in classes %}
-        {{ item }}
-    {%- endfor %}
-    {% endif %}
-    {% endblock %}
- 
-    {% block exceptions %}
-    {% if exceptions %}
-    .. rubric:: {{ _('Exceptions') }}
- 
-    .. autosummary::
-
-    {% for item in exceptions %}
-       {{ item }}
-    {%- endfor %}
-    {% endif %}
-    {% endblock %}
