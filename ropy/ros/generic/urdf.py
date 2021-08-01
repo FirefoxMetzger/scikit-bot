@@ -37,7 +37,6 @@ def create_frame_graph(urdf: str) -> Tuple[Dict[str, rtf.Frame], Dict[str, rtf.L
     frames = dict()
     links = dict()
     links_to_process: List[ElementTree.Element] = list()
-    origin = dict()
 
     for child in tree:
         if child.tag == "link":

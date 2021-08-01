@@ -78,7 +78,7 @@ def test_translation_direction():
 
 def test_affine_matrix():
     child = rtf.Frame(3)
-    rotated = rtf.RotvecRotation((1,0,0), angle=0)(child)
+    rotated = rtf.RotvecRotation((1, 0, 0), angle=0)(child)
     world = rtf.Translation((0, 1, 0))(rotated)
 
     origin_in_world = child.transform((0, 0, 0), world)
@@ -86,11 +86,13 @@ def test_affine_matrix():
 
     affine_matrix = child.get_affine_matrix(world)
 
-    expected_tf = np.array([
-        [1, 0, 0, 0],
-        [0, 1, 0, 1],
-        [0, 0, 1, 0],
-        [0, 0, 0, 1],
-    ])
+    expected_tf = np.array(
+        [
+            [1, 0, 0, 0],
+            [0, 1, 0, 1],
+            [0, 0, 1, 0],
+            [0, 0, 0, 1],
+        ]
+    )
 
     assert np.allclose(affine_matrix, expected_tf)
