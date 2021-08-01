@@ -40,6 +40,11 @@ Functions
 
 .. rubric:: SDFormat Bindings
 
+.. note::
+    SDFormat doesn't use SemVer. Ropy will automatically select the correct version
+    when using :func:`ropy.ignition.sdformat.loads`; however, it is imporant that
+    you are mindful of the version you are using.
+
 .. autosummary::
     :toctree:
 
@@ -52,12 +57,7 @@ SDFormat XML
 ------------
 
 .. note::
-    You can find more documentation aboud SDFormat in the `official spec <SdfSpec>`_.
-
-.. note::
-    SDFormat doesn't use SemVer. Ropy will automatically select the correct version
-    when using :func:`ropy.ignition.sdformat.loads`; however, it is imporant that
-    you are mindful of the version you are using.
+    You can find more documentation aboud SDFormat in the `official spec <http://sdformat.org/spec>`_.
 
 Ropy features a DOM-style parser and serializer for SDFormat XML. You can load
 many SDFormat versions and ropy will construct a class tree out of it.
@@ -68,12 +68,10 @@ The API used here mimics the API used by the familiar `JSON parser <json>`_ or
 `YAML parser <yaml>`_. The main difference is that this module returns an object
 tree of dataclass objects, whilst JSON and YAML return dictionaries.
 
-While the parser is imported together with ``ropy.ignition``, the individual
+While the parser is imported together with :mod:`ropy.ignition`, the individual
 models are imported on demand. This is done to keep import times low. To use the
-bindings explicitly you must import them explicitly.For example, if you want to
-import SDFormat v1.8 bindings you can use::
-
-    import ropy.ignition.sdformat.models.v18 as sdf_bindings
+bindings explicitly you must import them explicitly. Check the individual
+bindings for documentation on how to do this.
 
 Currently the following SDFormat versions are supported:
 
@@ -117,7 +115,6 @@ documentation`_.
 .. _Ignitionrobotics: https://ignitionrobotics.org/
 .. _yaml: https://pyyaml.org/wiki/PyYAMLDocumentation
 .. _json: https://docs.python.org/3/library/json.html
-.. _SdfSpec: http://sdformat.org/spec
 """
 
 from . import messages
