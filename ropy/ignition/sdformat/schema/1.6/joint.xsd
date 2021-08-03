@@ -245,7 +245,7 @@
                   <xs:documentation xml:lang="en">Simbody specific parameters</xs:documentation>
                 </xs:annotation>
                 <xs:all>
-                  <xs:element name="must_be_loop_joint" minOccurs="0" maxOccurs="1" default="0" type="xs:boolean">
+                  <xs:element name="must_be_loop_joint" minOccurs="0" maxOccurs="1" default="false" type="xs:boolean">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">Force cut in the multibody graph at this joint.</xs:documentation>
                     </xs:annotation>

@@ -110,7 +110,7 @@
                             <xs:documentation xml:lang="en">Torsional friction coefficient, unitless maximum ratio of           tangential stress to normal stress.</xs:documentation>
                           </xs:annotation>
                         </xs:element>
-                        <xs:element name="use_patch_radius" minOccurs="0" maxOccurs="1" default="1" type="xs:boolean">
+                        <xs:element name="use_patch_radius" minOccurs="0" maxOccurs="1" default="true" type="xs:boolean">
                           <xs:annotation>
                             <xs:documentation xml:lang="en">If this flag is true,           torsional friction is calculated using the "patch_radius" parameter.           If this flag is set to false,           "surface_radius" (R) and contact depth (d)           are used to compute the patch radius as sqrt(R*d).</xs:documentation>
                           </xs:annotation>
@@ -214,7 +214,7 @@
             <xs:element name="contact" minOccurs="0" maxOccurs="1">
               <xs:complexType>
                 <xs:all>
-                  <xs:element name="collide_without_contact" minOccurs="0" maxOccurs="1" default="0" type="xs:boolean">
+                  <xs:element name="collide_without_contact" minOccurs="0" maxOccurs="1" default="false" type="xs:boolean">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">Flag to disable contact force generation, while still allowing collision checks and contact visualization to occur.</xs:documentation>
                     </xs:annotation>
@@ -315,7 +315,7 @@
                             <xs:documentation xml:lang="en">dynamically "damping"-equivalent coefficient for contact joints</xs:documentation>
                           </xs:annotation>
                         </xs:element>
-                        <xs:element name="split_impulse" minOccurs="1" maxOccurs="1" default="1" type="xs:boolean">
+                        <xs:element name="split_impulse" minOccurs="1" maxOccurs="1" default="true" type="xs:boolean">
                           <xs:annotation>
                             <xs:documentation xml:lang="en">Similar to ODE's max_vel implementation.  See http://bulletphysics.org/mediawiki-1.5.8/index.php/BtContactSolverInfo#Split_Impulse for more information.</xs:documentation>
                           </xs:annotation>

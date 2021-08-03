@@ -178,7 +178,7 @@
                       <xs:documentation xml:lang="en">The depth of the surface layer around all geometry objects. Contacts are allowed to sink into the surface layer up to the given depth before coming to rest. The default value is zero. Increasing this to some small value (e.g. 0.001) can help prevent jittering problems due to contacts being repeatedly made and broken.</xs:documentation>
                     </xs:annotation>
                   </xs:element>
-                  <xs:element name="split_impulse" minOccurs="1" maxOccurs="1" default="1" type="xs:boolean">
+                  <xs:element name="split_impulse" minOccurs="1" maxOccurs="1" default="true" type="xs:boolean">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">Similar to ODE's max_vel implementation. See http://web.archive.org/web/20120430155635/http://bulletphysics.org/mediawiki-1.5.8/index.php/BtContactSolverInfo#Split_Impulse for more information.</xs:documentation>
                     </xs:annotation>
@@ -231,7 +231,7 @@
                       <xs:documentation xml:lang="en">Set the successive over-relaxation parameter.</xs:documentation>
                     </xs:annotation>
                   </xs:element>
-                  <xs:element name="use_dynamic_moi_rescaling" minOccurs="1" maxOccurs="1" default="0" type="xs:boolean">
+                  <xs:element name="use_dynamic_moi_rescaling" minOccurs="1" maxOccurs="1" default="false" type="xs:boolean">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">Flag to enable dynamic rescaling of moment of inertia in constrained directions.           See gazebo pull request 1114 for the implementation of this feature.           https://osrf-migration.github.io/gazebo-gh-pages/#!/osrf/gazebo/pull-request/1114</xs:documentation>
                     </xs:annotation>
