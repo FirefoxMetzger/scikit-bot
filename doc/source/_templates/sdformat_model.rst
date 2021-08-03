@@ -26,15 +26,11 @@ convention where needed.
     :toctree: sdformat_{{ sdformat_version }}
 
 {% for module_name in modules %}
-{% if not module_name.endswith("type") %}
-{% set class_path = module_name.split(".")[-1].split("_") | map("capitalize") | join("") %}
-{% set class_path = class_path | replace("Shape", "") | replace("State", "") %}
-{% if class_path == "Root" %}
-{% set class_path = "Sdf" %}
-{% endif%}
-{% if class_path == "Forcetorque" %}
-{% set class_path = "ForceTorque" %}
-{% endif%}
-    {{ class_path }}
+{% set class_path = module_name.split(".")[-1].capitalize() %}
+    {{ module_name }}.{{ class_path }}
+{% if class_path == "State" %}
+{% if not sdf_version in ["v1.0", "v1.2"] %}
+    {{ module_name }}.Model
+{% endif %}
 {% endif %}
 {% endfor %}
