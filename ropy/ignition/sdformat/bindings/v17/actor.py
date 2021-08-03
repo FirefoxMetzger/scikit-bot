@@ -105,12 +105,11 @@ class Actor:
         filename: Path to skin file, accepted formats: COLLADA, BVH.
         scale: Scale the skin's size.
         """
-        filename: Optional[str] = field(
-            default=None,
+        filename: str = field(
+            default="__default__",
             metadata={
                 "type": "Element",
                 "namespace": "",
-                "required": True,
             }
         )
         scale: Optional[float] = field(
@@ -136,12 +135,11 @@ class Actor:
             X.
         name: Unique name for animation.
         """
-        filename: Optional[str] = field(
-            default=None,
+        filename: str = field(
+            default="__default__",
             metadata={
                 "type": "Element",
                 "namespace": "",
-                "required": True,
             }
         )
         scale: Optional[float] = field(
@@ -272,20 +270,18 @@ class Actor:
                 pose: The pose which should be reached at the given
                     time.
                 """
-                time: Optional[float] = field(
-                    default=None,
+                time: float = field(
+                    default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                        "required": True,
                     }
                 )
-                pose: Optional[str] = field(
-                    default=None,
+                pose: str = field(
+                    default="0 0 0 0 0 0",
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                        "required": True,
                         "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
                     }
                 )

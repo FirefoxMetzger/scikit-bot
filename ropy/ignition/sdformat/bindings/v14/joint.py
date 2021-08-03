@@ -54,20 +54,18 @@ class Joint:
     class Meta:
         name = "joint"
 
-    parent: Optional[str] = field(
-        default=None,
+    parent: str = field(
+        default="__default__",
         metadata={
             "type": "Element",
             "namespace": "",
-            "required": True,
         }
     )
-    child: Optional[str] = field(
-        default=None,
+    child: str = field(
+        default="__default__",
         metadata={
             "type": "Element",
             "namespace": "",
-            "required": True,
         }
     )
     pose: Optional[str] = field(
@@ -162,12 +160,11 @@ class Joint:
             of the joint, particularly useful for simulation.
         limit: specifies the limits of this joint
         """
-        xyz: Optional[str] = field(
-            default=None,
+        xyz: str = field(
+            default="0 0 1",
             metadata={
                 "type": "Element",
                 "namespace": "",
-                "required": True,
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
             }
         )
@@ -237,20 +234,18 @@ class Joint:
                 SimBody.
             dissipation: Joint stop dissipation.
             """
-            lower: Optional[float] = field(
-                default=None,
+            lower: float = field(
+                default=-1e+16,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                    "required": True,
                 }
             )
-            upper: Optional[float] = field(
-                default=None,
+            upper: float = field(
+                default=1e+16,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                    "required": True,
                 }
             )
             effort: Optional[float] = field(
@@ -300,12 +295,11 @@ class Joint:
             of the joint, particularly useful for simulation.
         limit:
         """
-        xyz: Optional[str] = field(
-            default=None,
+        xyz: str = field(
+            default="0 0 1",
             metadata={
                 "type": "Element",
                 "namespace": "",
-                "required": True,
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
             }
         )
@@ -597,20 +591,18 @@ class Joint:
                     stop
                 erp: Error reduction parameter used by the joint stop
                 """
-                cfm: Optional[float] = field(
-                    default=None,
+                cfm: float = field(
+                    default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                        "required": True,
                     }
                 )
-                erp: Optional[float] = field(
-                    default=None,
+                erp: float = field(
+                    default=0.2,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                        "required": True,
                     }
                 )
 
@@ -622,19 +614,17 @@ class Joint:
                 cfm: Suspension constraint force mixing parameter
                 erp: Suspension error reduction parameter
                 """
-                cfm: Optional[float] = field(
-                    default=None,
+                cfm: float = field(
+                    default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                        "required": True,
                     }
                 )
-                erp: Optional[float] = field(
-                    default=None,
+                erp: float = field(
+                    default=0.2,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                        "required": True,
                     }
                 )

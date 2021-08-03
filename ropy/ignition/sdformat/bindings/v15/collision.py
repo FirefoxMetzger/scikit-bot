@@ -611,20 +611,18 @@ class Collision:
                         "namespace": "",
                     }
                 )
-                split_impulse: Optional[bool] = field(
-                    default=None,
+                split_impulse: bool = field(
+                    default=True,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                        "required": True,
                     }
                 )
-                split_impulse_penetration_threshold: Optional[float] = field(
-                    default=None,
+                split_impulse_penetration_threshold: float = field(
+                    default=-0.01,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                        "required": True,
                     }
                 )
 
@@ -662,35 +660,31 @@ class Collision:
                 flesh_mass_fraction: Fraction of mass to be distributed
                     among deformable nodes.
                 """
-                bone_attachment: Optional[float] = field(
-                    default=None,
+                bone_attachment: float = field(
+                    default=100.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                        "required": True,
                     }
                 )
-                stiffness: Optional[float] = field(
-                    default=None,
+                stiffness: float = field(
+                    default=100.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                        "required": True,
                     }
                 )
-                damping: Optional[float] = field(
-                    default=None,
+                damping: float = field(
+                    default=10.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                        "required": True,
                     }
                 )
-                flesh_mass_fraction: Optional[float] = field(
-                    default=None,
+                flesh_mass_fraction: float = field(
+                    default=0.05,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                        "required": True,
                     }
                 )

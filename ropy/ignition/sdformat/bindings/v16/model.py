@@ -155,12 +155,11 @@ class Model:
         name: Override the name of the included model.
         static: Override the static value of the included model.
         """
-        uri: Optional[str] = field(
-            default=None,
+        uri: str = field(
+            default="__default__",
             metadata={
                 "type": "Element",
                 "namespace": "",
-                "required": True,
             }
         )
         pose: Optional[str] = field(
@@ -313,12 +312,11 @@ class Model:
                 "min_occurs": 1,
             }
         )
-        palm_link: Optional[str] = field(
-            default=None,
+        palm_link: str = field(
+            default="__default__",
             metadata={
                 "type": "Element",
                 "namespace": "",
-                "required": True,
             }
         )
         name: Optional[str] = field(

@@ -98,12 +98,11 @@ class Actor:
 
     @dataclass
     class Skin:
-        filename: Optional[str] = field(
-            default=None,
+        filename: str = field(
+            default="__default__",
             metadata={
                 "type": "Element",
                 "namespace": "",
-                "required": True,
             }
         )
         scale: Optional[float] = field(
@@ -116,12 +115,11 @@ class Actor:
 
     @dataclass
     class Animation:
-        filename: Optional[str] = field(
-            default=None,
+        filename: str = field(
+            default="__default__",
             metadata={
                 "type": "Element",
                 "namespace": "",
-                "required": True,
             }
         )
         scale: Optional[float] = field(
@@ -203,20 +201,18 @@ class Actor:
 
             @dataclass
             class Waypoint:
-                time: Optional[float] = field(
-                    default=None,
+                time: float = field(
+                    default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                        "required": True,
                     }
                 )
-                pose: Optional[str] = field(
-                    default=None,
+                pose: str = field(
+                    default="0 0 0 0 0 0",
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                        "required": True,
                         "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
                     }
                 )

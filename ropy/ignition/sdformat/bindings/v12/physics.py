@@ -23,12 +23,11 @@ class Physics:
     class Meta:
         name = "physics"
 
-    update_rate: Optional[float] = field(
-        default=None,
+    update_rate: float = field(
+        default=1000.0,
         metadata={
             "type": "Element",
             "namespace": "",
-            "required": True,
         }
     )
     max_contacts: Optional[int] = field(
@@ -38,12 +37,11 @@ class Physics:
             "namespace": "",
         }
     )
-    gravity: Optional[str] = field(
-        default=None,
+    gravity: str = field(
+        default="0 0 -9.8",
         metadata={
             "type": "Element",
             "namespace": "",
-            "required": True,
             "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
         }
     )
@@ -78,12 +76,11 @@ class Physics:
         ----------
         dt: Time step
         """
-        dt: Optional[float] = field(
-            default=None,
+        dt: float = field(
+            default=0.003,
             metadata={
                 "type": "Element",
                 "namespace": "",
-                "required": True,
             }
         )
 
@@ -122,28 +119,25 @@ class Physics:
             precon_iters:
             sor: Set the successive over-relaxation parameter.
             """
-            type: Optional[str] = field(
-                default=None,
+            type: str = field(
+                default="quick",
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                    "required": True,
                 }
             )
-            dt: Optional[float] = field(
-                default=None,
+            dt: float = field(
+                default=0.001,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                    "required": True,
                 }
             )
-            iters: Optional[int] = field(
-                default=None,
+            iters: int = field(
+                default=50,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                    "required": True,
                 }
             )
             precon_iters: Optional[int] = field(
@@ -153,12 +147,11 @@ class Physics:
                     "namespace": "",
                 }
             )
-            sor: Optional[float] = field(
-                default=None,
+            sor: float = field(
+                default=1.3,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                    "required": True,
                 }
             )
 
@@ -181,35 +174,31 @@ class Physics:
                 problems due to contacts being repeatedly made and
                 broken.
             """
-            cfm: Optional[float] = field(
-                default=None,
+            cfm: float = field(
+                default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                    "required": True,
                 }
             )
-            erp: Optional[float] = field(
-                default=None,
+            erp: float = field(
+                default=0.2,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                    "required": True,
                 }
             )
-            contact_max_correcting_vel: Optional[float] = field(
-                default=None,
+            contact_max_correcting_vel: float = field(
+                default=100.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                    "required": True,
                 }
             )
-            contact_surface_layer: Optional[float] = field(
-                default=None,
+            contact_surface_layer: float = field(
+                default=0.001,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                    "required": True,
                 }
             )

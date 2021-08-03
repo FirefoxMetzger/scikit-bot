@@ -53,20 +53,18 @@ class Joint:
     class Meta:
         name = "joint"
 
-    parent: Optional[str] = field(
-        default=None,
+    parent: str = field(
+        default="__default__",
         metadata={
             "type": "Element",
             "namespace": "",
-            "required": True,
         }
     )
-    child: Optional[str] = field(
-        default=None,
+    child: str = field(
+        default="__default__",
         metadata={
             "type": "Element",
             "namespace": "",
-            "required": True,
         }
     )
     gearbox_ratio: Optional[float] = field(
@@ -165,12 +163,11 @@ class Joint:
                 "namespace": "",
             }
         )
-        xyz: Optional["Joint.Axis.Xyz"] = field(
-            default=None,
+        xyz: "Joint.Axis.Xyz" = field(
+            default="0 0 1",
             metadata={
                 "type": "Element",
                 "namespace": "",
-                "required": True,
             }
         )
         dynamics: Optional["Joint.Axis.Dynamics"] = field(
@@ -242,20 +239,18 @@ class Joint:
                     "namespace": "",
                 }
             )
-            spring_reference: Optional[float] = field(
-                default=None,
+            spring_reference: float = field(
+                default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                    "required": True,
                 }
             )
-            spring_stiffness: Optional[float] = field(
-                default=None,
+            spring_stiffness: float = field(
+                default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                    "required": True,
                 }
             )
 
@@ -278,20 +273,18 @@ class Joint:
             stiffness: Joint stop stiffness.
             dissipation: Joint stop dissipation.
             """
-            lower: Optional[float] = field(
-                default=None,
+            lower: float = field(
+                default=-1e+16,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                    "required": True,
                 }
             )
-            upper: Optional[float] = field(
-                default=None,
+            upper: float = field(
+                default=1e+16,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                    "required": True,
                 }
             )
             effort: Optional[float] = field(
@@ -348,12 +341,11 @@ class Joint:
                 "namespace": "",
             }
         )
-        xyz: Optional["Joint.Axis2.Xyz"] = field(
-            default=None,
+        xyz: "Joint.Axis2.Xyz" = field(
+            default="0 0 1",
             metadata={
                 "type": "Element",
                 "namespace": "",
-                "required": True,
             }
         )
         dynamics: Optional["Joint.Axis2.Dynamics"] = field(
@@ -427,20 +419,18 @@ class Joint:
                     "namespace": "",
                 }
             )
-            spring_reference: Optional[float] = field(
-                default=None,
+            spring_reference: float = field(
+                default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                    "required": True,
                 }
             )
-            spring_stiffness: Optional[float] = field(
-                default=None,
+            spring_stiffness: float = field(
+                default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                    "required": True,
                 }
             )
 
@@ -669,20 +659,18 @@ class Joint:
                     stop
                 erp: Error reduction parameter used by the joint stop
                 """
-                cfm: Optional[float] = field(
-                    default=None,
+                cfm: float = field(
+                    default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                        "required": True,
                     }
                 )
-                erp: Optional[float] = field(
-                    default=None,
+                erp: float = field(
+                    default=0.2,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                        "required": True,
                     }
                 )
 
@@ -694,20 +682,18 @@ class Joint:
                 cfm: Suspension constraint force mixing parameter
                 erp: Suspension error reduction parameter
                 """
-                cfm: Optional[float] = field(
-                    default=None,
+                cfm: float = field(
+                    default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                        "required": True,
                     }
                 )
-                erp: Optional[float] = field(
-                    default=None,
+                erp: float = field(
+                    default=0.2,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                        "required": True,
                     }
                 )
 

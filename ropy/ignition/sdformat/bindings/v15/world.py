@@ -163,12 +163,11 @@ class World:
             will use the system's default audio device. Otherwise,
             specify a an audio device file"
         """
-        device: Optional[str] = field(
-            default=None,
+        device: str = field(
+            default="default",
             metadata={
                 "type": "Element",
                 "namespace": "",
-                "required": True,
             }
         )
 
@@ -185,12 +184,11 @@ class World:
         pose: A position(x,y,z) and orientation(roll, pitch yaw) with
             respect to the specified frame.
         """
-        uri: Optional[str] = field(
-            default=None,
+        uri: str = field(
+            default="__default__",
             metadata={
                 "type": "Element",
                 "namespace": "",
-                "required": True,
             }
         )
         name: Optional[str] = field(
@@ -327,12 +325,11 @@ class World:
 
             @dataclass
             class TrackVisual:
-                name: Optional[str] = field(
-                    default=None,
+                name: str = field(
+                    default="__default__",
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                        "required": True,
                     }
                 )
                 min_dist: Optional[float] = field(
@@ -512,12 +509,11 @@ class World:
         material: The material of the visual element.
         name: Name of the road
         """
-        width: Optional[float] = field(
-            default=None,
+        width: float = field(
+            default=1.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
-                "required": True,
             }
         )
         point: List[str] = field(
@@ -565,44 +561,39 @@ class World:
             equivalently, the angle between North and       gazebo y
             axis. The angle is specified in degrees.
         """
-        surface_model: Optional[str] = field(
-            default=None,
+        surface_model: str = field(
+            default="EARTH_WGS84",
             metadata={
                 "type": "Element",
                 "namespace": "",
-                "required": True,
             }
         )
-        latitude_deg: Optional[float] = field(
-            default=None,
+        latitude_deg: float = field(
+            default=0.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
-                "required": True,
             }
         )
-        longitude_deg: Optional[float] = field(
-            default=None,
+        longitude_deg: float = field(
+            default=0.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
-                "required": True,
             }
         )
-        elevation: Optional[float] = field(
-            default=None,
+        elevation: float = field(
+            default=0.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
-                "required": True,
             }
         )
-        heading_deg: Optional[float] = field(
-            default=None,
+        heading_deg: float = field(
+            default=0.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
-                "required": True,
             }
         )
 
@@ -627,12 +618,11 @@ class World:
         name: A unique name for the population. This name must not match
             another population in the world.
         """
-        model_count: Optional[int] = field(
-            default=None,
+        model_count: int = field(
+            default=1,
             metadata={
                 "type": "Element",
                 "namespace": "",
-                "required": True,
             }
         )
         distribution: Optional["World.Population.Distribution"] = field(
@@ -710,12 +700,11 @@ class World:
             cols: Number of columns in the grid.
             step: Distance between elements of the grid.
             """
-            type: Optional[str] = field(
-                default=None,
+            type: str = field(
+                default="random",
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                    "required": True,
                 }
             )
             rows: Optional[int] = field(
@@ -752,12 +741,11 @@ class World:
                 box is in its geometric center (inside the center of the
                 box).
             """
-            size: Optional[str] = field(
-                default=None,
+            size: str = field(
+                default="1 1 1",
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                    "required": True,
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
                 }
             )
@@ -772,20 +760,18 @@ class World:
             radius: Radius of the cylinder
             length: Length of the cylinder along the z axis
             """
-            radius: Optional[float] = field(
-                default=None,
+            radius: float = field(
+                default=1.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                    "required": True,
                 }
             )
-            length: Optional[float] = field(
-                default=None,
+            length: float = field(
+                default=1.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                    "required": True,
                 }
             )
 

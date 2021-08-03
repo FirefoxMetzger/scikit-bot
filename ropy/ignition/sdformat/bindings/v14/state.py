@@ -119,12 +119,11 @@ class State:
         link: Link state
         name: Name of the model
         """
-        pose: Optional[str] = field(
-            default=None,
+        pose: str = field(
+            default="0 0 0 0 0 0",
             metadata={
                 "type": "Element",
                 "namespace": "",
-                "required": True,
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
             }
         )
@@ -212,12 +211,11 @@ class State:
             collision: Collision state
             name: Name of the link
             """
-            pose: Optional[str] = field(
-                default=None,
+            pose: str = field(
+                default="0 0 0 0 0 0",
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                    "required": True,
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
                 }
             )
@@ -270,12 +268,11 @@ class State:
                 pose: Pose of the link relative to the model
                 name: Name of the collision
                 """
-                pose: Optional[str] = field(
-                    default=None,
+                pose: str = field(
+                    default="0 0 0 0 0 0",
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                        "required": True,
                         "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
                     }
                 )

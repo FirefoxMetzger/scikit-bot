@@ -98,12 +98,11 @@ class Geometry:
         size: The three side lengths of the box. The origin of the box
             is in its geometric center (inside the center of the box).
         """
-        size: Optional[str] = field(
-            default=None,
+        size: str = field(
+            default="1 1 1",
             metadata={
                 "type": "Element",
                 "namespace": "",
-                "required": True,
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
             }
         )
@@ -118,20 +117,18 @@ class Geometry:
         radius: Radius of the cylinder
         length: Length of the cylinder along the z axis
         """
-        radius: Optional[float] = field(
-            default=None,
+        radius: float = field(
+            default=1.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
-                "required": True,
             }
         )
-        length: Optional[float] = field(
-            default=None,
+        length: float = field(
+            default=1.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
-                "required": True,
             }
         )
 
@@ -159,12 +156,11 @@ class Geometry:
         use_terrain_paging: Set if the rendering engine will use terrain
             paging
         """
-        uri: Optional[str] = field(
-            default=None,
+        uri: str = field(
+            default="__default__",
             metadata={
                 "type": "Element",
                 "namespace": "",
-                "required": True,
             }
         )
         size: Optional[str] = field(
@@ -220,28 +216,25 @@ class Geometry:
             diffuse: Diffuse texture image filename
             normal: Normalmap texture image filename
             """
-            size: Optional[float] = field(
-                default=None,
+            size: float = field(
+                default=10.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                    "required": True,
                 }
             )
-            diffuse: Optional[str] = field(
-                default=None,
+            diffuse: str = field(
+                default="__default__",
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                    "required": True,
                 }
             )
-            normal: Optional[str] = field(
-                default=None,
+            normal: str = field(
+                default="__default__",
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                    "required": True,
                 }
             )
 
@@ -257,20 +250,18 @@ class Geometry:
             min_height: Min height of a blend layer
             fade_dist: Distance over which the blend occurs
             """
-            min_height: Optional[float] = field(
-                default=None,
+            min_height: float = field(
+                default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                    "required": True,
                 }
             )
-            fade_dist: Optional[float] = field(
-                default=None,
+            fade_dist: float = field(
+                default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                    "required": True,
                 }
             )
 
@@ -287,44 +278,39 @@ class Geometry:
         height: Height of the extruded boxes
         granularity: The amount of error in the model
         """
-        uri: Optional[str] = field(
-            default=None,
+        uri: str = field(
+            default="__default__",
             metadata={
                 "type": "Element",
                 "namespace": "",
-                "required": True,
             }
         )
-        scale: Optional[float] = field(
-            default=None,
+        scale: float = field(
+            default=1.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
-                "required": True,
             }
         )
-        threshold: Optional[int] = field(
-            default=None,
+        threshold: int = field(
+            default=200,
             metadata={
                 "type": "Element",
                 "namespace": "",
-                "required": True,
             }
         )
-        height: Optional[float] = field(
-            default=None,
+        height: float = field(
+            default=1.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
-                "required": True,
             }
         )
-        granularity: Optional[int] = field(
-            default=None,
+        granularity: int = field(
+            default=1,
             metadata={
                 "type": "Element",
                 "namespace": "",
-                "required": True,
             }
         )
 
@@ -340,12 +326,11 @@ class Geometry:
             specified by the uri
         scale: Scaling factor applied to the mesh
         """
-        uri: Optional[str] = field(
-            default=None,
+        uri: str = field(
+            default="__default__",
             metadata={
                 "type": "Element",
                 "namespace": "",
-                "required": True,
             }
         )
         submesh: Optional["Geometry.Mesh.Submesh"] = field(
@@ -378,12 +363,11 @@ class Geometry:
                 on the submesh before the poses from parent links and
                 models are applied.
             """
-            name: Optional[str] = field(
-                default=None,
+            name: str = field(
+                default="__default__",
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                    "required": True,
                 }
             )
             center: Optional[bool] = field(
@@ -404,21 +388,19 @@ class Geometry:
         normal: Normal direction for the plane
         size: Length of each side of the plane
         """
-        normal: Optional[str] = field(
-            default=None,
+        normal: str = field(
+            default="0 0 1",
             metadata={
                 "type": "Element",
                 "namespace": "",
-                "required": True,
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
             }
         )
-        size: Optional[str] = field(
-            default=None,
+        size: str = field(
+            default="1 1",
             metadata={
                 "type": "Element",
                 "namespace": "",
-                "required": True,
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+)((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
             }
         )
@@ -442,12 +424,11 @@ class Geometry:
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+)((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
             }
         )
-        height: Optional[float] = field(
-            default=None,
+        height: float = field(
+            default=1.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
-                "required": True,
             }
         )
 
@@ -460,11 +441,10 @@ class Geometry:
         ----------
         radius: radius of the sphere
         """
-        radius: Optional[float] = field(
-            default=None,
+        radius: float = field(
+            default=1.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
-                "required": True,
             }
         )

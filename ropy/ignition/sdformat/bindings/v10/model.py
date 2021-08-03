@@ -102,12 +102,11 @@ class Model:
                 "min_occurs": 1,
             }
         )
-        palm_link: Optional[str] = field(
-            default=None,
+        palm_link: str = field(
+            default="__default__",
             metadata={
                 "type": "Element",
                 "namespace": "",
-                "required": True,
             }
         )
         name: Optional[str] = field(

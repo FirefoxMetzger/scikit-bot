@@ -181,12 +181,11 @@ class Sensor:
         save: Enable or disable saving of camera frames.
         depth_camera: Depth camera parameters
         """
-        horizontal_fov: Optional[float] = field(
-            default=None,
+        horizontal_fov: float = field(
+            default=1.047,
             metadata={
                 "type": "Element",
                 "namespace": "",
-                "required": True,
             }
         )
         image: Optional["Sensor.Camera.Image"] = field(
@@ -232,20 +231,18 @@ class Sensor:
             format:
                 (L8|R8G8B8|B8G8R8|BAYER_RGGB8|BAYER_BGGR8|BAYER_GBRG8|BAYER_GRBG8)
             """
-            width: Optional[int] = field(
-                default=None,
+            width: int = field(
+                default=320,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                    "required": True,
                 }
             )
-            height: Optional[int] = field(
-                default=None,
+            height: int = field(
+                default=240,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                    "required": True,
                 }
             )
             format: Optional[str] = field(
@@ -268,20 +265,18 @@ class Sensor:
             near: Near clipping plane
             far: Far clipping plane
             """
-            near: Optional[float] = field(
-                default=None,
+            near: float = field(
+                default=0.1,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                    "required": True,
                 }
             )
-            far: Optional[float] = field(
-                default=None,
+            far: float = field(
+                default=100.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                    "required": True,
                 }
             )
 
@@ -297,12 +292,11 @@ class Sensor:
                 working directory.
             enabled: True = saving enabled
             """
-            path: Optional[str] = field(
-                default=None,
+            path: str = field(
+                default="__default__",
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                    "required": True,
                 }
             )
             enabled: Optional[bool] = field(
@@ -322,12 +316,11 @@ class Sensor:
             ----------
             output: Type of output
             """
-            output: Optional[str] = field(
-                default=None,
+            output: str = field(
+                default="depths",
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                    "required": True,
                 }
             )
 
@@ -391,36 +384,32 @@ class Sensor:
                 min_angle:
                 max_angle: Must be greater or equal to min_angle
                 """
-                samples: Optional[int] = field(
-                    default=None,
+                samples: int = field(
+                    default=640,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                        "required": True,
                     }
                 )
-                resolution: Optional[float] = field(
-                    default=None,
+                resolution: float = field(
+                    default=1.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                        "required": True,
                     }
                 )
-                min_angle: Optional[float] = field(
-                    default=None,
+                min_angle: float = field(
+                    default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                        "required": True,
                     }
                 )
-                max_angle: Optional[float] = field(
-                    default=None,
+                max_angle: float = field(
+                    default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                        "required": True,
                     }
                 )
 
@@ -439,12 +428,11 @@ class Sensor:
                 min_angle:
                 max_angle: Must be greater or equal to min_angle
                 """
-                samples: Optional[int] = field(
-                    default=None,
+                samples: int = field(
+                    default=1,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                        "required": True,
                     }
                 )
                 resolution: Optional[float] = field(
@@ -454,20 +442,18 @@ class Sensor:
                         "namespace": "",
                     }
                 )
-                min_angle: Optional[float] = field(
-                    default=None,
+                min_angle: float = field(
+                    default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                        "required": True,
                     }
                 )
-                max_angle: Optional[float] = field(
-                    default=None,
+                max_angle: float = field(
+                    default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                        "required": True,
                     }
                 )
 
@@ -482,20 +468,18 @@ class Sensor:
             max: The maximum distance for each ray.
             resolution: Linear resolution of each ray.
             """
-            min: Optional[float] = field(
-                default=None,
+            min: float = field(
+                default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                    "required": True,
                 }
             )
-            max: Optional[float] = field(
-                default=None,
+            max: float = field(
+                default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                    "required": True,
                 }
             )
             resolution: Optional[float] = field(
@@ -517,19 +501,17 @@ class Sensor:
             as the contact sensor.
         topic: Topic on which contact data is published.
         """
-        collision: Optional[str] = field(
-            default=None,
+        collision: str = field(
+            default="__default__",
             metadata={
                 "type": "Element",
                 "namespace": "",
-                "required": True,
             }
         )
-        topic: Optional[str] = field(
-            default=None,
+        topic: str = field(
+            default="__default_topic__",
             metadata={
                 "type": "Element",
                 "namespace": "",
-                "required": True,
             }
         )

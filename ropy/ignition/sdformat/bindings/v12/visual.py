@@ -167,12 +167,11 @@ class Visual:
                     "namespace": "",
                 }
             )
-            name: Optional[str] = field(
-                default=None,
+            name: str = field(
+                default="__default__",
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                    "required": True,
                 }
             )
 

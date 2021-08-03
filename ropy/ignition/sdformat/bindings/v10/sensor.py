@@ -210,11 +210,10 @@ class Sensor:
                 "required": True,
             }
         )
-        topic: Optional[str] = field(
-            default=None,
+        topic: str = field(
+            default="__default_topic__",
             metadata={
                 "type": "Element",
                 "namespace": "",
-                "required": True,
             }
         )

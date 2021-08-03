@@ -168,12 +168,11 @@ class World:
 
             @dataclass
             class TrackVisual:
-                name: Optional[str] = field(
-                    default=None,
+                name: str = field(
+                    default="__default__",
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                        "required": True,
                     }
                 )
                 min_dist: Optional[float] = field(
@@ -239,12 +238,11 @@ class World:
         point: A series of points define the path of the road.
         name: Name of the road
         """
-        width: Optional[float] = field(
-            default=None,
+        width: float = field(
+            default=1.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
-                "required": True,
             }
         )
         point: List[str] = field(

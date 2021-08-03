@@ -100,46 +100,41 @@ class Geometry:
 
         @dataclass
         class Texture:
-            size: Optional[float] = field(
-                default=None,
+            size: float = field(
+                default=10.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                    "required": True,
                 }
             )
-            diffuse: Optional[str] = field(
-                default=None,
+            diffuse: str = field(
+                default="__default__",
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                    "required": True,
                 }
             )
-            normal: Optional[str] = field(
-                default=None,
+            normal: str = field(
+                default="__default__",
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                    "required": True,
                 }
             )
 
         @dataclass
         class Blend:
-            min_height: Optional[float] = field(
-                default=None,
+            min_height: float = field(
+                default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                    "required": True,
                 }
             )
-            fade_dist: Optional[float] = field(
-                default=None,
+            fade_dist: float = field(
+                default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                    "required": True,
                 }
             )

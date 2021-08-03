@@ -376,12 +376,11 @@ class State:
             "namespace": "",
         }
     )
-    iterations: Optional[int] = field(
-        default=None,
+    iterations: int = field(
+        default=0,
         metadata={
             "type": "Element",
             "namespace": "",
-            "required": True,
         }
     )
     insertions: Optional["State.Insertions"] = field(

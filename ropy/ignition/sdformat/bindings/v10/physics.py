@@ -54,12 +54,11 @@ class Physics:
 
     @dataclass
     class Bullet:
-        dt: Optional[float] = field(
-            default=None,
+        dt: float = field(
+            default=0.003,
             metadata={
                 "type": "Element",
                 "namespace": "",
-                "required": True,
             }
         )
 

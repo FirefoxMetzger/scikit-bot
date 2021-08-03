@@ -21,21 +21,19 @@ class Scene:
     class Meta:
         name = "scene"
 
-    ambient: Optional[str] = field(
-        default=None,
+    ambient: str = field(
+        default="0.2 0.2 0.2 1.0",
         metadata={
             "type": "Element",
             "namespace": "",
-            "required": True,
             "pattern": r"(\s*\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){3}\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s*",
         }
     )
-    background: Optional[str] = field(
-        default=None,
+    background: str = field(
+        default=".7 .7 .7 1",
         metadata={
             "type": "Element",
             "namespace": "",
-            "required": True,
             "pattern": r"(\s*\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){3}\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s*",
         }
     )
@@ -46,12 +44,11 @@ class Scene:
             "namespace": "",
         }
     )
-    shadows: Optional[bool] = field(
-        default=None,
+    shadows: bool = field(
+        default=True,
         metadata={
             "type": "Element",
             "namespace": "",
-            "required": True,
         }
     )
     fog: Optional["Scene.Fog"] = field(

@@ -154,20 +154,18 @@ class Link:
         linear: Linear damping
         angular: Angular damping
         """
-        linear: Optional[float] = field(
-            default=None,
+        linear: float = field(
+            default=0.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
-                "required": True,
             }
         )
-        angular: Optional[float] = field(
-            default=None,
+        angular: float = field(
+            default=0.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
-                "required": True,
             }
         )
 
@@ -220,52 +218,46 @@ class Link:
             above-diagonal elements of this matrix are specified here,
             using the attributes ixx, ixy, ixz, iyy, iyz, izz.
             """
-            ixx: Optional[float] = field(
-                default=None,
+            ixx: float = field(
+                default=1.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                    "required": True,
                 }
             )
-            ixy: Optional[float] = field(
-                default=None,
+            ixy: float = field(
+                default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                    "required": True,
                 }
             )
-            ixz: Optional[float] = field(
-                default=None,
+            ixz: float = field(
+                default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                    "required": True,
                 }
             )
-            iyy: Optional[float] = field(
-                default=None,
+            iyy: float = field(
+                default=1.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                    "required": True,
                 }
             )
-            iyz: Optional[float] = field(
-                default=None,
+            iyz: float = field(
+                default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                    "required": True,
                 }
             )
-            izz: Optional[float] = field(
-                default=None,
+            izz: float = field(
+                default=1.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                    "required": True,
                 }
             )
 
@@ -283,12 +275,11 @@ class Link:
             exist as a child of world, model, and sensor.
         name: Name of the projector
         """
-        texture: Optional[str] = field(
-            default=None,
+        texture: str = field(
+            default="__default__",
             metadata={
                 "type": "Element",
                 "namespace": "",
-                "required": True,
             }
         )
         pose: Optional[str] = field(
@@ -391,12 +382,11 @@ class Link:
             for the audio source. Position(x,y,z) and rotation (roll,
             pitch yaw) in the parent coordinate frame.
         """
-        uri: Optional[str] = field(
-            default=None,
+        uri: str = field(
+            default="__default__",
             metadata={
                 "type": "Element",
                 "namespace": "",
-                "required": True,
             }
         )
         pitch: Optional[float] = field(

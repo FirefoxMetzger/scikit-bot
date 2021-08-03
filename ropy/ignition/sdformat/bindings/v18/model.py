@@ -180,12 +180,11 @@ class Model:
         pose: A position(x,y,z) and orientation(roll, pitch yaw) with
             respect to the frame named in the relative_to attribute.
         """
-        uri: Optional[str] = field(
-            default=None,
+        uri: str = field(
+            default="__default__",
             metadata={
                 "type": "Element",
                 "namespace": "",
-                "required": True,
             }
         )
         name: Optional[str] = field(
@@ -380,12 +379,11 @@ class Model:
                 "min_occurs": 1,
             }
         )
-        palm_link: Optional[str] = field(
-            default=None,
+        palm_link: str = field(
+            default="__default__",
             metadata={
                 "type": "Element",
                 "namespace": "",
-                "required": True,
             }
         )
         name: Optional[str] = field(

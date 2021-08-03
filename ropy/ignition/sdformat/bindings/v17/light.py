@@ -56,12 +56,11 @@ class Light:
             "namespace": "",
         }
     )
-    direction: Optional[str] = field(
-        default=None,
+    direction: str = field(
+        default="0 0 -1",
         metadata={
             "type": "Element",
             "namespace": "",
-            "required": True,
             "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
         }
     )
@@ -109,12 +108,11 @@ class Light:
         quadratic: The quadratic attenuation factor: adds a curvature to
             the attenuation.
         """
-        range: Optional[float] = field(
-            default=None,
+        range: float = field(
+            default=10.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
-                "required": True,
             }
         )
         linear: Optional[float] = field(
@@ -152,28 +150,25 @@ class Light:
             1.0 means a linear falloff, less means slower falloff,
             higher means faster falloff.
         """
-        inner_angle: Optional[float] = field(
-            default=None,
+        inner_angle: float = field(
+            default=0.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
-                "required": True,
             }
         )
-        outer_angle: Optional[float] = field(
-            default=None,
+        outer_angle: float = field(
+            default=0.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
-                "required": True,
             }
         )
-        falloff: Optional[float] = field(
-            default=None,
+        falloff: float = field(
+            default=0.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
-                "required": True,
             }
         )
 

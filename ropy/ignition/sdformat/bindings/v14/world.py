@@ -153,12 +153,11 @@ class World:
             will use the system's default audio device. Otherwise,
             specify a an audio device file"
         """
-        device: Optional[str] = field(
-            default=None,
+        device: str = field(
+            default="default",
             metadata={
                 "type": "Element",
                 "namespace": "",
-                "required": True,
             }
         )
 
@@ -171,12 +170,11 @@ class World:
         ----------
         uri: URI to a resource, such as a model
         """
-        uri: Optional[str] = field(
-            default=None,
+        uri: str = field(
+            default="__default__",
             metadata={
                 "type": "Element",
                 "namespace": "",
-                "required": True,
             }
         )
 
@@ -230,12 +228,11 @@ class World:
 
             @dataclass
             class TrackVisual:
-                name: Optional[str] = field(
-                    default=None,
+                name: str = field(
+                    default="__default__",
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                        "required": True,
                     }
                 )
                 min_dist: Optional[float] = field(
@@ -301,12 +298,11 @@ class World:
         point: A series of points define the path of the road.
         name: Name of the road
         """
-        width: Optional[float] = field(
-            default=None,
+        width: float = field(
+            default=1.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
-                "required": True,
             }
         )
         point: List[str] = field(
@@ -347,43 +343,38 @@ class World:
             equivalently, the angle between North and       gazebo y
             axis. The angle is specified in degrees.
         """
-        surface_model: Optional[str] = field(
-            default=None,
+        surface_model: str = field(
+            default="EARTH_WGS84",
             metadata={
                 "type": "Element",
                 "namespace": "",
-                "required": True,
             }
         )
-        latitude_deg: Optional[float] = field(
-            default=None,
+        latitude_deg: float = field(
+            default=0.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
-                "required": True,
             }
         )
-        longitude_deg: Optional[float] = field(
-            default=None,
+        longitude_deg: float = field(
+            default=0.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
-                "required": True,
             }
         )
-        elevation: Optional[float] = field(
-            default=None,
+        elevation: float = field(
+            default=0.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
-                "required": True,
             }
         )
-        heading_deg: Optional[float] = field(
-            default=None,
+        heading_deg: float = field(
+            default=0.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
-                "required": True,
             }
         )

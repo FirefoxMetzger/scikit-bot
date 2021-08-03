@@ -90,20 +90,18 @@ class Link:
 
     @dataclass
     class Damping:
-        linear: Optional[float] = field(
-            default=None,
+        linear: float = field(
+            default=0.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
-                "required": True,
             }
         )
-        angular: Optional[float] = field(
-            default=None,
+        angular: float = field(
+            default=0.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
-                "required": True,
             }
         )
 
@@ -138,12 +136,11 @@ class Link:
 
     @dataclass
     class Projector:
-        texture: Optional[str] = field(
-            default=None,
+        texture: str = field(
+            default="__default__",
             metadata={
                 "type": "Element",
                 "namespace": "",
-                "required": True,
             }
         )
         pose: Optional[str] = field(
