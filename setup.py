@@ -8,7 +8,8 @@ extras_require = {
         "betterproto == 1.2.5",
         "psutil == 5.8.0",
         "requests == 2.22.0",
-        "xsdata==21.7",
+        "xsdata == 21.7",
+        "lxml == 4.6.3"
     ],
     "docs": [
         "sphinx == 4.1.2",
@@ -19,6 +20,9 @@ extras_require = {
     ],
     "linting": ["flake8 == 3.9.2", "black == 21.7b0"],
     "testing": ["pytest == 6.2.4", "coverage[toml] == 5.5"],
+    "dev": [
+        "lxml-stubs == 0.2.0"
+    ]
 }
 
 # Note: This is a shim, because I am used to developing
