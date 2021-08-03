@@ -2,7 +2,7 @@ from dataclasses import dataclass
 import numpy as np
 import pytest
 from xsdata.exceptions import ParserError
-from ropy.ignition.sdformat.bindings.v16.pose_type import PoseType
+from ropy.ignition.sdformat.bindings.v16.model import Model
 
 import ropy.ignition as ign
 
@@ -39,7 +39,9 @@ def test_custom_constructor(valid_sdf_string):
     else:
         ign.sdformat.loads(
             valid_sdf_string,
-            custom_constructor={PoseType: lambda **kwargs: NewPose(**kwargs)},
+            custom_constructor={
+                Model.Pose: lambda **kwargs: NewPose(**kwargs)
+            },
         )
 
 
