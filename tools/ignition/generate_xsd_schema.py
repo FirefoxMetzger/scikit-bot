@@ -140,6 +140,14 @@ class Element(SdfElement):
         }        
     )
 
+    default: Optional[str] = field(
+        default=None,
+        metadata={
+            "type": "Attribute",
+            "namespace": "",
+        },
+    )
+
     def __post_init__(self):
 
         return super().__post_init__()
