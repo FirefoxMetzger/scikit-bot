@@ -28,7 +28,6 @@ else:
 
 # convert the SDF templates to XSD
 xsd_location = Path("ropy/ignition/sdformat/schema/")
-# sdf_versions = ["1.4", "1.5", "1.6", "1.7", "1.8"]
 for version in sdf_versions:
     source_path = sdf_location / "sdf" / version
     out_dir = xsd_location / version
