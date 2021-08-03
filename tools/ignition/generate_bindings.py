@@ -42,8 +42,8 @@ for version in sdf_versions:
     config.output.package = (
         f"ropy.ignition.sdformat.bindings.v{version.replace('.', '')}"
     )
-    source_path = sdf_location / "sdf" / version
-    uris = [x.as_uri() for x in source_path.iterdir()]
+    source_path = xsd_location / version
+    uris = [x.absolute().as_uri() for x in source_path.iterdir()]
     if uris:
         tf = SchemaTransformer(print=False, config=config)
         tf.process(uris)
