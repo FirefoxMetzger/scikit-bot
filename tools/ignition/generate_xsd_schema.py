@@ -156,6 +156,9 @@ class Element(SdfElement):
         subtree.set("minOccurs", self.minOccurs)
         subtree.set("maxOccurs", self.maxOccurs)
 
+        if self.default and self.default != "":
+            subtree.set("default", self.default)
+
         if self.description:
             annotation = etree.SubElement(subtree, f"{{{xs}}}annotation")
             documentation = etree.SubElement(annotation, f"{{{xs}}}documentation")
