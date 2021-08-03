@@ -60,7 +60,7 @@ SDFormat XML
     You can find more documentation aboud SDFormat in the `official spec <http://sdformat.org/spec>`_.
 
 Ropy features a DOM-style parser and serializer for SDFormat XML. You can load
-many SDFormat versions and ropy will construct a class tree out of it.
+all SDFormat versions and ropy will construct a class tree out of it.
 Similarily, you can construct objects that represent SDF elements and ropy can
 serialize them into SDF. 
 
@@ -71,9 +71,7 @@ tree of dataclass objects, whilst JSON and YAML return dictionaries.
 While the parser is imported together with :mod:`ropy.ignition`, the individual
 models are imported on demand. This is done to keep import times low. To use the
 bindings explicitly you must import them explicitly. Check the individual
-bindings for documentation on how to do this.
-
-Currently the following SDFormat versions are supported:
+bindings for documentation on how to do this:
 
 .. autosummary::
     :template: sdformat_model.rst
@@ -84,6 +82,10 @@ Currently the following SDFormat versions are supported:
     ropy.ignition.sdformat.bindings.v17
     ropy.ignition.sdformat.bindings.v16
     ropy.ignition.sdformat.bindings.v15
+    ropy.ignition.sdformat.bindings.v14
+    ropy.ignition.sdformat.bindings.v13
+    ropy.ignition.sdformat.bindings.v12
+    ropy.ignition.sdformat.bindings.v10
 
 Ignition Messages
 -----------------
