@@ -1,0 +1,413 @@
+<xs:schema xmlns:types="sdformat/v1.8/types.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:light="sdformat/v1.8/light.xsd" xmlns:sensor="sdformat/v1.8/sensor.xsd" xmlns:collision="sdformat/v1.8/collision.xsd" xmlns:visual="sdformat/v1.8/visual.xsd" xmlns:material="sdformat/v1.8/material.xsd" targetNamespace="sdformat/v1.8/link.xsd" version="1.1">
+  <xs:import namespace="sdformat/v1.8/material.xsd" schemaLocation="./material.xsd"/>
+  <xs:import namespace="sdformat/v1.8/visual.xsd" schemaLocation="./visual.xsd"/>
+  <xs:import namespace="sdformat/v1.8/collision.xsd" schemaLocation="./collision.xsd"/>
+  <xs:import namespace="sdformat/v1.8/sensor.xsd" schemaLocation="./sensor.xsd"/>
+  <xs:import namespace="sdformat/v1.8/light.xsd" schemaLocation="./light.xsd"/>
+  <xs:import namespace="sdformat/v1.8/types.xsd" schemaLocation="./types.xsd"/>
+  <xs:complexType name="link">
+    <xs:annotation>
+      <xs:documentation xml:lang="en">A physical link with inertia, collision, and visual properties. A link must be a child of a model, and any number of links may exist in a model.</xs:documentation>
+    </xs:annotation>
+    <xs:all>
+      <xs:element name="gravity" minOccurs="0" maxOccurs="1" type="xs:boolean">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">If true, the link is affected by gravity.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="enable_wind" minOccurs="0" maxOccurs="1" type="xs:boolean">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">If true, the link is affected by the wind.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="self_collide" minOccurs="0" maxOccurs="1" type="xs:boolean">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">If true, the link can collide with other links in the model. Two links within a model will collide if link1.self_collide OR link2.self_collide. Links connected by a joint will never collide.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="kinematic" minOccurs="0" maxOccurs="1" type="xs:boolean">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">If true, the link is kinematic only</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="must_be_base_link" minOccurs="0" maxOccurs="1" type="xs:boolean">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">If true, the link will have 6DOF and be a direct child of world.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="velocity_decay" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">Exponential damping of the link's velocity.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:annotation>
+            <xs:documentation xml:lang="en">Exponential damping of the link's velocity.</xs:documentation>
+          </xs:annotation>
+          <xs:all>
+            <xs:element name="linear" minOccurs="0" maxOccurs="1" type="xs:double">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">Linear damping</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="angular" minOccurs="0" maxOccurs="1" type="xs:double">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">Angular damping</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="pose" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">A position(x,y,z) and orientation(roll, pitch yaw) with respect to the frame named in the relative_to attribute.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:simpleContent>
+            <xs:extension base="types:pose"/>
+          </xs:simpleContent>
+          <xs:attribute name="relative_to" type="xs:string" use="optional">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">Name of frame relative to which the pose is applied.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="inertial" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">The inertial properties of the link.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:annotation>
+            <xs:documentation xml:lang="en">The inertial properties of the link.</xs:documentation>
+          </xs:annotation>
+          <xs:all>
+            <xs:element name="mass" minOccurs="0" maxOccurs="1" type="xs:double">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">The mass of the link.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="pose" minOccurs="0" maxOccurs="1" type="types:pose">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">This is the pose of the inertial reference frame. The origin of the inertial reference frame needs to be at the center of gravity. The axes of the inertial reference frame do not need to be aligned with the principal axes of the inertia.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="inertia" minOccurs="0" maxOccurs="1">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">The 3x3 rotational inertia matrix. Because the rotational inertia matrix is symmetric, only 6 above-diagonal elements of this matrix are specified here, using the attributes ixx, ixy, ixz, iyy, iyz, izz.</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:annotation>
+                  <xs:documentation xml:lang="en">The 3x3 rotational inertia matrix. Because the rotational inertia matrix is symmetric, only 6 above-diagonal elements of this matrix are specified here, using the attributes ixx, ixy, ixz, iyy, iyz, izz.</xs:documentation>
+                </xs:annotation>
+                <xs:all>
+                  <xs:element name="ixx" minOccurs="1" maxOccurs="1" type="xs:double"/>
+                  <xs:element name="ixy" minOccurs="1" maxOccurs="1" type="xs:double"/>
+                  <xs:element name="ixz" minOccurs="1" maxOccurs="1" type="xs:double"/>
+                  <xs:element name="iyy" minOccurs="1" maxOccurs="1" type="xs:double"/>
+                  <xs:element name="iyz" minOccurs="1" maxOccurs="1" type="xs:double"/>
+                  <xs:element name="izz" minOccurs="1" maxOccurs="1" type="xs:double"/>
+                </xs:all>
+              </xs:complexType>
+            </xs:element>
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="collision" minOccurs="0" maxOccurs="unbounded" type="collision:collision">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">The collision properties of a link. Note that this can be different from the visual properties of a link, for example, simpler collision models are often used to reduce computation time.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="visual" minOccurs="0" maxOccurs="unbounded" type="visual:visual">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">The visual properties of the link. This element specifies the shape of the object (box, cylinder, etc.) for visualization purposes.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="sensor" minOccurs="0" maxOccurs="1" type="sensor:sensor">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">The sensor tag describes the type and properties of a sensor.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="projector" minOccurs="0" maxOccurs="1">
+        <xs:complexType>
+          <xs:all>
+            <xs:element name="texture" minOccurs="1" maxOccurs="1" type="xs:string">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">Texture name</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="fov" minOccurs="0" maxOccurs="1" type="xs:double">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">Field of view</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="near_clip" minOccurs="0" maxOccurs="1" type="xs:double">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">Near clip distance</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="far_clip" minOccurs="0" maxOccurs="1" type="xs:double">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">far clip distance</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="pose" minOccurs="0" maxOccurs="1">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">A position(x,y,z) and orientation(roll, pitch yaw) with respect to the frame named in the relative_to attribute.</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:simpleContent>
+                  <xs:extension base="types:pose"/>
+                </xs:simpleContent>
+                <xs:attribute name="relative_to" type="xs:string" use="optional">
+                  <xs:annotation>
+                    <xs:documentation xml:lang="en">Name of frame relative to which the pose is applied.</xs:documentation>
+                  </xs:annotation>
+                </xs:attribute>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="plugin" minOccurs="0" maxOccurs="unbounded">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">A plugin is a dynamically loaded chunk of code. It can exist as a child of world, model, and sensor.</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:annotation>
+                  <xs:documentation xml:lang="en">A plugin is a dynamically loaded chunk of code. It can exist as a child of world, model, and sensor.</xs:documentation>
+                </xs:annotation>
+                <xs:all>
+                  <xs:any processContents="skip" minOccurs="0" maxOccurs="unbounded">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">This is a special element that should not be specified in an SDFormat file. It automatically copies child elements into the SDFormat element so that a plugin can access the data.</xs:documentation>
+                    </xs:annotation>
+                  </xs:any>
+                </xs:all>
+                <xs:attribute name="name" type="xs:string" use="required">
+                  <xs:annotation>
+                    <xs:documentation xml:lang="en">A unique name for the plugin, scoped to its parent.</xs:documentation>
+                  </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="filename" type="xs:string" use="required">
+                  <xs:annotation>
+                    <xs:documentation xml:lang="en">Name of the shared library to load. If the filename is not a full path name, the file will be searched for in the configuration paths.</xs:documentation>
+                  </xs:annotation>
+                </xs:attribute>
+              </xs:complexType>
+            </xs:element>
+          </xs:all>
+          <xs:attribute name="name" type="xs:string" use="required">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">Name of the projector</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="audio_sink" minOccurs="0" maxOccurs="unbounded" type="xs:string">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">An audio sink.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="audio_source" minOccurs="0" maxOccurs="unbounded">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">An audio source.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:annotation>
+            <xs:documentation xml:lang="en">An audio source.</xs:documentation>
+          </xs:annotation>
+          <xs:all>
+            <xs:element name="uri" minOccurs="1" maxOccurs="1" type="xs:string">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">URI of the audio media.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="pitch" minOccurs="0" maxOccurs="1" type="xs:double">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">Pitch for the audio media, in Hz</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="gain" minOccurs="0" maxOccurs="1" type="xs:double">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">Gain for the audio media, in dB.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="contact" minOccurs="0" maxOccurs="1">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">List of collision objects that will trigger audio playback.</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:annotation>
+                  <xs:documentation xml:lang="en">List of collision objects that will trigger audio playback.</xs:documentation>
+                </xs:annotation>
+                <xs:all>
+                  <xs:element name="collision" minOccurs="1" maxOccurs="unbounded" type="xs:string">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">Name of child collision element that will trigger audio playback.</xs:documentation>
+                    </xs:annotation>
+                  </xs:element>
+                </xs:all>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="loop" minOccurs="0" maxOccurs="1" type="xs:boolean">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">True to make the audio source loop playback.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="pose" minOccurs="0" maxOccurs="1">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">A position(x,y,z) and orientation(roll, pitch yaw) with respect to the frame named in the relative_to attribute.</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:simpleContent>
+                  <xs:extension base="types:pose"/>
+                </xs:simpleContent>
+                <xs:attribute name="relative_to" type="xs:string" use="optional">
+                  <xs:annotation>
+                    <xs:documentation xml:lang="en">Name of frame relative to which the pose is applied.</xs:documentation>
+                  </xs:annotation>
+                </xs:attribute>
+              </xs:complexType>
+            </xs:element>
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="battery" minOccurs="0" maxOccurs="unbounded">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">Description of a battery.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:annotation>
+            <xs:documentation xml:lang="en">Description of a battery.</xs:documentation>
+          </xs:annotation>
+          <xs:all>
+            <xs:element name="voltage" minOccurs="1" maxOccurs="1" type="xs:double">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">Initial voltage in volts.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:all>
+          <xs:attribute name="name" type="xs:string" use="required">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">Unique name for the battery.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="light" minOccurs="0" maxOccurs="unbounded" type="light:light">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">The light element describes a light source.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="particle_emitter" minOccurs="0" maxOccurs="unbounded">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">A particle emitter that can be used to describe fog, smoke, and dust.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:annotation>
+            <xs:documentation xml:lang="en">A particle emitter that can be used to describe fog, smoke, and dust.</xs:documentation>
+          </xs:annotation>
+          <xs:all>
+            <xs:element name="emitting" minOccurs="0" maxOccurs="1" type="xs:boolean">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">True indicates that the particle emitter should generate particles when loaded</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="duration" minOccurs="0" maxOccurs="1" type="xs:double">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">The number of seconds the emitter is active. A value less than or equal to zero means infinite duration.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="size" minOccurs="0" maxOccurs="1" type="types:vector3">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">The size of the emitter where the particles are sampled.     Default value is (1, 1, 1).     Note that the interpretation of the emitter area varies     depending on the emmiter type:       - point: The area is ignored.       - box: The area is interpreted as width X height X depth.       - cylinder: The area is interpreted as the bounding box of the                   cylinder. The cylinder is oriented along the Z-axis.       - ellipsoid: The area is interpreted as the bounding box of an                    ellipsoid shaped area, i.e. a sphere or                    squashed-sphere area. The parameters are again                    identical to EM_BOX, except that the dimensions                    describe the widest points along each of the axes.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="particle_size" minOccurs="0" maxOccurs="1" type="types:vector3">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">The particle dimensions (width, height, depth).</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="lifetime" minOccurs="0" maxOccurs="1" type="xs:double">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">The number of seconds each particle will &#8217;live&#8217; for before being destroyed. This value must be greater than zero.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="rate" minOccurs="0" maxOccurs="1" type="xs:double">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">The number of particles per second that should be emitted.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="min_velocity" minOccurs="0" maxOccurs="1" type="xs:double">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">Sets a minimum velocity for each particle (m/s).</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="max_velocity" minOccurs="0" maxOccurs="1" type="xs:double">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">Sets a maximum velocity for each particle (m/s).</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="scale_rate" minOccurs="0" maxOccurs="1" type="xs:double">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">Sets the amount by which to scale the particles in both x and y direction per second.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="color_start" minOccurs="0" maxOccurs="1" type="types:color">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">Sets the starting color for all particles emitted.      The actual color will be interpolated between this color      and the one set under color_end.      Color::White is the default color for the particles      unless a specific function is used.      To specify a color, RGB values should be passed in.      For example, to specify red, a user should enter:      &amp;lt;color_start&amp;gt;1 0 0&amp;lt;/color_start&amp;gt;      Note that this function overrides the particle colors set      with color_range_image.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="color_end" minOccurs="0" maxOccurs="1" type="types:color">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">Sets the end color for all particles emitted.     The actual color will be interpolated between this color     and the one set under color_start.     Color::White is the default color for the particles     unless a specific function is used (see color_start for     more information about defining custom colors with RGB     values).     Note that this function overrides the particle colors set     with color_range_image.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="color_range_image" minOccurs="0" maxOccurs="1" type="xs:string">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">Sets the path to the color image used as an affector. This affector modifies the color of particles in flight. The colors are taken from a specified image file. The range of color values begins from the left side of the image and moves to the right over the lifetime of the particle, therefore only the horizontal dimension of the image is used.  Note that this function overrides the particle colors set with color_start and color_end.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="topic" minOccurs="0" maxOccurs="1" type="xs:string">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">Topic used to update particle emitter properties at runtime.      The default topic is      /model/{model_name}/particle_emitter/{emitter_name}      Note that the emitter id and name may not be changed.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="pose" minOccurs="0" maxOccurs="1">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">A position(x,y,z) and orientation(roll, pitch yaw) with respect to the frame named in the relative_to attribute.</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:simpleContent>
+                  <xs:extension base="types:pose"/>
+                </xs:simpleContent>
+                <xs:attribute name="relative_to" type="xs:string" use="optional">
+                  <xs:annotation>
+                    <xs:documentation xml:lang="en">Name of frame relative to which the pose is applied.</xs:documentation>
+                  </xs:annotation>
+                </xs:attribute>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="material" minOccurs="0" maxOccurs="1" type="material:material">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">The material of the visual element.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:all>
+          <xs:attribute name="name" type="xs:string" use="required">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">A unique name for the particle emitter.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="type" type="xs:string" use="required">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">The type of a particle emitter. One of "box", "cylinder", "ellipsoid", or "point".</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+    </xs:all>
+    <xs:attribute name="name" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation xml:lang="en">A unique name for the link within the scope of the model.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+</xs:schema>

@@ -1,0 +1,43 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="sdformat/v1.3/types.xsd" targetNamespace="sdformat/v1.3/types.xsd">
+  <xs:simpleType name="vector3">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="quaternion">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){3}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="vector2d">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+)((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="vector2i">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="\s*(-|\+)?\d+\s+(-|\+)?\d+\s*"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="pose">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="time">
+    <xs:restriction base="xs:double">
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="color">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="(\s*\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){3}\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s*"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+</xs:schema>

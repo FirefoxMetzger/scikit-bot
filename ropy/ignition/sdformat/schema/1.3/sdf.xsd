@@ -1,0 +1,34 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:world="sdformat/v1.3/world.xsd" xmlns:light="sdformat/v1.3/light.xsd" xmlns:actor="sdformat/v1.3/actor.xsd" xmlns:model="sdformat/v1.3/model.xsd" targetNamespace="sdformat/v1.3/sdf.xsd" version="1.1">
+  <xs:import namespace="sdformat/v1.3/model.xsd" schemaLocation="./model.xsd"/>
+  <xs:import namespace="sdformat/v1.3/actor.xsd" schemaLocation="./actor.xsd"/>
+  <xs:import namespace="sdformat/v1.3/light.xsd" schemaLocation="./light.xsd"/>
+  <xs:import namespace="sdformat/v1.3/world.xsd" schemaLocation="./world.xsd"/>
+  <xs:complexType name="sdf">
+    <xs:annotation>
+      <xs:documentation xml:lang="en">SDFormat base element.</xs:documentation>
+    </xs:annotation>
+    <xs:all>
+      <xs:element name="world" minOccurs="0" maxOccurs="unbounded" type="world:world">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">The world element encapsulates an entire world description including: models, scene, physics, joints, and plugins</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="model" minOccurs="0" maxOccurs="unbounded" type="model:model">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">The model element defines a complete robot or any other physical object.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="actor" minOccurs="0" maxOccurs="unbounded" type="actor:actor"/>
+      <xs:element name="light" minOccurs="0" maxOccurs="unbounded" type="light:light">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">The light element describes a light source.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+    <xs:attribute name="version" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation xml:lang="en">Version number of the SDFormat specification.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+</xs:schema>

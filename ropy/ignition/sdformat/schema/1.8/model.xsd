@@ -1,0 +1,206 @@
+<xs:schema xmlns:types="sdformat/v1.8/types.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:link="sdformat/v1.8/link.xsd" xmlns:joint="sdformat/v1.8/joint.xsd" targetNamespace="sdformat/v1.8/model.xsd" version="1.1">
+  <xs:import namespace="sdformat/v1.8/joint.xsd" schemaLocation="./joint.xsd"/>
+  <xs:import namespace="sdformat/v1.8/link.xsd" schemaLocation="./link.xsd"/>
+  <xs:import namespace="sdformat/v1.8/types.xsd" schemaLocation="./types.xsd"/>
+  <xs:complexType name="model">
+    <xs:annotation>
+      <xs:documentation xml:lang="en">The model element defines a complete robot or any other physical object.</xs:documentation>
+    </xs:annotation>
+    <xs:all>
+      <xs:element name="static" minOccurs="0" maxOccurs="1" type="xs:boolean">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">If set to true, the model is immovable. Otherwise the model is simulated in the dynamics engine.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="self_collide" minOccurs="0" maxOccurs="1" type="xs:boolean">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">If set to true, all links in the model will collide with each other (except those connected by a joint). Can be overridden by the link or collision element self_collide property. Two links within a model will collide if link1.self_collide OR link2.self_collide. Links connected by a joint will never collide.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="allow_auto_disable" minOccurs="0" maxOccurs="1" type="xs:boolean">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">Allows a model to auto-disable, which is means the physics engine can skip updating the model when the model is at rest. This parameter is only used by models with no joints.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="include" minOccurs="0" maxOccurs="unbounded">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">Include resources from a URI. This can be used to nest models. Included resources can only contain one 'model', 'light' or 'actor' element. The URI can point to a directory or a file. If the URI is a directory, it must conform to the model database structure (see /tutorials?tut=composition&amp;cat=specification&amp;#defining-models-in-separate-files).</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:annotation>
+            <xs:documentation xml:lang="en">Include resources from a URI. This can be used to nest models. Included resources can only contain one 'model', 'light' or 'actor' element. The URI can point to a directory or a file. If the URI is a directory, it must conform to the model database structure (see /tutorials?tut=composition&amp;cat=specification&amp;#defining-models-in-separate-files).</xs:documentation>
+          </xs:annotation>
+          <xs:all>
+            <xs:element name="uri" minOccurs="1" maxOccurs="1" type="xs:string">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">URI to a resource, such as a model</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="name" minOccurs="0" maxOccurs="1" type="xs:string">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">Override the name of the included model.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="static" minOccurs="0" maxOccurs="1" type="xs:boolean">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">Override the static value of the included model.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="placement_frame" minOccurs="0" maxOccurs="1" type="xs:string">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">The frame inside the included model whose pose will be set by the specified pose element. If this element is specified, the pose must be specified.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="pose" minOccurs="0" maxOccurs="1">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">A position(x,y,z) and orientation(roll, pitch yaw) with respect to the frame named in the relative_to attribute.</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:simpleContent>
+                  <xs:extension base="types:pose"/>
+                </xs:simpleContent>
+                <xs:attribute name="relative_to" type="xs:string" use="optional">
+                  <xs:annotation>
+                    <xs:documentation xml:lang="en">Name of frame relative to which the pose is applied.</xs:documentation>
+                  </xs:annotation>
+                </xs:attribute>
+              </xs:complexType>
+            </xs:element>
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="model" minOccurs="0" maxOccurs="unbounded" type="model">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">A nested model element</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="enable_wind" minOccurs="0" maxOccurs="1" type="xs:boolean">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">If set to true, all links in the model will be affected by the wind. Can be overriden by the link wind property.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="frame" minOccurs="0" maxOccurs="unbounded">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">A frame of reference to which a pose is relative.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:annotation>
+            <xs:documentation xml:lang="en">A frame of reference to which a pose is relative.</xs:documentation>
+          </xs:annotation>
+          <xs:all>
+            <xs:element name="pose" minOccurs="0" maxOccurs="1">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">A position(x,y,z) and orientation(roll, pitch yaw) with respect to the frame named in the relative_to attribute.</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:simpleContent>
+                  <xs:extension base="types:pose"/>
+                </xs:simpleContent>
+                <xs:attribute name="relative_to" type="xs:string" use="optional">
+                  <xs:annotation>
+                    <xs:documentation xml:lang="en">Name of frame relative to which the pose is applied.</xs:documentation>
+                  </xs:annotation>
+                </xs:attribute>
+              </xs:complexType>
+            </xs:element>
+          </xs:all>
+          <xs:attribute name="name" type="xs:string" use="required">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">Name of the frame. This name must not match another frame defined inside the parent that this frame is attached to.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="attached_to" type="xs:string" use="optional">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">Name of the link or frame to which this frame is attached.       If a frame is specified, recursively following the attached_to attributes       of the specified frames must lead to the name of a link, a model, or the world frame.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="pose" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">A position(x,y,z) and orientation(roll, pitch yaw) with respect to the frame named in the relative_to attribute.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:simpleContent>
+            <xs:extension base="types:pose"/>
+          </xs:simpleContent>
+          <xs:attribute name="relative_to" type="xs:string" use="optional">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">Name of frame relative to which the pose is applied.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="link" minOccurs="0" maxOccurs="unbounded" type="link:link">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">A physical link with inertia, collision, and visual properties. A link must be a child of a model, and any number of links may exist in a model.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="joint" minOccurs="0" maxOccurs="unbounded" type="joint:joint">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">A joint connects two links with kinematic and dynamic properties. By default, the pose of a joint is expressed in the child link frame.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="plugin" minOccurs="0" maxOccurs="unbounded">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">A plugin is a dynamically loaded chunk of code. It can exist as a child of world, model, and sensor.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:annotation>
+            <xs:documentation xml:lang="en">A plugin is a dynamically loaded chunk of code. It can exist as a child of world, model, and sensor.</xs:documentation>
+          </xs:annotation>
+          <xs:all>
+            <xs:any processContents="skip" minOccurs="0" maxOccurs="unbounded">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">This is a special element that should not be specified in an SDFormat file. It automatically copies child elements into the SDFormat element so that a plugin can access the data.</xs:documentation>
+              </xs:annotation>
+            </xs:any>
+          </xs:all>
+          <xs:attribute name="name" type="xs:string" use="required">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">A unique name for the plugin, scoped to its parent.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="filename" type="xs:string" use="required">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">Name of the shared library to load. If the filename is not a full path name, the file will be searched for in the configuration paths.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="gripper" minOccurs="0" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:all>
+            <xs:element name="grasp_check" minOccurs="0" maxOccurs="1">
+              <xs:complexType>
+                <xs:all>
+                  <xs:element name="detach_steps" minOccurs="0" maxOccurs="1" type="xs:int"/>
+                  <xs:element name="attach_steps" minOccurs="0" maxOccurs="1" type="xs:int"/>
+                  <xs:element name="min_contact_count" minOccurs="0" maxOccurs="1" type="xs:unsignedInt"/>
+                </xs:all>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="gripper_link" minOccurs="1" maxOccurs="unbounded" type="xs:string"/>
+            <xs:element name="palm_link" minOccurs="1" maxOccurs="1" type="xs:string"/>
+          </xs:all>
+          <xs:attribute name="name" type="xs:string" use="required"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:all>
+    <xs:attribute name="name" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation xml:lang="en">A unique name for the model. This name must not match another model in the world.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="canonical_link" type="xs:string" use="optional">
+      <xs:annotation>
+        <xs:documentation xml:lang="en">The name of the model's canonical link, to which the model's implicit       coordinate frame is attached. If unset or set to an empty string,       the first link element listed as a child of this model is chosen       as the canonical link.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="placement_frame" type="xs:string" use="optional">
+      <xs:annotation>
+        <xs:documentation xml:lang="en">The frame inside this model whose pose will be set by the pose element of the model. i.e, the pose element specifies the pose of this frame instead of the model frame.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+</xs:schema>

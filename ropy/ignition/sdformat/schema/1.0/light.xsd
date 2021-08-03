@@ -1,0 +1,15 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="sdformat/v1.0/light.xsd" version="1.1">
+  <xs:complexType name="light">
+    <xs:all>
+      <xs:element name="origin" minOccurs="0" maxOccurs="1" type="xs:string"/>
+      <xs:element name="diffuse" minOccurs="1" maxOccurs="1" type="xs:string"/>
+      <xs:element name="specular" minOccurs="1" maxOccurs="1" type="xs:string"/>
+      <xs:element name="attenuation" minOccurs="0" maxOccurs="1" type="xs:string"/>
+      <xs:element name="direction" minOccurs="1" maxOccurs="1" type="xs:string"/>
+      <xs:element name="spot" minOccurs="0" maxOccurs="1" type="xs:string"/>
+    </xs:all>
+    <xs:attribute name="name" type="xs:string" use="optional" default="__default__"/>
+    <xs:attribute name="type" type="xs:string" use="required"/>
+    <xs:attribute name="cast_shadows" type="xs:boolean" use="optional" default="false"/>
+  </xs:complexType>
+</xs:schema>
