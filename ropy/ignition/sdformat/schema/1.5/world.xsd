@@ -22,7 +22,7 @@
             <xs:documentation xml:lang="en">Global audio properties.</xs:documentation>
           </xs:annotation>
           <xs:all>
-            <xs:element name="device" minOccurs="1" maxOccurs="1" type="xs:string">
+            <xs:element name="device" minOccurs="1" maxOccurs="1" default="default" type="xs:string">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Device to use for audio playback. A value of "default" will use the system's default audio device. Otherwise, specify a an audio device file"</xs:documentation>
               </xs:annotation>
@@ -39,7 +39,7 @@
             <xs:documentation xml:lang="en">Include resources from a URI</xs:documentation>
           </xs:annotation>
           <xs:all>
-            <xs:element name="uri" minOccurs="1" maxOccurs="1" type="xs:string">
+            <xs:element name="uri" minOccurs="1" maxOccurs="1" default="__default__" type="xs:string">
               <xs:annotation>
                 <xs:documentation xml:lang="en">URI to a resource, such as a model</xs:documentation>
               </xs:annotation>
@@ -49,12 +49,12 @@
                 <xs:documentation xml:lang="en">Override the name of the included model.</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="static" minOccurs="0" maxOccurs="1" type="xs:boolean">
+            <xs:element name="static" minOccurs="0" maxOccurs="1" default="false" type="xs:boolean">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Override the static value of the included model.</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="pose" minOccurs="0" maxOccurs="1">
+            <xs:element name="pose" minOccurs="0" maxOccurs="1" default="0 0 0 0 0 0">
               <xs:annotation>
                 <xs:documentation xml:lang="en">A position(x,y,z) and orientation(roll, pitch yaw) with respect to the specified frame.</xs:documentation>
               </xs:annotation>
@@ -84,8 +84,8 @@
                   <xs:documentation xml:lang="en"></xs:documentation>
                 </xs:annotation>
                 <xs:all>
-                  <xs:element name="view_controller" minOccurs="0" maxOccurs="1" type="xs:string"/>
-                  <xs:element name="projection_type" minOccurs="0" maxOccurs="1" type="xs:string">
+                  <xs:element name="view_controller" minOccurs="0" maxOccurs="1" default="orbit" type="xs:string"/>
+                  <xs:element name="projection_type" minOccurs="0" maxOccurs="1" default="perspective" type="xs:string">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">Set the type of projection for the camera. Valid values are "perspective" and "orthographic".</xs:documentation>
                     </xs:annotation>
@@ -93,9 +93,9 @@
                   <xs:element name="track_visual" minOccurs="0" maxOccurs="1">
                     <xs:complexType>
                       <xs:all>
-                        <xs:element name="name" minOccurs="1" maxOccurs="1" type="xs:string"/>
-                        <xs:element name="min_dist" minOccurs="0" maxOccurs="1" type="xs:double"/>
-                        <xs:element name="max_dist" minOccurs="0" maxOccurs="1" type="xs:double"/>
+                        <xs:element name="name" minOccurs="1" maxOccurs="1" default="__default__" type="xs:string"/>
+                        <xs:element name="min_dist" minOccurs="0" maxOccurs="1" default="0" type="xs:double"/>
+                        <xs:element name="max_dist" minOccurs="0" maxOccurs="1" default="0" type="xs:double"/>
                       </xs:all>
                     </xs:complexType>
                   </xs:element>
@@ -108,7 +108,7 @@
                         <xs:documentation xml:lang="en">A frame of reference to which a pose is relative.</xs:documentation>
                       </xs:annotation>
                       <xs:all>
-                        <xs:element name="pose" minOccurs="0" maxOccurs="1">
+                        <xs:element name="pose" minOccurs="0" maxOccurs="1" default="0 0 0 0 0 0">
                           <xs:annotation>
                             <xs:documentation xml:lang="en">A position(x,y,z) and orientation(roll, pitch yaw) with respect to the specified frame.</xs:documentation>
                           </xs:annotation>
@@ -131,7 +131,7 @@
                       </xs:attribute>
                     </xs:complexType>
                   </xs:element>
-                  <xs:element name="pose" minOccurs="0" maxOccurs="1">
+                  <xs:element name="pose" minOccurs="0" maxOccurs="1" default="0 0 0 0 0 0">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">A position(x,y,z) and orientation(roll, pitch yaw) with respect to the specified frame.</xs:documentation>
                     </xs:annotation>
@@ -237,12 +237,12 @@
       <xs:element name="road" minOccurs="0" maxOccurs="unbounded">
         <xs:complexType>
           <xs:all>
-            <xs:element name="width" minOccurs="1" maxOccurs="1" type="xs:double">
+            <xs:element name="width" minOccurs="1" maxOccurs="1" default="1.0" type="xs:double">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Width of the road</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="point" minOccurs="1" maxOccurs="unbounded" type="types:vector3">
+            <xs:element name="point" minOccurs="1" maxOccurs="unbounded" default="0 0 0" type="types:vector3">
               <xs:annotation>
                 <xs:documentation xml:lang="en">A series of points that define the path of the road.</xs:documentation>
               </xs:annotation>
@@ -263,27 +263,27 @@
       <xs:element name="spherical_coordinates" minOccurs="0" maxOccurs="1">
         <xs:complexType>
           <xs:all>
-            <xs:element name="surface_model" minOccurs="1" maxOccurs="1" type="xs:string">
+            <xs:element name="surface_model" minOccurs="1" maxOccurs="1" default="EARTH_WGS84" type="xs:string">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Name of planetary surface model, used to determine the surface altitude       at a given latitude and longitude. The default is an ellipsoid model of       the earth based on the WGS-84 standard. It is used in Gazebo's GPS sensor       implementation.</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="latitude_deg" minOccurs="1" maxOccurs="1" type="xs:double">
+            <xs:element name="latitude_deg" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Geodetic latitude at origin of gazebo reference frame, specified       in units of degrees.</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="longitude_deg" minOccurs="1" maxOccurs="1" type="xs:double">
+            <xs:element name="longitude_deg" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Longitude at origin of gazebo reference frame, specified in units       of degrees.</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="elevation" minOccurs="1" maxOccurs="1" type="xs:double">
+            <xs:element name="elevation" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Elevation of origin of gazebo reference frame, specified in meters.</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="heading_deg" minOccurs="1" maxOccurs="1" type="xs:double">
+            <xs:element name="heading_deg" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Heading offset of gazebo reference frame, measured as angle between       East and gazebo x axis, or equivalently, the angle between North and       gazebo y axis. The angle is specified in degrees.</xs:documentation>
               </xs:annotation>
@@ -301,7 +301,7 @@
             <xs:documentation xml:lang="en">The population element defines how and where a set of models will     be automatically populated in Gazebo.</xs:documentation>
           </xs:annotation>
           <xs:all>
-            <xs:element name="model_count" minOccurs="1" maxOccurs="1" type="xs:int">
+            <xs:element name="model_count" minOccurs="1" maxOccurs="1" default="1" type="xs:int">
               <xs:annotation>
                 <xs:documentation xml:lang="en">The number of models to place.</xs:documentation>
               </xs:annotation>
@@ -315,22 +315,22 @@
                   <xs:documentation xml:lang="en">Specifies the type of object distribution and its optional parameters.</xs:documentation>
                 </xs:annotation>
                 <xs:all>
-                  <xs:element name="type" minOccurs="1" maxOccurs="1" type="xs:string">
+                  <xs:element name="type" minOccurs="1" maxOccurs="1" default="random" type="xs:string">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">Define how the objects will be placed in the specified region.         - random: Models placed at random.         - uniform: Models approximately placed in a 2D grid pattern with control             over the number of objects.         - grid: Models evenly placed in a 2D grid pattern. The number of objects             is not explicitly specified, it is based on the number of rows and             columns of the grid.         - linear-x: Models evently placed in a row along the global x-axis.         - linear-y: Models evently placed in a row along the global y-axis.         - linear-z: Models evently placed in a row along the global z-axis.</xs:documentation>
                     </xs:annotation>
                   </xs:element>
-                  <xs:element name="rows" minOccurs="0" maxOccurs="1" type="xs:int">
+                  <xs:element name="rows" minOccurs="0" maxOccurs="1" default="1" type="xs:int">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">Number of rows in the grid.</xs:documentation>
                     </xs:annotation>
                   </xs:element>
-                  <xs:element name="cols" minOccurs="0" maxOccurs="1" type="xs:int">
+                  <xs:element name="cols" minOccurs="0" maxOccurs="1" default="1" type="xs:int">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">Number of columns in the grid.</xs:documentation>
                     </xs:annotation>
                   </xs:element>
-                  <xs:element name="step" minOccurs="0" maxOccurs="1" type="types:vector3">
+                  <xs:element name="step" minOccurs="0" maxOccurs="1" default="0.5 0.5 0" type="types:vector3">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">Distance between elements of the grid.</xs:documentation>
                     </xs:annotation>
@@ -347,7 +347,7 @@
                   <xs:documentation xml:lang="en">Box shape</xs:documentation>
                 </xs:annotation>
                 <xs:all>
-                  <xs:element name="size" minOccurs="1" maxOccurs="1" type="types:vector3">
+                  <xs:element name="size" minOccurs="1" maxOccurs="1" default="1 1 1" type="types:vector3">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">The three side lengths of the box. The origin of the box is in its geometric center (inside the center of the box).</xs:documentation>
                     </xs:annotation>
@@ -364,12 +364,12 @@
                   <xs:documentation xml:lang="en">Cylinder shape</xs:documentation>
                 </xs:annotation>
                 <xs:all>
-                  <xs:element name="radius" minOccurs="1" maxOccurs="1" type="xs:double">
+                  <xs:element name="radius" minOccurs="1" maxOccurs="1" default="1" type="xs:double">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">Radius of the cylinder</xs:documentation>
                     </xs:annotation>
                   </xs:element>
-                  <xs:element name="length" minOccurs="1" maxOccurs="1" type="xs:double">
+                  <xs:element name="length" minOccurs="1" maxOccurs="1" default="1" type="xs:double">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">Length of the cylinder along the z axis</xs:documentation>
                     </xs:annotation>
@@ -386,7 +386,7 @@
                   <xs:documentation xml:lang="en">A frame of reference to which a pose is relative.</xs:documentation>
                 </xs:annotation>
                 <xs:all>
-                  <xs:element name="pose" minOccurs="0" maxOccurs="1">
+                  <xs:element name="pose" minOccurs="0" maxOccurs="1" default="0 0 0 0 0 0">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">A position(x,y,z) and orientation(roll, pitch yaw) with respect to the specified frame.</xs:documentation>
                     </xs:annotation>
@@ -409,7 +409,7 @@
                 </xs:attribute>
               </xs:complexType>
             </xs:element>
-            <xs:element name="pose" minOccurs="0" maxOccurs="1">
+            <xs:element name="pose" minOccurs="0" maxOccurs="1" default="0 0 0 0 0 0">
               <xs:annotation>
                 <xs:documentation xml:lang="en">A position(x,y,z) and orientation(roll, pitch yaw) with respect to the specified frame.</xs:documentation>
               </xs:annotation>

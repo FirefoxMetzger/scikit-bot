@@ -14,12 +14,12 @@
             <xs:documentation xml:lang="en">Name of material from an installed script file. This will override the color element if the script exists.</xs:documentation>
           </xs:annotation>
           <xs:all>
-            <xs:element name="uri" minOccurs="1" maxOccurs="unbounded" type="xs:string">
+            <xs:element name="uri" minOccurs="1" maxOccurs="unbounded" default="__default__" type="xs:string">
               <xs:annotation>
                 <xs:documentation xml:lang="en">URI of the material script file</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="name" minOccurs="1" maxOccurs="1" type="xs:string">
+            <xs:element name="name" minOccurs="1" maxOccurs="1" default="__default__" type="xs:string">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Name of the script within the script file</xs:documentation>
               </xs:annotation>
@@ -30,7 +30,7 @@
       <xs:element name="shader" minOccurs="0" maxOccurs="1">
         <xs:complexType>
           <xs:all>
-            <xs:element name="normal_map" minOccurs="0" maxOccurs="1" type="xs:string">
+            <xs:element name="normal_map" minOccurs="0" maxOccurs="1" default="__default__" type="xs:string">
               <xs:annotation>
                 <xs:documentation xml:lang="en">filename of the normal map</xs:documentation>
               </xs:annotation>
@@ -43,37 +43,37 @@
           </xs:attribute>
         </xs:complexType>
       </xs:element>
-      <xs:element name="render_order" minOccurs="0" maxOccurs="1" type="xs:float">
+      <xs:element name="render_order" minOccurs="0" maxOccurs="1" default="0.0" type="xs:float">
         <xs:annotation>
           <xs:documentation xml:lang="en">Set render order for coplanar polygons. The higher value will be rendered on top of the other coplanar polygons</xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="lighting" minOccurs="0" maxOccurs="1" type="xs:boolean">
+      <xs:element name="lighting" minOccurs="0" maxOccurs="1" default="true" type="xs:boolean">
         <xs:annotation>
           <xs:documentation xml:lang="en">If false, dynamic lighting will be disabled</xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="ambient" minOccurs="0" maxOccurs="1" type="types:color">
+      <xs:element name="ambient" minOccurs="0" maxOccurs="1" default="0 0 0 1" type="types:color">
         <xs:annotation>
           <xs:documentation xml:lang="en">The ambient color of a material specified by set of four numbers representing red/green/blue, each in the range of [0,1].</xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="diffuse" minOccurs="0" maxOccurs="1" type="types:color">
+      <xs:element name="diffuse" minOccurs="0" maxOccurs="1" default="0 0 0 1" type="types:color">
         <xs:annotation>
           <xs:documentation xml:lang="en">The diffuse color of a material specified by set of four numbers representing red/green/blue/alpha, each in the range of [0,1].</xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="specular" minOccurs="0" maxOccurs="1" type="types:color">
+      <xs:element name="specular" minOccurs="0" maxOccurs="1" default="0 0 0 1" type="types:color">
         <xs:annotation>
           <xs:documentation xml:lang="en">The specular color of a material specified by set of four numbers representing red/green/blue/alpha, each in the range of [0,1].</xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="emissive" minOccurs="0" maxOccurs="1" type="types:color">
+      <xs:element name="emissive" minOccurs="0" maxOccurs="1" default="0 0 0 1" type="types:color">
         <xs:annotation>
           <xs:documentation xml:lang="en">The emissive color of a material specified by set of four numbers representing red/green/blue, each in the range of [0,1].</xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="double_sided" minOccurs="0" maxOccurs="1" type="xs:boolean">
+      <xs:element name="double_sided" minOccurs="0" maxOccurs="1" default="false" type="xs:boolean">
         <xs:annotation>
           <xs:documentation xml:lang="en">If true, the mesh that this material is applied to will be rendered as double sided</xs:documentation>
         </xs:annotation>
@@ -106,7 +106,7 @@
                       <xs:documentation xml:lang="en">Filename of the roughness map.</xs:documentation>
                     </xs:annotation>
                   </xs:element>
-                  <xs:element name="roughness" minOccurs="0" maxOccurs="1" type="xs:string">
+                  <xs:element name="roughness" minOccurs="0" maxOccurs="1" default="0.5" type="xs:string">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">Material roughness in the range of [0,1], where 0 represents a smooth surface and 1 represents a rough surface. This is the inverse of a specular map in a PBR specular workflow.</xs:documentation>
                     </xs:annotation>
@@ -116,7 +116,7 @@
                       <xs:documentation xml:lang="en">Filename of the metalness map.</xs:documentation>
                     </xs:annotation>
                   </xs:element>
-                  <xs:element name="metalness" minOccurs="0" maxOccurs="1" type="xs:string">
+                  <xs:element name="metalness" minOccurs="0" maxOccurs="1" default="0.5" type="xs:string">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">Material metalness in the range of [0,1], where 0 represents non-metal and 1 represents raw metal</xs:documentation>
                     </xs:annotation>
@@ -193,7 +193,7 @@
                       <xs:documentation xml:lang="en">Filename of the glossiness map.</xs:documentation>
                     </xs:annotation>
                   </xs:element>
-                  <xs:element name="glossiness" minOccurs="0" maxOccurs="1" type="xs:string">
+                  <xs:element name="glossiness" minOccurs="0" maxOccurs="1" default="0" type="xs:string">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">Material glossiness in the range of [0-1], where 0 represents a rough surface and 1 represents a smooth surface. This is the inverse of a roughness map in a PBR metal workflow.</xs:documentation>
                     </xs:annotation>

@@ -16,12 +16,12 @@
             <xs:documentation xml:lang="en">Skin file which defines a visual and the underlying skeleton which moves it.</xs:documentation>
           </xs:annotation>
           <xs:all>
-            <xs:element name="filename" minOccurs="1" maxOccurs="1" type="xs:string">
+            <xs:element name="filename" minOccurs="1" maxOccurs="1" default="__default__" type="xs:string">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Path to skin file, accepted formats: COLLADA, BVH.</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="scale" minOccurs="0" maxOccurs="1" type="xs:double">
+            <xs:element name="scale" minOccurs="0" maxOccurs="1" default="1.0" type="xs:double">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Scale the skin's size.</xs:documentation>
               </xs:annotation>
@@ -38,17 +38,17 @@
             <xs:documentation xml:lang="en">Animation file defines an animation for the skeleton in the skin. The skeleton must be compatible with the skin skeleton.</xs:documentation>
           </xs:annotation>
           <xs:all>
-            <xs:element name="filename" minOccurs="1" maxOccurs="1" type="xs:string">
+            <xs:element name="filename" minOccurs="1" maxOccurs="1" default="__default__" type="xs:string">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Path to animation file. Accepted formats: COLLADA, BVH.</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="scale" minOccurs="0" maxOccurs="1" type="xs:double">
+            <xs:element name="scale" minOccurs="0" maxOccurs="1" default="1.0" type="xs:double">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Scale for the animation skeleton.</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="interpolate_x" minOccurs="0" maxOccurs="1" type="xs:boolean">
+            <xs:element name="interpolate_x" minOccurs="0" maxOccurs="1" default="false" type="xs:boolean">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Set to true so the animation is interpolated on X.</xs:documentation>
               </xs:annotation>
@@ -70,17 +70,17 @@
             <xs:documentation xml:lang="en">Adds scripted trajectories to the actor.</xs:documentation>
           </xs:annotation>
           <xs:all>
-            <xs:element name="loop" minOccurs="0" maxOccurs="1" type="xs:boolean">
+            <xs:element name="loop" minOccurs="0" maxOccurs="1" default="true" type="xs:boolean">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Set this to true for the script to be repeated in a loop. For a fluid continuous motion, make sure the last waypoint matches the first one.</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="delay_start" minOccurs="0" maxOccurs="1" type="xs:double">
+            <xs:element name="delay_start" minOccurs="0" maxOccurs="1" default="0.0" type="xs:double">
               <xs:annotation>
                 <xs:documentation xml:lang="en">This is the time to wait before starting the script. If running in a loop, this time will be waited before starting each cycle.</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="auto_start" minOccurs="0" maxOccurs="1" type="xs:boolean">
+            <xs:element name="auto_start" minOccurs="0" maxOccurs="1" default="true" type="xs:boolean">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Set to true if the animation should start as soon as the simulation starts playing. It is useful to set this to false if the animation should only start playing only when triggered by a plugin, for example.</xs:documentation>
               </xs:annotation>
@@ -103,12 +103,12 @@
                         <xs:documentation xml:lang="en">Each point in the trajectory.</xs:documentation>
                       </xs:annotation>
                       <xs:all>
-                        <xs:element name="time" minOccurs="1" maxOccurs="1" type="xs:double">
+                        <xs:element name="time" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
                           <xs:annotation>
                             <xs:documentation xml:lang="en">The time in seconds, counted from the beginning of the script, when the pose should be reached.</xs:documentation>
                           </xs:annotation>
                         </xs:element>
-                        <xs:element name="pose" minOccurs="1" maxOccurs="1" type="types:pose">
+                        <xs:element name="pose" minOccurs="1" maxOccurs="1" default="0 0 0 0 0 0" type="types:pose">
                           <xs:annotation>
                             <xs:documentation xml:lang="en">The pose which should be reached at the given time.</xs:documentation>
                           </xs:annotation>
@@ -137,7 +137,7 @@
           </xs:all>
         </xs:complexType>
       </xs:element>
-      <xs:element name="pose" minOccurs="0" maxOccurs="1">
+      <xs:element name="pose" minOccurs="0" maxOccurs="1" default="0 0 0 0 0 0">
         <xs:annotation>
           <xs:documentation xml:lang="en">A position(x,y,z) and orientation(roll, pitch yaw) with respect to the frame named in the relative_to attribute.</xs:documentation>
         </xs:annotation>

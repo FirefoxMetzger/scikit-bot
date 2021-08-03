@@ -19,7 +19,7 @@
             <xs:documentation xml:lang="en">Box shape</xs:documentation>
           </xs:annotation>
           <xs:all>
-            <xs:element name="size" minOccurs="1" maxOccurs="1" type="types:vector3">
+            <xs:element name="size" minOccurs="1" maxOccurs="1" default="1 1 1" type="types:vector3">
               <xs:annotation>
                 <xs:documentation xml:lang="en">The three side lengths of the box. The origin of the box is in its geometric center (inside the center of the box).</xs:documentation>
               </xs:annotation>
@@ -36,12 +36,12 @@
             <xs:documentation xml:lang="en">Cylinder shape</xs:documentation>
           </xs:annotation>
           <xs:all>
-            <xs:element name="radius" minOccurs="1" maxOccurs="1" type="xs:double">
+            <xs:element name="radius" minOccurs="1" maxOccurs="1" default="1" type="xs:double">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Radius of the cylinder</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="length" minOccurs="1" maxOccurs="1" type="xs:double">
+            <xs:element name="length" minOccurs="1" maxOccurs="1" default="1" type="xs:double">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Length of the cylinder along the z axis</xs:documentation>
               </xs:annotation>
@@ -58,17 +58,17 @@
             <xs:documentation xml:lang="en">A heightmap based on a 2d grayscale image.</xs:documentation>
           </xs:annotation>
           <xs:all>
-            <xs:element name="uri" minOccurs="1" maxOccurs="1" type="xs:string">
+            <xs:element name="uri" minOccurs="1" maxOccurs="1" default="__default__" type="xs:string">
               <xs:annotation>
                 <xs:documentation xml:lang="en">URI to a grayscale image file</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="size" minOccurs="0" maxOccurs="1" type="types:vector3">
+            <xs:element name="size" minOccurs="0" maxOccurs="1" default="1 1 1" type="types:vector3">
               <xs:annotation>
                 <xs:documentation xml:lang="en">The size of the heightmap in world units.       When loading an image: "size" is used if present, otherwise defaults to 1x1x1.       When loading a DEM: "size" is used if present, otherwise defaults to true size of DEM.</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="pos" minOccurs="0" maxOccurs="1" type="types:vector3">
+            <xs:element name="pos" minOccurs="0" maxOccurs="1" default="0 0 0" type="types:vector3">
               <xs:annotation>
                 <xs:documentation xml:lang="en">A position offset.</xs:documentation>
               </xs:annotation>
@@ -82,17 +82,17 @@
                   <xs:documentation xml:lang="en">The heightmap can contain multiple textures. The order of the texture matters. The first texture will appear at the lowest height, and the last texture at the highest height. Use blend to control the height thresholds and fade between textures.</xs:documentation>
                 </xs:annotation>
                 <xs:all>
-                  <xs:element name="size" minOccurs="1" maxOccurs="1" type="xs:double">
+                  <xs:element name="size" minOccurs="1" maxOccurs="1" default="10" type="xs:double">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">Size of the applied texture in meters.</xs:documentation>
                     </xs:annotation>
                   </xs:element>
-                  <xs:element name="diffuse" minOccurs="1" maxOccurs="1" type="xs:string">
+                  <xs:element name="diffuse" minOccurs="1" maxOccurs="1" default="__default__" type="xs:string">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">Diffuse texture image filename</xs:documentation>
                     </xs:annotation>
                   </xs:element>
-                  <xs:element name="normal" minOccurs="1" maxOccurs="1" type="xs:string">
+                  <xs:element name="normal" minOccurs="1" maxOccurs="1" default="__default__" type="xs:string">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">Normalmap texture image filename</xs:documentation>
                     </xs:annotation>
@@ -109,12 +109,12 @@
                   <xs:documentation xml:lang="en">The blend tag controls how two adjacent textures are mixed. The number of blend elements should equal one less than the number of textures.</xs:documentation>
                 </xs:annotation>
                 <xs:all>
-                  <xs:element name="min_height" minOccurs="1" maxOccurs="1" type="xs:double">
+                  <xs:element name="min_height" minOccurs="1" maxOccurs="1" default="0" type="xs:double">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">Min height of a blend layer</xs:documentation>
                     </xs:annotation>
                   </xs:element>
-                  <xs:element name="fade_dist" minOccurs="1" maxOccurs="1" type="xs:double">
+                  <xs:element name="fade_dist" minOccurs="1" maxOccurs="1" default="0" type="xs:double">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">Distance over which the blend occurs</xs:documentation>
                     </xs:annotation>
@@ -122,7 +122,7 @@
                 </xs:all>
               </xs:complexType>
             </xs:element>
-            <xs:element name="use_terrain_paging" minOccurs="0" maxOccurs="1" type="xs:boolean">
+            <xs:element name="use_terrain_paging" minOccurs="0" maxOccurs="1" default="false" type="xs:boolean">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Set if the rendering engine will use terrain paging</xs:documentation>
               </xs:annotation>
@@ -139,27 +139,27 @@
             <xs:documentation xml:lang="en">Extrude a set of boxes from a grayscale image.</xs:documentation>
           </xs:annotation>
           <xs:all>
-            <xs:element name="uri" minOccurs="1" maxOccurs="1" type="xs:string">
+            <xs:element name="uri" minOccurs="1" maxOccurs="1" default="__default__" type="xs:string">
               <xs:annotation>
                 <xs:documentation xml:lang="en">URI of the grayscale image file</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="scale" minOccurs="1" maxOccurs="1" type="xs:double">
+            <xs:element name="scale" minOccurs="1" maxOccurs="1" default="1" type="xs:double">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Scaling factor applied to the image</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="threshold" minOccurs="1" maxOccurs="1" type="xs:int">
+            <xs:element name="threshold" minOccurs="1" maxOccurs="1" default="200" type="xs:int">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Grayscale threshold</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="height" minOccurs="1" maxOccurs="1" type="xs:double">
+            <xs:element name="height" minOccurs="1" maxOccurs="1" default="1" type="xs:double">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Height of the extruded boxes</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="granularity" minOccurs="1" maxOccurs="1" type="xs:int">
+            <xs:element name="granularity" minOccurs="1" maxOccurs="1" default="1" type="xs:int">
               <xs:annotation>
                 <xs:documentation xml:lang="en">The amount of error in the model</xs:documentation>
               </xs:annotation>
@@ -176,7 +176,7 @@
             <xs:documentation xml:lang="en">Mesh shape</xs:documentation>
           </xs:annotation>
           <xs:all>
-            <xs:element name="uri" minOccurs="1" maxOccurs="1" type="xs:string">
+            <xs:element name="uri" minOccurs="1" maxOccurs="1" default="__default__" type="xs:string">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Mesh uri</xs:documentation>
               </xs:annotation>
@@ -190,12 +190,12 @@
                   <xs:documentation xml:lang="en">Use a named submesh. The submesh must exist in the mesh specified by the uri</xs:documentation>
                 </xs:annotation>
                 <xs:all>
-                  <xs:element name="name" minOccurs="1" maxOccurs="1" type="xs:string">
+                  <xs:element name="name" minOccurs="1" maxOccurs="1" default="__default__" type="xs:string">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">Name of the submesh within the parent mesh</xs:documentation>
                     </xs:annotation>
                   </xs:element>
-                  <xs:element name="center" minOccurs="0" maxOccurs="1" type="xs:boolean">
+                  <xs:element name="center" minOccurs="0" maxOccurs="1" default="false" type="xs:boolean">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">Set to true to center the vertices of the submesh at 0,0,0. This will effectively remove any transformations on the submesh before the poses from parent links and models are applied.</xs:documentation>
                     </xs:annotation>
@@ -203,7 +203,7 @@
                 </xs:all>
               </xs:complexType>
             </xs:element>
-            <xs:element name="scale" minOccurs="0" maxOccurs="1" type="types:vector3">
+            <xs:element name="scale" minOccurs="0" maxOccurs="1" default="1 1 1" type="types:vector3">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Scaling factor applied to the mesh</xs:documentation>
               </xs:annotation>
@@ -220,12 +220,12 @@
             <xs:documentation xml:lang="en">Plane shape</xs:documentation>
           </xs:annotation>
           <xs:all>
-            <xs:element name="normal" minOccurs="1" maxOccurs="1" type="types:vector3">
+            <xs:element name="normal" minOccurs="1" maxOccurs="1" default="0 0 1" type="types:vector3">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Normal direction for the plane</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="size" minOccurs="1" maxOccurs="1" type="types:vector2d">
+            <xs:element name="size" minOccurs="1" maxOccurs="1" default="1 1" type="types:vector2d">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Length of each side of the plane</xs:documentation>
               </xs:annotation>
@@ -242,7 +242,7 @@
             <xs:documentation xml:lang="en">Sphere shape</xs:documentation>
           </xs:annotation>
           <xs:all>
-            <xs:element name="radius" minOccurs="1" maxOccurs="1" type="xs:double">
+            <xs:element name="radius" minOccurs="1" maxOccurs="1" default="1" type="xs:double">
               <xs:annotation>
                 <xs:documentation xml:lang="en">radius of the sphere</xs:documentation>
               </xs:annotation>

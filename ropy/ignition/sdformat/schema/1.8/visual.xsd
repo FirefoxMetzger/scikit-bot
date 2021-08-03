@@ -7,22 +7,22 @@
       <xs:documentation xml:lang="en">The visual properties of the link. This element specifies the shape of the object (box, cylinder, etc.) for visualization purposes.</xs:documentation>
     </xs:annotation>
     <xs:all>
-      <xs:element name="cast_shadows" minOccurs="0" maxOccurs="1" type="xs:boolean">
+      <xs:element name="cast_shadows" minOccurs="0" maxOccurs="1" default="true" type="xs:boolean">
         <xs:annotation>
           <xs:documentation xml:lang="en">If true the visual will cast shadows.</xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="laser_retro" minOccurs="0" maxOccurs="1" type="xs:double">
+      <xs:element name="laser_retro" minOccurs="0" maxOccurs="1" default="0.0" type="xs:double">
         <xs:annotation>
           <xs:documentation xml:lang="en">will be implemented in the future release.</xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="transparency" minOccurs="0" maxOccurs="1" type="xs:double">
+      <xs:element name="transparency" minOccurs="0" maxOccurs="1" default="0.0" type="xs:double">
         <xs:annotation>
           <xs:documentation xml:lang="en">The amount of transparency( 0=opaque, 1 = fully transparent)</xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="visibility_flags" minOccurs="0" maxOccurs="1" type="xs:unsignedInt">
+      <xs:element name="visibility_flags" minOccurs="0" maxOccurs="1" default="4294967295" type="xs:unsignedInt">
         <xs:annotation>
           <xs:documentation xml:lang="en">Visibility flags of a visual. When (camera's visibility_mask &amp; visual's visibility_flags) evaluates to non-zero, the visual will be visible to the camera.</xs:documentation>
         </xs:annotation>
@@ -36,7 +36,7 @@
             <xs:documentation xml:lang="en">Optional meta information for the visual. The information contained within this element should be used to provide additional feedback to an end user.</xs:documentation>
           </xs:annotation>
           <xs:all>
-            <xs:element name="layer" minOccurs="0" maxOccurs="1" type="xs:int">
+            <xs:element name="layer" minOccurs="0" maxOccurs="1" default="0" type="xs:int">
               <xs:annotation>
                 <xs:documentation xml:lang="en">The layer in which this visual is displayed. The layer number is useful for programs, such as Gazebo, that put visuals in different layers for enhanced visualization.</xs:documentation>
               </xs:annotation>
@@ -44,7 +44,7 @@
           </xs:all>
         </xs:complexType>
       </xs:element>
-      <xs:element name="pose" minOccurs="0" maxOccurs="1">
+      <xs:element name="pose" minOccurs="0" maxOccurs="1" default="0 0 0 0 0 0">
         <xs:annotation>
           <xs:documentation xml:lang="en">A position(x,y,z) and orientation(roll, pitch yaw) with respect to the frame named in the relative_to attribute.</xs:documentation>
         </xs:annotation>

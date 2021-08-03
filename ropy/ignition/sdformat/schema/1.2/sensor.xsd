@@ -5,27 +5,27 @@
       <xs:documentation xml:lang="en">The sensor tag describes the type and properties of a sensor.</xs:documentation>
     </xs:annotation>
     <xs:all>
-      <xs:element name="always_on" minOccurs="0" maxOccurs="1" type="xs:boolean">
+      <xs:element name="always_on" minOccurs="0" maxOccurs="1" default="false" type="xs:boolean">
         <xs:annotation>
           <xs:documentation xml:lang="en">If true the sensor will always be updated according to the update rate.</xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="update_rate" minOccurs="0" maxOccurs="1" type="xs:double">
+      <xs:element name="update_rate" minOccurs="0" maxOccurs="1" default="0" type="xs:double">
         <xs:annotation>
           <xs:documentation xml:lang="en">The frequency at which the sensor data is generated. If left unspecified, the sensor will generate data every cycle.</xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="visualize" minOccurs="0" maxOccurs="1" type="xs:boolean">
+      <xs:element name="visualize" minOccurs="0" maxOccurs="1" default="false" type="xs:boolean">
         <xs:annotation>
           <xs:documentation xml:lang="en">If true, the sensor is visualized in the GUI</xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="pose" minOccurs="0" maxOccurs="1" type="types:pose">
+      <xs:element name="pose" minOccurs="0" maxOccurs="1" default="0 0 0 0 0 0" type="types:pose">
         <xs:annotation>
           <xs:documentation xml:lang="en">This is the pose of the sensor, relative to the parent link reference frame.</xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="topic" minOccurs="0" maxOccurs="1" type="xs:string">
+      <xs:element name="topic" minOccurs="0" maxOccurs="1" default="__default" type="xs:string">
         <xs:annotation>
           <xs:documentation xml:lang="en">Name of the topic on which data is published. This is necessary for visualization</xs:documentation>
         </xs:annotation>
@@ -66,7 +66,7 @@
             <xs:documentation xml:lang="en">These elements are specific to camera sensors.</xs:documentation>
           </xs:annotation>
           <xs:all>
-            <xs:element name="horizontal_fov" minOccurs="1" maxOccurs="1" type="xs:double">
+            <xs:element name="horizontal_fov" minOccurs="1" maxOccurs="1" default="1.047" type="xs:double">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Horizontal field of view</xs:documentation>
               </xs:annotation>
@@ -80,17 +80,17 @@
                   <xs:documentation xml:lang="en">The image size in pixels and format.</xs:documentation>
                 </xs:annotation>
                 <xs:all>
-                  <xs:element name="width" minOccurs="1" maxOccurs="1" type="xs:int">
+                  <xs:element name="width" minOccurs="1" maxOccurs="1" default="320" type="xs:int">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">Width in pixels</xs:documentation>
                     </xs:annotation>
                   </xs:element>
-                  <xs:element name="height" minOccurs="1" maxOccurs="1" type="xs:int">
+                  <xs:element name="height" minOccurs="1" maxOccurs="1" default="240" type="xs:int">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">Height in pixels</xs:documentation>
                     </xs:annotation>
                   </xs:element>
-                  <xs:element name="format" minOccurs="0" maxOccurs="1" type="xs:string">
+                  <xs:element name="format" minOccurs="0" maxOccurs="1" default="R8G8B8" type="xs:string">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">(L8|R8G8B8|B8G8R8|BAYER_RGGB8|BAYER_BGGR8|BAYER_GBRG8|BAYER_GRBG8)</xs:documentation>
                     </xs:annotation>
@@ -107,12 +107,12 @@
                   <xs:documentation xml:lang="en">The near and far clip planes. Objects closer or farther than these planes are not rendered.</xs:documentation>
                 </xs:annotation>
                 <xs:all>
-                  <xs:element name="near" minOccurs="1" maxOccurs="1" type="xs:double">
+                  <xs:element name="near" minOccurs="1" maxOccurs="1" default=".1" type="xs:double">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">Near clipping plane</xs:documentation>
                     </xs:annotation>
                   </xs:element>
-                  <xs:element name="far" minOccurs="1" maxOccurs="1" type="xs:double">
+                  <xs:element name="far" minOccurs="1" maxOccurs="1" default="100" type="xs:double">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">Far clipping plane</xs:documentation>
                     </xs:annotation>
@@ -129,7 +129,7 @@
                   <xs:documentation xml:lang="en">Enable or disable saving of camera frames.</xs:documentation>
                 </xs:annotation>
                 <xs:all>
-                  <xs:element name="path" minOccurs="1" maxOccurs="1" type="xs:string">
+                  <xs:element name="path" minOccurs="1" maxOccurs="1" default="__default__" type="xs:string">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">The path name which will hold the frame data. If path name is relative, then directory is relative to current working directory.</xs:documentation>
                     </xs:annotation>
@@ -151,7 +151,7 @@
                   <xs:documentation xml:lang="en">Depth camera parameters</xs:documentation>
                 </xs:annotation>
                 <xs:all>
-                  <xs:element name="output" minOccurs="1" maxOccurs="1" type="xs:string">
+                  <xs:element name="output" minOccurs="1" maxOccurs="1" default="depths" type="xs:string">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">Type of output</xs:documentation>
                     </xs:annotation>
@@ -177,18 +177,18 @@
                   <xs:element name="horizontal" minOccurs="1" maxOccurs="1">
                     <xs:complexType>
                       <xs:all>
-                        <xs:element name="samples" minOccurs="1" maxOccurs="1" type="xs:unsignedInt">
+                        <xs:element name="samples" minOccurs="1" maxOccurs="1" default="640" type="xs:unsignedInt">
                           <xs:annotation>
                             <xs:documentation xml:lang="en">The number of simulated rays to generate per complete laser sweep cycle.</xs:documentation>
                           </xs:annotation>
                         </xs:element>
-                        <xs:element name="resolution" minOccurs="1" maxOccurs="1" type="xs:double">
+                        <xs:element name="resolution" minOccurs="1" maxOccurs="1" default="1" type="xs:double">
                           <xs:annotation>
                             <xs:documentation xml:lang="en">This number is multiplied by samples to determine the number of range data points returned. If resolution is less than one, range data is interpolated. If resolution is greater than one, range data is averaged.</xs:documentation>
                           </xs:annotation>
                         </xs:element>
-                        <xs:element name="min_angle" minOccurs="1" maxOccurs="1" type="xs:double"/>
-                        <xs:element name="max_angle" minOccurs="1" maxOccurs="1" type="xs:double">
+                        <xs:element name="min_angle" minOccurs="1" maxOccurs="1" default="0" type="xs:double"/>
+                        <xs:element name="max_angle" minOccurs="1" maxOccurs="1" default="0" type="xs:double">
                           <xs:annotation>
                             <xs:documentation xml:lang="en">Must be greater or equal to min_angle</xs:documentation>
                           </xs:annotation>
@@ -199,18 +199,18 @@
                   <xs:element name="vertical" minOccurs="0" maxOccurs="1">
                     <xs:complexType>
                       <xs:all>
-                        <xs:element name="samples" minOccurs="1" maxOccurs="1" type="xs:unsignedInt">
+                        <xs:element name="samples" minOccurs="1" maxOccurs="1" default="1" type="xs:unsignedInt">
                           <xs:annotation>
                             <xs:documentation xml:lang="en">The number of simulated rays to generate per complete laser sweep cycle.</xs:documentation>
                           </xs:annotation>
                         </xs:element>
-                        <xs:element name="resolution" minOccurs="0" maxOccurs="1" type="xs:double">
+                        <xs:element name="resolution" minOccurs="0" maxOccurs="1" default="1" type="xs:double">
                           <xs:annotation>
                             <xs:documentation xml:lang="en">This number is multiplied by samples to determine the number of range data points returned. If resolution is less than one, range data is interpolated. If resolution is greater than one, range data is averaged.</xs:documentation>
                           </xs:annotation>
                         </xs:element>
-                        <xs:element name="min_angle" minOccurs="1" maxOccurs="1" type="xs:double"/>
-                        <xs:element name="max_angle" minOccurs="1" maxOccurs="1" type="xs:double">
+                        <xs:element name="min_angle" minOccurs="1" maxOccurs="1" default="0" type="xs:double"/>
+                        <xs:element name="max_angle" minOccurs="1" maxOccurs="1" default="0" type="xs:double">
                           <xs:annotation>
                             <xs:documentation xml:lang="en">Must be greater or equal to min_angle</xs:documentation>
                           </xs:annotation>
@@ -230,17 +230,17 @@
                   <xs:documentation xml:lang="en">specifies range properties of each simulated ray</xs:documentation>
                 </xs:annotation>
                 <xs:all>
-                  <xs:element name="min" minOccurs="1" maxOccurs="1" type="xs:double">
+                  <xs:element name="min" minOccurs="1" maxOccurs="1" default="0" type="xs:double">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">The minimum distance for each ray.</xs:documentation>
                     </xs:annotation>
                   </xs:element>
-                  <xs:element name="max" minOccurs="1" maxOccurs="1" type="xs:double">
+                  <xs:element name="max" minOccurs="1" maxOccurs="1" default="0" type="xs:double">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">The maximum distance for each ray.</xs:documentation>
                     </xs:annotation>
                   </xs:element>
-                  <xs:element name="resolution" minOccurs="0" maxOccurs="1" type="xs:double">
+                  <xs:element name="resolution" minOccurs="0" maxOccurs="1" default="0" type="xs:double">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">Linear resolution of each ray.</xs:documentation>
                     </xs:annotation>
@@ -260,12 +260,12 @@
             <xs:documentation xml:lang="en">These elements are specific to the contact sensor.</xs:documentation>
           </xs:annotation>
           <xs:all>
-            <xs:element name="collision" minOccurs="1" maxOccurs="1" type="xs:string">
+            <xs:element name="collision" minOccurs="1" maxOccurs="1" default="__default__" type="xs:string">
               <xs:annotation>
                 <xs:documentation xml:lang="en">name of the collision element within a link that acts as the contact sensor.</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="topic" minOccurs="1" maxOccurs="1" type="xs:string">
+            <xs:element name="topic" minOccurs="1" maxOccurs="1" default="__default_topic__" type="xs:string">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Topic on which contact data is published.</xs:documentation>
               </xs:annotation>

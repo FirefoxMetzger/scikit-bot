@@ -15,14 +15,14 @@
             <xs:element name="camera" minOccurs="0" maxOccurs="1">
               <xs:complexType>
                 <xs:all>
-                  <xs:element name="view_controller" minOccurs="0" maxOccurs="1" type="xs:string"/>
+                  <xs:element name="view_controller" minOccurs="0" maxOccurs="1" default="oribit" type="xs:string"/>
                   <xs:element name="origin" minOccurs="0" maxOccurs="1" type="xs:string"/>
                   <xs:element name="track_visual" minOccurs="0" maxOccurs="1">
                     <xs:complexType>
                       <xs:all>
-                        <xs:element name="name" minOccurs="1" maxOccurs="1" type="xs:string"/>
-                        <xs:element name="min_dist" minOccurs="0" maxOccurs="1" type="xs:double"/>
-                        <xs:element name="max_dist" minOccurs="0" maxOccurs="1" type="xs:double"/>
+                        <xs:element name="name" minOccurs="1" maxOccurs="1" default="__default__" type="xs:string"/>
+                        <xs:element name="min_dist" minOccurs="0" maxOccurs="1" default="0" type="xs:double"/>
+                        <xs:element name="max_dist" minOccurs="0" maxOccurs="1" default="0" type="xs:double"/>
                       </xs:all>
                     </xs:complexType>
                   </xs:element>
@@ -52,8 +52,8 @@
       <xs:element name="road" minOccurs="0" maxOccurs="unbounded">
         <xs:complexType>
           <xs:all>
-            <xs:element name="width" minOccurs="1" maxOccurs="1" type="xs:double"/>
-            <xs:element name="point" minOccurs="1" maxOccurs="unbounded" type="types:vector3"/>
+            <xs:element name="width" minOccurs="1" maxOccurs="1" default="1.0" type="xs:double"/>
+            <xs:element name="point" minOccurs="1" maxOccurs="unbounded" default="0 0 0" type="types:vector3"/>
           </xs:all>
           <xs:attribute name="name" type="xs:string" use="required"/>
         </xs:complexType>

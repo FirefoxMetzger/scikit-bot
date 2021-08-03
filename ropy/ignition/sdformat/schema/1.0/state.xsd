@@ -5,17 +5,17 @@
       <xs:element name="model" minOccurs="1" maxOccurs="unbounded">
         <xs:complexType>
           <xs:all>
-            <xs:element name="pose" minOccurs="1" maxOccurs="1" type="types:pose"/>
+            <xs:element name="pose" minOccurs="1" maxOccurs="1" default="0 0 0 0 0 0" type="types:pose"/>
             <xs:element name="link" minOccurs="0" maxOccurs="unbounded">
               <xs:complexType>
                 <xs:all>
-                  <xs:element name="pose" minOccurs="1" maxOccurs="1" type="types:pose"/>
-                  <xs:element name="velocity" minOccurs="0" maxOccurs="1" type="types:pose"/>
+                  <xs:element name="pose" minOccurs="1" maxOccurs="1" default="0 0 0 0 0 0" type="types:pose"/>
+                  <xs:element name="velocity" minOccurs="0" maxOccurs="1" default="0 0 0 0 0 0" type="types:pose"/>
                   <xs:element name="wrench" minOccurs="0" maxOccurs="unbounded">
                     <xs:complexType>
                       <xs:all>
-                        <xs:element name="pos" minOccurs="0" maxOccurs="1" type="types:vector3"/>
-                        <xs:element name="mag" minOccurs="1" maxOccurs="1" type="types:pose"/>
+                        <xs:element name="pos" minOccurs="0" maxOccurs="1" default="0 0 0" type="types:vector3"/>
+                        <xs:element name="mag" minOccurs="1" maxOccurs="1" default="0 0 0 0 0 0" type="types:pose"/>
                       </xs:all>
                     </xs:complexType>
                   </xs:element>

@@ -8,22 +8,22 @@
       <xs:documentation xml:lang="en">A physical link with inertia, collision, and visual properties. A link must be a child of a model, and any number of links may exist in a model.</xs:documentation>
     </xs:annotation>
     <xs:all>
-      <xs:element name="gravity" minOccurs="0" maxOccurs="1" type="xs:boolean">
+      <xs:element name="gravity" minOccurs="0" maxOccurs="1" default="true" type="xs:boolean">
         <xs:annotation>
           <xs:documentation xml:lang="en">If true, the link is affected by gravity.</xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="self_collide" minOccurs="0" maxOccurs="1" type="xs:boolean">
+      <xs:element name="self_collide" minOccurs="0" maxOccurs="1" default="false" type="xs:boolean">
         <xs:annotation>
           <xs:documentation xml:lang="en">If true, the link can collide with other links in the model.</xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="kinematic" minOccurs="0" maxOccurs="1" type="xs:boolean">
+      <xs:element name="kinematic" minOccurs="0" maxOccurs="1" default="false" type="xs:boolean">
         <xs:annotation>
           <xs:documentation xml:lang="en">If true, the link is kinematic only</xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="pose" minOccurs="0" maxOccurs="1" type="types:pose">
+      <xs:element name="pose" minOccurs="0" maxOccurs="1" default="0 0 0 0 0 0" type="types:pose">
         <xs:annotation>
           <xs:documentation xml:lang="en">This is the pose of the link reference frame, relative to the model reference frame.</xs:documentation>
         </xs:annotation>
@@ -37,12 +37,12 @@
             <xs:documentation xml:lang="en">Exponential damping of the link's velocity.</xs:documentation>
           </xs:annotation>
           <xs:all>
-            <xs:element name="linear" minOccurs="1" maxOccurs="1" type="xs:double">
+            <xs:element name="linear" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Linear damping</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="angular" minOccurs="1" maxOccurs="1" type="xs:double">
+            <xs:element name="angular" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Angular damping</xs:documentation>
               </xs:annotation>
@@ -59,12 +59,12 @@
             <xs:documentation xml:lang="en">The inertial properties of the link.</xs:documentation>
           </xs:annotation>
           <xs:all>
-            <xs:element name="mass" minOccurs="0" maxOccurs="1" type="xs:double">
+            <xs:element name="mass" minOccurs="0" maxOccurs="1" default="1.0" type="xs:double">
               <xs:annotation>
                 <xs:documentation xml:lang="en">The mass of the link.</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="pose" minOccurs="0" maxOccurs="1" type="types:pose">
+            <xs:element name="pose" minOccurs="0" maxOccurs="1" default="0 0 0 0 0 0" type="types:pose">
               <xs:annotation>
                 <xs:documentation xml:lang="en">This is the pose of the inertial reference frame, relative to the link reference frame. The origin of the inertial reference frame needs to be at the center of gravity. The axes of the inertial reference frame do not need to be aligned with the principal axes of the inertia.</xs:documentation>
               </xs:annotation>
@@ -78,12 +78,12 @@
                   <xs:documentation xml:lang="en">The 3x3 rotational inertia matrix. Because the rotational inertia matrix is symmetric, only 6 above-diagonal elements of this matrix are specified here, using the attributes ixx, ixy, ixz, iyy, iyz, izz.</xs:documentation>
                 </xs:annotation>
                 <xs:all>
-                  <xs:element name="ixx" minOccurs="1" maxOccurs="1" type="xs:double"/>
-                  <xs:element name="ixy" minOccurs="1" maxOccurs="1" type="xs:double"/>
-                  <xs:element name="ixz" minOccurs="1" maxOccurs="1" type="xs:double"/>
-                  <xs:element name="iyy" minOccurs="1" maxOccurs="1" type="xs:double"/>
-                  <xs:element name="iyz" minOccurs="1" maxOccurs="1" type="xs:double"/>
-                  <xs:element name="izz" minOccurs="1" maxOccurs="1" type="xs:double"/>
+                  <xs:element name="ixx" minOccurs="1" maxOccurs="1" default="1.0" type="xs:double"/>
+                  <xs:element name="ixy" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double"/>
+                  <xs:element name="ixz" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double"/>
+                  <xs:element name="iyy" minOccurs="1" maxOccurs="1" default="1.0" type="xs:double"/>
+                  <xs:element name="iyz" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double"/>
+                  <xs:element name="izz" minOccurs="1" maxOccurs="1" default="1.0" type="xs:double"/>
                 </xs:all>
               </xs:complexType>
             </xs:element>
@@ -108,27 +108,27 @@
       <xs:element name="projector" minOccurs="0" maxOccurs="1">
         <xs:complexType>
           <xs:all>
-            <xs:element name="texture" minOccurs="1" maxOccurs="1" type="xs:string">
+            <xs:element name="texture" minOccurs="1" maxOccurs="1" default="__default__" type="xs:string">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Texture name</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="pose" minOccurs="0" maxOccurs="1" type="types:pose">
+            <xs:element name="pose" minOccurs="0" maxOccurs="1" default="0 0 0 0 0 0" type="types:pose">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Pose of the projector</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="fov" minOccurs="0" maxOccurs="1" type="xs:double">
+            <xs:element name="fov" minOccurs="0" maxOccurs="1" default="0.785" type="xs:double">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Field of view</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="near_clip" minOccurs="0" maxOccurs="1" type="xs:double">
+            <xs:element name="near_clip" minOccurs="0" maxOccurs="1" default="0.1" type="xs:double">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Near clip distance</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="far_clip" minOccurs="0" maxOccurs="1" type="xs:double">
+            <xs:element name="far_clip" minOccurs="0" maxOccurs="1" default="10.0" type="xs:double">
               <xs:annotation>
                 <xs:documentation xml:lang="en">far clip distance</xs:documentation>
               </xs:annotation>

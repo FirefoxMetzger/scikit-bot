@@ -7,17 +7,17 @@
       <xs:documentation xml:lang="en">The model element defines a complete robot or any other physical object.</xs:documentation>
     </xs:annotation>
     <xs:all>
-      <xs:element name="static" minOccurs="0" maxOccurs="1" type="xs:boolean">
+      <xs:element name="static" minOccurs="0" maxOccurs="1" default="false" type="xs:boolean">
         <xs:annotation>
           <xs:documentation xml:lang="en">If set to true, the model is immovable. Otherwise the model is simulated in the dynamics engine.</xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="self_collide" minOccurs="0" maxOccurs="1" type="xs:boolean">
+      <xs:element name="self_collide" minOccurs="0" maxOccurs="1" default="false" type="xs:boolean">
         <xs:annotation>
           <xs:documentation xml:lang="en">If set to true, all links in the model will collide with each other (except those connected by a joint). Can be overridden by the link or collision element self_collide property. Two links within a model will collide if link1.self_collide OR link2.self_collide. Links connected by a joint will never collide.</xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="allow_auto_disable" minOccurs="0" maxOccurs="1" type="xs:boolean">
+      <xs:element name="allow_auto_disable" minOccurs="0" maxOccurs="1" default="true" type="xs:boolean">
         <xs:annotation>
           <xs:documentation xml:lang="en">Allows a model to auto-disable, which is means the physics engine can skip updating the model when the model is at rest. This parameter is only used by models with no joints.</xs:documentation>
         </xs:annotation>
@@ -31,7 +31,7 @@
             <xs:documentation xml:lang="en">Include resources from a URI. This can be used to nest models. Included resources can only contain one 'model', 'light' or 'actor' element. The URI can point to a directory or a file. If the URI is a directory, it must conform to the model database structure (see /tutorials?tut=composition&amp;cat=specification&amp;#defining-models-in-separate-files).</xs:documentation>
           </xs:annotation>
           <xs:all>
-            <xs:element name="uri" minOccurs="1" maxOccurs="1" type="xs:string">
+            <xs:element name="uri" minOccurs="1" maxOccurs="1" default="__default__" type="xs:string">
               <xs:annotation>
                 <xs:documentation xml:lang="en">URI to a resource, such as a model</xs:documentation>
               </xs:annotation>
@@ -41,7 +41,7 @@
                 <xs:documentation xml:lang="en">Override the name of the included model.</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="static" minOccurs="0" maxOccurs="1" type="xs:boolean">
+            <xs:element name="static" minOccurs="0" maxOccurs="1" default="false" type="xs:boolean">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Override the static value of the included model.</xs:documentation>
               </xs:annotation>
@@ -51,7 +51,7 @@
                 <xs:documentation xml:lang="en">The frame inside the included model whose pose will be set by the specified pose element. If this element is specified, the pose must be specified.</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="pose" minOccurs="0" maxOccurs="1">
+            <xs:element name="pose" minOccurs="0" maxOccurs="1" default="0 0 0 0 0 0">
               <xs:annotation>
                 <xs:documentation xml:lang="en">A position(x,y,z) and orientation(roll, pitch yaw) with respect to the frame named in the relative_to attribute.</xs:documentation>
               </xs:annotation>
@@ -74,7 +74,7 @@
           <xs:documentation xml:lang="en">A nested model element</xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="enable_wind" minOccurs="0" maxOccurs="1" type="xs:boolean">
+      <xs:element name="enable_wind" minOccurs="0" maxOccurs="1" default="false" type="xs:boolean">
         <xs:annotation>
           <xs:documentation xml:lang="en">If set to true, all links in the model will be affected by the wind. Can be overriden by the link wind property.</xs:documentation>
         </xs:annotation>
@@ -88,7 +88,7 @@
             <xs:documentation xml:lang="en">A frame of reference to which a pose is relative.</xs:documentation>
           </xs:annotation>
           <xs:all>
-            <xs:element name="pose" minOccurs="0" maxOccurs="1">
+            <xs:element name="pose" minOccurs="0" maxOccurs="1" default="0 0 0 0 0 0">
               <xs:annotation>
                 <xs:documentation xml:lang="en">A position(x,y,z) and orientation(roll, pitch yaw) with respect to the frame named in the relative_to attribute.</xs:documentation>
               </xs:annotation>
@@ -116,7 +116,7 @@
           </xs:attribute>
         </xs:complexType>
       </xs:element>
-      <xs:element name="pose" minOccurs="0" maxOccurs="1">
+      <xs:element name="pose" minOccurs="0" maxOccurs="1" default="0 0 0 0 0 0">
         <xs:annotation>
           <xs:documentation xml:lang="en">A position(x,y,z) and orientation(roll, pitch yaw) with respect to the frame named in the relative_to attribute.</xs:documentation>
         </xs:annotation>
@@ -174,14 +174,14 @@
             <xs:element name="grasp_check" minOccurs="0" maxOccurs="1">
               <xs:complexType>
                 <xs:all>
-                  <xs:element name="detach_steps" minOccurs="0" maxOccurs="1" type="xs:int"/>
-                  <xs:element name="attach_steps" minOccurs="0" maxOccurs="1" type="xs:int"/>
-                  <xs:element name="min_contact_count" minOccurs="0" maxOccurs="1" type="xs:unsignedInt"/>
+                  <xs:element name="detach_steps" minOccurs="0" maxOccurs="1" default="40" type="xs:int"/>
+                  <xs:element name="attach_steps" minOccurs="0" maxOccurs="1" default="20" type="xs:int"/>
+                  <xs:element name="min_contact_count" minOccurs="0" maxOccurs="1" default="2" type="xs:unsignedInt"/>
                 </xs:all>
               </xs:complexType>
             </xs:element>
-            <xs:element name="gripper_link" minOccurs="1" maxOccurs="unbounded" type="xs:string"/>
-            <xs:element name="palm_link" minOccurs="1" maxOccurs="1" type="xs:string"/>
+            <xs:element name="gripper_link" minOccurs="1" maxOccurs="unbounded" default="__default__" type="xs:string"/>
+            <xs:element name="palm_link" minOccurs="1" maxOccurs="1" default="__default__" type="xs:string"/>
           </xs:all>
           <xs:attribute name="name" type="xs:string" use="required"/>
         </xs:complexType>
