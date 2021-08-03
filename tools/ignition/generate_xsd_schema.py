@@ -149,7 +149,12 @@ class Element(SdfElement):
     )
 
     def __post_init__(self):
-
+        if self.default is not None:
+            if self.default == "":
+                self.default = None
+            elif self.type == "bool" and self.default in ["0", "1"]:
+                self.default = "true" if self.default == "1" else "false"
+            
         return super().__post_init__()
 
     def to_xsd(self) -> etree.Element:
@@ -164,7 +169,7 @@ class Element(SdfElement):
         subtree.set("minOccurs", self.minOccurs)
         subtree.set("maxOccurs", self.maxOccurs)
 
-        if self.default and self.default != "":
+        if self.default:
             subtree.set("default", self.default)
 
         if self.description:
