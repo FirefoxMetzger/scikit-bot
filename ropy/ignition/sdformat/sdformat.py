@@ -125,8 +125,6 @@ def loads(
 
     if version is None:
         version = get_version(sdf)
-    else:
-        version = version
 
     handler_class = {
         None: handlers.default_handler(),
