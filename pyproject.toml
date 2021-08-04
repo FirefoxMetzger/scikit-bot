@@ -9,7 +9,8 @@ build-backend = "setuptools.build_meta"
 [tool.coverage.report]
     omit = [
         "./ropy/ignition/messages.py",
-        "*tests*"
+        "*tests*",
+        "./ropy/ignition/sdformat/bindings/*"
     ]
 
     exclude_lines = [

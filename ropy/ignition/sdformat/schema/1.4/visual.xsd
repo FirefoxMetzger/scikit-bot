@@ -1,0 +1,143 @@
+<xs:schema xmlns:types="sdformat/v1.4/types.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:geometry="sdformat/v1.4/geometry.xsd" targetNamespace="sdformat/v1.4/visual.xsd" version="1.1">
+  <xs:import namespace="sdformat/v1.4/geometry.xsd" schemaLocation="./geometry.xsd"/>
+  <xs:import namespace="sdformat/v1.4/types.xsd" schemaLocation="./types.xsd"/>
+  <xs:complexType name="visual">
+    <xs:annotation>
+      <xs:documentation xml:lang="en">The visual properties of the link. This element specifies the shape of the object (box, cylinder, etc.) for visualization purposes.</xs:documentation>
+    </xs:annotation>
+    <xs:all>
+      <xs:element name="cast_shadows" minOccurs="1" maxOccurs="1" default="true" type="xs:boolean">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">If true the visual will cast shadows.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="laser_retro" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">will be implemented in the future release.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="transparency" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">The amount of transparency( 0=opaque, 1 = fully transparent)</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="pose" minOccurs="1" maxOccurs="1" default="0 0 0 0 0 0" type="types:pose">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">The reference frame of the visual element, relative to the reference frame of the link.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="material" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">The material of the visual element.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:annotation>
+            <xs:documentation xml:lang="en">The material of the visual element.</xs:documentation>
+          </xs:annotation>
+          <xs:all>
+            <xs:element name="script" minOccurs="0" maxOccurs="1">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">Name of material from an installed script file. This will override the color element if the script exists.</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:annotation>
+                  <xs:documentation xml:lang="en">Name of material from an installed script file. This will override the color element if the script exists.</xs:documentation>
+                </xs:annotation>
+                <xs:all>
+                  <xs:element name="uri" minOccurs="1" maxOccurs="unbounded" default="__default__" type="xs:string">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">URI of the material script file</xs:documentation>
+                    </xs:annotation>
+                  </xs:element>
+                  <xs:element name="name" minOccurs="1" maxOccurs="1" default="__default__" type="xs:string">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">Name of the script within the script file</xs:documentation>
+                    </xs:annotation>
+                  </xs:element>
+                </xs:all>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="shader" minOccurs="0" maxOccurs="1">
+              <xs:complexType>
+                <xs:all>
+                  <xs:element name="normal_map" minOccurs="1" maxOccurs="1" default="__default__" type="xs:string">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">filename of the normal map</xs:documentation>
+                    </xs:annotation>
+                  </xs:element>
+                </xs:all>
+                <xs:attribute name="type" type="xs:string" use="required">
+                  <xs:annotation>
+                    <xs:documentation xml:lang="en">vertex, pixel, normal_map_object_space, normal_map_tangent_space</xs:documentation>
+                  </xs:annotation>
+                </xs:attribute>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="lighting" minOccurs="1" maxOccurs="1" default="true" type="xs:boolean">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">If false, dynamic lighting will be disabled</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="ambient" minOccurs="1" maxOccurs="1" default="0 0 0 1" type="types:color">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">The ambient color of a material specified by set of four numbers representing red/green/blue, each in the range of [0,1].</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="diffuse" minOccurs="1" maxOccurs="1" default="0 0 0 1" type="types:color">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">The diffuse color of a material specified by set of four numbers representing red/green/blue/alpha, each in the range of [0,1].</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="specular" minOccurs="1" maxOccurs="1" default="0 0 0 1" type="types:color">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">The specular color of a material specified by set of four numbers representing red/green/blue/alpha, each in the range of [0,1].</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="emissive" minOccurs="1" maxOccurs="1" default="0 0 0 1" type="types:color">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">The emissive color of a material specified by set of four numbers representing red/green/blue, each in the range of [0,1].</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="geometry" minOccurs="1" maxOccurs="1" type="geometry:geometry">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">The shape of the visual or collision object.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="plugin" minOccurs="0" maxOccurs="unbounded">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">A plugin is a dynamically loaded chunk of code. It can exist as a child of world, model, and sensor.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:annotation>
+            <xs:documentation xml:lang="en">A plugin is a dynamically loaded chunk of code. It can exist as a child of world, model, and sensor.</xs:documentation>
+          </xs:annotation>
+          <xs:all>
+            <xs:any processContents="skip" minOccurs="0" maxOccurs="unbounded">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">This is a special element that should not be specified in an SDFormat file. It automatically copies child elements into the SDFormat element so that a plugin can access the data.</xs:documentation>
+              </xs:annotation>
+            </xs:any>
+          </xs:all>
+          <xs:attribute name="name" type="xs:string" use="required">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">A unique name for the plugin, scoped to its parent.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="filename" type="xs:string" use="required">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">Name of the shared library to load. If the filename is not a full path name, the file will be searched for in the configuration paths.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+    </xs:all>
+    <xs:attribute name="name" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation xml:lang="en">Unique name for the visual element within the scope of the parent link.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+</xs:schema>

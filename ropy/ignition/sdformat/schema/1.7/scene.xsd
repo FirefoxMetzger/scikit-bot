@@ -1,0 +1,136 @@
+<xs:schema xmlns:types="sdformat/v1.7/types.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="sdformat/v1.7/scene.xsd" version="1.1">
+  <xs:import namespace="sdformat/v1.7/types.xsd" schemaLocation="./types.xsd"/>
+  <xs:complexType name="scene">
+    <xs:annotation>
+      <xs:documentation xml:lang="en">Specifies the look of the environment.</xs:documentation>
+    </xs:annotation>
+    <xs:all>
+      <xs:element name="ambient" minOccurs="1" maxOccurs="1" default="0.4 0.4 0.4 1.0" type="types:color">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">Color of the ambient light.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="background" minOccurs="1" maxOccurs="1" default=".7 .7 .7 1" type="types:color">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">Color of the background.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="sky" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">Properties for the sky</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:annotation>
+            <xs:documentation xml:lang="en">Properties for the sky</xs:documentation>
+          </xs:annotation>
+          <xs:all>
+            <xs:element name="time" minOccurs="1" maxOccurs="1" default="10.0" type="xs:double">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">Time of day [0..24]</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="sunrise" minOccurs="1" maxOccurs="1" default="6.0" type="xs:double">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">Sunrise time [0..24]</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="sunset" minOccurs="1" maxOccurs="1" default="20.0" type="xs:double">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">Sunset time [0..24]</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="clouds" minOccurs="0" maxOccurs="1">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">Sunset time [0..24]</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:annotation>
+                  <xs:documentation xml:lang="en">Sunset time [0..24]</xs:documentation>
+                </xs:annotation>
+                <xs:all>
+                  <xs:element name="speed" minOccurs="1" maxOccurs="1" default="0.6" type="xs:double">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">Speed of the clouds</xs:documentation>
+                    </xs:annotation>
+                  </xs:element>
+                  <xs:element name="direction" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">Direction of the cloud movement</xs:documentation>
+                    </xs:annotation>
+                  </xs:element>
+                  <xs:element name="humidity" minOccurs="1" maxOccurs="1" default="0.5" type="xs:double">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">Density of clouds</xs:documentation>
+                    </xs:annotation>
+                  </xs:element>
+                  <xs:element name="mean_size" minOccurs="1" maxOccurs="1" default="0.5" type="xs:double">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">Average size of the clouds</xs:documentation>
+                    </xs:annotation>
+                  </xs:element>
+                  <xs:element name="ambient" minOccurs="1" maxOccurs="1" default=".8 .8 .8 1" type="types:color">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">Ambient cloud color</xs:documentation>
+                    </xs:annotation>
+                  </xs:element>
+                </xs:all>
+              </xs:complexType>
+            </xs:element>
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="shadows" minOccurs="1" maxOccurs="1" default="true" type="xs:boolean">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">Enable/disable shadows</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="fog" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">Controls fog</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:annotation>
+            <xs:documentation xml:lang="en">Controls fog</xs:documentation>
+          </xs:annotation>
+          <xs:all>
+            <xs:element name="color" minOccurs="1" maxOccurs="1" default="1 1 1 1" type="types:color">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">Fog color</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="type" minOccurs="1" maxOccurs="1" default="none" type="xs:string">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">Fog type: constant, linear, quadratic</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="start" minOccurs="1" maxOccurs="1" default="1.0" type="xs:double">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">Distance to start of fog</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="end" minOccurs="1" maxOccurs="1" default="100.0" type="xs:double">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">Distance to end of fog</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="density" minOccurs="1" maxOccurs="1" default="1.0" type="xs:double">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">Density of fog</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="grid" minOccurs="1" maxOccurs="1" default="true" type="xs:boolean">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">Enable/disable the grid</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="origin_visual" minOccurs="1" maxOccurs="1" default="true" type="xs:boolean">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">Show/hide world origin indicator</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+</xs:schema>

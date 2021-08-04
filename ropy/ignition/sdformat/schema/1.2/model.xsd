@@ -1,0 +1,87 @@
+<xs:schema xmlns:types="sdformat/v1.2/types.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:link="sdformat/v1.2/link.xsd" xmlns:joint="sdformat/v1.2/joint.xsd" targetNamespace="sdformat/v1.2/model.xsd" version="1.1">
+  <xs:import namespace="sdformat/v1.2/joint.xsd" schemaLocation="./joint.xsd"/>
+  <xs:import namespace="sdformat/v1.2/link.xsd" schemaLocation="./link.xsd"/>
+  <xs:import namespace="sdformat/v1.2/types.xsd" schemaLocation="./types.xsd"/>
+  <xs:complexType name="model">
+    <xs:annotation>
+      <xs:documentation xml:lang="en">The model element defines a complete robot or any other physical object.</xs:documentation>
+    </xs:annotation>
+    <xs:all>
+      <xs:element name="static" minOccurs="1" maxOccurs="1" default="false" type="xs:boolean">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">If set to true, the model is immovable. Otherwise the model is simulated in the dynamics engine.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="allow_auto_disable" minOccurs="1" maxOccurs="1" default="true" type="xs:boolean">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">Allows a model to auto-disable, which is means the physics engine can skip updating the model when the model is at rest. This parameter is only used by models with no joints.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="pose" minOccurs="1" maxOccurs="1" default="0 0 0 0 0 0" type="types:pose">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">A position and orientation in the global coordinate frame for the model. Position(x,y,z) and rotation (roll, pitch yaw) in the global coordinate frame.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="link" minOccurs="1" maxOccurs="unbounded" type="link:link">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">A physical link with inertia, collision, and visual properties. A link must be a child of a model, and any number of links may exist in a model.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="joint" minOccurs="0" maxOccurs="unbounded" type="joint:joint">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">A joint connections two links with kinematic and dynamic properties.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="plugin" minOccurs="0" maxOccurs="unbounded">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">A plugin is a dynamically loaded chunk of code. It can exist as a child of world, model, and sensor.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:annotation>
+            <xs:documentation xml:lang="en">A plugin is a dynamically loaded chunk of code. It can exist as a child of world, model, and sensor.</xs:documentation>
+          </xs:annotation>
+          <xs:all>
+            <xs:any processContents="skip" minOccurs="0" maxOccurs="unbounded">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">This is a special element that should not be specified in an SDFormat file. It automatically copies child elements into the SDFormat element so that a plugin can access the data.</xs:documentation>
+              </xs:annotation>
+            </xs:any>
+          </xs:all>
+          <xs:attribute name="name" type="xs:string" use="required">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">A unique name for the plugin, scoped to its parent.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="filename" type="xs:string" use="required">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">Name of the shared library to load. If the filename is not a full path name, the file will be searched for in the configuration paths.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="gripper" minOccurs="0" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:all>
+            <xs:element name="grasp_check" minOccurs="0" maxOccurs="1">
+              <xs:complexType>
+                <xs:all>
+                  <xs:element name="detach_steps" minOccurs="1" maxOccurs="1" default="40" type="xs:int"/>
+                  <xs:element name="attach_steps" minOccurs="1" maxOccurs="1" default="20" type="xs:int"/>
+                  <xs:element name="min_contact_count" minOccurs="1" maxOccurs="1" default="2" type="xs:unsignedInt"/>
+                </xs:all>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="gripper_link" minOccurs="1" maxOccurs="unbounded" default="__default__" type="xs:string"/>
+            <xs:element name="palm_link" minOccurs="1" maxOccurs="1" default="__default__" type="xs:string"/>
+          </xs:all>
+          <xs:attribute name="name" type="xs:string" use="required"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:all>
+    <xs:attribute name="name" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation xml:lang="en">A unique name for the model. This name must not match another model in the world.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+</xs:schema>

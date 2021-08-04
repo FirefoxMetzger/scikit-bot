@@ -1,0 +1,317 @@
+<xs:schema xmlns:types="sdformat/v1.3/types.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="sdformat/v1.3/sensor.xsd" version="1.1">
+  <xs:import namespace="sdformat/v1.3/types.xsd" schemaLocation="./types.xsd"/>
+  <xs:complexType name="sensor">
+    <xs:annotation>
+      <xs:documentation xml:lang="en">The sensor tag describes the type and properties of a sensor.</xs:documentation>
+    </xs:annotation>
+    <xs:all>
+      <xs:element name="always_on" minOccurs="1" maxOccurs="1" default="false" type="xs:boolean">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">If true the sensor will always be updated according to the update rate.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="update_rate" minOccurs="1" maxOccurs="1" default="0" type="xs:double">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">The frequency at which the sensor data is generated. If left unspecified, the sensor will generate data every cycle.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="visualize" minOccurs="1" maxOccurs="1" default="false" type="xs:boolean">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">If true, the sensor is visualized in the GUI</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="pose" minOccurs="1" maxOccurs="1" default="0 0 0 0 0 0" type="types:pose">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">This is the pose of the sensor, relative to the parent link reference frame.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="topic" minOccurs="1" maxOccurs="1" default="__default__" type="xs:string">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">Name of the topic on which data is published. This is necessary for visualization</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="plugin" minOccurs="0" maxOccurs="unbounded">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">A plugin is a dynamically loaded chunk of code. It can exist as a child of world, model, and sensor.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:annotation>
+            <xs:documentation xml:lang="en">A plugin is a dynamically loaded chunk of code. It can exist as a child of world, model, and sensor.</xs:documentation>
+          </xs:annotation>
+          <xs:all>
+            <xs:any processContents="skip" minOccurs="0" maxOccurs="unbounded">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">This is a special element that should not be specified in an SDFormat file. It automatically copies child elements into the SDFormat element so that a plugin can access the data.</xs:documentation>
+              </xs:annotation>
+            </xs:any>
+          </xs:all>
+          <xs:attribute name="name" type="xs:string" use="required">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">A unique name for the plugin, scoped to its parent.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="filename" type="xs:string" use="required">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">Name of the shared library to load. If the filename is not a full path name, the file will be searched for in the configuration paths.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="camera" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">These elements are specific to camera sensors.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:annotation>
+            <xs:documentation xml:lang="en">These elements are specific to camera sensors.</xs:documentation>
+          </xs:annotation>
+          <xs:all>
+            <xs:element name="pose" minOccurs="1" maxOccurs="1" default="0 0 0 0 0 0" type="types:pose">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">A position and orientation in the parent coordinate frame for the camera.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="horizontal_fov" minOccurs="1" maxOccurs="1" default="1.047" type="xs:double">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">Horizontal field of view</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="image" minOccurs="1" maxOccurs="1">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">The image size in pixels and format.</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:annotation>
+                  <xs:documentation xml:lang="en">The image size in pixels and format.</xs:documentation>
+                </xs:annotation>
+                <xs:all>
+                  <xs:element name="width" minOccurs="1" maxOccurs="1" default="320" type="xs:int">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">Width in pixels</xs:documentation>
+                    </xs:annotation>
+                  </xs:element>
+                  <xs:element name="height" minOccurs="1" maxOccurs="1" default="240" type="xs:int">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">Height in pixels</xs:documentation>
+                    </xs:annotation>
+                  </xs:element>
+                  <xs:element name="format" minOccurs="1" maxOccurs="1" default="R8G8B8" type="xs:string">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">(L8|R8G8B8|B8G8R8|BAYER_RGGB8|BAYER_BGGR8|BAYER_GBRG8|BAYER_GRBG8)</xs:documentation>
+                    </xs:annotation>
+                  </xs:element>
+                </xs:all>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="clip" minOccurs="1" maxOccurs="1">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">The near and far clip planes. Objects closer or farther than these planes are not rendered.</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:annotation>
+                  <xs:documentation xml:lang="en">The near and far clip planes. Objects closer or farther than these planes are not rendered.</xs:documentation>
+                </xs:annotation>
+                <xs:all>
+                  <xs:element name="near" minOccurs="1" maxOccurs="1" default=".1" type="xs:double">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">Near clipping plane</xs:documentation>
+                    </xs:annotation>
+                  </xs:element>
+                  <xs:element name="far" minOccurs="1" maxOccurs="1" default="100" type="xs:double">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">Far clipping plane</xs:documentation>
+                    </xs:annotation>
+                  </xs:element>
+                </xs:all>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="save" minOccurs="0" maxOccurs="1">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">Enable or disable saving of camera frames.</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:annotation>
+                  <xs:documentation xml:lang="en">Enable or disable saving of camera frames.</xs:documentation>
+                </xs:annotation>
+                <xs:all>
+                  <xs:element name="path" minOccurs="1" maxOccurs="1" default="__default__" type="xs:string">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">The path name which will hold the frame data. If path name is relative, then directory is relative to current working directory.</xs:documentation>
+                    </xs:annotation>
+                  </xs:element>
+                </xs:all>
+                <xs:attribute name="enabled" type="xs:boolean" use="required">
+                  <xs:annotation>
+                    <xs:documentation xml:lang="en">True = saving enabled</xs:documentation>
+                  </xs:annotation>
+                </xs:attribute>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="depth_camera" minOccurs="0" maxOccurs="1">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">Depth camera parameters</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:annotation>
+                  <xs:documentation xml:lang="en">Depth camera parameters</xs:documentation>
+                </xs:annotation>
+                <xs:all>
+                  <xs:element name="output" minOccurs="1" maxOccurs="1" default="depths" type="xs:string">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">Type of output</xs:documentation>
+                    </xs:annotation>
+                  </xs:element>
+                </xs:all>
+              </xs:complexType>
+            </xs:element>
+          </xs:all>
+          <xs:attribute name="name" type="xs:string" use="optional" default="__default__">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">An optional name for the camera.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="ray" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">These elements are specific to the ray (laser) sensor.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:annotation>
+            <xs:documentation xml:lang="en">These elements are specific to the ray (laser) sensor.</xs:documentation>
+          </xs:annotation>
+          <xs:all>
+            <xs:element name="scan" minOccurs="1" maxOccurs="1">
+              <xs:complexType>
+                <xs:all>
+                  <xs:element name="horizontal" minOccurs="1" maxOccurs="1">
+                    <xs:complexType>
+                      <xs:all>
+                        <xs:element name="samples" minOccurs="1" maxOccurs="1" default="640" type="xs:unsignedInt">
+                          <xs:annotation>
+                            <xs:documentation xml:lang="en">The number of simulated rays to generate per complete laser sweep cycle.</xs:documentation>
+                          </xs:annotation>
+                        </xs:element>
+                        <xs:element name="resolution" minOccurs="1" maxOccurs="1" default="1" type="xs:double">
+                          <xs:annotation>
+                            <xs:documentation xml:lang="en">This number is multiplied by samples to determine the number of range data points returned. If resolution is less than one, range data is interpolated. If resolution is greater than one, range data is averaged.</xs:documentation>
+                          </xs:annotation>
+                        </xs:element>
+                        <xs:element name="min_angle" minOccurs="1" maxOccurs="1" default="0" type="xs:double"/>
+                        <xs:element name="max_angle" minOccurs="1" maxOccurs="1" default="0" type="xs:double">
+                          <xs:annotation>
+                            <xs:documentation xml:lang="en">Must be greater or equal to min_angle</xs:documentation>
+                          </xs:annotation>
+                        </xs:element>
+                      </xs:all>
+                    </xs:complexType>
+                  </xs:element>
+                  <xs:element name="vertical" minOccurs="0" maxOccurs="1">
+                    <xs:complexType>
+                      <xs:all>
+                        <xs:element name="samples" minOccurs="1" maxOccurs="1" default="1" type="xs:unsignedInt">
+                          <xs:annotation>
+                            <xs:documentation xml:lang="en">The number of simulated rays to generate per complete laser sweep cycle.</xs:documentation>
+                          </xs:annotation>
+                        </xs:element>
+                        <xs:element name="resolution" minOccurs="1" maxOccurs="1" default="1" type="xs:double">
+                          <xs:annotation>
+                            <xs:documentation xml:lang="en">This number is multiplied by samples to determine the number of range data points returned. If resolution is less than one, range data is interpolated. If resolution is greater than one, range data is averaged.</xs:documentation>
+                          </xs:annotation>
+                        </xs:element>
+                        <xs:element name="min_angle" minOccurs="1" maxOccurs="1" default="0" type="xs:double"/>
+                        <xs:element name="max_angle" minOccurs="1" maxOccurs="1" default="0" type="xs:double">
+                          <xs:annotation>
+                            <xs:documentation xml:lang="en">Must be greater or equal to min_angle</xs:documentation>
+                          </xs:annotation>
+                        </xs:element>
+                      </xs:all>
+                    </xs:complexType>
+                  </xs:element>
+                </xs:all>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="range" minOccurs="1" maxOccurs="1">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">specifies range properties of each simulated ray</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:annotation>
+                  <xs:documentation xml:lang="en">specifies range properties of each simulated ray</xs:documentation>
+                </xs:annotation>
+                <xs:all>
+                  <xs:element name="min" minOccurs="1" maxOccurs="1" default="0" type="xs:double">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">The minimum distance for each ray.</xs:documentation>
+                    </xs:annotation>
+                  </xs:element>
+                  <xs:element name="max" minOccurs="1" maxOccurs="1" default="0" type="xs:double">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">The maximum distance for each ray.</xs:documentation>
+                    </xs:annotation>
+                  </xs:element>
+                  <xs:element name="resolution" minOccurs="1" maxOccurs="1" default="0" type="xs:double">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">Linear resolution of each ray.</xs:documentation>
+                    </xs:annotation>
+                  </xs:element>
+                </xs:all>
+              </xs:complexType>
+            </xs:element>
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="contact" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">These elements are specific to the contact sensor.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:annotation>
+            <xs:documentation xml:lang="en">These elements are specific to the contact sensor.</xs:documentation>
+          </xs:annotation>
+          <xs:all>
+            <xs:element name="collision" minOccurs="1" maxOccurs="1" default="__default__" type="xs:string">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">name of the collision element within a link that acts as the contact sensor.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="topic" minOccurs="1" maxOccurs="1" default="__default_topic__" type="xs:string">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">Topic on which contact data is published.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="rfidtag" minOccurs="0" maxOccurs="1" type="xs:string"/>
+      <xs:element name="rfid" minOccurs="0" maxOccurs="1" type="xs:string"/>
+      <xs:element name="imu" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">These elements are specific to the IMU sensor.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:annotation>
+            <xs:documentation xml:lang="en">These elements are specific to the IMU sensor.</xs:documentation>
+          </xs:annotation>
+          <xs:all>
+            <xs:element name="topic" minOccurs="1" maxOccurs="1" default="__default_topic__" type="xs:string">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">Topic on which data is published.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+    </xs:all>
+    <xs:attribute name="name" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation xml:lang="en">A unique name for the sensor. This name must not match another model in the model.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="type" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation xml:lang="en">The type name of the sensor. By default, SDFormat supports types camera, depth, multicamera, contact, imu, ir and ray.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+</xs:schema>

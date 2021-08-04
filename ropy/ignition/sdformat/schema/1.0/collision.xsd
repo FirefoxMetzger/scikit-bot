@@ -1,0 +1,34 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:geometry="sdformat/v1.0/geometry.xsd" targetNamespace="sdformat/v1.0/collision.xsd" version="1.1">
+  <xs:import namespace="sdformat/v1.0/geometry.xsd" schemaLocation="./geometry.xsd"/>
+  <xs:complexType name="collision">
+    <xs:all>
+      <xs:element name="max_contacts" minOccurs="1" maxOccurs="1" default="10" type="xs:int"/>
+      <xs:element name="mass" minOccurs="1" maxOccurs="1" default="0" type="xs:double"/>
+      <xs:element name="origin" minOccurs="0" maxOccurs="1" type="xs:string"/>
+      <xs:element name="geometry" minOccurs="1" maxOccurs="1" type="geometry:geometry"/>
+      <xs:element name="surface" minOccurs="0" maxOccurs="1">
+        <xs:complexType>
+          <xs:all>
+            <xs:element name="bounce" minOccurs="0" maxOccurs="1" type="xs:string"/>
+            <xs:element name="friction" minOccurs="0" maxOccurs="1">
+              <xs:complexType>
+                <xs:all>
+                  <xs:element name="ode" minOccurs="0" maxOccurs="1" type="xs:string"/>
+                </xs:all>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="contact" minOccurs="0" maxOccurs="1">
+              <xs:complexType>
+                <xs:all>
+                  <xs:element name="ode" minOccurs="0" maxOccurs="1" type="xs:string"/>
+                </xs:all>
+              </xs:complexType>
+            </xs:element>
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+    </xs:all>
+    <xs:attribute name="name" type="xs:string" use="required"/>
+    <xs:attribute name="laser_retro" type="xs:double" use="optional" default="0"/>
+  </xs:complexType>
+</xs:schema>

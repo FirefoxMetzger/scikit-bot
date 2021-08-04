@@ -1,0 +1,19 @@
+<xs:schema xmlns:types="sdformat/v1.0/types.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="sdformat/v1.0/scene.xsd" version="1.1">
+  <xs:import namespace="sdformat/v1.0/types.xsd" schemaLocation="./types.xsd"/>
+  <xs:complexType name="scene">
+    <xs:all>
+      <xs:element name="ambient" minOccurs="0" maxOccurs="1" type="xs:string"/>
+      <xs:element name="background" minOccurs="0" maxOccurs="1">
+        <xs:complexType>
+          <xs:all>
+            <xs:element name="sky" minOccurs="0" maxOccurs="1" type="xs:string"/>
+          </xs:all>
+          <xs:attribute name="rgba" type="types:color" use="required"/>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="shadows" minOccurs="0" maxOccurs="1" type="xs:string"/>
+      <xs:element name="fog" minOccurs="0" maxOccurs="1" type="xs:string"/>
+      <xs:element name="grid" minOccurs="0" maxOccurs="1" type="xs:string"/>
+    </xs:all>
+  </xs:complexType>
+</xs:schema>

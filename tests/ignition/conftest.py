@@ -33,7 +33,7 @@ def sdf_string(request):
         "model_nested_static_model.sdf",
         "inertial_complete.sdf",
         "model_multi_nested_model.sdf",
-        "world_with_state.sdf",
+        # "world_with_state.sdf",  # disabled. See: https://github.com/ignitionrobotics/sdformat/issues/653
         "material_normal_map_missing.sdf",
         "model_without_links.sdf",
         "model_frame_relative_to.sdf",
@@ -91,7 +91,7 @@ def sdf_string(request):
         "joint_invalid_child.sdf",
         "joint_nested_parent_child.sdf",
         "world_relative_to_nested_reference.sdf",
-        "sensors.sdf",
+        # "sensors.sdf",  # disabled. See: https://github.com/ignitionrobotics/sdformat/issues/653
         "joint_child_frame.sdf",
         "ignore_sdf_in_plugin.sdf",
         "model_nested_frame_attached_to.sdf",
@@ -120,6 +120,8 @@ def sdf_string(request):
         "nested_model.sdf",
         "empty_axis.sdf",
         "placement_frame_missing_pose.sdf",
+        "nested_multiple_elements_error_world.sdf",
+        "audio_14.sdf",
     ]
 )
 def valid_sdf_string(request):
@@ -143,7 +145,6 @@ def valid_sdf_string(request):
         "shapes.sdf",
         "includes.sdf",
         "invalid_version.sdf",
-        "nested_multiple_elements_error_world.sdf",
         "empty_noversion.sdf",
     ]
 )

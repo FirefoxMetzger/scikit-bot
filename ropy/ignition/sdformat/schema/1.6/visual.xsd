@@ -1,0 +1,133 @@
+<xs:schema xmlns:types="sdformat/v1.6/types.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:material="sdformat/v1.6/material.xsd" xmlns:geometry="sdformat/v1.6/geometry.xsd" targetNamespace="sdformat/v1.6/visual.xsd" version="1.1">
+  <xs:import namespace="sdformat/v1.6/geometry.xsd" schemaLocation="./geometry.xsd"/>
+  <xs:import namespace="sdformat/v1.6/material.xsd" schemaLocation="./material.xsd"/>
+  <xs:import namespace="sdformat/v1.6/types.xsd" schemaLocation="./types.xsd"/>
+  <xs:complexType name="visual">
+    <xs:annotation>
+      <xs:documentation xml:lang="en">The visual properties of the link. This element specifies the shape of the object (box, cylinder, etc.) for visualization purposes.</xs:documentation>
+    </xs:annotation>
+    <xs:all>
+      <xs:element name="cast_shadows" minOccurs="1" maxOccurs="1" default="true" type="xs:boolean">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">If true the visual will cast shadows.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="laser_retro" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">will be implemented in the future release.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="transparency" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">The amount of transparency( 0=opaque, 1 = fully transparent)</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="meta" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">Optional meta information for the visual. The information contained within this element should be used to provide additional feedback to an end user.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:annotation>
+            <xs:documentation xml:lang="en">Optional meta information for the visual. The information contained within this element should be used to provide additional feedback to an end user.</xs:documentation>
+          </xs:annotation>
+          <xs:all>
+            <xs:element name="layer" minOccurs="1" maxOccurs="1" default="0" type="xs:int">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">The layer in which this visual is displayed. The layer number is useful for programs, such as Gazebo, that put visuals in different layers for enhanced visualization.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="frame" minOccurs="0" maxOccurs="unbounded">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">A frame of reference to which a pose is relative.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:annotation>
+            <xs:documentation xml:lang="en">A frame of reference to which a pose is relative.</xs:documentation>
+          </xs:annotation>
+          <xs:all>
+            <xs:element name="pose" minOccurs="1" maxOccurs="1" default="0 0 0 0 0 0">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">A position(x,y,z) and orientation(roll, pitch yaw) with respect to the specified frame.</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:simpleContent>
+                  <xs:extension base="types:pose"/>
+                </xs:simpleContent>
+                <xs:attribute name="frame" type="xs:string" use="optional">
+                  <xs:annotation>
+                    <xs:documentation xml:lang="en">Name of frame which the pose is defined relative to.</xs:documentation>
+                  </xs:annotation>
+                </xs:attribute>
+              </xs:complexType>
+            </xs:element>
+          </xs:all>
+          <xs:attribute name="name" type="xs:string" use="required">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">Name of the frame. This name must not match another frame defined inside the parent that this frame is attached to.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="pose" minOccurs="1" maxOccurs="1" default="0 0 0 0 0 0">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">A position(x,y,z) and orientation(roll, pitch yaw) with respect to the specified frame.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:simpleContent>
+            <xs:extension base="types:pose"/>
+          </xs:simpleContent>
+          <xs:attribute name="frame" type="xs:string" use="optional">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">Name of frame which the pose is defined relative to.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="material" minOccurs="0" maxOccurs="1" type="material:material">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">The material of the visual element.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="geometry" minOccurs="1" maxOccurs="1" type="geometry:geometry">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">The shape of the visual or collision object.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="plugin" minOccurs="0" maxOccurs="unbounded">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">A plugin is a dynamically loaded chunk of code. It can exist as a child of world, model, and sensor.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:annotation>
+            <xs:documentation xml:lang="en">A plugin is a dynamically loaded chunk of code. It can exist as a child of world, model, and sensor.</xs:documentation>
+          </xs:annotation>
+          <xs:all>
+            <xs:any processContents="skip" minOccurs="0" maxOccurs="unbounded">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">This is a special element that should not be specified in an SDFormat file. It automatically copies child elements into the SDFormat element so that a plugin can access the data.</xs:documentation>
+              </xs:annotation>
+            </xs:any>
+          </xs:all>
+          <xs:attribute name="name" type="xs:string" use="required">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">A unique name for the plugin, scoped to its parent.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="filename" type="xs:string" use="required">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">Name of the shared library to load. If the filename is not a full path name, the file will be searched for in the configuration paths.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+    </xs:all>
+    <xs:attribute name="name" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation xml:lang="en">Unique name for the visual element within the scope of the parent link.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+</xs:schema>

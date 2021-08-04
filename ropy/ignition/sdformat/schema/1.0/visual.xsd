@@ -1,0 +1,32 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:geometry="sdformat/v1.0/geometry.xsd" targetNamespace="sdformat/v1.0/visual.xsd" version="1.1">
+  <xs:import namespace="sdformat/v1.0/geometry.xsd" schemaLocation="./geometry.xsd"/>
+  <xs:complexType name="visual">
+    <xs:all>
+      <xs:element name="origin" minOccurs="0" maxOccurs="1" type="xs:string"/>
+      <xs:element name="material" minOccurs="0" maxOccurs="1">
+        <xs:complexType>
+          <xs:all>
+            <xs:element name="shader" minOccurs="0" maxOccurs="1">
+              <xs:complexType>
+                <xs:all>
+                  <xs:element name="normal_map" minOccurs="1" maxOccurs="1" default="__default__" type="xs:string"/>
+                </xs:all>
+                <xs:attribute name="type" type="xs:string" use="required"/>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="ambient" minOccurs="0" maxOccurs="1" type="xs:string"/>
+            <xs:element name="diffuse" minOccurs="0" maxOccurs="1" type="xs:string"/>
+            <xs:element name="specular" minOccurs="0" maxOccurs="1" type="xs:string"/>
+            <xs:element name="emissive" minOccurs="0" maxOccurs="1" type="xs:string"/>
+          </xs:all>
+          <xs:attribute name="script" type="xs:string" use="optional" default="__default__"/>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="geometry" minOccurs="1" maxOccurs="1" type="geometry:geometry"/>
+    </xs:all>
+    <xs:attribute name="name" type="xs:string" use="required"/>
+    <xs:attribute name="cast_shadows" type="xs:boolean" use="optional" default="true"/>
+    <xs:attribute name="laser_retro" type="xs:double" use="optional" default="0.0"/>
+    <xs:attribute name="transparency" type="xs:double" use="optional" default="0.0"/>
+  </xs:complexType>
+</xs:schema>

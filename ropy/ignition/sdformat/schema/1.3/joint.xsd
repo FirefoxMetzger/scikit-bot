@@ -1,0 +1,263 @@
+<xs:schema xmlns:types="sdformat/v1.3/types.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="sdformat/v1.3/joint.xsd" version="1.1">
+  <xs:import namespace="sdformat/v1.3/types.xsd" schemaLocation="./types.xsd"/>
+  <xs:complexType name="joint">
+    <xs:annotation>
+      <xs:documentation xml:lang="en">A joint connections two links with kinematic and dynamic properties.</xs:documentation>
+    </xs:annotation>
+    <xs:all>
+      <xs:element name="parent" minOccurs="1" maxOccurs="1" default="__default__" type="xs:string">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">Name of the parent link</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="child" minOccurs="1" maxOccurs="1" default="__default__" type="xs:string">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">Name of the child link</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="pose" minOccurs="1" maxOccurs="1" default="0 0 0 0 0 0" type="types:pose">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">offset from child link origin in child link frame.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="thread_pitch" minOccurs="1" maxOccurs="1" default="1.0" type="xs:double"/>
+      <xs:element name="axis" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">The joint axis specified in the model frame. This is the axis of rotation for revolute joints, the axis of translation for prismatic joints. The axis is currently specified in the model frame of reference, but this will be changed to the joint frame in future version of SDFormat (see gazebo issue #494).</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:annotation>
+            <xs:documentation xml:lang="en">The joint axis specified in the model frame. This is the axis of rotation for revolute joints, the axis of translation for prismatic joints. The axis is currently specified in the model frame of reference, but this will be changed to the joint frame in future version of SDFormat (see gazebo issue #494).</xs:documentation>
+          </xs:annotation>
+          <xs:all>
+            <xs:element name="xyz" minOccurs="1" maxOccurs="1" default="0 0 1" type="types:vector3">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">Represents the x,y,z components of a vector. The vector should be normalized.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="dynamics" minOccurs="0" maxOccurs="1">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">An element specifying physical properties of the joint. These values are used to specify modeling properties of the joint, particularly useful for simulation.</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:annotation>
+                  <xs:documentation xml:lang="en">An element specifying physical properties of the joint. These values are used to specify modeling properties of the joint, particularly useful for simulation.</xs:documentation>
+                </xs:annotation>
+                <xs:all>
+                  <xs:element name="damping" minOccurs="1" maxOccurs="1" default="0" type="xs:double">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">The physical velocity dependent viscous damping coefficient of the joint.</xs:documentation>
+                    </xs:annotation>
+                  </xs:element>
+                  <xs:element name="friction" minOccurs="1" maxOccurs="1" default="0" type="xs:double">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">The physical static friction value of the joint.</xs:documentation>
+                    </xs:annotation>
+                  </xs:element>
+                </xs:all>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="limit" minOccurs="1" maxOccurs="1">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">specifies the limits of this joint</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:annotation>
+                  <xs:documentation xml:lang="en">specifies the limits of this joint</xs:documentation>
+                </xs:annotation>
+                <xs:all>
+                  <xs:element name="lower" minOccurs="1" maxOccurs="1" default="-1e16" type="xs:double">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">An attribute specifying the lower joint limit (radians for revolute joints, meters for prismatic joints). Omit if joint is continuous.</xs:documentation>
+                    </xs:annotation>
+                  </xs:element>
+                  <xs:element name="upper" minOccurs="1" maxOccurs="1" default="1e16" type="xs:double">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">An attribute specifying the upper joint limit (radians for revolute joints, meters for prismatic joints). Omit if joint is continuous.</xs:documentation>
+                    </xs:annotation>
+                  </xs:element>
+                  <xs:element name="effort" minOccurs="1" maxOccurs="1" default="-1" type="xs:double">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">An attribute for enforcing the maximum joint effort applied by Joint::SetForce.  Limit is not enforced if value is negative.</xs:documentation>
+                    </xs:annotation>
+                  </xs:element>
+                  <xs:element name="velocity" minOccurs="1" maxOccurs="1" default="-1" type="xs:double">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">(not implemented) An attribute for enforcing the maximum joint velocity.</xs:documentation>
+                    </xs:annotation>
+                  </xs:element>
+                </xs:all>
+              </xs:complexType>
+            </xs:element>
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="axis2" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">The second joint axis specified in the model frame. This is the second axis of rotation for revolute2 joints and universal joints. The axis is currently specified in the model frame of reference, but this will be changed to the joint frame in future version of SDFormat (see gazebo issue #494).</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:annotation>
+            <xs:documentation xml:lang="en">The second joint axis specified in the model frame. This is the second axis of rotation for revolute2 joints and universal joints. The axis is currently specified in the model frame of reference, but this will be changed to the joint frame in future version of SDFormat (see gazebo issue #494).</xs:documentation>
+          </xs:annotation>
+          <xs:all>
+            <xs:element name="xyz" minOccurs="1" maxOccurs="1" default="0 0 1" type="types:vector3">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">Represents the x,y,z components of a vector. The vector should be normalized.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="dynamics" minOccurs="0" maxOccurs="1">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">An element specifying physical properties of the joint. These values are used to specify modeling properties of the joint, particularly useful for simulation.</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:annotation>
+                  <xs:documentation xml:lang="en">An element specifying physical properties of the joint. These values are used to specify modeling properties of the joint, particularly useful for simulation.</xs:documentation>
+                </xs:annotation>
+                <xs:all>
+                  <xs:element name="damping" minOccurs="1" maxOccurs="1" default="0" type="xs:double">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">The physical velocity dependent viscous damping coefficient of the joint.</xs:documentation>
+                    </xs:annotation>
+                  </xs:element>
+                  <xs:element name="friction" minOccurs="1" maxOccurs="1" default="0" type="xs:double">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">The physical static friction value of the joint.</xs:documentation>
+                    </xs:annotation>
+                  </xs:element>
+                </xs:all>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="limit" minOccurs="0" maxOccurs="1">
+              <xs:complexType>
+                <xs:all>
+                  <xs:element name="lower" minOccurs="1" maxOccurs="1" default="-1e16" type="xs:double">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">An attribute specifying the lower joint limit (radians for revolute joints, meters for prismatic joints). Omit if joint is continuous.</xs:documentation>
+                    </xs:annotation>
+                  </xs:element>
+                  <xs:element name="upper" minOccurs="1" maxOccurs="1" default="1e16" type="xs:double">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">An attribute specifying the upper joint limit (radians for revolute joints, meters for prismatic joints). Omit if joint is continuous.</xs:documentation>
+                    </xs:annotation>
+                  </xs:element>
+                  <xs:element name="effort" minOccurs="1" maxOccurs="1" default="-1" type="xs:double">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">An attribute for enforcing the maximum joint effort applied by Joint::SetForce.  Limit is not enforced if value is negative.</xs:documentation>
+                    </xs:annotation>
+                  </xs:element>
+                  <xs:element name="velocity" minOccurs="1" maxOccurs="1" default="-1" type="xs:double">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">(not implemented) An attribute for enforcing the maximum joint velocity.</xs:documentation>
+                    </xs:annotation>
+                  </xs:element>
+                </xs:all>
+              </xs:complexType>
+            </xs:element>
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="physics" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">Parameters that are specific to a certain physics engine.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:annotation>
+            <xs:documentation xml:lang="en">Parameters that are specific to a certain physics engine.</xs:documentation>
+          </xs:annotation>
+          <xs:all>
+            <xs:element name="ode" minOccurs="0" maxOccurs="1">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">ODE specific parameters</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:annotation>
+                  <xs:documentation xml:lang="en">ODE specific parameters</xs:documentation>
+                </xs:annotation>
+                <xs:all>
+                  <xs:element name="provide_feedback" minOccurs="1" maxOccurs="1" default="false" type="xs:boolean">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">If provide feedback is set to true, ODE will compute the constraint forces at this joint.</xs:documentation>
+                    </xs:annotation>
+                  </xs:element>
+                  <xs:element name="cfm_damping" minOccurs="1" maxOccurs="1" default="false" type="xs:boolean">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">If cfm damping is set to true, ODE will use CFM to simulate damping, allows for infinite damping, and one additional constraint row (previously used for joint limit) is always active.</xs:documentation>
+                    </xs:annotation>
+                  </xs:element>
+                  <xs:element name="fudge_factor" minOccurs="1" maxOccurs="1" default="0" type="xs:double">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">Scale the excess for in a joint motor at joint limits. Should be between zero and one.</xs:documentation>
+                    </xs:annotation>
+                  </xs:element>
+                  <xs:element name="cfm" minOccurs="1" maxOccurs="1" default="0" type="xs:double">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">Constraint force mixing used when not at a stop</xs:documentation>
+                    </xs:annotation>
+                  </xs:element>
+                  <xs:element name="bounce" minOccurs="1" maxOccurs="1" default="0" type="xs:double">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">Bounciness of the limits</xs:documentation>
+                    </xs:annotation>
+                  </xs:element>
+                  <xs:element name="max_force" minOccurs="1" maxOccurs="1" default="0" type="xs:double">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">Maximum force or torque used to reach the desired velocity.</xs:documentation>
+                    </xs:annotation>
+                  </xs:element>
+                  <xs:element name="velocity" minOccurs="1" maxOccurs="1" default="0" type="xs:double">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">The desired velocity of the joint. Should only be set if you want the joint to move on load.</xs:documentation>
+                    </xs:annotation>
+                  </xs:element>
+                  <xs:element name="limit" minOccurs="0" maxOccurs="1">
+                    <xs:complexType>
+                      <xs:all>
+                        <xs:element name="cfm" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                          <xs:annotation>
+                            <xs:documentation xml:lang="en">Constraint force mixing parameter used by the joint stop</xs:documentation>
+                          </xs:annotation>
+                        </xs:element>
+                        <xs:element name="erp" minOccurs="1" maxOccurs="1" default="0.2" type="xs:double">
+                          <xs:annotation>
+                            <xs:documentation xml:lang="en">Error reduction parameter used by the joint stop</xs:documentation>
+                          </xs:annotation>
+                        </xs:element>
+                      </xs:all>
+                    </xs:complexType>
+                  </xs:element>
+                  <xs:element name="suspension" minOccurs="0" maxOccurs="1">
+                    <xs:complexType>
+                      <xs:all>
+                        <xs:element name="cfm" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                          <xs:annotation>
+                            <xs:documentation xml:lang="en">Suspension constraint force mixing parameter</xs:documentation>
+                          </xs:annotation>
+                        </xs:element>
+                        <xs:element name="erp" minOccurs="1" maxOccurs="1" default="0.2" type="xs:double">
+                          <xs:annotation>
+                            <xs:documentation xml:lang="en">Suspension error reduction parameter</xs:documentation>
+                          </xs:annotation>
+                        </xs:element>
+                      </xs:all>
+                    </xs:complexType>
+                  </xs:element>
+                </xs:all>
+              </xs:complexType>
+            </xs:element>
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+    </xs:all>
+    <xs:attribute name="name" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation xml:lang="en">A unique name for the joint within the scope of the model.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="type" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation xml:lang="en">The type of joint, which must be one of the following: (revolute) a hinge joint that rotates on a single axis with either a fixed or continuous range of motion, (revolute2) same as two revolute joints connected in series, (prismatic) a sliding joint that slides along an axis with a limited range specified by upper and lower limits, (ball) a ball and socket joint, (universal), like a ball joint, but constrains one degree of freedom, (piston) similar to a Slider joint except that rotation around the translation axis is possible.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+</xs:schema>

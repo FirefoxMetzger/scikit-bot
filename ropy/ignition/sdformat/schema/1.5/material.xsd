@@ -1,0 +1,73 @@
+<xs:schema xmlns:types="sdformat/v1.5/types.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="sdformat/v1.5/material.xsd" version="1.1">
+  <xs:import namespace="sdformat/v1.5/types.xsd" schemaLocation="./types.xsd"/>
+  <xs:complexType name="material">
+    <xs:annotation>
+      <xs:documentation xml:lang="en">The material of the visual element.</xs:documentation>
+    </xs:annotation>
+    <xs:all>
+      <xs:element name="script" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">Name of material from an installed script file. This will override the color element if the script exists.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:annotation>
+            <xs:documentation xml:lang="en">Name of material from an installed script file. This will override the color element if the script exists.</xs:documentation>
+          </xs:annotation>
+          <xs:all>
+            <xs:element name="uri" minOccurs="1" maxOccurs="unbounded" default="__default__" type="xs:string">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">URI of the material script file</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="name" minOccurs="1" maxOccurs="1" default="__default__" type="xs:string">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">Name of the script within the script file</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="shader" minOccurs="0" maxOccurs="1">
+        <xs:complexType>
+          <xs:all>
+            <xs:element name="normal_map" minOccurs="1" maxOccurs="1" default="__default__" type="xs:string">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">filename of the normal map</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:all>
+          <xs:attribute name="type" type="xs:string" use="required">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">vertex, pixel, normal_map_object_space, normal_map_tangent_space</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="lighting" minOccurs="1" maxOccurs="1" default="true" type="xs:boolean">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">If false, dynamic lighting will be disabled</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="ambient" minOccurs="1" maxOccurs="1" default="0 0 0 1" type="types:color">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">The ambient color of a material specified by set of four numbers representing red/green/blue, each in the range of [0,1].</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="diffuse" minOccurs="1" maxOccurs="1" default="0 0 0 1" type="types:color">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">The diffuse color of a material specified by set of four numbers representing red/green/blue/alpha, each in the range of [0,1].</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="specular" minOccurs="1" maxOccurs="1" default="0 0 0 1" type="types:color">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">The specular color of a material specified by set of four numbers representing red/green/blue/alpha, each in the range of [0,1].</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="emissive" minOccurs="1" maxOccurs="1" default="0 0 0 1" type="types:color">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">The emissive color of a material specified by set of four numbers representing red/green/blue, each in the range of [0,1].</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+</xs:schema>

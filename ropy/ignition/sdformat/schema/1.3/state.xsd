@@ -1,0 +1,175 @@
+<xs:schema xmlns:types="sdformat/v1.3/types.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:model="sdformat/v1.3/model.xsd" targetNamespace="sdformat/v1.3/state.xsd" version="1.1">
+  <xs:import namespace="sdformat/v1.3/model.xsd" schemaLocation="./model.xsd"/>
+  <xs:import namespace="sdformat/v1.3/types.xsd" schemaLocation="./types.xsd"/>
+  <xs:complexType name="state">
+    <xs:all>
+      <xs:element name="sim_time" minOccurs="1" maxOccurs="1" default="0 0" type="types:time">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">Simulation time stamp of the state [seconds nanoseconds]</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="wall_time" minOccurs="1" maxOccurs="1" default="0 0" type="types:time">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">Wall time stamp of the state [seconds nanoseconds]</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="real_time" minOccurs="1" maxOccurs="1" default="0 0" type="types:time">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">Real time stamp of the state [seconds nanoseconds]</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="insertions" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">A list of new model names</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:annotation>
+            <xs:documentation xml:lang="en">A list of new model names</xs:documentation>
+          </xs:annotation>
+          <xs:all>
+            <xs:element name="model" minOccurs="0" maxOccurs="unbounded" type="model:model">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">The model element defines a complete robot or any other physical object.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="deletions" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">A list of deleted model names</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:annotation>
+            <xs:documentation xml:lang="en">A list of deleted model names</xs:documentation>
+          </xs:annotation>
+          <xs:all>
+            <xs:element name="name" minOccurs="1" maxOccurs="unbounded" default="__default__" type="xs:string">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">The name of a deleted model</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="model" minOccurs="0" maxOccurs="unbounded">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">Model state</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:annotation>
+            <xs:documentation xml:lang="en">Model state</xs:documentation>
+          </xs:annotation>
+          <xs:all>
+            <xs:element name="pose" minOccurs="1" maxOccurs="1" default="0 0 0 0 0 0" type="types:pose">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">Pose of the model</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="joint" minOccurs="0" maxOccurs="unbounded">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">Joint angle</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:annotation>
+                  <xs:documentation xml:lang="en">Joint angle</xs:documentation>
+                </xs:annotation>
+                <xs:all>
+                  <xs:element name="angle" minOccurs="1" maxOccurs="unbounded" default="0">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">Angle of an axis</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                      <xs:simpleContent>
+                        <xs:extension base="xs:double"/>
+                      </xs:simpleContent>
+                      <xs:attribute name="axis" type="xs:unsignedInt" use="required">
+                        <xs:annotation>
+                          <xs:documentation xml:lang="en">Index of the axis.</xs:documentation>
+                        </xs:annotation>
+                      </xs:attribute>
+                    </xs:complexType>
+                  </xs:element>
+                </xs:all>
+                <xs:attribute name="name" type="xs:string" use="required">
+                  <xs:annotation>
+                    <xs:documentation xml:lang="en">Name of the joint</xs:documentation>
+                  </xs:annotation>
+                </xs:attribute>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="link" minOccurs="0" maxOccurs="unbounded">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">Link state</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:annotation>
+                  <xs:documentation xml:lang="en">Link state</xs:documentation>
+                </xs:annotation>
+                <xs:all>
+                  <xs:element name="pose" minOccurs="1" maxOccurs="1" default="0 0 0 0 0 0" type="types:pose">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">Pose of the link relative to the model</xs:documentation>
+                    </xs:annotation>
+                  </xs:element>
+                  <xs:element name="velocity" minOccurs="1" maxOccurs="1" default="0 0 0 0 0 0" type="types:pose">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">Velocity of the link</xs:documentation>
+                    </xs:annotation>
+                  </xs:element>
+                  <xs:element name="acceleration" minOccurs="1" maxOccurs="1" default="0 0 0 0 0 0" type="types:pose">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">Acceleration of the link</xs:documentation>
+                    </xs:annotation>
+                  </xs:element>
+                  <xs:element name="wrench" minOccurs="1" maxOccurs="1" default="0 0 0 0 0 0" type="types:pose">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">Force applied to the link</xs:documentation>
+                    </xs:annotation>
+                  </xs:element>
+                  <xs:element name="collision" minOccurs="0" maxOccurs="unbounded">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">Collision state</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                      <xs:annotation>
+                        <xs:documentation xml:lang="en">Collision state</xs:documentation>
+                      </xs:annotation>
+                      <xs:all>
+                        <xs:element name="pose" minOccurs="1" maxOccurs="1" default="0 0 0 0 0 0" type="types:pose">
+                          <xs:annotation>
+                            <xs:documentation xml:lang="en">Pose of the link relative to the model</xs:documentation>
+                          </xs:annotation>
+                        </xs:element>
+                      </xs:all>
+                      <xs:attribute name="name" type="xs:string" use="required">
+                        <xs:annotation>
+                          <xs:documentation xml:lang="en">Name of the collision</xs:documentation>
+                        </xs:annotation>
+                      </xs:attribute>
+                    </xs:complexType>
+                  </xs:element>
+                </xs:all>
+                <xs:attribute name="name" type="xs:string" use="required">
+                  <xs:annotation>
+                    <xs:documentation xml:lang="en">Name of the link</xs:documentation>
+                  </xs:annotation>
+                </xs:attribute>
+              </xs:complexType>
+            </xs:element>
+          </xs:all>
+          <xs:attribute name="name" type="xs:string" use="required">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">Name of the model</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+    </xs:all>
+    <xs:attribute name="world_name" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation xml:lang="en">Name of the world this state applies to</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+</xs:schema>

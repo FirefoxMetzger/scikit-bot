@@ -2,8 +2,9 @@ from dataclasses import dataclass
 import numpy as np
 import pytest
 from xsdata.exceptions import ParserError
-from ropy.ignition.sdformat.bindings.v16.pose_type import PoseType
+from pathlib import Path
 
+from ropy.ignition.sdformat.bindings.v16.model import Model
 import ropy.ignition as ign
 
 
@@ -20,6 +21,11 @@ def test_valid_parsing(valid_sdf_string):
 def test_invalid_parsing(invalid_sdf_string):
     with pytest.raises(ParserError):
         ign.sdformat.loads(invalid_sdf_string)
+
+
+def test_invalid_parsing_xml_etree(invalid_sdf_string):
+    with pytest.raises(ParserError):
+        ign.sdformat.loads(invalid_sdf_string, handler="XmlEventHandler")
 
 
 @pytest.mark.skip(reason="Currently disabled.")
@@ -39,7 +45,7 @@ def test_custom_constructor(valid_sdf_string):
     else:
         ign.sdformat.loads(
             valid_sdf_string,
-            custom_constructor={PoseType: lambda **kwargs: NewPose(**kwargs)},
+            custom_constructor={Model.Pose: lambda **kwargs: NewPose(**kwargs)},
         )
 
 
@@ -48,9 +54,6 @@ def test_idempotence(valid_sdf_string):
     # the first serialization should normalize the XML
     # the second pass should make no changes
 
-    # Note: the normalized XML doesn't use new-line
-    # characters.
-
     parsed_sdf = ign.sdformat.loads(valid_sdf_string)
     normalized_sdf = ign.sdformat.dumps(parsed_sdf)
 
@@ -58,6 +61,12 @@ def test_idempotence(valid_sdf_string):
     serialized_sdf = ign.sdformat.dumps(parsed_sdf)
 
     assert serialized_sdf == normalized_sdf
+
+
+def test_force_version():
+    sdf_file = Path(__file__).parent / "sdf" / "empty.sdf"
+
+    ign.sdformat.loads(sdf_file.read_text(), version="1.8")
 
 
 def test_light(light_sdf):
@@ -70,10 +79,3 @@ def test_light(light_sdf):
     result = frames["/sdf/point_light"].transform((0, 0, 0), "/sdf")
     expected = (0, 2, 2)
     assert np.allclose(result, expected)
-
-
-def test_unsupported_sdf_version():
-    sdf = ""
-
-    with pytest.raises(ParserError):
-        ign.sdformat.loads(sdf, version="1.0")

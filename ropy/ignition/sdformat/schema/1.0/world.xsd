@@ -1,0 +1,65 @@
+<xs:schema xmlns:types="sdformat/v1.0/types.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:scene="sdformat/v1.0/scene.xsd" xmlns:state="sdformat/v1.0/state.xsd" xmlns:physics="sdformat/v1.0/physics.xsd" xmlns:light="sdformat/v1.0/light.xsd" xmlns:actor="sdformat/v1.0/actor.xsd" xmlns:model="sdformat/v1.0/model.xsd" xmlns:joint="sdformat/v1.0/joint.xsd" targetNamespace="sdformat/v1.0/world.xsd" version="1.1">
+  <xs:import namespace="sdformat/v1.0/joint.xsd" schemaLocation="./joint.xsd"/>
+  <xs:import namespace="sdformat/v1.0/model.xsd" schemaLocation="./model.xsd"/>
+  <xs:import namespace="sdformat/v1.0/actor.xsd" schemaLocation="./actor.xsd"/>
+  <xs:import namespace="sdformat/v1.0/light.xsd" schemaLocation="./light.xsd"/>
+  <xs:import namespace="sdformat/v1.0/physics.xsd" schemaLocation="./physics.xsd"/>
+  <xs:import namespace="sdformat/v1.0/state.xsd" schemaLocation="./state.xsd"/>
+  <xs:import namespace="sdformat/v1.0/scene.xsd" schemaLocation="./scene.xsd"/>
+  <xs:import namespace="sdformat/v1.0/types.xsd" schemaLocation="./types.xsd"/>
+  <xs:complexType name="world">
+    <xs:all>
+      <xs:element name="gui" minOccurs="0" maxOccurs="1">
+        <xs:complexType>
+          <xs:all>
+            <xs:element name="camera" minOccurs="0" maxOccurs="1">
+              <xs:complexType>
+                <xs:all>
+                  <xs:element name="view_controller" minOccurs="1" maxOccurs="1" default="oribit" type="xs:string"/>
+                  <xs:element name="origin" minOccurs="0" maxOccurs="1" type="xs:string"/>
+                  <xs:element name="track_visual" minOccurs="0" maxOccurs="1">
+                    <xs:complexType>
+                      <xs:all>
+                        <xs:element name="name" minOccurs="1" maxOccurs="1" default="__default__" type="xs:string"/>
+                        <xs:element name="min_dist" minOccurs="1" maxOccurs="1" default="0" type="xs:double"/>
+                        <xs:element name="max_dist" minOccurs="1" maxOccurs="1" default="0" type="xs:double"/>
+                      </xs:all>
+                    </xs:complexType>
+                  </xs:element>
+                </xs:all>
+                <xs:attribute name="name" type="xs:string" use="required"/>
+              </xs:complexType>
+            </xs:element>
+          </xs:all>
+          <xs:attribute name="fullscreen" type="xs:boolean" use="optional" default="false"/>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="physics" minOccurs="1" maxOccurs="1" type="physics:physics"/>
+      <xs:element name="scene" minOccurs="1" maxOccurs="1" type="scene:scene"/>
+      <xs:element name="light" minOccurs="0" maxOccurs="unbounded" type="light:light"/>
+      <xs:element name="model" minOccurs="0" maxOccurs="unbounded" type="model:model"/>
+      <xs:element name="actor" minOccurs="0" maxOccurs="unbounded" type="actor:actor"/>
+      <xs:element name="plugin" minOccurs="0" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:all>
+            <xs:any processContents="skip" minOccurs="0" maxOccurs="unbounded"/>
+          </xs:all>
+          <xs:attribute name="name" type="xs:string" use="required"/>
+          <xs:attribute name="filename" type="xs:string" use="required"/>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="joint" minOccurs="0" maxOccurs="unbounded" type="joint:joint"/>
+      <xs:element name="road" minOccurs="0" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:all>
+            <xs:element name="width" minOccurs="1" maxOccurs="1" default="1.0" type="xs:double"/>
+            <xs:element name="point" minOccurs="1" maxOccurs="unbounded" default="0 0 0" type="types:vector3"/>
+          </xs:all>
+          <xs:attribute name="name" type="xs:string" use="required"/>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="state" minOccurs="0" maxOccurs="unbounded" type="state:state"/>
+    </xs:all>
+    <xs:attribute name="name" type="xs:string" use="required"/>
+  </xs:complexType>
+</xs:schema>

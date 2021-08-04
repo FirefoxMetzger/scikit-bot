@@ -1,0 +1,25 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="sdformat/v1.0/physics.xsd" version="1.1">
+  <xs:complexType name="physics">
+    <xs:all>
+      <xs:element name="max_contacts" minOccurs="1" maxOccurs="1" default="20" type="xs:int"/>
+      <xs:element name="gravity" minOccurs="1" maxOccurs="1" type="xs:string"/>
+      <xs:element name="bullet" minOccurs="0" maxOccurs="1">
+        <xs:complexType>
+          <xs:all>
+            <xs:element name="dt" minOccurs="1" maxOccurs="1" default="0.003" type="xs:double"/>
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="ode" minOccurs="0" maxOccurs="1">
+        <xs:complexType>
+          <xs:all>
+            <xs:element name="solver" minOccurs="1" maxOccurs="1" type="xs:string"/>
+            <xs:element name="constraints" minOccurs="1" maxOccurs="1" type="xs:string"/>
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+    </xs:all>
+    <xs:attribute name="type" type="xs:string" use="required"/>
+    <xs:attribute name="update_rate" type="xs:double" use="optional" default="0"/>
+  </xs:complexType>
+</xs:schema>

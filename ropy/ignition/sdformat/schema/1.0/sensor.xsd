@@ -1,0 +1,58 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="sdformat/v1.0/sensor.xsd" version="1.1">
+  <xs:complexType name="sensor">
+    <xs:all>
+      <xs:element name="origin" minOccurs="0" maxOccurs="1" type="xs:string"/>
+      <xs:element name="topic" minOccurs="1" maxOccurs="1" default="__default" type="xs:string"/>
+      <xs:element name="plugin" minOccurs="0" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:all>
+            <xs:any processContents="skip" minOccurs="0" maxOccurs="unbounded"/>
+          </xs:all>
+          <xs:attribute name="name" type="xs:string" use="required"/>
+          <xs:attribute name="filename" type="xs:string" use="required"/>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="camera" minOccurs="0" maxOccurs="1">
+        <xs:complexType>
+          <xs:all>
+            <xs:element name="horizontal_fov" minOccurs="1" maxOccurs="1" type="xs:string"/>
+            <xs:element name="image" minOccurs="1" maxOccurs="1" type="xs:string"/>
+            <xs:element name="clip" minOccurs="1" maxOccurs="1" type="xs:string"/>
+            <xs:element name="save" minOccurs="0" maxOccurs="1" type="xs:string"/>
+            <xs:element name="depth_camera" minOccurs="0" maxOccurs="1" type="xs:string"/>
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="ray" minOccurs="0" maxOccurs="1">
+        <xs:complexType>
+          <xs:all>
+            <xs:element name="scan" minOccurs="1" maxOccurs="1">
+              <xs:complexType>
+                <xs:all>
+                  <xs:element name="horizontal" minOccurs="1" maxOccurs="1" type="xs:string"/>
+                  <xs:element name="vertical" minOccurs="0" maxOccurs="1" type="xs:string"/>
+                </xs:all>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="range" minOccurs="1" maxOccurs="1" type="xs:string"/>
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="contact" minOccurs="0" maxOccurs="1">
+        <xs:complexType>
+          <xs:all>
+            <xs:element name="collision" minOccurs="1" maxOccurs="1" type="xs:string"/>
+            <xs:element name="topic" minOccurs="1" maxOccurs="1" default="__default_topic__" type="xs:string"/>
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="rfidtag" minOccurs="0" maxOccurs="1" type="xs:string"/>
+      <xs:element name="rfid" minOccurs="0" maxOccurs="1" type="xs:string"/>
+    </xs:all>
+    <xs:attribute name="name" type="xs:string" use="required"/>
+    <xs:attribute name="type" type="xs:string" use="required"/>
+    <xs:attribute name="always_on" type="xs:boolean" use="optional" default="false"/>
+    <xs:attribute name="update_rate" type="xs:double" use="optional" default="0"/>
+    <xs:attribute name="visualize" type="xs:boolean" use="optional" default="false"/>
+  </xs:complexType>
+</xs:schema>

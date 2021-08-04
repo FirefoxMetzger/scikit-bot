@@ -1,0 +1,155 @@
+<xs:schema xmlns:types="sdformat/v1.3/types.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:geometry="sdformat/v1.3/geometry.xsd" targetNamespace="sdformat/v1.3/collision.xsd" version="1.1">
+  <xs:import namespace="sdformat/v1.3/geometry.xsd" schemaLocation="./geometry.xsd"/>
+  <xs:import namespace="sdformat/v1.3/types.xsd" schemaLocation="./types.xsd"/>
+  <xs:complexType name="collision">
+    <xs:annotation>
+      <xs:documentation xml:lang="en">The collision properties of a link. Note that this can be different from the visual properties of a link, for example, simpler collision models are often used to reduce computation time.</xs:documentation>
+    </xs:annotation>
+    <xs:all>
+      <xs:element name="laser_retro" minOccurs="1" maxOccurs="1" default="0" type="xs:double">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">intensity value returned by laser sensor.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="max_contacts" minOccurs="1" maxOccurs="1" default="10" type="xs:int">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">Maximum number of contacts allowed between two entities. This value overrides the max_contacts element defined in physics.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="pose" minOccurs="1" maxOccurs="1" default="0 0 0 0 0 0" type="types:pose">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">The reference frame of the collision element, relative to the reference frame of the link.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="geometry" minOccurs="1" maxOccurs="1" type="geometry:geometry">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">The shape of the visual or collision object.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="surface" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">The surface parameters</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:annotation>
+            <xs:documentation xml:lang="en">The surface parameters</xs:documentation>
+          </xs:annotation>
+          <xs:all>
+            <xs:element name="bounce" minOccurs="0" maxOccurs="1">
+              <xs:complexType>
+                <xs:all>
+                  <xs:element name="restitution_coefficient" minOccurs="1" maxOccurs="1" default="0" type="xs:double">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">Bounciness coefficient of restitution, from [0...1], where 0=no bounciness.</xs:documentation>
+                    </xs:annotation>
+                  </xs:element>
+                  <xs:element name="threshold" minOccurs="1" maxOccurs="1" default="100000" type="xs:double">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">Bounce velocity threshold, below which effective coefficient of restitution is 0.</xs:documentation>
+                    </xs:annotation>
+                  </xs:element>
+                </xs:all>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="friction" minOccurs="0" maxOccurs="1">
+              <xs:complexType>
+                <xs:all>
+                  <xs:element name="ode" minOccurs="0" maxOccurs="1">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">ODE friction parameters</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                      <xs:annotation>
+                        <xs:documentation xml:lang="en">ODE friction parameters</xs:documentation>
+                      </xs:annotation>
+                      <xs:all>
+                        <xs:element name="mu" minOccurs="1" maxOccurs="1" default="-1" type="xs:double">
+                          <xs:annotation>
+                            <xs:documentation xml:lang="en">Coefficient of friction in the range of [0..1].</xs:documentation>
+                          </xs:annotation>
+                        </xs:element>
+                        <xs:element name="mu2" minOccurs="1" maxOccurs="1" default="-1" type="xs:double">
+                          <xs:annotation>
+                            <xs:documentation xml:lang="en">Second coefficient of friction in the range of [0..1]</xs:documentation>
+                          </xs:annotation>
+                        </xs:element>
+                        <xs:element name="fdir1" minOccurs="1" maxOccurs="1" default="0 0 0" type="types:vector3">
+                          <xs:annotation>
+                            <xs:documentation xml:lang="en">3-tuple specifying direction of mu1 in the collision local reference frame.</xs:documentation>
+                          </xs:annotation>
+                        </xs:element>
+                        <xs:element name="slip1" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                          <xs:annotation>
+                            <xs:documentation xml:lang="en">Force dependent slip direction 1 in collision local frame, between the range of [0..1].</xs:documentation>
+                          </xs:annotation>
+                        </xs:element>
+                        <xs:element name="slip2" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                          <xs:annotation>
+                            <xs:documentation xml:lang="en">Force dependent slip direction 2 in collision local frame, between the range of [0..1].</xs:documentation>
+                          </xs:annotation>
+                        </xs:element>
+                      </xs:all>
+                    </xs:complexType>
+                  </xs:element>
+                </xs:all>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="contact" minOccurs="0" maxOccurs="1">
+              <xs:complexType>
+                <xs:all>
+                  <xs:element name="ode" minOccurs="0" maxOccurs="1">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">ODE contact parameters</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                      <xs:annotation>
+                        <xs:documentation xml:lang="en">ODE contact parameters</xs:documentation>
+                      </xs:annotation>
+                      <xs:all>
+                        <xs:element name="soft_cfm" minOccurs="1" maxOccurs="1" default="0" type="xs:double">
+                          <xs:annotation>
+                            <xs:documentation xml:lang="en">Soft constraint force mixing.</xs:documentation>
+                          </xs:annotation>
+                        </xs:element>
+                        <xs:element name="soft_erp" minOccurs="1" maxOccurs="1" default="0.2" type="xs:double">
+                          <xs:annotation>
+                            <xs:documentation xml:lang="en">Soft error reduction parameter</xs:documentation>
+                          </xs:annotation>
+                        </xs:element>
+                        <xs:element name="kp" minOccurs="1" maxOccurs="1" default="1000000000000.0" type="xs:double">
+                          <xs:annotation>
+                            <xs:documentation xml:lang="en">dynamically "stiffness"-equivalent coefficient for contact joints</xs:documentation>
+                          </xs:annotation>
+                        </xs:element>
+                        <xs:element name="kd" minOccurs="1" maxOccurs="1" default="1.0" type="xs:double">
+                          <xs:annotation>
+                            <xs:documentation xml:lang="en">dynamically "damping"-equivalent coefficient for contact joints</xs:documentation>
+                          </xs:annotation>
+                        </xs:element>
+                        <xs:element name="max_vel" minOccurs="1" maxOccurs="1" default="0.01" type="xs:double">
+                          <xs:annotation>
+                            <xs:documentation xml:lang="en">maximum contact correction velocity truncation term.</xs:documentation>
+                          </xs:annotation>
+                        </xs:element>
+                        <xs:element name="min_depth" minOccurs="1" maxOccurs="1" default="0" type="xs:double">
+                          <xs:annotation>
+                            <xs:documentation xml:lang="en">minimum allowable depth before contact correction impulse is applied</xs:documentation>
+                          </xs:annotation>
+                        </xs:element>
+                      </xs:all>
+                    </xs:complexType>
+                  </xs:element>
+                </xs:all>
+              </xs:complexType>
+            </xs:element>
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+    </xs:all>
+    <xs:attribute name="name" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation xml:lang="en">Unique name for the collision element within the scope of the parent link.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+</xs:schema>

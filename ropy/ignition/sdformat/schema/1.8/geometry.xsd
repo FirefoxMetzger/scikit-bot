@@ -1,0 +1,321 @@
+<xs:schema xmlns:types="sdformat/v1.8/types.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="sdformat/v1.8/geometry.xsd" version="1.1">
+  <xs:import namespace="sdformat/v1.8/types.xsd" schemaLocation="./types.xsd"/>
+  <xs:complexType name="geometry">
+    <xs:annotation>
+      <xs:documentation xml:lang="en">The shape of the visual or collision object.</xs:documentation>
+    </xs:annotation>
+    <xs:all>
+      <xs:element name="empty" minOccurs="0" maxOccurs="1" type="xs:string">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">You can use the empty tag to make empty geometries.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="box" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">Box shape</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:annotation>
+            <xs:documentation xml:lang="en">Box shape</xs:documentation>
+          </xs:annotation>
+          <xs:all>
+            <xs:element name="size" minOccurs="1" maxOccurs="1" default="1 1 1" type="types:vector3">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">The three side lengths of the box. The origin of the box is in its geometric center (inside the center of the box).</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="capsule" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">Capsule shape</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:annotation>
+            <xs:documentation xml:lang="en">Capsule shape</xs:documentation>
+          </xs:annotation>
+          <xs:all>
+            <xs:element name="radius" minOccurs="1" maxOccurs="1" default="0.5" type="xs:double">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">Radius of the capsule</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="length" minOccurs="1" maxOccurs="1" default="1" type="xs:double">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">Length of the cylindrical portion of the capsule along the z axis</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="cylinder" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">Cylinder shape</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:annotation>
+            <xs:documentation xml:lang="en">Cylinder shape</xs:documentation>
+          </xs:annotation>
+          <xs:all>
+            <xs:element name="radius" minOccurs="1" maxOccurs="1" default="1" type="xs:double">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">Radius of the cylinder</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="length" minOccurs="1" maxOccurs="1" default="1" type="xs:double">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">Length of the cylinder along the z axis</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="ellipsoid" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">Ellipsoid shape</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:annotation>
+            <xs:documentation xml:lang="en">Ellipsoid shape</xs:documentation>
+          </xs:annotation>
+          <xs:all>
+            <xs:element name="radii" minOccurs="1" maxOccurs="1" default="1 1 1" type="types:vector3">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">The three radii of the ellipsoid. The origin of the ellipsoid is in its geometric center (inside the center of the ellipsoid).</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="heightmap" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">A heightmap based on a 2d grayscale image.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:annotation>
+            <xs:documentation xml:lang="en">A heightmap based on a 2d grayscale image.</xs:documentation>
+          </xs:annotation>
+          <xs:all>
+            <xs:element name="uri" minOccurs="1" maxOccurs="1" default="__default__" type="xs:string">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">URI to a grayscale image file</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="size" minOccurs="1" maxOccurs="1" default="1 1 1" type="types:vector3">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">The size of the heightmap in world units.       When loading an image: "size" is used if present, otherwise defaults to 1x1x1.       When loading a DEM: "size" is used if present, otherwise defaults to true size of DEM.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="pos" minOccurs="1" maxOccurs="1" default="0 0 0" type="types:vector3">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">A position offset.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="texture" minOccurs="0" maxOccurs="unbounded">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">The heightmap can contain multiple textures. The order of the texture matters. The first texture will appear at the lowest height, and the last texture at the highest height. Use blend to control the height thresholds and fade between textures.</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:annotation>
+                  <xs:documentation xml:lang="en">The heightmap can contain multiple textures. The order of the texture matters. The first texture will appear at the lowest height, and the last texture at the highest height. Use blend to control the height thresholds and fade between textures.</xs:documentation>
+                </xs:annotation>
+                <xs:all>
+                  <xs:element name="size" minOccurs="1" maxOccurs="1" default="10" type="xs:double">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">Size of the applied texture in meters.</xs:documentation>
+                    </xs:annotation>
+                  </xs:element>
+                  <xs:element name="diffuse" minOccurs="1" maxOccurs="1" default="__default__" type="xs:string">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">Diffuse texture image filename</xs:documentation>
+                    </xs:annotation>
+                  </xs:element>
+                  <xs:element name="normal" minOccurs="1" maxOccurs="1" default="__default__" type="xs:string">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">Normalmap texture image filename</xs:documentation>
+                    </xs:annotation>
+                  </xs:element>
+                </xs:all>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="blend" minOccurs="0" maxOccurs="unbounded">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">The blend tag controls how two adjacent textures are mixed. The number of blend elements should equal one less than the number of textures.</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:annotation>
+                  <xs:documentation xml:lang="en">The blend tag controls how two adjacent textures are mixed. The number of blend elements should equal one less than the number of textures.</xs:documentation>
+                </xs:annotation>
+                <xs:all>
+                  <xs:element name="min_height" minOccurs="1" maxOccurs="1" default="0" type="xs:double">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">Min height of a blend layer</xs:documentation>
+                    </xs:annotation>
+                  </xs:element>
+                  <xs:element name="fade_dist" minOccurs="1" maxOccurs="1" default="0" type="xs:double">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">Distance over which the blend occurs</xs:documentation>
+                    </xs:annotation>
+                  </xs:element>
+                </xs:all>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="use_terrain_paging" minOccurs="1" maxOccurs="1" default="false" type="xs:boolean">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">Set if the rendering engine will use terrain paging</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="sampling" minOccurs="1" maxOccurs="1" default="1" type="xs:unsignedInt">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">Samples per heightmap datum. For rasterized heightmaps, this indicates the number of samples to take per pixel. Using a higher value, e.g. 2, will generally improve the quality of the heightmap but lower performance.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="image" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">Extrude a set of boxes from a grayscale image.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:annotation>
+            <xs:documentation xml:lang="en">Extrude a set of boxes from a grayscale image.</xs:documentation>
+          </xs:annotation>
+          <xs:all>
+            <xs:element name="uri" minOccurs="1" maxOccurs="1" default="__default__" type="xs:string">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">URI of the grayscale image file</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="scale" minOccurs="1" maxOccurs="1" default="1" type="xs:double">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">Scaling factor applied to the image</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="threshold" minOccurs="1" maxOccurs="1" default="200" type="xs:int">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">Grayscale threshold</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="height" minOccurs="1" maxOccurs="1" default="1" type="xs:double">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">Height of the extruded boxes</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="granularity" minOccurs="1" maxOccurs="1" default="1" type="xs:int">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">The amount of error in the model</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="mesh" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">Mesh shape</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:annotation>
+            <xs:documentation xml:lang="en">Mesh shape</xs:documentation>
+          </xs:annotation>
+          <xs:all>
+            <xs:element name="uri" minOccurs="1" maxOccurs="1" default="__default__" type="xs:string">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">Mesh uri</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="submesh" minOccurs="0" maxOccurs="1">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">Use a named submesh. The submesh must exist in the mesh specified by the uri</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:annotation>
+                  <xs:documentation xml:lang="en">Use a named submesh. The submesh must exist in the mesh specified by the uri</xs:documentation>
+                </xs:annotation>
+                <xs:all>
+                  <xs:element name="name" minOccurs="1" maxOccurs="1" default="__default__" type="xs:string">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">Name of the submesh within the parent mesh</xs:documentation>
+                    </xs:annotation>
+                  </xs:element>
+                  <xs:element name="center" minOccurs="1" maxOccurs="1" default="false" type="xs:boolean">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">Set to true to center the vertices of the submesh at 0,0,0. This will effectively remove any transformations on the submesh before the poses from parent links and models are applied.</xs:documentation>
+                    </xs:annotation>
+                  </xs:element>
+                </xs:all>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="scale" minOccurs="1" maxOccurs="1" default="1 1 1" type="types:vector3">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">Scaling factor applied to the mesh</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="plane" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">Plane shape</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:annotation>
+            <xs:documentation xml:lang="en">Plane shape</xs:documentation>
+          </xs:annotation>
+          <xs:all>
+            <xs:element name="normal" minOccurs="1" maxOccurs="1" default="0 0 1" type="types:vector3">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">Normal direction for the plane. When a Plane is used as a geometry for a Visual or Collision object, then the normal is specified in the Visual or Collision frame, respectively.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="size" minOccurs="1" maxOccurs="1" default="1 1" type="types:vector2d">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">Length of each side of the plane. Note that this property is meaningful only for visualizing the Plane, i.e., when the Plane is used as a geometry for a Visual object. The Plane has infinite size when used as a geometry for a Collision object.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="polyline" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">Defines an extruded polyline shape</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:annotation>
+            <xs:documentation xml:lang="en">Defines an extruded polyline shape</xs:documentation>
+          </xs:annotation>
+          <xs:all>
+            <xs:element name="point" minOccurs="1" maxOccurs="unbounded" default="0 0" type="types:vector2d">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">A series of points that define the path of the polyline.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="height" minOccurs="1" maxOccurs="1" default="1.0" type="xs:double">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">Height of the polyline</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="sphere" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">Sphere shape</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:annotation>
+            <xs:documentation xml:lang="en">Sphere shape</xs:documentation>
+          </xs:annotation>
+          <xs:all>
+            <xs:element name="radius" minOccurs="1" maxOccurs="1" default="1" type="xs:double">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">radius of the sphere</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+</xs:schema>

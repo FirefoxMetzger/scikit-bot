@@ -1,0 +1,50 @@
+<xs:schema xmlns:types="sdformat/v1.0/types.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="sdformat/v1.0/joint.xsd" version="1.1">
+  <xs:import namespace="sdformat/v1.0/types.xsd" schemaLocation="./types.xsd"/>
+  <xs:complexType name="joint">
+    <xs:all>
+      <xs:element name="parent" minOccurs="1" maxOccurs="1" type="xs:string"/>
+      <xs:element name="child" minOccurs="1" maxOccurs="1" type="xs:string"/>
+      <xs:element name="origin" minOccurs="0" maxOccurs="1" type="xs:string"/>
+      <xs:element name="thread_pitch" minOccurs="1" maxOccurs="1" default="1.0" type="xs:double"/>
+      <xs:element name="axis" minOccurs="1" maxOccurs="1">
+        <xs:complexType>
+          <xs:all>
+            <xs:element name="dynamics" minOccurs="0" maxOccurs="1" type="xs:string"/>
+            <xs:element name="limit" minOccurs="1" maxOccurs="1" type="xs:string"/>
+          </xs:all>
+          <xs:attribute name="xyz" type="types:vector3" use="required"/>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="axis2" minOccurs="0" maxOccurs="1">
+        <xs:complexType>
+          <xs:all>
+            <xs:element name="dynamics" minOccurs="0" maxOccurs="1" type="xs:string"/>
+            <xs:element name="limit" minOccurs="0" maxOccurs="1" type="xs:string"/>
+          </xs:all>
+          <xs:attribute name="xyz" type="types:vector3" use="required"/>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="physics" minOccurs="0" maxOccurs="1">
+        <xs:complexType>
+          <xs:all>
+            <xs:element name="ode" minOccurs="0" maxOccurs="1">
+              <xs:complexType>
+                <xs:all>
+                  <xs:element name="fudge_factor" minOccurs="1" maxOccurs="1" default="0" type="xs:double"/>
+                  <xs:element name="cfm" minOccurs="1" maxOccurs="1" default="0" type="xs:double"/>
+                  <xs:element name="bounce" minOccurs="1" maxOccurs="1" default="0" type="xs:double"/>
+                  <xs:element name="max_force" minOccurs="1" maxOccurs="1" default="0" type="xs:double"/>
+                  <xs:element name="velocity" minOccurs="1" maxOccurs="1" default="0" type="xs:double"/>
+                  <xs:element name="limit" minOccurs="0" maxOccurs="1" type="xs:string"/>
+                  <xs:element name="suspension" minOccurs="0" maxOccurs="1" type="xs:string"/>
+                </xs:all>
+              </xs:complexType>
+            </xs:element>
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+    </xs:all>
+    <xs:attribute name="name" type="xs:string" use="required"/>
+    <xs:attribute name="type" type="xs:string" use="required"/>
+  </xs:complexType>
+</xs:schema>

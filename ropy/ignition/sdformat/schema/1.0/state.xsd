@@ -1,0 +1,34 @@
+<xs:schema xmlns:types="sdformat/v1.0/types.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="sdformat/v1.0/state.xsd" version="1.1">
+  <xs:import namespace="sdformat/v1.0/types.xsd" schemaLocation="./types.xsd"/>
+  <xs:complexType name="state">
+    <xs:all>
+      <xs:element name="model" minOccurs="1" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:all>
+            <xs:element name="pose" minOccurs="1" maxOccurs="1" default="0 0 0 0 0 0" type="types:pose"/>
+            <xs:element name="link" minOccurs="0" maxOccurs="unbounded">
+              <xs:complexType>
+                <xs:all>
+                  <xs:element name="pose" minOccurs="1" maxOccurs="1" default="0 0 0 0 0 0" type="types:pose"/>
+                  <xs:element name="velocity" minOccurs="1" maxOccurs="1" default="0 0 0 0 0 0" type="types:pose"/>
+                  <xs:element name="wrench" minOccurs="0" maxOccurs="unbounded">
+                    <xs:complexType>
+                      <xs:all>
+                        <xs:element name="pos" minOccurs="1" maxOccurs="1" default="0 0 0" type="types:vector3"/>
+                        <xs:element name="mag" minOccurs="1" maxOccurs="1" default="0 0 0 0 0 0" type="types:pose"/>
+                      </xs:all>
+                    </xs:complexType>
+                  </xs:element>
+                </xs:all>
+                <xs:attribute name="name" type="xs:string" use="required"/>
+              </xs:complexType>
+            </xs:element>
+          </xs:all>
+          <xs:attribute name="name" type="xs:string" use="required"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:all>
+    <xs:attribute name="world_name" type="xs:string" use="required"/>
+    <xs:attribute name="time" type="types:time" use="optional" default="0 0"/>
+  </xs:complexType>
+</xs:schema>

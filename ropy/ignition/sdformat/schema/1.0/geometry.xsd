@@ -1,0 +1,39 @@
+<xs:schema xmlns:types="sdformat/v1.0/types.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="sdformat/v1.0/geometry.xsd" version="1.1">
+  <xs:import namespace="sdformat/v1.0/types.xsd" schemaLocation="./types.xsd"/>
+  <xs:complexType name="geometry">
+    <xs:all>
+      <xs:element name="box" minOccurs="0" maxOccurs="1" type="xs:string"/>
+      <xs:element name="sphere" minOccurs="0" maxOccurs="1" type="xs:string"/>
+      <xs:element name="cylinder" minOccurs="0" maxOccurs="1" type="xs:string"/>
+      <xs:element name="mesh" minOccurs="0" maxOccurs="1" type="xs:string"/>
+      <xs:element name="plane" minOccurs="0" maxOccurs="1" type="xs:string"/>
+      <xs:element name="image" minOccurs="0" maxOccurs="1" type="xs:string"/>
+      <xs:element name="heightmap" minOccurs="0" maxOccurs="1">
+        <xs:complexType>
+          <xs:all>
+            <xs:element name="texture" minOccurs="0" maxOccurs="unbounded">
+              <xs:complexType>
+                <xs:all>
+                  <xs:element name="size" minOccurs="1" maxOccurs="1" default="10" type="xs:double"/>
+                  <xs:element name="diffuse" minOccurs="1" maxOccurs="1" default="__default__" type="xs:string"/>
+                  <xs:element name="normal" minOccurs="1" maxOccurs="1" default="__default__" type="xs:string"/>
+                </xs:all>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="blend" minOccurs="0" maxOccurs="unbounded">
+              <xs:complexType>
+                <xs:all>
+                  <xs:element name="min_height" minOccurs="1" maxOccurs="1" default="0" type="xs:double"/>
+                  <xs:element name="fade_dist" minOccurs="1" maxOccurs="1" default="0" type="xs:double"/>
+                </xs:all>
+              </xs:complexType>
+            </xs:element>
+          </xs:all>
+          <xs:attribute name="filename" type="xs:string" use="required"/>
+          <xs:attribute name="size" type="types:vector3" use="required"/>
+          <xs:attribute name="origin" type="types:vector3" use="optional" default="0 0 0"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+</xs:schema>
