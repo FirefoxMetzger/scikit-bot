@@ -41,9 +41,10 @@ Functions
 .. rubric:: SDFormat Bindings
 
 .. note::
-    SDFormat doesn't use SemVer. Ropy will automatically select the correct version
-    when using :func:`ropy.ignition.sdformat.loads`; however, it is imporant that
-    you are mindful of the version you are using.
+    Ropy will automatically select the correct version when using
+    :func:`ropy.ignition.sdformat.loads`; however, it is imporant that you are
+    mindful of the version you are using, since SDFormat doesn't use SemVer and
+    availability of elements may differ slightly across versions.
 
 .. autosummary::
     :toctree:
@@ -58,6 +59,26 @@ SDFormat XML
 
 .. note::
     You can find more documentation aboud SDFormat in the `official spec <http://sdformat.org/spec>`_.
+
+.. rubric:: _`XSD Schema Files`
+
+.. warning::
+    The XSD bindings are (slightly) oppinionated and promote some optional
+    elements to required elements with a default value. Check the content of
+    this section for details.
+
+Ropy comes with XSD1.1 schema files that describe SDFormat. You can find their
+latest versions inside the ropy/ignition/sdformat folder. You can view them on
+GitHub and a copy can be found in your local version, too. Contrary to the
+official SDFormat, schemas are provided for *all* SDF versions.
+
+The XSD bindings are (slightly) oppinionated. If a SDF element is optional (the
+spec denotes this as required=0 or required=*) but specifies a default value,
+the schema promotes this to a *required* element with a default value. This is
+done to allow the python bindings to provide you with auto-populated defaults
+where possible.
+
+.. rubric:: _`SDF Bindings`
 
 Ropy features a DOM-style parser and serializer for SDFormat XML. You can load
 all SDFormat versions and ropy will construct a class tree out of it.

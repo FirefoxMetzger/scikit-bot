@@ -3,15 +3,14 @@
 {% set path = ".".join(mod_parts[:loop.index]) %}
 {% if mod_part == "bindings" %}
 
-{% set mod_path = ".".join(mod_parts[:loop.index + 1]) %}
+{% set mod_path = ".".join(mod_parts[:loop.index]) %}
 {% set sdf_version = mod_parts[loop.index] %}
-{% set class_path = ".".join(mod_parts[(loop.index + 1):]) %}
+{% set class_path = ".".join(mod_parts[(loop.index):]) %}
 {% set top_class = mod_parts[loop.index + 2] %}
 {% set sdf_ver = sdf_version[0] + sdf_version[1] + "." + sdf_version[2:] %}
 
 
-{% set document_title = sdf_version+"."+class_path %}
-{{ document_title | escape | underline}}
+{{ class_path | escape | underline}}
 
 {% set link = "http://sdformat.org/spec?ver=" + sdf_ver[1:] + "&elem=" + top_class.lower() %}
 {% if loop.index + 2 != mod_parts | length - 1 %}
