@@ -121,6 +121,7 @@ def sdf_string(request):
         "empty_axis.sdf",
         "placement_frame_missing_pose.sdf",
         "nested_multiple_elements_error_world.sdf",
+        "audio_14.sdf"
     ]
 )
 def valid_sdf_string(request):
