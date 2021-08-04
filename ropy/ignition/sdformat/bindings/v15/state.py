@@ -44,8 +44,8 @@ class Model:
             "namespace": "",
         }
     )
-    pose: Optional["Model.Pose"] = field(
-        default=None,
+    pose: "Model.Pose" = field(
+        default="0 0 0 0 0 0",
         metadata={
             "type": "Element",
             "namespace": "",
@@ -126,8 +126,8 @@ class Model:
         name: Name of the frame. This name must not match another frame
             defined inside the parent that this frame is attached to.
         """
-        pose: Optional["Model.Frame.Pose"] = field(
-            default=None,
+        pose: "Model.Frame.Pose" = field(
+            default="0 0 0 0 0 0",
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -210,24 +210,24 @@ class Model:
             respect to the specified frame.
         name: Name of the link
         """
-        velocity: Optional[str] = field(
-            default=None,
+        velocity: str = field(
+            default="0 0 0 0 0 0",
             metadata={
                 "type": "Element",
                 "namespace": "",
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
             }
         )
-        acceleration: Optional[str] = field(
-            default=None,
+        acceleration: str = field(
+            default="0 0 0 0 0 0",
             metadata={
                 "type": "Element",
                 "namespace": "",
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
             }
         )
-        wrench: Optional[str] = field(
-            default=None,
+        wrench: str = field(
+            default="0 0 0 0 0 0",
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -248,8 +248,8 @@ class Model:
                 "namespace": "",
             }
         )
-        pose: Optional["Model.Link.Pose"] = field(
-            default=None,
+        pose: "Model.Link.Pose" = field(
+            default="0 0 0 0 0 0",
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -276,8 +276,8 @@ class Model:
                 frame defined inside the parent that this frame is
                 attached to.
             """
-            pose: Optional["Model.Link.Frame.Pose"] = field(
-                default=None,
+            pose: "Model.Link.Frame.Pose" = field(
+                default="0 0 0 0 0 0",
                 metadata={
                     "type": "Element",
                     "namespace": "",
@@ -355,22 +355,22 @@ class State:
     class Meta:
         name = "state"
 
-    sim_time: Optional[float] = field(
-        default=None,
+    sim_time: float = field(
+        default="0 0",
         metadata={
             "type": "Element",
             "namespace": "",
         }
     )
-    wall_time: Optional[float] = field(
-        default=None,
+    wall_time: float = field(
+        default="0 0",
         metadata={
             "type": "Element",
             "namespace": "",
         }
     )
-    real_time: Optional[float] = field(
-        default=None,
+    real_time: float = field(
+        default="0 0",
         metadata={
             "type": "Element",
             "namespace": "",
@@ -474,8 +474,8 @@ class State:
                 "namespace": "",
             }
         )
-        pose: Optional["State.Light.Pose"] = field(
-            default=None,
+        pose: "State.Light.Pose" = field(
+            default="0 0 0 0 0 0",
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -502,8 +502,8 @@ class State:
                 frame defined inside the parent that this frame is
                 attached to.
             """
-            pose: Optional["State.Light.Frame.Pose"] = field(
-                default=None,
+            pose: "State.Light.Frame.Pose" = field(
+                default="0 0 0 0 0 0",
                 metadata={
                     "type": "Element",
                     "namespace": "",

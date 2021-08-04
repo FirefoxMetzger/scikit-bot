@@ -26,23 +26,23 @@ class Light:
     class Meta:
         name = "light"
 
-    cast_shadows: Optional[bool] = field(
-        default=None,
+    cast_shadows: bool = field(
+        default=False,
         metadata={
             "type": "Element",
             "namespace": "",
         }
     )
-    diffuse: Optional[str] = field(
-        default=None,
+    diffuse: str = field(
+        default="1 1 1 1",
         metadata={
             "type": "Element",
             "namespace": "",
             "pattern": r"(\s*\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){3}\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s*",
         }
     )
-    specular: Optional[str] = field(
-        default=None,
+    specular: str = field(
+        default=".1 .1 .1 1",
         metadata={
             "type": "Element",
             "namespace": "",
@@ -71,8 +71,8 @@ class Light:
             "namespace": "",
         }
     )
-    pose: Optional["Light.Pose"] = field(
-        default=None,
+    pose: "Light.Pose" = field(
+        default="0 0 0 0 0 0",
         metadata={
             "type": "Element",
             "namespace": "",
@@ -115,22 +115,22 @@ class Light:
                 "namespace": "",
             }
         )
-        linear: Optional[float] = field(
-            default=None,
+        linear: float = field(
+            default=1.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
             }
         )
-        constant: Optional[float] = field(
-            default=None,
+        constant: float = field(
+            default=1.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
             }
         )
-        quadratic: Optional[float] = field(
-            default=None,
+        quadratic: float = field(
+            default=0.0,
             metadata={
                 "type": "Element",
                 "namespace": "",

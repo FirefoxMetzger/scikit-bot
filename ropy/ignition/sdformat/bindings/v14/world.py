@@ -196,15 +196,15 @@ class World:
 
         @dataclass
         class Camera:
-            view_controller: Optional[str] = field(
-                default=None,
+            view_controller: str = field(
+                default="orbit",
                 metadata={
                     "type": "Element",
                     "namespace": "",
                 }
             )
-            pose: Optional[str] = field(
-                default=None,
+            pose: str = field(
+                default="0 0 0 0 0 0",
                 metadata={
                     "type": "Element",
                     "namespace": "",
@@ -235,15 +235,15 @@ class World:
                         "namespace": "",
                     }
                 )
-                min_dist: Optional[float] = field(
-                    default=None,
+                min_dist: float = field(
+                    default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
                     }
                 )
-                max_dist: Optional[float] = field(
-                    default=None,
+                max_dist: float = field(
+                    default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",

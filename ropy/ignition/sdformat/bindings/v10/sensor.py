@@ -16,8 +16,8 @@ class Sensor:
             "namespace": "",
         }
     )
-    topic: Optional[str] = field(
-        default=None,
+    topic: str = field(
+        default="__default",
         metadata={
             "type": "Element",
             "namespace": "",

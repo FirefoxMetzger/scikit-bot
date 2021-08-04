@@ -62,8 +62,8 @@ class Physics:
             "namespace": "",
         }
     )
-    max_contacts: Optional[int] = field(
-        default=None,
+    max_contacts: int = field(
+        default=20,
         metadata={
             "type": "Element",
             "namespace": "",
@@ -159,22 +159,22 @@ class Physics:
             e1==e2==0                          = 2*e1*e2/(e1+e2),
             otherwise
         """
-        min_step_size: Optional[float] = field(
-            default=None,
+        min_step_size: float = field(
+            default=0.0001,
             metadata={
                 "type": "Element",
                 "namespace": "",
             }
         )
-        accuracy: Optional[float] = field(
-            default=None,
+        accuracy: float = field(
+            default=0.001,
             metadata={
                 "type": "Element",
                 "namespace": "",
             }
         )
-        max_transient_velocity: Optional[float] = field(
-            default=None,
+        max_transient_velocity: float = field(
+            default=0.01,
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -228,64 +228,64 @@ class Physics:
                 static friction force            is reached.  Combining
                 rule: use larger velocity
             """
-            stiffness: Optional[float] = field(
-                default=None,
+            stiffness: float = field(
+                default=100000000.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
                 }
             )
-            dissipation: Optional[float] = field(
-                default=None,
+            dissipation: float = field(
+                default=100.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
                 }
             )
-            plastic_coef_restitution: Optional[float] = field(
-                default=None,
+            plastic_coef_restitution: float = field(
+                default=0.5,
                 metadata={
                     "type": "Element",
                     "namespace": "",
                 }
             )
-            plastic_impact_velocity: Optional[float] = field(
-                default=None,
+            plastic_impact_velocity: float = field(
+                default=0.5,
                 metadata={
                     "type": "Element",
                     "namespace": "",
                 }
             )
-            static_friction: Optional[float] = field(
-                default=None,
+            static_friction: float = field(
+                default=0.9,
                 metadata={
                     "type": "Element",
                     "namespace": "",
                 }
             )
-            dynamic_friction: Optional[float] = field(
-                default=None,
+            dynamic_friction: float = field(
+                default=0.9,
                 metadata={
                     "type": "Element",
                     "namespace": "",
                 }
             )
-            viscous_friction: Optional[float] = field(
-                default=None,
+            viscous_friction: float = field(
+                default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
                 }
             )
-            override_impact_capture_velocity: Optional[float] = field(
-                default=None,
+            override_impact_capture_velocity: float = field(
+                default=0.001,
                 metadata={
                     "type": "Element",
                     "namespace": "",
                 }
             )
-            override_stiction_transition_velocity: Optional[float] = field(
-                default=None,
+            override_stiction_transition_velocity: float = field(
+                default=0.001,
                 metadata={
                     "type": "Element",
                     "namespace": "",
@@ -340,8 +340,8 @@ class Physics:
                     "namespace": "",
                 }
             )
-            min_step_size: Optional[float] = field(
-                default=None,
+            min_step_size: float = field(
+                default=0.0001,
                 metadata={
                     "type": "Element",
                     "namespace": "",
@@ -479,8 +479,8 @@ class Physics:
                     "namespace": "",
                 }
             )
-            min_step_size: Optional[float] = field(
-                default=None,
+            min_step_size: float = field(
+                default=0.0001,
                 metadata={
                     "type": "Element",
                     "namespace": "",
@@ -493,8 +493,8 @@ class Physics:
                     "namespace": "",
                 }
             )
-            precon_iters: Optional[int] = field(
-                default=None,
+            precon_iters: int = field(
+                default=0,
                 metadata={
                     "type": "Element",
                     "namespace": "",

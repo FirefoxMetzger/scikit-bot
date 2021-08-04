@@ -9,8 +9,8 @@ class Physics:
     class Meta:
         name = "physics"
 
-    max_contacts: Optional[int] = field(
-        default=None,
+    max_contacts: int = field(
+        default=20,
         metadata={
             "type": "Element",
             "namespace": "",

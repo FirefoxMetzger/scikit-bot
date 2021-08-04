@@ -59,22 +59,22 @@ class Model:
     class Meta:
         name = "model"
 
-    static: Optional[bool] = field(
-        default=None,
+    static: bool = field(
+        default=False,
         metadata={
             "type": "Element",
             "namespace": "",
         }
     )
-    self_collide: Optional[bool] = field(
-        default=None,
+    self_collide: bool = field(
+        default=False,
         metadata={
             "type": "Element",
             "namespace": "",
         }
     )
-    allow_auto_disable: Optional[bool] = field(
-        default=None,
+    allow_auto_disable: bool = field(
+        default=True,
         metadata={
             "type": "Element",
             "namespace": "",
@@ -94,8 +94,8 @@ class Model:
             "namespace": "",
         }
     )
-    enable_wind: Optional[bool] = field(
-        default=None,
+    enable_wind: bool = field(
+        default=False,
         metadata={
             "type": "Element",
             "namespace": "",
@@ -108,8 +108,8 @@ class Model:
             "namespace": "",
         }
     )
-    pose: Optional["Model.Pose"] = field(
-        default=None,
+    pose: "Model.Pose" = field(
+        default="0 0 0 0 0 0",
         metadata={
             "type": "Element",
             "namespace": "",
@@ -194,8 +194,8 @@ class Model:
                 "namespace": "",
             }
         )
-        static: Optional[bool] = field(
-            default=None,
+        static: bool = field(
+            default=False,
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -208,8 +208,8 @@ class Model:
                 "namespace": "",
             }
         )
-        pose: Optional["Model.Include.Pose"] = field(
-            default=None,
+        pose: "Model.Include.Pose" = field(
+            default="0 0 0 0 0 0",
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -256,8 +256,8 @@ class Model:
             frames must lead to the name of a link, a model, or the
             world frame.
         """
-        pose: Optional["Model.Frame.Pose"] = field(
-            default=None,
+        pose: "Model.Frame.Pose" = field(
+            default="0 0 0 0 0 0",
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -396,22 +396,22 @@ class Model:
 
         @dataclass
         class GraspCheck:
-            detach_steps: Optional[int] = field(
-                default=None,
+            detach_steps: int = field(
+                default=40,
                 metadata={
                     "type": "Element",
                     "namespace": "",
                 }
             )
-            attach_steps: Optional[int] = field(
-                default=None,
+            attach_steps: int = field(
+                default=20,
                 metadata={
                     "type": "Element",
                     "namespace": "",
                 }
             )
-            min_contact_count: Optional[int] = field(
-                default=None,
+            min_contact_count: int = field(
+                default=2,
                 metadata={
                     "type": "Element",
                     "namespace": "",

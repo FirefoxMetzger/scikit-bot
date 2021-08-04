@@ -62,29 +62,29 @@ class Sensor:
     class Meta:
         name = "sensor"
 
-    always_on: Optional[bool] = field(
-        default=None,
+    always_on: bool = field(
+        default=False,
         metadata={
             "type": "Element",
             "namespace": "",
         }
     )
-    update_rate: Optional[float] = field(
-        default=None,
+    update_rate: float = field(
+        default=0.0,
         metadata={
             "type": "Element",
             "namespace": "",
         }
     )
-    visualize: Optional[bool] = field(
-        default=None,
+    visualize: bool = field(
+        default=False,
         metadata={
             "type": "Element",
             "namespace": "",
         }
     )
-    topic: Optional[str] = field(
-        default=None,
+    topic: str = field(
+        default="__default__",
         metadata={
             "type": "Element",
             "namespace": "",
@@ -97,8 +97,8 @@ class Sensor:
             "namespace": "",
         }
     )
-    pose: Optional["Sensor.Pose"] = field(
-        default=None,
+    pose: "Sensor.Pose" = field(
+        default="0 0 0 0 0 0",
         metadata={
             "type": "Element",
             "namespace": "",
@@ -243,8 +243,8 @@ class Sensor:
         name: Name of the frame. This name must not match another frame
             defined inside the parent that this frame is attached to.
         """
-        pose: Optional["Sensor.Frame.Pose"] = field(
-            default=None,
+        pose: "Sensor.Frame.Pose" = field(
+            default="0 0 0 0 0 0",
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -357,8 +357,8 @@ class Sensor:
             height of zero.
         pressure: Noise parameters for the pressure data.
         """
-        reference_altitude: Optional[float] = field(
-            default=None,
+        reference_altitude: float = field(
+            default=0.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -427,50 +427,50 @@ class Sensor:
                     ("gaussian" plus quantization of outputs (ie.
                     rounding))
                 """
-                mean: Optional[float] = field(
-                    default=None,
+                mean: float = field(
+                    default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
                     }
                 )
-                stddev: Optional[float] = field(
-                    default=None,
+                stddev: float = field(
+                    default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
                     }
                 )
-                bias_mean: Optional[float] = field(
-                    default=None,
+                bias_mean: float = field(
+                    default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
                     }
                 )
-                bias_stddev: Optional[float] = field(
-                    default=None,
+                bias_stddev: float = field(
+                    default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
                     }
                 )
-                dynamic_bias_stddev: Optional[float] = field(
-                    default=None,
+                dynamic_bias_stddev: float = field(
+                    default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
                     }
                 )
-                dynamic_bias_correlation_time: Optional[float] = field(
-                    default=None,
+                dynamic_bias_correlation_time: float = field(
+                    default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
                     }
                 )
-                precision: Optional[float] = field(
-                    default=None,
+                precision: float = field(
+                    default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
@@ -564,50 +564,50 @@ class Sensor:
                     ("gaussian" plus quantization of outputs (ie.
                     rounding))
                 """
-                mean: Optional[float] = field(
-                    default=None,
+                mean: float = field(
+                    default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
                     }
                 )
-                stddev: Optional[float] = field(
-                    default=None,
+                stddev: float = field(
+                    default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
                     }
                 )
-                bias_mean: Optional[float] = field(
-                    default=None,
+                bias_mean: float = field(
+                    default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
                     }
                 )
-                bias_stddev: Optional[float] = field(
-                    default=None,
+                bias_stddev: float = field(
+                    default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
                     }
                 )
-                dynamic_bias_stddev: Optional[float] = field(
-                    default=None,
+                dynamic_bias_stddev: float = field(
+                    default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
                     }
                 )
-                dynamic_bias_correlation_time: Optional[float] = field(
-                    default=None,
+                dynamic_bias_correlation_time: float = field(
+                    default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
                     }
                 )
-                precision: Optional[float] = field(
-                    default=None,
+                precision: float = field(
+                    default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
@@ -676,50 +676,50 @@ class Sensor:
                     ("gaussian" plus quantization of outputs (ie.
                     rounding))
                 """
-                mean: Optional[float] = field(
-                    default=None,
+                mean: float = field(
+                    default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
                     }
                 )
-                stddev: Optional[float] = field(
-                    default=None,
+                stddev: float = field(
+                    default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
                     }
                 )
-                bias_mean: Optional[float] = field(
-                    default=None,
+                bias_mean: float = field(
+                    default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
                     }
                 )
-                bias_stddev: Optional[float] = field(
-                    default=None,
+                bias_stddev: float = field(
+                    default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
                     }
                 )
-                dynamic_bias_stddev: Optional[float] = field(
-                    default=None,
+                dynamic_bias_stddev: float = field(
+                    default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
                     }
                 )
-                dynamic_bias_correlation_time: Optional[float] = field(
-                    default=None,
+                dynamic_bias_correlation_time: float = field(
+                    default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
                     }
                 )
-                precision: Optional[float] = field(
-                    default=None,
+                precision: float = field(
+                    default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
@@ -821,8 +821,8 @@ class Sensor:
                 "namespace": "",
             }
         )
-        pose: Optional["Sensor.Camera.Pose"] = field(
-            default=None,
+        pose: "Sensor.Camera.Pose" = field(
+            default="0 0 0 0 0 0",
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -861,8 +861,8 @@ class Sensor:
                     "namespace": "",
                 }
             )
-            format: Optional[str] = field(
-                default=None,
+            format: str = field(
+                default="R8G8B8",
                 metadata={
                     "type": "Element",
                     "namespace": "",
@@ -962,15 +962,15 @@ class Sensor:
                 near: Near clipping plane for depth camera
                 far: Far clipping plane for depth camera
                 """
-                near: Optional[float] = field(
-                    default=None,
+                near: float = field(
+                    default=0.1,
                     metadata={
                         "type": "Element",
                         "namespace": "",
                     }
                 )
-                far: Optional[float] = field(
-                    default=None,
+                far: float = field(
+                    default=10.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
@@ -1000,15 +1000,15 @@ class Sensor:
                     "namespace": "",
                 }
             )
-            mean: Optional[float] = field(
-                default=None,
+            mean: float = field(
+                default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
                 }
             )
-            stddev: Optional[float] = field(
-                default=None,
+            stddev: float = field(
+                default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
@@ -1030,43 +1030,43 @@ class Sensor:
             p2: The tangential distortion coefficient p2
             center: The distortion center or principal point
             """
-            k1: Optional[float] = field(
-                default=None,
+            k1: float = field(
+                default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
                 }
             )
-            k2: Optional[float] = field(
-                default=None,
+            k2: float = field(
+                default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
                 }
             )
-            k3: Optional[float] = field(
-                default=None,
+            k3: float = field(
+                default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
                 }
             )
-            p1: Optional[float] = field(
-                default=None,
+            p1: float = field(
+                default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
                 }
             )
-            p2: Optional[float] = field(
-                default=None,
+            p2: float = field(
+                default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
                 }
             )
-            center: Optional[str] = field(
-                default=None,
+            center: str = field(
+                default="0.5 0.5",
                 metadata={
                     "type": "Element",
                     "namespace": "",
@@ -1125,15 +1125,15 @@ class Sensor:
                     "namespace": "",
                 }
             )
-            cutoff_angle: Optional[float] = field(
-                default=None,
+            cutoff_angle: float = field(
+                default=1.5707,
                 metadata={
                     "type": "Element",
                     "namespace": "",
                 }
             )
-            env_texture_size: Optional[int] = field(
-                default=None,
+            env_texture_size: int = field(
+                default=256,
                 metadata={
                     "type": "Element",
                     "namespace": "",
@@ -1164,29 +1164,29 @@ class Sensor:
                     value is ignored if 'scale_to_fov' is set to true
                 fun: Possible values are 'sin', 'tan' and 'id'
                 """
-                c1: Optional[float] = field(
-                    default=None,
+                c1: float = field(
+                    default=1.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
                     }
                 )
-                c2: Optional[float] = field(
-                    default=None,
+                c2: float = field(
+                    default=1.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
                     }
                 )
-                c3: Optional[float] = field(
-                    default=None,
+                c3: float = field(
+                    default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
                     }
                 )
-                f: Optional[float] = field(
-                    default=None,
+                f: float = field(
+                    default=1.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
@@ -1266,8 +1266,8 @@ class Sensor:
                 frame defined inside the parent that this frame is
                 attached to.
             """
-            pose: Optional["Sensor.Camera.Frame.Pose"] = field(
-                default=None,
+            pose: "Sensor.Camera.Frame.Pose" = field(
+                default="0 0 0 0 0 0",
                 metadata={
                     "type": "Element",
                     "namespace": "",
@@ -1375,15 +1375,15 @@ class Sensor:
             wrench is the one applied by the child link on the parent
             link.
         """
-        frame: Optional[str] = field(
-            default=None,
+        frame: str = field(
+            default="child",
             metadata={
                 "type": "Element",
                 "namespace": "",
             }
         )
-        measure_direction: Optional[str] = field(
-            default=None,
+        measure_direction: str = field(
+            default="child_to_parent",
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -1502,50 +1502,50 @@ class Sensor:
                         "gaussian_quantized" ("gaussian" plus
                         quantization of outputs (ie. rounding))
                     """
-                    mean: Optional[float] = field(
-                        default=None,
+                    mean: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
                         }
                     )
-                    stddev: Optional[float] = field(
-                        default=None,
+                    stddev: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
                         }
                     )
-                    bias_mean: Optional[float] = field(
-                        default=None,
+                    bias_mean: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
                         }
                     )
-                    bias_stddev: Optional[float] = field(
-                        default=None,
+                    bias_stddev: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
                         }
                     )
-                    dynamic_bias_stddev: Optional[float] = field(
-                        default=None,
+                    dynamic_bias_stddev: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
                         }
                     )
-                    dynamic_bias_correlation_time: Optional[float] = field(
-                        default=None,
+                    dynamic_bias_correlation_time: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
                         }
                     )
-                    precision: Optional[float] = field(
-                        default=None,
+                    precision: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
@@ -1617,50 +1617,50 @@ class Sensor:
                         "gaussian_quantized" ("gaussian" plus
                         quantization of outputs (ie. rounding))
                     """
-                    mean: Optional[float] = field(
-                        default=None,
+                    mean: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
                         }
                     )
-                    stddev: Optional[float] = field(
-                        default=None,
+                    stddev: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
                         }
                     )
-                    bias_mean: Optional[float] = field(
-                        default=None,
+                    bias_mean: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
                         }
                     )
-                    bias_stddev: Optional[float] = field(
-                        default=None,
+                    bias_stddev: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
                         }
                     )
-                    dynamic_bias_stddev: Optional[float] = field(
-                        default=None,
+                    dynamic_bias_stddev: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
                         }
                     )
-                    dynamic_bias_correlation_time: Optional[float] = field(
-                        default=None,
+                    dynamic_bias_correlation_time: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
                         }
                     )
-                    precision: Optional[float] = field(
-                        default=None,
+                    precision: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
@@ -1759,50 +1759,50 @@ class Sensor:
                         "gaussian_quantized" ("gaussian" plus
                         quantization of outputs (ie. rounding))
                     """
-                    mean: Optional[float] = field(
-                        default=None,
+                    mean: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
                         }
                     )
-                    stddev: Optional[float] = field(
-                        default=None,
+                    stddev: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
                         }
                     )
-                    bias_mean: Optional[float] = field(
-                        default=None,
+                    bias_mean: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
                         }
                     )
-                    bias_stddev: Optional[float] = field(
-                        default=None,
+                    bias_stddev: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
                         }
                     )
-                    dynamic_bias_stddev: Optional[float] = field(
-                        default=None,
+                    dynamic_bias_stddev: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
                         }
                     )
-                    dynamic_bias_correlation_time: Optional[float] = field(
-                        default=None,
+                    dynamic_bias_correlation_time: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
                         }
                     )
-                    precision: Optional[float] = field(
-                        default=None,
+                    precision: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
@@ -1874,50 +1874,50 @@ class Sensor:
                         "gaussian_quantized" ("gaussian" plus
                         quantization of outputs (ie. rounding))
                     """
-                    mean: Optional[float] = field(
-                        default=None,
+                    mean: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
                         }
                     )
-                    stddev: Optional[float] = field(
-                        default=None,
+                    stddev: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
                         }
                     )
-                    bias_mean: Optional[float] = field(
-                        default=None,
+                    bias_mean: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
                         }
                     )
-                    bias_stddev: Optional[float] = field(
-                        default=None,
+                    bias_stddev: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
                         }
                     )
-                    dynamic_bias_stddev: Optional[float] = field(
-                        default=None,
+                    dynamic_bias_stddev: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
                         }
                     )
-                    dynamic_bias_correlation_time: Optional[float] = field(
-                        default=None,
+                    dynamic_bias_correlation_time: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
                         }
                     )
-                    precision: Optional[float] = field(
-                        default=None,
+                    precision: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
@@ -1955,8 +1955,8 @@ class Sensor:
                 "namespace": "",
             }
         )
-        topic: Optional[str] = field(
-            default=None,
+        topic: str = field(
+            default="__default_topic__",
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -2069,15 +2069,15 @@ class Sensor:
                     "namespace": "",
                 }
             )
-            custom_rpy: Optional["Sensor.Imu.OrientationReferenceFrame.CustomRpy"] = field(
-                default=None,
+            custom_rpy: "Sensor.Imu.OrientationReferenceFrame.CustomRpy" = field(
+                default="0 0 0",
                 metadata={
                     "type": "Element",
                     "namespace": "",
                 }
             )
-            grav_dir_x: Optional["Sensor.Imu.OrientationReferenceFrame.GravDirX"] = field(
-                default=None,
+            grav_dir_x: "Sensor.Imu.OrientationReferenceFrame.GravDirX" = field(
+                default="1 0 0",
                 metadata={
                     "type": "Element",
                     "namespace": "",
@@ -2227,50 +2227,50 @@ class Sensor:
                         "gaussian_quantized" ("gaussian" plus
                         quantization of outputs (ie. rounding))
                     """
-                    mean: Optional[float] = field(
-                        default=None,
+                    mean: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
                         }
                     )
-                    stddev: Optional[float] = field(
-                        default=None,
+                    stddev: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
                         }
                     )
-                    bias_mean: Optional[float] = field(
-                        default=None,
+                    bias_mean: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
                         }
                     )
-                    bias_stddev: Optional[float] = field(
-                        default=None,
+                    bias_stddev: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
                         }
                     )
-                    dynamic_bias_stddev: Optional[float] = field(
-                        default=None,
+                    dynamic_bias_stddev: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
                         }
                     )
-                    dynamic_bias_correlation_time: Optional[float] = field(
-                        default=None,
+                    dynamic_bias_correlation_time: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
                         }
                     )
-                    precision: Optional[float] = field(
-                        default=None,
+                    precision: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
@@ -2341,50 +2341,50 @@ class Sensor:
                         "gaussian_quantized" ("gaussian" plus
                         quantization of outputs (ie. rounding))
                     """
-                    mean: Optional[float] = field(
-                        default=None,
+                    mean: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
                         }
                     )
-                    stddev: Optional[float] = field(
-                        default=None,
+                    stddev: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
                         }
                     )
-                    bias_mean: Optional[float] = field(
-                        default=None,
+                    bias_mean: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
                         }
                     )
-                    bias_stddev: Optional[float] = field(
-                        default=None,
+                    bias_stddev: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
                         }
                     )
-                    dynamic_bias_stddev: Optional[float] = field(
-                        default=None,
+                    dynamic_bias_stddev: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
                         }
                     )
-                    dynamic_bias_correlation_time: Optional[float] = field(
-                        default=None,
+                    dynamic_bias_correlation_time: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
                         }
                     )
-                    precision: Optional[float] = field(
-                        default=None,
+                    precision: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
@@ -2455,50 +2455,50 @@ class Sensor:
                         "gaussian_quantized" ("gaussian" plus
                         quantization of outputs (ie. rounding))
                     """
-                    mean: Optional[float] = field(
-                        default=None,
+                    mean: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
                         }
                     )
-                    stddev: Optional[float] = field(
-                        default=None,
+                    stddev: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
                         }
                     )
-                    bias_mean: Optional[float] = field(
-                        default=None,
+                    bias_mean: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
                         }
                     )
-                    bias_stddev: Optional[float] = field(
-                        default=None,
+                    bias_stddev: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
                         }
                     )
-                    dynamic_bias_stddev: Optional[float] = field(
-                        default=None,
+                    dynamic_bias_stddev: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
                         }
                     )
-                    dynamic_bias_correlation_time: Optional[float] = field(
-                        default=None,
+                    dynamic_bias_correlation_time: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
                         }
                     )
-                    precision: Optional[float] = field(
-                        default=None,
+                    precision: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
@@ -2603,50 +2603,50 @@ class Sensor:
                         "gaussian_quantized" ("gaussian" plus
                         quantization of outputs (ie. rounding))
                     """
-                    mean: Optional[float] = field(
-                        default=None,
+                    mean: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
                         }
                     )
-                    stddev: Optional[float] = field(
-                        default=None,
+                    stddev: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
                         }
                     )
-                    bias_mean: Optional[float] = field(
-                        default=None,
+                    bias_mean: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
                         }
                     )
-                    bias_stddev: Optional[float] = field(
-                        default=None,
+                    bias_stddev: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
                         }
                     )
-                    dynamic_bias_stddev: Optional[float] = field(
-                        default=None,
+                    dynamic_bias_stddev: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
                         }
                     )
-                    dynamic_bias_correlation_time: Optional[float] = field(
-                        default=None,
+                    dynamic_bias_correlation_time: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
                         }
                     )
-                    precision: Optional[float] = field(
-                        default=None,
+                    precision: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
@@ -2717,50 +2717,50 @@ class Sensor:
                         "gaussian_quantized" ("gaussian" plus
                         quantization of outputs (ie. rounding))
                     """
-                    mean: Optional[float] = field(
-                        default=None,
+                    mean: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
                         }
                     )
-                    stddev: Optional[float] = field(
-                        default=None,
+                    stddev: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
                         }
                     )
-                    bias_mean: Optional[float] = field(
-                        default=None,
+                    bias_mean: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
                         }
                     )
-                    bias_stddev: Optional[float] = field(
-                        default=None,
+                    bias_stddev: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
                         }
                     )
-                    dynamic_bias_stddev: Optional[float] = field(
-                        default=None,
+                    dynamic_bias_stddev: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
                         }
                     )
-                    dynamic_bias_correlation_time: Optional[float] = field(
-                        default=None,
+                    dynamic_bias_correlation_time: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
                         }
                     )
-                    precision: Optional[float] = field(
-                        default=None,
+                    precision: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
@@ -2831,50 +2831,50 @@ class Sensor:
                         "gaussian_quantized" ("gaussian" plus
                         quantization of outputs (ie. rounding))
                     """
-                    mean: Optional[float] = field(
-                        default=None,
+                    mean: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
                         }
                     )
-                    stddev: Optional[float] = field(
-                        default=None,
+                    stddev: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
                         }
                     )
-                    bias_mean: Optional[float] = field(
-                        default=None,
+                    bias_mean: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
                         }
                     )
-                    bias_stddev: Optional[float] = field(
-                        default=None,
+                    bias_stddev: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
                         }
                     )
-                    dynamic_bias_stddev: Optional[float] = field(
-                        default=None,
+                    dynamic_bias_stddev: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
                         }
                     )
-                    dynamic_bias_correlation_time: Optional[float] = field(
-                        default=None,
+                    dynamic_bias_correlation_time: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
                         }
                     )
-                    precision: Optional[float] = field(
-                        default=None,
+                    precision: float = field(
+                        default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
@@ -3006,8 +3006,8 @@ class Sensor:
                         "namespace": "",
                     }
                 )
-                resolution: Optional[float] = field(
-                    default=None,
+                resolution: float = field(
+                    default=1.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
@@ -3053,8 +3053,8 @@ class Sensor:
                     "namespace": "",
                 }
             )
-            resolution: Optional[float] = field(
-                default=None,
+            resolution: float = field(
+                default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
@@ -3084,15 +3084,15 @@ class Sensor:
                     "namespace": "",
                 }
             )
-            mean: Optional[float] = field(
-                default=None,
+            mean: float = field(
+                default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
                 }
             )
-            stddev: Optional[float] = field(
-                default=None,
+            stddev: float = field(
+                default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
@@ -3236,50 +3236,50 @@ class Sensor:
                     ("gaussian" plus quantization of outputs (ie.
                     rounding))
                 """
-                mean: Optional[float] = field(
-                    default=None,
+                mean: float = field(
+                    default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
                     }
                 )
-                stddev: Optional[float] = field(
-                    default=None,
+                stddev: float = field(
+                    default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
                     }
                 )
-                bias_mean: Optional[float] = field(
-                    default=None,
+                bias_mean: float = field(
+                    default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
                     }
                 )
-                bias_stddev: Optional[float] = field(
-                    default=None,
+                bias_stddev: float = field(
+                    default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
                     }
                 )
-                dynamic_bias_stddev: Optional[float] = field(
-                    default=None,
+                dynamic_bias_stddev: float = field(
+                    default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
                     }
                 )
-                dynamic_bias_correlation_time: Optional[float] = field(
-                    default=None,
+                dynamic_bias_correlation_time: float = field(
+                    default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
                     }
                 )
-                precision: Optional[float] = field(
-                    default=None,
+                precision: float = field(
+                    default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
@@ -3348,50 +3348,50 @@ class Sensor:
                     ("gaussian" plus quantization of outputs (ie.
                     rounding))
                 """
-                mean: Optional[float] = field(
-                    default=None,
+                mean: float = field(
+                    default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
                     }
                 )
-                stddev: Optional[float] = field(
-                    default=None,
+                stddev: float = field(
+                    default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
                     }
                 )
-                bias_mean: Optional[float] = field(
-                    default=None,
+                bias_mean: float = field(
+                    default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
                     }
                 )
-                bias_stddev: Optional[float] = field(
-                    default=None,
+                bias_stddev: float = field(
+                    default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
                     }
                 )
-                dynamic_bias_stddev: Optional[float] = field(
-                    default=None,
+                dynamic_bias_stddev: float = field(
+                    default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
                     }
                 )
-                dynamic_bias_correlation_time: Optional[float] = field(
-                    default=None,
+                dynamic_bias_correlation_time: float = field(
+                    default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
                     }
                 )
-                precision: Optional[float] = field(
-                    default=None,
+                precision: float = field(
+                    default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
@@ -3460,50 +3460,50 @@ class Sensor:
                     ("gaussian" plus quantization of outputs (ie.
                     rounding))
                 """
-                mean: Optional[float] = field(
-                    default=None,
+                mean: float = field(
+                    default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
                     }
                 )
-                stddev: Optional[float] = field(
-                    default=None,
+                stddev: float = field(
+                    default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
                     }
                 )
-                bias_mean: Optional[float] = field(
-                    default=None,
+                bias_mean: float = field(
+                    default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
                     }
                 )
-                bias_stddev: Optional[float] = field(
-                    default=None,
+                bias_stddev: float = field(
+                    default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
                     }
                 )
-                dynamic_bias_stddev: Optional[float] = field(
-                    default=None,
+                dynamic_bias_stddev: float = field(
+                    default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
                     }
                 )
-                dynamic_bias_correlation_time: Optional[float] = field(
-                    default=None,
+                dynamic_bias_correlation_time: float = field(
+                    default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
                     }
                 )
-                precision: Optional[float] = field(
-                    default=None,
+                precision: float = field(
+                    default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
@@ -3637,8 +3637,8 @@ class Sensor:
                         "namespace": "",
                     }
                 )
-                resolution: Optional[float] = field(
-                    default=None,
+                resolution: float = field(
+                    default=1.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
@@ -3684,8 +3684,8 @@ class Sensor:
                     "namespace": "",
                 }
             )
-            resolution: Optional[float] = field(
-                default=None,
+            resolution: float = field(
+                default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
@@ -3715,15 +3715,15 @@ class Sensor:
                     "namespace": "",
                 }
             )
-            mean: Optional[float] = field(
-                default=None,
+            mean: float = field(
+                default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
                 }
             )
-            stddev: Optional[float] = field(
-                default=None,
+            stddev: float = field(
+                default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
@@ -3744,8 +3744,8 @@ class Sensor:
         radius: Radius of the sonar cone at max range. This parameter is
             only used if geometry is "cone".
         """
-        geometry: Optional[str] = field(
-            default=None,
+        geometry: str = field(
+            default="cone",
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -3765,8 +3765,8 @@ class Sensor:
                 "namespace": "",
             }
         )
-        radius: Optional[float] = field(
-            default=None,
+        radius: float = field(
+            default=0.5,
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -3790,29 +3790,29 @@ class Sensor:
         power: Specifies the transmission power in dBm
         sensitivity: Mininum received signal power in dBm
         """
-        essid: Optional[str] = field(
-            default=None,
+        essid: str = field(
+            default="wireless",
             metadata={
                 "type": "Element",
                 "namespace": "",
             }
         )
-        frequency: Optional[float] = field(
-            default=None,
+        frequency: float = field(
+            default=2442.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
             }
         )
-        min_frequency: Optional[float] = field(
-            default=None,
+        min_frequency: float = field(
+            default=2412.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
             }
         )
-        max_frequency: Optional[float] = field(
-            default=None,
+        max_frequency: float = field(
+            default=2484.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -3832,8 +3832,8 @@ class Sensor:
                 "namespace": "",
             }
         )
-        sensitivity: Optional[float] = field(
-            default=None,
+        sensitivity: float = field(
+            default=-90.0,
             metadata={
                 "type": "Element",
                 "namespace": "",

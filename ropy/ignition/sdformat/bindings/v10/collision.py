@@ -10,15 +10,15 @@ class Collision:
     class Meta:
         name = "collision"
 
-    max_contacts: Optional[int] = field(
-        default=None,
+    max_contacts: int = field(
+        default=10,
         metadata={
             "type": "Element",
             "namespace": "",
         }
     )
-    mass: Optional[float] = field(
-        default=None,
+    mass: float = field(
+        default=0.0,
         metadata={
             "type": "Element",
             "namespace": "",

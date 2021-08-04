@@ -32,8 +32,8 @@ class Joint:
             "namespace": "",
         }
     )
-    thread_pitch: Optional[float] = field(
-        default=None,
+    thread_pitch: float = field(
+        default=1.0,
         metadata={
             "type": "Element",
             "namespace": "",
@@ -139,36 +139,36 @@ class Joint:
 
         @dataclass
         class Ode:
-            fudge_factor: Optional[float] = field(
-                default=None,
+            fudge_factor: float = field(
+                default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
                 }
             )
-            cfm: Optional[float] = field(
-                default=None,
+            cfm: float = field(
+                default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
                 }
             )
-            bounce: Optional[float] = field(
-                default=None,
+            bounce: float = field(
+                default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
                 }
             )
-            max_force: Optional[float] = field(
-                default=None,
+            max_force: float = field(
+                default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
                 }
             )
-            velocity: Optional[float] = field(
-                default=None,
+            velocity: float = field(
+                default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",

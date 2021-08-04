@@ -58,8 +58,8 @@ class Scene:
             "namespace": "",
         }
     )
-    grid: Optional[bool] = field(
-        default=None,
+    grid: bool = field(
+        default=True,
         metadata={
             "type": "Element",
             "namespace": "",
@@ -78,22 +78,22 @@ class Scene:
         sunset: Sunset time [0..24]
         clouds: Sunset time [0..24]
         """
-        time: Optional[float] = field(
-            default=None,
+        time: float = field(
+            default=10.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
             }
         )
-        sunrise: Optional[float] = field(
-            default=None,
+        sunrise: float = field(
+            default=6.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
             }
         )
-        sunset: Optional[float] = field(
-            default=None,
+        sunset: float = field(
+            default=20.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -120,36 +120,36 @@ class Scene:
             mean_size: Average size of the clouds
             ambient: Ambient cloud color
             """
-            speed: Optional[float] = field(
-                default=None,
+            speed: float = field(
+                default=0.6,
                 metadata={
                     "type": "Element",
                     "namespace": "",
                 }
             )
-            direction: Optional[float] = field(
-                default=None,
+            direction: float = field(
+                default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
                 }
             )
-            humidity: Optional[float] = field(
-                default=None,
+            humidity: float = field(
+                default=0.5,
                 metadata={
                     "type": "Element",
                     "namespace": "",
                 }
             )
-            mean_size: Optional[float] = field(
-                default=None,
+            mean_size: float = field(
+                default=0.5,
                 metadata={
                     "type": "Element",
                     "namespace": "",
                 }
             )
-            ambient: Optional[str] = field(
-                default=None,
+            ambient: str = field(
+                default=".8 .8 .8 1",
                 metadata={
                     "type": "Element",
                     "namespace": "",
@@ -170,37 +170,37 @@ class Scene:
         end: Distance to end of fog
         density: Density of fog
         """
-        color: Optional[str] = field(
-            default=None,
+        color: str = field(
+            default="1 1 1 1",
             metadata={
                 "type": "Element",
                 "namespace": "",
                 "pattern": r"(\s*\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){3}\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s*",
             }
         )
-        type: Optional[str] = field(
-            default=None,
+        type: str = field(
+            default="none",
             metadata={
                 "type": "Element",
                 "namespace": "",
             }
         )
-        start: Optional[float] = field(
-            default=None,
+        start: float = field(
+            default=1.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
             }
         )
-        end: Optional[float] = field(
-            default=None,
+        end: float = field(
+            default=100.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
             }
         )
-        density: Optional[float] = field(
-            default=None,
+        density: float = field(
+            default=1.0,
             metadata={
                 "type": "Element",
                 "namespace": "",

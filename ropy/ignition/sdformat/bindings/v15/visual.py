@@ -35,22 +35,22 @@ class Visual:
     class Meta:
         name = "visual"
 
-    cast_shadows: Optional[bool] = field(
-        default=None,
+    cast_shadows: bool = field(
+        default=True,
         metadata={
             "type": "Element",
             "namespace": "",
         }
     )
-    laser_retro: Optional[float] = field(
-        default=None,
+    laser_retro: float = field(
+        default=0.0,
         metadata={
             "type": "Element",
             "namespace": "",
         }
     )
-    transparency: Optional[float] = field(
-        default=None,
+    transparency: float = field(
+        default=0.0,
         metadata={
             "type": "Element",
             "namespace": "",
@@ -70,8 +70,8 @@ class Visual:
             "namespace": "",
         }
     )
-    pose: Optional["Visual.Pose"] = field(
-        default=None,
+    pose: "Visual.Pose" = field(
+        default="0 0 0 0 0 0",
         metadata={
             "type": "Element",
             "namespace": "",
@@ -120,8 +120,8 @@ class Visual:
             number is useful for programs, such as Gazebo, that put
             visuals in different layers for enhanced visualization.
         """
-        layer: Optional[int] = field(
-            default=None,
+        layer: int = field(
+            default=0,
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -140,8 +140,8 @@ class Visual:
         name: Name of the frame. This name must not match another frame
             defined inside the parent that this frame is attached to.
         """
-        pose: Optional["Visual.Frame.Pose"] = field(
-            default=None,
+        pose: "Visual.Frame.Pose" = field(
+            default="0 0 0 0 0 0",
             metadata={
                 "type": "Element",
                 "namespace": "",

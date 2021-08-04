@@ -29,22 +29,22 @@ class Collision:
     class Meta:
         name = "collision"
 
-    laser_retro: Optional[float] = field(
-        default=None,
+    laser_retro: float = field(
+        default=0.0,
         metadata={
             "type": "Element",
             "namespace": "",
         }
     )
-    max_contacts: Optional[int] = field(
-        default=None,
+    max_contacts: int = field(
+        default=10,
         metadata={
             "type": "Element",
             "namespace": "",
         }
     )
-    pose: Optional[str] = field(
-        default=None,
+    pose: str = field(
+        default="0 0 0 0 0 0",
         metadata={
             "type": "Element",
             "namespace": "",
@@ -111,15 +111,15 @@ class Collision:
             threshold: Bounce velocity threshold, below which effective
                 coefficient of restitution is 0.
             """
-            restitution_coefficient: Optional[float] = field(
-                default=None,
+            restitution_coefficient: float = field(
+                default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
                 }
             )
-            threshold: Optional[float] = field(
-                default=None,
+            threshold: float = field(
+                default=100000.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
@@ -158,37 +158,37 @@ class Collision:
                 slip2: Force dependent slip direction 2 in collision
                     local frame, between the range of [0..1].
                 """
-                mu: Optional[float] = field(
-                    default=None,
+                mu: float = field(
+                    default=-1.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
                     }
                 )
-                mu2: Optional[float] = field(
-                    default=None,
+                mu2: float = field(
+                    default=-1.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
                     }
                 )
-                fdir1: Optional[str] = field(
-                    default=None,
+                fdir1: str = field(
+                    default="0 0 0",
                     metadata={
                         "type": "Element",
                         "namespace": "",
                         "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
                     }
                 )
-                slip1: Optional[float] = field(
-                    default=None,
+                slip1: float = field(
+                    default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
                     }
                 )
-                slip2: Optional[float] = field(
-                    default=None,
+                slip2: float = field(
+                    default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
@@ -228,43 +228,43 @@ class Collision:
                 min_depth: minimum allowable depth before contact
                     correction impulse is applied
                 """
-                soft_cfm: Optional[float] = field(
-                    default=None,
+                soft_cfm: float = field(
+                    default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
                     }
                 )
-                soft_erp: Optional[float] = field(
-                    default=None,
+                soft_erp: float = field(
+                    default=0.2,
                     metadata={
                         "type": "Element",
                         "namespace": "",
                     }
                 )
-                kp: Optional[float] = field(
-                    default=None,
+                kp: float = field(
+                    default=1000000000000.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
                     }
                 )
-                kd: Optional[float] = field(
-                    default=None,
+                kd: float = field(
+                    default=1.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
                     }
                 )
-                max_vel: Optional[float] = field(
-                    default=None,
+                max_vel: float = field(
+                    default=0.01,
                     metadata={
                         "type": "Element",
                         "namespace": "",
                     }
                 )
-                min_depth: Optional[float] = field(
-                    default=None,
+                min_depth: float = field(
+                    default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",

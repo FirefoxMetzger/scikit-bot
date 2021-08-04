@@ -21,22 +21,22 @@ class State:
     class Meta:
         name = "state"
 
-    sim_time: Optional[float] = field(
-        default=None,
+    sim_time: float = field(
+        default="0 0",
         metadata={
             "type": "Element",
             "namespace": "",
         }
     )
-    wall_time: Optional[float] = field(
-        default=None,
+    wall_time: float = field(
+        default="0 0",
         metadata={
             "type": "Element",
             "namespace": "",
         }
     )
-    real_time: Optional[float] = field(
-        default=None,
+    real_time: float = field(
+        default="0 0",
         metadata={
             "type": "Element",
             "namespace": "",
@@ -219,24 +219,24 @@ class State:
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
                 }
             )
-            velocity: Optional[str] = field(
-                default=None,
+            velocity: str = field(
+                default="0 0 0 0 0 0",
                 metadata={
                     "type": "Element",
                     "namespace": "",
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
                 }
             )
-            acceleration: Optional[str] = field(
-                default=None,
+            acceleration: str = field(
+                default="0 0 0 0 0 0",
                 metadata={
                     "type": "Element",
                     "namespace": "",
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
                 }
             )
-            wrench: Optional[str] = field(
-                default=None,
+            wrench: str = field(
+                default="0 0 0 0 0 0",
                 metadata={
                     "type": "Element",
                     "namespace": "",

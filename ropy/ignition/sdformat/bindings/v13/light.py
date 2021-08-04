@@ -26,15 +26,15 @@ class Light:
     class Meta:
         name = "light"
 
-    cast_shadows: Optional[bool] = field(
-        default=None,
+    cast_shadows: bool = field(
+        default=False,
         metadata={
             "type": "Element",
             "namespace": "",
         }
     )
-    pose: Optional[str] = field(
-        default=None,
+    pose: str = field(
+        default="0 0 0 0 0 0",
         metadata={
             "type": "Element",
             "namespace": "",
@@ -115,22 +115,22 @@ class Light:
                 "namespace": "",
             }
         )
-        linear: Optional[float] = field(
-            default=None,
+        linear: float = field(
+            default=1.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
             }
         )
-        constant: Optional[float] = field(
-            default=None,
+        constant: float = field(
+            default=1.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
             }
         )
-        quadratic: Optional[float] = field(
-            default=None,
+        quadratic: float = field(
+            default=0.0,
             metadata={
                 "type": "Element",
                 "namespace": "",

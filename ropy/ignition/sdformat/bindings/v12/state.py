@@ -16,8 +16,8 @@ class State:
     class Meta:
         name = "state"
 
-    time: Optional[float] = field(
-        default=None,
+    time: float = field(
+        default="0 0",
         metadata={
             "type": "Element",
             "namespace": "",
@@ -93,8 +93,8 @@ class State:
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
                 }
             )
-            velocity: Optional[str] = field(
-                default=None,
+            velocity: str = field(
+                default="0 0 0 0 0 0",
                 metadata={
                     "type": "Element",
                     "namespace": "",
@@ -126,8 +126,8 @@ class State:
                 pos: Position of the force.
                 mag: Magnitude of the force.
                 """
-                pos: Optional[str] = field(
-                    default=None,
+                pos: str = field(
+                    default="0 0 0",
                     metadata={
                         "type": "Element",
                         "namespace": "",

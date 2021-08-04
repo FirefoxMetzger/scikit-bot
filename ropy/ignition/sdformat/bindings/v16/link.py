@@ -53,36 +53,36 @@ class Link:
     class Meta:
         name = "link"
 
-    gravity: Optional[bool] = field(
-        default=None,
+    gravity: bool = field(
+        default=True,
         metadata={
             "type": "Element",
             "namespace": "",
         }
     )
-    enable_wind: Optional[bool] = field(
-        default=None,
+    enable_wind: bool = field(
+        default=False,
         metadata={
             "type": "Element",
             "namespace": "",
         }
     )
-    self_collide: Optional[bool] = field(
-        default=None,
+    self_collide: bool = field(
+        default=False,
         metadata={
             "type": "Element",
             "namespace": "",
         }
     )
-    kinematic: Optional[bool] = field(
-        default=None,
+    kinematic: bool = field(
+        default=False,
         metadata={
             "type": "Element",
             "namespace": "",
         }
     )
-    must_be_base_link: Optional[bool] = field(
-        default=None,
+    must_be_base_link: bool = field(
+        default=False,
         metadata={
             "type": "Element",
             "namespace": "",
@@ -102,8 +102,8 @@ class Link:
             "namespace": "",
         }
     )
-    pose: Optional["Link.Pose"] = field(
-        default=None,
+    pose: "Link.Pose" = field(
+        default="0 0 0 0 0 0",
         metadata={
             "type": "Element",
             "namespace": "",
@@ -197,15 +197,15 @@ class Link:
         linear: Linear damping
         angular: Angular damping
         """
-        linear: Optional[float] = field(
-            default=None,
+        linear: float = field(
+            default=0.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
             }
         )
-        angular: Optional[float] = field(
-            default=None,
+        angular: float = field(
+            default=0.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -224,8 +224,8 @@ class Link:
         name: Name of the frame. This name must not match another frame
             defined inside the parent that this frame is attached to.
         """
-        pose: Optional["Link.Frame.Pose"] = field(
-            default=None,
+        pose: "Link.Frame.Pose" = field(
+            default="0 0 0 0 0 0",
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -302,8 +302,8 @@ class Link:
             axes of the inertial reference frame do not need to be
             aligned with the principal axes of the inertia.
         """
-        mass: Optional[float] = field(
-            default=None,
+        mass: float = field(
+            default=1.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -323,8 +323,8 @@ class Link:
                 "namespace": "",
             }
         )
-        pose: Optional["Link.Inertial.Pose"] = field(
-            default=None,
+        pose: "Link.Inertial.Pose" = field(
+            default="0 0 0 0 0 0",
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -395,8 +395,8 @@ class Link:
                 frame defined inside the parent that this frame is
                 attached to.
             """
-            pose: Optional["Link.Inertial.Frame.Pose"] = field(
-                default=None,
+            pose: "Link.Inertial.Frame.Pose" = field(
+                default="0 0 0 0 0 0",
                 metadata={
                     "type": "Element",
                     "namespace": "",
@@ -478,22 +478,22 @@ class Link:
                 "namespace": "",
             }
         )
-        fov: Optional[float] = field(
-            default=None,
+        fov: float = field(
+            default=0.785,
             metadata={
                 "type": "Element",
                 "namespace": "",
             }
         )
-        near_clip: Optional[float] = field(
-            default=None,
+        near_clip: float = field(
+            default=0.1,
             metadata={
                 "type": "Element",
                 "namespace": "",
             }
         )
-        far_clip: Optional[float] = field(
-            default=None,
+        far_clip: float = field(
+            default=10.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -506,8 +506,8 @@ class Link:
                 "namespace": "",
             }
         )
-        pose: Optional["Link.Projector.Pose"] = field(
-            default=None,
+        pose: "Link.Projector.Pose" = field(
+            default="0 0 0 0 0 0",
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -541,8 +541,8 @@ class Link:
                 frame defined inside the parent that this frame is
                 attached to.
             """
-            pose: Optional["Link.Projector.Frame.Pose"] = field(
-                default=None,
+            pose: "Link.Projector.Frame.Pose" = field(
+                default="0 0 0 0 0 0",
                 metadata={
                     "type": "Element",
                     "namespace": "",
@@ -664,15 +664,15 @@ class Link:
                 "namespace": "",
             }
         )
-        pitch: Optional[float] = field(
-            default=None,
+        pitch: float = field(
+            default=1.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
             }
         )
-        gain: Optional[float] = field(
-            default=None,
+        gain: float = field(
+            default=1.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -685,8 +685,8 @@ class Link:
                 "namespace": "",
             }
         )
-        loop: Optional[bool] = field(
-            default=None,
+        loop: bool = field(
+            default=False,
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -699,8 +699,8 @@ class Link:
                 "namespace": "",
             }
         )
-        pose: Optional["Link.AudioSource.Pose"] = field(
-            default=None,
+        pose: "Link.AudioSource.Pose" = field(
+            default="0 0 0 0 0 0",
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -739,8 +739,8 @@ class Link:
                 frame defined inside the parent that this frame is
                 attached to.
             """
-            pose: Optional["Link.AudioSource.Frame.Pose"] = field(
-                default=None,
+            pose: "Link.AudioSource.Frame.Pose" = field(
+                default="0 0 0 0 0 0",
                 metadata={
                     "type": "Element",
                     "namespace": "",
@@ -900,81 +900,81 @@ class Link:
         type: The type of a particle emitter. One of "box", "cylinder",
             "ellipsoid", or "point".
         """
-        emitting: Optional[bool] = field(
-            default=None,
+        emitting: bool = field(
+            default=True,
             metadata={
                 "type": "Element",
                 "namespace": "",
             }
         )
-        duration: Optional[float] = field(
-            default=None,
+        duration: float = field(
+            default=0.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
             }
         )
-        size: Optional[str] = field(
-            default=None,
-            metadata={
-                "type": "Element",
-                "namespace": "",
-                "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-            }
-        )
-        particle_size: Optional[str] = field(
-            default=None,
+        size: str = field(
+            default="1 1 1",
             metadata={
                 "type": "Element",
                 "namespace": "",
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
             }
         )
-        lifetime: Optional[float] = field(
-            default=None,
+        particle_size: str = field(
+            default="1 1 1",
+            metadata={
+                "type": "Element",
+                "namespace": "",
+                "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
+            }
+        )
+        lifetime: float = field(
+            default=5.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
             }
         )
-        rate: Optional[float] = field(
-            default=None,
+        rate: float = field(
+            default=10.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
             }
         )
-        min_velocity: Optional[float] = field(
-            default=None,
+        min_velocity: float = field(
+            default=1.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
             }
         )
-        max_velocity: Optional[float] = field(
-            default=None,
+        max_velocity: float = field(
+            default=1.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
             }
         )
-        scale_rate: Optional[float] = field(
-            default=None,
+        scale_rate: float = field(
+            default=0.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
             }
         )
-        color_start: Optional[str] = field(
-            default=None,
+        color_start: str = field(
+            default="1 1 1 1",
             metadata={
                 "type": "Element",
                 "namespace": "",
                 "pattern": r"(\s*\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){3}\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s*",
             }
         )
-        color_end: Optional[str] = field(
-            default=None,
+        color_end: str = field(
+            default="1 1 1 1",
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -995,15 +995,15 @@ class Link:
                 "namespace": "",
             }
         )
-        particle_scatter_ratio: Optional[float] = field(
-            default=None,
+        particle_scatter_ratio: float = field(
+            default=0.65,
             metadata={
                 "type": "Element",
                 "namespace": "",
             }
         )
-        pose: Optional["Link.ParticleEmitter.Pose"] = field(
-            default=None,
+        pose: "Link.ParticleEmitter.Pose" = field(
+            default="0 0 0 0 0 0",
             metadata={
                 "type": "Element",
                 "namespace": "",

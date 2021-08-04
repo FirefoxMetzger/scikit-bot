@@ -29,29 +29,29 @@ class Visual:
     class Meta:
         name = "visual"
 
-    cast_shadows: Optional[bool] = field(
-        default=None,
+    cast_shadows: bool = field(
+        default=True,
         metadata={
             "type": "Element",
             "namespace": "",
         }
     )
-    laser_retro: Optional[float] = field(
-        default=None,
+    laser_retro: float = field(
+        default=0.0,
         metadata={
             "type": "Element",
             "namespace": "",
         }
     )
-    transparency: Optional[float] = field(
-        default=None,
+    transparency: float = field(
+        default=0.0,
         metadata={
             "type": "Element",
             "namespace": "",
         }
     )
-    pose: Optional[str] = field(
-        default=None,
+    pose: str = field(
+        default="0 0 0 0 0 0",
         metadata={
             "type": "Element",
             "namespace": "",
@@ -125,32 +125,32 @@ class Visual:
                 "namespace": "",
             }
         )
-        ambient: Optional[str] = field(
-            default=None,
+        ambient: str = field(
+            default="0 0 0 1",
             metadata={
                 "type": "Element",
                 "namespace": "",
                 "pattern": r"(\s*\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){3}\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s*",
             }
         )
-        diffuse: Optional[str] = field(
-            default=None,
+        diffuse: str = field(
+            default="0 0 0 1",
             metadata={
                 "type": "Element",
                 "namespace": "",
                 "pattern": r"(\s*\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){3}\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s*",
             }
         )
-        specular: Optional[str] = field(
-            default=None,
+        specular: str = field(
+            default="0 0 0 1",
             metadata={
                 "type": "Element",
                 "namespace": "",
                 "pattern": r"(\s*\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){3}\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s*",
             }
         )
-        emissive: Optional[str] = field(
-            default=None,
+        emissive: str = field(
+            default="0 0 0 1",
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -194,8 +194,8 @@ class Visual:
             type: vertex, pixel, normal_map_object_space,
                 normal_map_tangent_space
             """
-            normal_map: Optional[str] = field(
-                default=None,
+            normal_map: str = field(
+                default="__default__",
                 metadata={
                     "type": "Element",
                     "namespace": "",

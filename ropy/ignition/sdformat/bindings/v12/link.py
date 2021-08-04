@@ -39,29 +39,29 @@ class Link:
     class Meta:
         name = "link"
 
-    gravity: Optional[bool] = field(
-        default=None,
+    gravity: bool = field(
+        default=True,
         metadata={
             "type": "Element",
             "namespace": "",
         }
     )
-    self_collide: Optional[bool] = field(
-        default=None,
+    self_collide: bool = field(
+        default=False,
         metadata={
             "type": "Element",
             "namespace": "",
         }
     )
-    kinematic: Optional[bool] = field(
-        default=None,
+    kinematic: bool = field(
+        default=False,
         metadata={
             "type": "Element",
             "namespace": "",
         }
     )
-    pose: Optional[str] = field(
-        default=None,
+    pose: str = field(
+        default="0 0 0 0 0 0",
         metadata={
             "type": "Element",
             "namespace": "",
@@ -162,15 +162,15 @@ class Link:
             diagonal elements of this matrix are specified here, using
             the attributes ixx, ixy, ixz, iyy, iyz, izz.
         """
-        mass: Optional[float] = field(
-            default=None,
+        mass: float = field(
+            default=1.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
             }
         )
-        pose: Optional[str] = field(
-            default=None,
+        pose: str = field(
+            default="0 0 0 0 0 0",
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -257,30 +257,30 @@ class Link:
                 "namespace": "",
             }
         )
-        pose: Optional[str] = field(
-            default=None,
+        pose: str = field(
+            default="0 0 0 0 0 0",
             metadata={
                 "type": "Element",
                 "namespace": "",
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
             }
         )
-        fov: Optional[float] = field(
-            default=None,
+        fov: float = field(
+            default=0.785,
             metadata={
                 "type": "Element",
                 "namespace": "",
             }
         )
-        near_clip: Optional[float] = field(
-            default=None,
+        near_clip: float = field(
+            default=0.1,
             metadata={
                 "type": "Element",
                 "namespace": "",
             }
         )
-        far_clip: Optional[float] = field(
-            default=None,
+        far_clip: float = field(
+            default=10.0,
             metadata={
                 "type": "Element",
                 "namespace": "",

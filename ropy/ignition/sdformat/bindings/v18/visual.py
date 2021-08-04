@@ -37,29 +37,29 @@ class Visual:
     class Meta:
         name = "visual"
 
-    cast_shadows: Optional[bool] = field(
-        default=None,
+    cast_shadows: bool = field(
+        default=True,
         metadata={
             "type": "Element",
             "namespace": "",
         }
     )
-    laser_retro: Optional[float] = field(
-        default=None,
+    laser_retro: float = field(
+        default=0.0,
         metadata={
             "type": "Element",
             "namespace": "",
         }
     )
-    transparency: Optional[float] = field(
-        default=None,
+    transparency: float = field(
+        default=0.0,
         metadata={
             "type": "Element",
             "namespace": "",
         }
     )
-    visibility_flags: Optional[int] = field(
-        default=None,
+    visibility_flags: int = field(
+        default=4294967295,
         metadata={
             "type": "Element",
             "namespace": "",
@@ -72,8 +72,8 @@ class Visual:
             "namespace": "",
         }
     )
-    pose: Optional["Visual.Pose"] = field(
-        default=None,
+    pose: "Visual.Pose" = field(
+        default="0 0 0 0 0 0",
         metadata={
             "type": "Element",
             "namespace": "",
@@ -122,8 +122,8 @@ class Visual:
             number is useful for programs, such as Gazebo, that put
             visuals in different layers for enhanced visualization.
         """
-        layer: Optional[int] = field(
-            default=None,
+        layer: int = field(
+            default=0,
             metadata={
                 "type": "Element",
                 "namespace": "",

@@ -155,16 +155,16 @@ class Geometry:
                 "namespace": "",
             }
         )
-        size: Optional[str] = field(
-            default=None,
+        size: str = field(
+            default="1 1 1",
             metadata={
                 "type": "Element",
                 "namespace": "",
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
             }
         )
-        pos: Optional[str] = field(
-            default=None,
+        pos: str = field(
+            default="0 0 0",
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -185,8 +185,8 @@ class Geometry:
                 "namespace": "",
             }
         )
-        use_terrain_paging: Optional[bool] = field(
-            default=None,
+        use_terrain_paging: bool = field(
+            default=False,
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -332,8 +332,8 @@ class Geometry:
                 "namespace": "",
             }
         )
-        scale: Optional[str] = field(
-            default=None,
+        scale: str = field(
+            default="1 1 1",
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -362,8 +362,8 @@ class Geometry:
                     "namespace": "",
                 }
             )
-            center: Optional[bool] = field(
-                default=None,
+            center: bool = field(
+                default=False,
                 metadata={
                     "type": "Element",
                     "namespace": "",

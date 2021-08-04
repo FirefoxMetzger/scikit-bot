@@ -66,8 +66,8 @@ class State:
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
                 }
             )
-            velocity: Optional[str] = field(
-                default=None,
+            velocity: str = field(
+                default="0 0 0 0 0 0",
                 metadata={
                     "type": "Element",
                     "namespace": "",
@@ -91,8 +91,8 @@ class State:
 
             @dataclass
             class Wrench:
-                pos: Optional[str] = field(
-                    default=None,
+                pos: str = field(
+                    default="0 0 0",
                     metadata={
                         "type": "Element",
                         "namespace": "",

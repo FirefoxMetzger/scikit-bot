@@ -28,8 +28,8 @@ class Actor:
     class Meta:
         name = "actor"
 
-    pose: Optional[str] = field(
-        default=None,
+    pose: str = field(
+        default="0 0 0 0 0 0",
         metadata={
             "type": "Element",
             "namespace": "",
@@ -105,8 +105,8 @@ class Actor:
                 "namespace": "",
             }
         )
-        scale: Optional[float] = field(
-            default=None,
+        scale: float = field(
+            default=1.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -122,15 +122,15 @@ class Actor:
                 "namespace": "",
             }
         )
-        scale: Optional[float] = field(
-            default=None,
+        scale: float = field(
+            default=1.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
             }
         )
-        interpolate_x: Optional[bool] = field(
-            default=None,
+        interpolate_x: bool = field(
+            default=False,
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -146,22 +146,22 @@ class Actor:
 
     @dataclass
     class Script:
-        loop: Optional[bool] = field(
-            default=None,
+        loop: bool = field(
+            default=True,
             metadata={
                 "type": "Element",
                 "namespace": "",
             }
         )
-        delay_start: Optional[float] = field(
-            default=None,
+        delay_start: float = field(
+            default=0.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
             }
         )
-        auto_start: Optional[bool] = field(
-            default=None,
+        auto_start: bool = field(
+            default=True,
             metadata={
                 "type": "Element",
                 "namespace": "",

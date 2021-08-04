@@ -30,8 +30,8 @@ class Physics:
             "namespace": "",
         }
     )
-    max_contacts: Optional[int] = field(
-        default=None,
+    max_contacts: int = field(
+        default=20,
         metadata={
             "type": "Element",
             "namespace": "",
@@ -140,8 +140,8 @@ class Physics:
                     "namespace": "",
                 }
             )
-            precon_iters: Optional[int] = field(
-                default=None,
+            precon_iters: int = field(
+                default=0,
                 metadata={
                     "type": "Element",
                     "namespace": "",

@@ -104,8 +104,8 @@ class Visual:
 
         @dataclass
         class Shader:
-            normal_map: Optional[str] = field(
-                default=None,
+            normal_map: str = field(
+                default="__default__",
                 metadata={
                     "type": "Element",
                     "namespace": "",

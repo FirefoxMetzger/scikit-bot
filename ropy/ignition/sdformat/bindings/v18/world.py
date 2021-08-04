@@ -223,8 +223,8 @@ class World:
         ----------
         linear_velocity: Linear velocity of the wind.
         """
-        linear_velocity: Optional[str] = field(
-            default=None,
+        linear_velocity: str = field(
+            default="0 0 0",
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -263,8 +263,8 @@ class World:
                 "namespace": "",
             }
         )
-        static: Optional[bool] = field(
-            default=None,
+        static: bool = field(
+            default=False,
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -277,8 +277,8 @@ class World:
                 "namespace": "",
             }
         )
-        pose: Optional["World.Include.Pose"] = field(
-            default=None,
+        pose: "World.Include.Pose" = field(
+            default="0 0 0 0 0 0",
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -323,22 +323,22 @@ class World:
         type: The type of the atmosphere engine. Current options are
             adiabatic.  Defaults to adiabatic if left unspecified.
         """
-        temperature: Optional[float] = field(
-            default=None,
+        temperature: float = field(
+            default=288.15,
             metadata={
                 "type": "Element",
                 "namespace": "",
             }
         )
-        pressure: Optional[float] = field(
-            default=None,
+        pressure: float = field(
+            default=101325.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
             }
         )
-        temperature_gradient: Optional[float] = field(
-            default=None,
+        temperature_gradient: float = field(
+            default=-0.0065,
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -397,15 +397,15 @@ class World:
                 attribute.
             name:
             """
-            view_controller: Optional[str] = field(
-                default=None,
+            view_controller: str = field(
+                default="orbit",
                 metadata={
                     "type": "Element",
                     "namespace": "",
                 }
             )
-            projection_type: Optional[str] = field(
-                default=None,
+            projection_type: str = field(
+                default="perspective",
                 metadata={
                     "type": "Element",
                     "namespace": "",
@@ -418,8 +418,8 @@ class World:
                     "namespace": "",
                 }
             )
-            pose: Optional["World.Gui.Camera.Pose"] = field(
-                default=None,
+            pose: "World.Gui.Camera.Pose" = field(
+                default="0 0 0 0 0 0",
                 metadata={
                     "type": "Element",
                     "namespace": "",
@@ -473,51 +473,51 @@ class World:
                     only used if static and use_model_frame are set to
                     true.
                 """
-                name: Optional[str] = field(
-                    default=None,
+                name: str = field(
+                    default="__default__",
                     metadata={
                         "type": "Element",
                         "namespace": "",
                     }
                 )
-                min_dist: Optional[float] = field(
-                    default=None,
+                min_dist: float = field(
+                    default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
                     }
                 )
-                max_dist: Optional[float] = field(
-                    default=None,
+                max_dist: float = field(
+                    default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
                     }
                 )
-                static: Optional[bool] = field(
-                    default=None,
+                static: bool = field(
+                    default=False,
                     metadata={
                         "type": "Element",
                         "namespace": "",
                     }
                 )
-                use_model_frame: Optional[bool] = field(
-                    default=None,
+                use_model_frame: bool = field(
+                    default=True,
                     metadata={
                         "type": "Element",
                         "namespace": "",
                     }
                 )
-                xyz: Optional[str] = field(
-                    default=None,
+                xyz: str = field(
+                    default="-5.0 0.0 3.0",
                     metadata={
                         "type": "Element",
                         "namespace": "",
                         "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
                     }
                 )
-                inherit_yaw: Optional[bool] = field(
-                    default=None,
+                inherit_yaw: bool = field(
+                    default=False,
                     metadata={
                         "type": "Element",
                         "namespace": "",
@@ -603,8 +603,8 @@ class World:
             frames must lead to the name of a link, a model, or the
             world frame.
         """
-        pose: Optional["World.Frame.Pose"] = field(
-            default=None,
+        pose: "World.Frame.Pose" = field(
+            default="0 0 0 0 0 0",
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -773,8 +773,8 @@ class World:
                 "namespace": "",
             }
         )
-        world_frame_orientation: Optional[str] = field(
-            default=None,
+        world_frame_orientation: str = field(
+            default="ENU",
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -858,8 +858,8 @@ class World:
                 "namespace": "",
             }
         )
-        pose: Optional["World.Population.Pose"] = field(
-            default=None,
+        pose: "World.Population.Pose" = field(
+            default="0 0 0 0 0 0",
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -911,22 +911,22 @@ class World:
                     "namespace": "",
                 }
             )
-            rows: Optional[int] = field(
-                default=None,
+            rows: int = field(
+                default=1,
                 metadata={
                     "type": "Element",
                     "namespace": "",
                 }
             )
-            cols: Optional[int] = field(
-                default=None,
+            cols: int = field(
+                default=1,
                 metadata={
                     "type": "Element",
                     "namespace": "",
                 }
             )
-            step: Optional[str] = field(
-                default=None,
+            step: str = field(
+                default="0.5 0.5 0",
                 metadata={
                     "type": "Element",
                     "namespace": "",

@@ -144,8 +144,8 @@ class Geometry:
         uri: Mesh uri
         scale: Scaling factor applied to the mesh
         """
-        filename: Optional[str] = field(
-            default=None,
+        filename: str = field(
+            default="__default__",
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -158,8 +158,8 @@ class Geometry:
                 "namespace": "",
             }
         )
-        scale: Optional[str] = field(
-            default=None,
+        scale: str = field(
+            default="1 1 1",
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -277,8 +277,8 @@ class Geometry:
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
             }
         )
-        pos: Optional[str] = field(
-            default=None,
+        pos: str = field(
+            default="0 0 0",
             metadata={
                 "type": "Element",
                 "namespace": "",

@@ -143,30 +143,30 @@ class Link:
                 "namespace": "",
             }
         )
-        pose: Optional[str] = field(
-            default=None,
+        pose: str = field(
+            default="0 0 0 0 0 0",
             metadata={
                 "type": "Element",
                 "namespace": "",
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
             }
         )
-        fov: Optional[float] = field(
-            default=None,
+        fov: float = field(
+            default=0.785,
             metadata={
                 "type": "Element",
                 "namespace": "",
             }
         )
-        near_clip: Optional[float] = field(
-            default=None,
+        near_clip: float = field(
+            default=0.1,
             metadata={
                 "type": "Element",
                 "namespace": "",
             }
         )
-        far_clip: Optional[float] = field(
-            default=None,
+        far_clip: float = field(
+            default=10.0,
             metadata={
                 "type": "Element",
                 "namespace": "",

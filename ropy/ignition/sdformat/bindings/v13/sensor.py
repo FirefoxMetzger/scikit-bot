@@ -36,37 +36,37 @@ class Sensor:
     class Meta:
         name = "sensor"
 
-    always_on: Optional[bool] = field(
-        default=None,
+    always_on: bool = field(
+        default=False,
         metadata={
             "type": "Element",
             "namespace": "",
         }
     )
-    update_rate: Optional[float] = field(
-        default=None,
+    update_rate: float = field(
+        default=0.0,
         metadata={
             "type": "Element",
             "namespace": "",
         }
     )
-    visualize: Optional[bool] = field(
-        default=None,
+    visualize: bool = field(
+        default=False,
         metadata={
             "type": "Element",
             "namespace": "",
         }
     )
-    pose: Optional[str] = field(
-        default=None,
+    pose: str = field(
+        default="0 0 0 0 0 0",
         metadata={
             "type": "Element",
             "namespace": "",
             "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
         }
     )
-    topic: Optional[str] = field(
-        default=None,
+    topic: str = field(
+        default="__default__",
         metadata={
             "type": "Element",
             "namespace": "",
@@ -192,8 +192,8 @@ class Sensor:
         depth_camera: Depth camera parameters
         name: An optional name for the camera.
         """
-        pose: Optional[str] = field(
-            default=None,
+        pose: str = field(
+            default="0 0 0 0 0 0",
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -270,8 +270,8 @@ class Sensor:
                     "namespace": "",
                 }
             )
-            format: Optional[str] = field(
-                default=None,
+            format: str = field(
+                default="R8G8B8",
                 metadata={
                     "type": "Element",
                     "namespace": "",
@@ -460,8 +460,8 @@ class Sensor:
                         "namespace": "",
                     }
                 )
-                resolution: Optional[float] = field(
-                    default=None,
+                resolution: float = field(
+                    default=1.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
@@ -507,8 +507,8 @@ class Sensor:
                     "namespace": "",
                 }
             )
-            resolution: Optional[float] = field(
-                default=None,
+            resolution: float = field(
+                default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
@@ -550,8 +550,8 @@ class Sensor:
         ----------
         topic: Topic on which data is published.
         """
-        topic: Optional[str] = field(
-            default=None,
+        topic: str = field(
+            default="__default_topic__",
             metadata={
                 "type": "Element",
                 "namespace": "",

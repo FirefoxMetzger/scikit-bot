@@ -198,15 +198,15 @@ class World:
                 "namespace": "",
             }
         )
-        static: Optional[bool] = field(
-            default=None,
+        static: bool = field(
+            default=False,
             metadata={
                 "type": "Element",
                 "namespace": "",
             }
         )
-        pose: Optional["World.Include.Pose"] = field(
-            default=None,
+        pose: "World.Include.Pose" = field(
+            default="0 0 0 0 0 0",
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -280,15 +280,15 @@ class World:
                 with respect to the specified frame.
             name:
             """
-            view_controller: Optional[str] = field(
-                default=None,
+            view_controller: str = field(
+                default="orbit",
                 metadata={
                     "type": "Element",
                     "namespace": "",
                 }
             )
-            projection_type: Optional[str] = field(
-                default=None,
+            projection_type: str = field(
+                default="perspective",
                 metadata={
                     "type": "Element",
                     "namespace": "",
@@ -308,8 +308,8 @@ class World:
                     "namespace": "",
                 }
             )
-            pose: Optional["World.Gui.Camera.Pose"] = field(
-                default=None,
+            pose: "World.Gui.Camera.Pose" = field(
+                default="0 0 0 0 0 0",
                 metadata={
                     "type": "Element",
                     "namespace": "",
@@ -332,15 +332,15 @@ class World:
                         "namespace": "",
                     }
                 )
-                min_dist: Optional[float] = field(
-                    default=None,
+                min_dist: float = field(
+                    default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
                     }
                 )
-                max_dist: Optional[float] = field(
-                    default=None,
+                max_dist: float = field(
+                    default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
@@ -360,8 +360,8 @@ class World:
                     another frame defined inside the parent that this
                     frame is attached to.
                 """
-                pose: Optional["World.Gui.Camera.Frame.Pose"] = field(
-                    default=None,
+                pose: "World.Gui.Camera.Frame.Pose" = field(
+                    default="0 0 0 0 0 0",
                     metadata={
                         "type": "Element",
                         "namespace": "",
@@ -654,8 +654,8 @@ class World:
                 "namespace": "",
             }
         )
-        pose: Optional["World.Population.Pose"] = field(
-            default=None,
+        pose: "World.Population.Pose" = field(
+            default="0 0 0 0 0 0",
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -707,22 +707,22 @@ class World:
                     "namespace": "",
                 }
             )
-            rows: Optional[int] = field(
-                default=None,
+            rows: int = field(
+                default=1,
                 metadata={
                     "type": "Element",
                     "namespace": "",
                 }
             )
-            cols: Optional[int] = field(
-                default=None,
+            cols: int = field(
+                default=1,
                 metadata={
                     "type": "Element",
                     "namespace": "",
                 }
             )
-            step: Optional[str] = field(
-                default=None,
+            step: str = field(
+                default="0.5 0.5 0",
                 metadata={
                     "type": "Element",
                     "namespace": "",
@@ -788,8 +788,8 @@ class World:
                 frame defined inside the parent that this frame is
                 attached to.
             """
-            pose: Optional["World.Population.Frame.Pose"] = field(
-                default=None,
+            pose: "World.Population.Frame.Pose" = field(
+                default="0 0 0 0 0 0",
                 metadata={
                     "type": "Element",
                     "namespace": "",

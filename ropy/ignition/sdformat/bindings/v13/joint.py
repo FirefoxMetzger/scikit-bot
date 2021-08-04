@@ -54,16 +54,16 @@ class Joint:
             "namespace": "",
         }
     )
-    pose: Optional[str] = field(
-        default=None,
+    pose: str = field(
+        default="0 0 0 0 0 0",
         metadata={
             "type": "Element",
             "namespace": "",
             "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
         }
     )
-    thread_pitch: Optional[float] = field(
-        default=None,
+    thread_pitch: float = field(
+        default=1.0,
         metadata={
             "type": "Element",
             "namespace": "",
@@ -162,15 +162,15 @@ class Joint:
                 coefficient of the joint.
             friction: The physical static friction value of the joint.
             """
-            damping: Optional[float] = field(
-                default=None,
+            damping: float = field(
+                default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
                 }
             )
-            friction: Optional[float] = field(
-                default=None,
+            friction: float = field(
+                default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
@@ -210,15 +210,15 @@ class Joint:
                     "namespace": "",
                 }
             )
-            effort: Optional[float] = field(
-                default=None,
+            effort: float = field(
+                default=-1.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
                 }
             )
-            velocity: Optional[float] = field(
-                default=None,
+            velocity: float = field(
+                default=-1.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
@@ -279,15 +279,15 @@ class Joint:
                 coefficient of the joint.
             friction: The physical static friction value of the joint.
             """
-            damping: Optional[float] = field(
-                default=None,
+            damping: float = field(
+                default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
                 }
             )
-            friction: Optional[float] = field(
-                default=None,
+            friction: float = field(
+                default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
@@ -311,29 +311,29 @@ class Joint:
             velocity: (not implemented) An attribute for enforcing the
                 maximum joint velocity.
             """
-            lower: Optional[float] = field(
-                default=None,
+            lower: float = field(
+                default=-1e+16,
                 metadata={
                     "type": "Element",
                     "namespace": "",
                 }
             )
-            upper: Optional[float] = field(
-                default=None,
+            upper: float = field(
+                default=1e+16,
                 metadata={
                     "type": "Element",
                     "namespace": "",
                 }
             )
-            effort: Optional[float] = field(
-                default=None,
+            effort: float = field(
+                default=-1.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
                 }
             )
-            velocity: Optional[float] = field(
-                default=None,
+            velocity: float = field(
+                default=-1.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
@@ -381,50 +381,50 @@ class Joint:
             limit:
             suspension:
             """
-            provide_feedback: Optional[bool] = field(
-                default=None,
+            provide_feedback: bool = field(
+                default=False,
                 metadata={
                     "type": "Element",
                     "namespace": "",
                 }
             )
-            cfm_damping: Optional[bool] = field(
-                default=None,
+            cfm_damping: bool = field(
+                default=False,
                 metadata={
                     "type": "Element",
                     "namespace": "",
                 }
             )
-            fudge_factor: Optional[float] = field(
-                default=None,
+            fudge_factor: float = field(
+                default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
                 }
             )
-            cfm: Optional[float] = field(
-                default=None,
+            cfm: float = field(
+                default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
                 }
             )
-            bounce: Optional[float] = field(
-                default=None,
+            bounce: float = field(
+                default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
                 }
             )
-            max_force: Optional[float] = field(
-                default=None,
+            max_force: float = field(
+                default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
                 }
             )
-            velocity: Optional[float] = field(
-                default=None,
+            velocity: float = field(
+                default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
