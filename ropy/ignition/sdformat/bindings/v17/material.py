@@ -36,6 +36,7 @@ class Material:
         capability). It is also recommended to use the same workflow for
         all materials in the world.
     """
+
     class Meta:
         name = "material"
 
@@ -44,28 +45,28 @@ class Material:
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     shader: Optional["Material.Shader"] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     render_order: float = field(
         default=0.0,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     lighting: bool = field(
         default=True,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     ambient: str = field(
         default="0 0 0 1",
@@ -73,7 +74,7 @@ class Material:
             "type": "Element",
             "namespace": "",
             "pattern": r"(\s*\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){3}\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s*",
-        }
+        },
     )
     diffuse: str = field(
         default="0 0 0 1",
@@ -81,7 +82,7 @@ class Material:
             "type": "Element",
             "namespace": "",
             "pattern": r"(\s*\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){3}\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s*",
-        }
+        },
     )
     specular: str = field(
         default="0 0 0 1",
@@ -89,7 +90,7 @@ class Material:
             "type": "Element",
             "namespace": "",
             "pattern": r"(\s*\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){3}\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s*",
-        }
+        },
     )
     emissive: str = field(
         default="0 0 0 1",
@@ -97,21 +98,21 @@ class Material:
             "type": "Element",
             "namespace": "",
             "pattern": r"(\s*\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){3}\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s*",
-        }
+        },
     )
     double_sided: bool = field(
         default=False,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     pbr: Optional["Material.Pbr"] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
 
     @dataclass
@@ -125,20 +126,21 @@ class Material:
         uri: URI of the material script file
         name: Name of the script within the script file
         """
+
         uri: List[str] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
                 "min_occurs": 1,
-            }
+            },
         )
         name: str = field(
             default="__default__",
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
 
     @dataclass
@@ -150,19 +152,20 @@ class Material:
         type: vertex, pixel, normal_map_object_space,
             normal_map_tangent_space
         """
+
         normal_map: str = field(
             default="__default__",
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         type: Optional[str] = field(
             default=None,
             metadata={
                 "type": "Attribute",
                 "required": True,
-            }
+            },
         )
 
     @dataclass
@@ -180,19 +183,20 @@ class Material:
         metal: PBR using the Metallic/Roughness workflow.
         specular: PBR using the Specular/Glossiness workflow.
         """
+
         metal: Optional["Material.Pbr.Metal"] = field(
             default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         specular: Optional["Material.Pbr.Specular"] = field(
             default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
 
         @dataclass
@@ -224,75 +228,76 @@ class Material:
                 prebaked light texture that is applied over the albedo
                 map
             """
+
             albedo_map: Optional[str] = field(
                 default=None,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             roughness_map: Optional[str] = field(
                 default=None,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             roughness: str = field(
                 default="0.5",
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             metalness_map: Optional[str] = field(
                 default=None,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             metalness: str = field(
                 default="0.5",
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             environment_map: Optional[str] = field(
                 default=None,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             ambient_occlusion_map: Optional[str] = field(
                 default=None,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             normal_map: Optional["Material.Pbr.Metal.NormalMap"] = field(
                 default=None,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             emissive_map: Optional[str] = field(
                 default=None,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             light_map: Optional["Material.Pbr.Metal.LightMap"] = field(
                 default=None,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
 
             @dataclass
@@ -304,17 +309,18 @@ class Material:
                 type: The space that the normals are in. Values are:
                     'object' or 'tangent'
                 """
+
                 value: Optional[str] = field(
                     default=None,
                     metadata={
                         "required": True,
-                    }
+                    },
                 )
                 type: str = field(
                     default="tangent",
                     metadata={
                         "type": "Attribute",
-                    }
+                    },
                 )
 
             @dataclass
@@ -325,17 +331,18 @@ class Material:
                 value:
                 uv_set: Index of the texture coordinate set to use.
                 """
+
                 value: Optional[str] = field(
                     default=None,
                     metadata={
                         "required": True,
-                    }
+                    },
                 )
                 uv_set: int = field(
                     default=0,
                     metadata={
                         "type": "Attribute",
-                    }
+                    },
                 )
 
         @dataclass
@@ -363,61 +370,62 @@ class Material:
                 prebaked light texture that is applied over the albedo
                 map
             """
+
             albedo_map: Optional[str] = field(
                 default=None,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             specular_map: Optional[str] = field(
                 default=None,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             glossiness_map: Optional[str] = field(
                 default=None,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             glossiness: str = field(
                 default="0",
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             ambient_occlusion_map: Optional[str] = field(
                 default=None,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             normal_map: Optional["Material.Pbr.Specular.NormalMap"] = field(
                 default=None,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             emissive_map: Optional[str] = field(
                 default=None,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             light_map: Optional["Material.Pbr.Specular.LightMap"] = field(
                 default=None,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
 
             @dataclass
@@ -429,17 +437,18 @@ class Material:
                 type: The space that the normals are in. Values are:
                     'object' or 'tangent'
                 """
+
                 value: Optional[str] = field(
                     default=None,
                     metadata={
                         "required": True,
-                    }
+                    },
                 )
                 type: str = field(
                     default="tangent",
                     metadata={
                         "type": "Attribute",
-                    }
+                    },
                 )
 
             @dataclass
@@ -450,15 +459,16 @@ class Material:
                 value:
                 uv_set: Index of the texture coordinate set to use.
                 """
+
                 value: Optional[str] = field(
                     default=None,
                     metadata={
                         "required": True,
-                    }
+                    },
                 )
                 uv_set: int = field(
                     default=0,
                     metadata={
                         "type": "Attribute",
-                    }
+                    },
                 )

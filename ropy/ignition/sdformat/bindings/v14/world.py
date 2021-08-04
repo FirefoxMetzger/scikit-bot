@@ -38,6 +38,7 @@ class World:
     state:
     name: Unique name of the world
     """
+
     class Meta:
         name = "world"
 
@@ -46,21 +47,21 @@ class World:
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     include: List["World.Include"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     gui: Optional["World.Gui"] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     physics: Optional[Physics] = field(
         default=None,
@@ -68,7 +69,7 @@ class World:
             "type": "Element",
             "namespace": "",
             "required": True,
-        }
+        },
     )
     scene: Optional[Scene] = field(
         default=None,
@@ -76,70 +77,70 @@ class World:
             "type": "Element",
             "namespace": "",
             "required": True,
-        }
+        },
     )
     light: List[Light] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     model: List[Model] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     actor: List[Actor] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     plugin: List["World.Plugin"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     joint: List[Joint] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     road: List["World.Road"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     spherical_coordinates: Optional["World.SphericalCoordinates"] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     state: List[State] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     name: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )
 
     @dataclass
@@ -153,12 +154,13 @@ class World:
             will use the system's default audio device. Otherwise,
             specify a an audio device file"
         """
+
         device: str = field(
             default="default",
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
 
     @dataclass
@@ -170,12 +172,13 @@ class World:
         ----------
         uri: URI to a resource, such as a model
         """
+
         uri: str = field(
             default="__default__",
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
 
     @dataclass
@@ -185,13 +188,13 @@ class World:
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         fullscreen: bool = field(
             default=False,
             metadata={
                 "type": "Attribute",
-            }
+            },
         )
 
         @dataclass
@@ -201,7 +204,7 @@ class World:
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             pose: str = field(
                 default="0 0 0 0 0 0",
@@ -209,21 +212,21 @@ class World:
                     "type": "Element",
                     "namespace": "",
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-                }
+                },
             )
             track_visual: Optional["World.Gui.Camera.TrackVisual"] = field(
                 default=None,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             name: Optional[str] = field(
                 default=None,
                 metadata={
                     "type": "Attribute",
                     "required": True,
-                }
+                },
             )
 
             @dataclass
@@ -233,21 +236,21 @@ class World:
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 min_dist: float = field(
                     default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 max_dist: float = field(
                     default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
 
     @dataclass
@@ -267,26 +270,27 @@ class World:
             not a full path name, the file will be searched for in the
             configuration paths.
         """
+
         any_element: List[object] = field(
             default_factory=list,
             metadata={
                 "type": "Wildcard",
                 "namespace": "##any",
-            }
+            },
         )
         name: Optional[str] = field(
             default=None,
             metadata={
                 "type": "Attribute",
                 "required": True,
-            }
+            },
         )
         filename: Optional[str] = field(
             default=None,
             metadata={
                 "type": "Attribute",
                 "required": True,
-            }
+            },
         )
 
     @dataclass
@@ -298,12 +302,13 @@ class World:
         point: A series of points define the path of the road.
         name: Name of the road
         """
+
         width: float = field(
             default=1.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         point: List[str] = field(
             default_factory=list,
@@ -312,14 +317,14 @@ class World:
                 "namespace": "",
                 "min_occurs": 1,
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-            }
+            },
         )
         name: Optional[str] = field(
             default=None,
             metadata={
                 "type": "Attribute",
                 "required": True,
-            }
+            },
         )
 
     @dataclass
@@ -343,38 +348,39 @@ class World:
             equivalently, the angle between North and       gazebo y
             axis. The angle is specified in degrees.
         """
+
         surface_model: str = field(
             default="EARTH_WGS84",
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         latitude_deg: float = field(
             default=0.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         longitude_deg: float = field(
             default=0.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         elevation: float = field(
             default=0.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         heading_deg: float = field(
             default=0.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )

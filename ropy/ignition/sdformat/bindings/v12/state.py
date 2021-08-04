@@ -13,6 +13,7 @@ class State:
     model: Model state
     world_name: Name of the world this state applies to
     """
+
     class Meta:
         name = "state"
 
@@ -21,7 +22,7 @@ class State:
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     model: List["State.Model"] = field(
         default_factory=list,
@@ -29,14 +30,14 @@ class State:
             "type": "Element",
             "namespace": "",
             "min_occurs": 1,
-        }
+        },
     )
     world_name: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )
 
     @dataclass
@@ -50,27 +51,28 @@ class State:
         link: Link state
         name: Name of the model
         """
+
         pose: str = field(
             default="0 0 0 0 0 0",
             metadata={
                 "type": "Element",
                 "namespace": "",
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-            }
+            },
         )
         link: List["State.Model.Link"] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         name: Optional[str] = field(
             default=None,
             metadata={
                 "type": "Attribute",
                 "required": True,
-            }
+            },
         )
 
         @dataclass
@@ -85,13 +87,14 @@ class State:
             wrench: Force applied to the link
             name: Name of the link
             """
+
             pose: str = field(
                 default="0 0 0 0 0 0",
                 metadata={
                     "type": "Element",
                     "namespace": "",
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-                }
+                },
             )
             velocity: str = field(
                 default="0 0 0 0 0 0",
@@ -99,21 +102,21 @@ class State:
                     "type": "Element",
                     "namespace": "",
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-                }
+                },
             )
             wrench: List["State.Model.Link.Wrench"] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             name: Optional[str] = field(
                 default=None,
                 metadata={
                     "type": "Attribute",
                     "required": True,
-                }
+                },
             )
 
             @dataclass
@@ -126,13 +129,14 @@ class State:
                 pos: Position of the force.
                 mag: Magnitude of the force.
                 """
+
                 pos: str = field(
                     default="0 0 0",
                     metadata={
                         "type": "Element",
                         "namespace": "",
                         "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-                    }
+                    },
                 )
                 mag: str = field(
                     default="0 0 0 0 0 0",
@@ -140,5 +144,5 @@ class State:
                         "type": "Element",
                         "namespace": "",
                         "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-                    }
+                    },
                 )

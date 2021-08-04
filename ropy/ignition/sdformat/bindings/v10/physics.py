@@ -14,7 +14,7 @@ class Physics:
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     gravity: Optional[str] = field(
         default=None,
@@ -22,34 +22,34 @@ class Physics:
             "type": "Element",
             "namespace": "",
             "required": True,
-        }
+        },
     )
     bullet: Optional["Physics.Bullet"] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     ode: Optional["Physics.Ode"] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     type: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )
     update_rate: float = field(
         default=0.0,
         metadata={
             "type": "Attribute",
-        }
+        },
     )
 
     @dataclass
@@ -59,7 +59,7 @@ class Physics:
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
 
     @dataclass
@@ -70,7 +70,7 @@ class Physics:
                 "type": "Element",
                 "namespace": "",
                 "required": True,
-            }
+            },
         )
         constraints: Optional[str] = field(
             default=None,
@@ -78,5 +78,5 @@ class Physics:
                 "type": "Element",
                 "namespace": "",
                 "required": True,
-            }
+            },
         )

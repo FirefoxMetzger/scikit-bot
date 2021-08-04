@@ -10,6 +10,7 @@ from copy import deepcopy
 
 xs = "http://www.w3.org/2001/XMLSchema"
 
+
 def _to_xsd_type(in_type: str) -> str:
     known_types = {
         "unsigned int": "xs:unsignedInt",
@@ -40,7 +41,7 @@ def _to_xsd_type(in_type: str) -> str:
         "collision:collision": "collision:collision",
         "visual:visual": "visual:visual",
         "material:material": "material:material",
-        "geometry:geometry": "geometry:geometry"
+        "geometry:geometry": "geometry:geometry",
     }
 
     try:
@@ -51,12 +52,7 @@ def _to_xsd_type(in_type: str) -> str:
 
 @dataclass
 class SdfElement:
-    required: str = field(
-        metadata={
-            "type":"Attribute",
-            "namespace": ""
-        }
-    )
+    required: str = field(metadata={"type": "Attribute", "namespace": ""})
 
     minOccurs: str = field(init=False)
     maxOccurs: str = field(init=False)
@@ -70,6 +66,7 @@ class SdfElement:
             "-1": ("0", "0"),
         }
         self.minOccurs, self.maxOccurs = required_codes[self.required]
+
 
 @dataclass
 class Element(SdfElement):
@@ -85,11 +82,7 @@ class Element(SdfElement):
     )
 
     copy_data: Optional[bool] = field(
-        default=False,
-        metadata={
-            "type": "Attribute",
-            "namespace": ""
-        }
+        default=False, metadata={"type": "Attribute", "namespace": ""}
     )
 
     type: Optional[str] = field(
@@ -109,35 +102,19 @@ class Element(SdfElement):
     )
 
     description: Optional[str] = field(
-        default=None,
-        metadata={
-            "type": "Element",
-            "namespace": ""
-        }
+        default=None, metadata={"type": "Element", "namespace": ""}
     )
 
     attribute: List["Attribute"] = field(
-        default_factory=list,
-        metadata={
-            "type": "Element",
-            "namespace": ""
-        }
+        default_factory=list, metadata={"type": "Element", "namespace": ""}
     )
 
     include: List["Include"] = field(
-        default_factory=list,
-        metadata={
-            "type":"Element",
-            "namespace": ""
-        }
+        default_factory=list, metadata={"type": "Element", "namespace": ""}
     )
 
     element: List["Element"] = field(
-        default_factory=list,
-        metadata={
-            "type":"Element",
-            "namespace": ""
-        }        
+        default_factory=list, metadata={"type": "Element", "namespace": ""}
     )
 
     default: Optional[str] = field(
@@ -182,7 +159,9 @@ class Element(SdfElement):
             annotation = etree.SubElement(subtree, f"{{{xs}}}annotation")
             documentation = etree.SubElement(annotation, f"{{{xs}}}documentation")
             documentation.set("{http://www.w3.org/XML/1998/namespace}lang", "en")
-            documentation.text = self.description.strip().replace("\r\n", " ").replace("\n", " ")
+            documentation.text = (
+                self.description.strip().replace("\r\n", " ").replace("\n", " ")
+            )
 
         if self.copy_data:
             pass  # skip
@@ -201,23 +180,26 @@ class Element(SdfElement):
             subtree.set("type", _to_xsd_type(self.type))
         elif len(self.element) > 0:
             complex_type = etree.SubElement(subtree, f"{{{xs}}}complexType")
-            
+
             if self.description:
                 annotation = etree.SubElement(complex_type, f"{{{xs}}}annotation")
                 documentation = etree.SubElement(annotation, f"{{{xs}}}documentation")
                 documentation.set("{http://www.w3.org/XML/1998/namespace}lang", "en")
-                documentation.text = self.description.strip().replace("\r\n", " ").replace("\n", " ")
+                documentation.text = (
+                    self.description.strip().replace("\r\n", " ").replace("\n", " ")
+                )
 
             all_element = etree.SubElement(complex_type, f"{{{xs}}}all")
             for el in self.element:
                 all_element.append(el.to_xsd())
 
             for attrib in self.attribute:
-                complex_type.append(attrib.to_xsd())            
+                complex_type.append(attrib.to_xsd())
         else:
             subtree.set("type", _to_xsd_type("string"))
 
         return subtree
+
 
 @dataclass
 class Include(SdfElement):
@@ -226,17 +208,13 @@ class Include(SdfElement):
 
     filename: str = field(
         metadata={
-            "type":"Attribute",
+            "type": "Attribute",
             "namespace": "",
         }
     )
 
     description: Optional[str] = field(
-        default=None,
-        metadata={
-            "type": "Element",
-            "namespace": ""
-        }
+        default=None, metadata={"type": "Element", "namespace": ""}
     )
 
 
@@ -259,15 +237,8 @@ class Attribute:
         },
     )
 
-    required: str = field(
-        metadata={
-            "type":"Attribute",
-            "namespace": ""
-        }
-    )
-    use: str = field(
-        init=False
-    )
+    required: str = field(metadata={"type": "Attribute", "namespace": ""})
+    use: str = field(init=False)
 
     default: Optional[str] = field(
         metadata={
@@ -277,11 +248,7 @@ class Attribute:
     )
 
     description: Optional[str] = field(
-        default=None,
-        metadata={
-            "type": "Element",
-            "namespace": ""
-        }
+        default=None, metadata={"type": "Element", "namespace": ""}
     )
 
     def __post_init__(self):
@@ -289,7 +256,6 @@ class Attribute:
             self.use = "required"
         else:
             self.use = "optional"
-
 
     def to_xsd(self) -> etree.Element:
         attrib = etree.Element(f"{{{xs}}}attribute")
@@ -304,7 +270,9 @@ class Attribute:
             annotation = etree.SubElement(attrib, f"{{{xs}}}annotation")
             documentation = etree.SubElement(annotation, f"{{{xs}}}documentation")
             documentation.set("{http://www.w3.org/XML/1998/namespace}lang", "en")
-            documentation.text = self.description.strip().replace("\r\n", " ").replace("\n", " ")
+            documentation.text = (
+                self.description.strip().replace("\r\n", " ").replace("\n", " ")
+            )
 
         return attrib
 
@@ -316,20 +284,18 @@ def gen_bindings(source_dir: Path, out_dir: Path, ns_prefix="sdformat"):
     if not types_file.exists():
         types_file = Path(__file__).parent / "fallback_types.xsd"
     types_xsd = ElementTree.parse(types_file)
-    types_xsd.getroot().attrib.update({
-        "xmlns": f"{ns_prefix}/types.xsd",
-        "targetNamespace": f"{ns_prefix}/types.xsd"
-    })
+    types_xsd.getroot().attrib.update(
+        {"xmlns": f"{ns_prefix}/types.xsd", "targetNamespace": f"{ns_prefix}/types.xsd"}
+    )
     types_string = ElementTree.tostring(types_xsd.getroot())
     types_xsd = etree.fromstring(types_string)
 
     for el in types_xsd.findall(".//xs:restriction", namespaces={"xs": xs}):
         prefix, attrib_type = el.attrib["base"].split(":")
-        el.attrib["base"] = "xs:"+attrib_type
+        el.attrib["base"] = "xs:" + attrib_type
 
     with open(out_dir / ("types.xsd"), "wb") as out_file:
         etree.ElementTree(types_xsd).write(out_file)
-
 
     # use a fixed set of namespaces that matches the menu structure of the SDF
     # spec. This leads to nicer bindings the schema location
@@ -350,12 +316,15 @@ def gen_bindings(source_dir: Path, out_dir: Path, ns_prefix="sdformat"):
         "material.sdf": "material.xsd",
         "geometry.sdf": "geometry.xsd",
     }
-    filename_map = {key:value for key, value in full_filename_map.items() if (source_dir / key).exists()}
+    filename_map = {
+        key: value
+        for key, value in full_filename_map.items()
+        if (source_dir / key).exists()
+    }
 
     namespaces = {
         "types": f"{ns_prefix}/types.xsd",
         "xs": "http://www.w3.org/2001/XMLSchema",
-
         "sdf": f"{ns_prefix}/sdf.xsd",
         "world": f"{ns_prefix}/world.xsd",
         "scene": f"{ns_prefix}/scene.xsd",
@@ -373,19 +342,19 @@ def gen_bindings(source_dir: Path, out_dir: Path, ns_prefix="sdformat"):
         "geometry": f"{ns_prefix}/geometry.xsd",
     }
 
-
     xml_ctx = XmlContext()
     sdf_parser = XmlParser(context=xml_ctx)
-    def _parse_sane(in_file:Path) -> Element:
-        root:etree.Element = etree.parse(str(in_file)).getroot()
+
+    def _parse_sane(in_file: Path) -> Element:
+        root: etree.Element = etree.parse(str(in_file)).getroot()
         for description in root.findall(".//description"):
             if description.text is None:
                 description.text = ""
-            text:str = description.text 
+            text: str = description.text
             for child in [x for x in description]:
                 text += etree.tostring(child).decode("UTF-8")
                 description.remove(child)
-            
+
             text = text.replace("<", "&lt;").replace(">", "&gt;")
             if text == "":
                 description.text = None
@@ -394,10 +363,8 @@ def gen_bindings(source_dir: Path, out_dir: Path, ns_prefix="sdformat"):
         xml_string = etree.tostring(root).decode("UTF-8")
         return sdf_parser.from_string(xml_string, Element)
 
-
-
     for in_file, out_file in filename_map.items():
-        sdf_root:Element = _parse_sane(source_dir / in_file)
+        sdf_root: Element = _parse_sane(source_dir / in_file)
 
         queue = [sdf_root]
 
@@ -405,7 +372,7 @@ def gen_bindings(source_dir: Path, out_dir: Path, ns_prefix="sdformat"):
             el = queue.pop(0)
             for include in el.include:
                 included_el = _parse_sane(source_dir / include.filename)
-                
+
                 if include.description:
                     included_el.description = include.description
 
@@ -417,7 +384,7 @@ def gen_bindings(source_dir: Path, out_dir: Path, ns_prefix="sdformat"):
                     included_el.element = list()
                     included_el.include = list()
                     included_el.attribute = list()
-                
+
                 el.element.append(included_el)
 
             queue.extend(el.element)
@@ -431,7 +398,7 @@ def gen_bindings(source_dir: Path, out_dir: Path, ns_prefix="sdformat"):
         # convert the full element and then pop the outer layer
         # as we are only interested in the nested complex type
         xsd_element = sdf_root.to_xsd()
-        xsd_type:etree.Element = xsd_element.find(f"./{{{xs}}}complexType")
+        xsd_type: etree.Element = xsd_element.find(f"./{{{xs}}}complexType")
         name = xsd_element.attrib["name"]
         xsd_type.set("name", name)
         xsd_root.append(xsd_type)
@@ -445,7 +412,9 @@ def gen_bindings(source_dir: Path, out_dir: Path, ns_prefix="sdformat"):
                 ref_el.attrib.pop("ref")
                 ref_el.set("type", name)
             else:
-                for candidate in xsd_type.findall(f".//{{{xs}}}element[@name='{ref_name}']"):
+                for candidate in xsd_type.findall(
+                    f".//{{{xs}}}element[@name='{ref_name}']"
+                ):
                     all_children = candidate.findall(".//*")
                     if not ref_el in all_children:
                         continue
@@ -485,7 +454,7 @@ def gen_bindings(source_dir: Path, out_dir: Path, ns_prefix="sdformat"):
             file_name = Path(uri).stem + ".xsd"
             import_el.set("schemaLocation", f"./{file_name}")
             xsd_root.insert(0, import_el)
-        
+
         if not out_dir.exists():
             out_dir.mkdir(exist_ok=True, parents=True)
 

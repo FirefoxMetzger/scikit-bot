@@ -56,6 +56,7 @@ class Model:
         by the pose element of the model. i.e, the pose element
         specifies the pose of this frame instead of the model frame.
     """
+
     class Meta:
         name = "model"
 
@@ -64,103 +65,103 @@ class Model:
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     self_collide: bool = field(
         default=False,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     allow_auto_disable: bool = field(
         default=True,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     include: List["Model.Include"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     model: List["Model"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     enable_wind: bool = field(
         default=False,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     frame: List["Model.Frame"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     pose: "Model.Pose" = field(
         default="0 0 0 0 0 0",
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     link: List[Link] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     joint: List[Joint] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     plugin: List["Model.Plugin"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     gripper: List["Model.Gripper"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     name: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )
     canonical_link: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
-        }
+        },
     )
     placement_frame: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
-        }
+        },
     )
 
     @dataclass
@@ -180,40 +181,41 @@ class Model:
         pose: A position(x,y,z) and orientation(roll, pitch yaw) with
             respect to the frame named in the relative_to attribute.
         """
+
         uri: str = field(
             default="__default__",
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         name: Optional[str] = field(
             default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         static: bool = field(
             default=False,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         placement_frame: Optional[str] = field(
             default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         pose: "Model.Include.Pose" = field(
             default="0 0 0 0 0 0",
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
 
         @dataclass
@@ -225,18 +227,19 @@ class Model:
             relative_to: Name of frame relative to which the pose is
                 applied.
             """
+
             value: Optional[str] = field(
                 default=None,
                 metadata={
                     "required": True,
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-                }
+                },
             )
             relative_to: Optional[str] = field(
                 default=None,
                 metadata={
                     "type": "Attribute",
-                }
+                },
             )
 
     @dataclass
@@ -256,25 +259,26 @@ class Model:
             frames must lead to the name of a link, a model, or the
             world frame.
         """
+
         pose: "Model.Frame.Pose" = field(
             default="0 0 0 0 0 0",
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         name: Optional[str] = field(
             default=None,
             metadata={
                 "type": "Attribute",
                 "required": True,
-            }
+            },
         )
         attached_to: Optional[str] = field(
             default=None,
             metadata={
                 "type": "Attribute",
-            }
+            },
         )
 
         @dataclass
@@ -286,18 +290,19 @@ class Model:
             relative_to: Name of frame relative to which the pose is
                 applied.
             """
+
             value: Optional[str] = field(
                 default=None,
                 metadata={
                     "required": True,
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-                }
+                },
             )
             relative_to: Optional[str] = field(
                 default=None,
                 metadata={
                     "type": "Attribute",
-                }
+                },
             )
 
     @dataclass
@@ -309,18 +314,19 @@ class Model:
         relative_to: Name of frame relative to which the pose is
             applied.
         """
+
         value: Optional[str] = field(
             default=None,
             metadata={
                 "required": True,
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-            }
+            },
         )
         relative_to: Optional[str] = field(
             default=None,
             metadata={
                 "type": "Attribute",
-            }
+            },
         )
 
     @dataclass
@@ -340,26 +346,27 @@ class Model:
             not a full path name, the file will be searched for in the
             configuration paths.
         """
+
         any_element: List[object] = field(
             default_factory=list,
             metadata={
                 "type": "Wildcard",
                 "namespace": "##any",
-            }
+            },
         )
         name: Optional[str] = field(
             default=None,
             metadata={
                 "type": "Attribute",
                 "required": True,
-            }
+            },
         )
         filename: Optional[str] = field(
             default=None,
             metadata={
                 "type": "Attribute",
                 "required": True,
-            }
+            },
         )
 
     @dataclass
@@ -369,7 +376,7 @@ class Model:
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         gripper_link: List[str] = field(
             default_factory=list,
@@ -377,21 +384,21 @@ class Model:
                 "type": "Element",
                 "namespace": "",
                 "min_occurs": 1,
-            }
+            },
         )
         palm_link: str = field(
             default="__default__",
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         name: Optional[str] = field(
             default=None,
             metadata={
                 "type": "Attribute",
                 "required": True,
-            }
+            },
         )
 
         @dataclass
@@ -401,19 +408,19 @@ class Model:
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             attach_steps: int = field(
                 default=20,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             min_contact_count: int = field(
                 default=2,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )

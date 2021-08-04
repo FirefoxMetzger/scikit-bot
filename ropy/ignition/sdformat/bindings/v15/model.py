@@ -41,6 +41,7 @@ class Model:
     name: A unique name for the model. This name must not match another
         model in the world.
     """
+
     class Meta:
         name = "model"
 
@@ -49,84 +50,84 @@ class Model:
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     self_collide: bool = field(
         default=False,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     allow_auto_disable: bool = field(
         default=True,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     include: List["Model.Include"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     model: List["Model"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     frame: List["Model.Frame"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     pose: "Model.Pose" = field(
         default="0 0 0 0 0 0",
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     link: List[Link] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     joint: List[Joint] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     plugin: List["Model.Plugin"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     gripper: List["Model.Gripper"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     name: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )
 
     @dataclass
@@ -145,12 +146,13 @@ class Model:
         name: Override the name of the included model.
         static: Override the static value of the included model.
         """
+
         uri: str = field(
             default="__default__",
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         pose: str = field(
             default="0 0 0 0 0 0",
@@ -158,21 +160,21 @@ class Model:
                 "type": "Element",
                 "namespace": "",
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-            }
+            },
         )
         name: Optional[str] = field(
             default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         static: bool = field(
             default=False,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
 
     @dataclass
@@ -187,19 +189,20 @@ class Model:
         name: Name of the frame. This name must not match another frame
             defined inside the parent that this frame is attached to.
         """
+
         pose: "Model.Frame.Pose" = field(
             default="0 0 0 0 0 0",
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         name: Optional[str] = field(
             default=None,
             metadata={
                 "type": "Attribute",
                 "required": True,
-            }
+            },
         )
 
         @dataclass
@@ -210,18 +213,19 @@ class Model:
             value:
             frame: Name of frame which the pose is defined relative to.
             """
+
             value: Optional[str] = field(
                 default=None,
                 metadata={
                     "required": True,
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-                }
+                },
             )
             frame: Optional[str] = field(
                 default=None,
                 metadata={
                     "type": "Attribute",
-                }
+                },
             )
 
     @dataclass
@@ -232,18 +236,19 @@ class Model:
         value:
         frame: Name of frame which the pose is defined relative to.
         """
+
         value: Optional[str] = field(
             default=None,
             metadata={
                 "required": True,
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-            }
+            },
         )
         frame: Optional[str] = field(
             default=None,
             metadata={
                 "type": "Attribute",
-            }
+            },
         )
 
     @dataclass
@@ -263,26 +268,27 @@ class Model:
             not a full path name, the file will be searched for in the
             configuration paths.
         """
+
         any_element: List[object] = field(
             default_factory=list,
             metadata={
                 "type": "Wildcard",
                 "namespace": "##any",
-            }
+            },
         )
         name: Optional[str] = field(
             default=None,
             metadata={
                 "type": "Attribute",
                 "required": True,
-            }
+            },
         )
         filename: Optional[str] = field(
             default=None,
             metadata={
                 "type": "Attribute",
                 "required": True,
-            }
+            },
         )
 
     @dataclass
@@ -292,7 +298,7 @@ class Model:
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         gripper_link: List[str] = field(
             default_factory=list,
@@ -300,21 +306,21 @@ class Model:
                 "type": "Element",
                 "namespace": "",
                 "min_occurs": 1,
-            }
+            },
         )
         palm_link: str = field(
             default="__default__",
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         name: Optional[str] = field(
             default=None,
             metadata={
                 "type": "Attribute",
                 "required": True,
-            }
+            },
         )
 
         @dataclass
@@ -324,19 +330,19 @@ class Model:
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             attach_steps: int = field(
                 default=20,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             min_contact_count: int = field(
                 default=2,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )

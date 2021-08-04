@@ -21,6 +21,7 @@ class Geometry:
     polyline: Defines an extruded polyline shape
     sphere: Sphere shape
     """
+
     class Meta:
         name = "geometry"
 
@@ -29,63 +30,63 @@ class Geometry:
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     box: Optional["Geometry.Box"] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     cylinder: Optional["Geometry.Cylinder"] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     heightmap: Optional["Geometry.Heightmap"] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     image: Optional["Geometry.Image"] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     mesh: Optional["Geometry.Mesh"] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     plane: Optional["Geometry.Plane"] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     polyline: Optional["Geometry.Polyline"] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     sphere: Optional["Geometry.Sphere"] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
 
     @dataclass
@@ -98,13 +99,14 @@ class Geometry:
         size: The three side lengths of the box. The origin of the box
             is in its geometric center (inside the center of the box).
         """
+
         size: str = field(
             default="1 1 1",
             metadata={
                 "type": "Element",
                 "namespace": "",
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-            }
+            },
         )
 
     @dataclass
@@ -117,19 +119,20 @@ class Geometry:
         radius: Radius of the cylinder
         length: Length of the cylinder along the z axis
         """
+
         radius: float = field(
             default=1.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         length: float = field(
             default=1.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
 
     @dataclass
@@ -161,12 +164,13 @@ class Geometry:
             the performance of the heightmap but lower the heightmap
             quality.
         """
+
         uri: str = field(
             default="__default__",
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         size: str = field(
             default="1 1 1",
@@ -174,7 +178,7 @@ class Geometry:
                 "type": "Element",
                 "namespace": "",
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-            }
+            },
         )
         pos: str = field(
             default="0 0 0",
@@ -182,35 +186,35 @@ class Geometry:
                 "type": "Element",
                 "namespace": "",
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-            }
+            },
         )
         texture: List["Geometry.Heightmap.Texture"] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         blend: List["Geometry.Heightmap.Blend"] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         use_terrain_paging: bool = field(
             default=False,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         sampling: int = field(
             default=2,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
 
         @dataclass
@@ -228,26 +232,27 @@ class Geometry:
             diffuse: Diffuse texture image filename
             normal: Normalmap texture image filename
             """
+
             size: float = field(
                 default=10.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             diffuse: str = field(
                 default="__default__",
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             normal: str = field(
                 default="__default__",
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
 
         @dataclass
@@ -262,19 +267,20 @@ class Geometry:
             min_height: Min height of a blend layer
             fade_dist: Distance over which the blend occurs
             """
+
             min_height: float = field(
                 default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             fade_dist: float = field(
                 default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
 
     @dataclass
@@ -290,40 +296,41 @@ class Geometry:
         height: Height of the extruded boxes
         granularity: The amount of error in the model
         """
+
         uri: str = field(
             default="__default__",
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         scale: float = field(
             default=1.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         threshold: int = field(
             default=200,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         height: float = field(
             default=1.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         granularity: int = field(
             default=1,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
 
     @dataclass
@@ -338,19 +345,20 @@ class Geometry:
             specified by the uri
         scale: Scaling factor applied to the mesh
         """
+
         uri: str = field(
             default="__default__",
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         submesh: Optional["Geometry.Mesh.Submesh"] = field(
             default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         scale: str = field(
             default="1 1 1",
@@ -358,7 +366,7 @@ class Geometry:
                 "type": "Element",
                 "namespace": "",
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-            }
+            },
         )
 
         @dataclass
@@ -375,19 +383,20 @@ class Geometry:
                 on the submesh before the poses from parent links and
                 models are applied.
             """
+
             name: str = field(
                 default="__default__",
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             center: bool = field(
                 default=False,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
 
     @dataclass
@@ -406,13 +415,14 @@ class Geometry:
             has infinite size when used as a geometry for a Collision
             object.
         """
+
         normal: str = field(
             default="0 0 1",
             metadata={
                 "type": "Element",
                 "namespace": "",
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-            }
+            },
         )
         size: str = field(
             default="1 1",
@@ -420,7 +430,7 @@ class Geometry:
                 "type": "Element",
                 "namespace": "",
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+)((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-            }
+            },
         )
 
     @dataclass
@@ -433,6 +443,7 @@ class Geometry:
         point: A series of points that define the path of the polyline.
         height: Height of the polyline
         """
+
         point: List[str] = field(
             default_factory=list,
             metadata={
@@ -440,14 +451,14 @@ class Geometry:
                 "namespace": "",
                 "min_occurs": 1,
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+)((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-            }
+            },
         )
         height: float = field(
             default=1.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
 
     @dataclass
@@ -459,10 +470,11 @@ class Geometry:
         ----------
         radius: radius of the sphere
         """
+
         radius: float = field(
             default=1.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )

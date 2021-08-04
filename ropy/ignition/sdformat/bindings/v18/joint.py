@@ -50,6 +50,7 @@ class Joint:
         constrains one degree of freedom,       (fixed) a joint with
         zero degrees of freedom that rigidly connects two links.
     """
+
     class Meta:
         name = "joint"
 
@@ -58,84 +59,84 @@ class Joint:
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     child: str = field(
         default="__default__",
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     gearbox_ratio: float = field(
         default=1.0,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     gearbox_reference_body: str = field(
         default="__default__",
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     thread_pitch: float = field(
         default=1.0,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     axis: Optional["Joint.Axis"] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     axis2: Optional["Joint.Axis2"] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     physics: Optional["Joint.Physics"] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     pose: "Joint.Pose" = field(
         default="0 0 0 0 0 0",
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     sensor: Optional[Sensor] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     name: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )
     type: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )
 
     @dataclass
@@ -155,19 +156,20 @@ class Joint:
             of the joint, particularly useful for simulation.
         limit: specifies the limits of this joint
         """
+
         xyz: "Joint.Axis.Xyz" = field(
             default="0 0 1",
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         dynamics: Optional["Joint.Axis.Dynamics"] = field(
             default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         limit: Optional["Joint.Axis.Limit"] = field(
             default=None,
@@ -175,7 +177,7 @@ class Joint:
                 "type": "Element",
                 "namespace": "",
                 "required": True,
-            }
+            },
         )
 
         @dataclass
@@ -187,18 +189,19 @@ class Joint:
             expressed_in: Name of frame in whose coordinates the xyz
                 unit vector is expressed.
             """
+
             value: Optional[str] = field(
                 default=None,
                 metadata={
                     "required": True,
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-                }
+                },
             )
             expressed_in: Optional[str] = field(
                 default=None,
                 metadata={
                     "type": "Attribute",
-                }
+                },
             )
 
         @dataclass
@@ -217,33 +220,34 @@ class Joint:
                 joint axis.
             spring_stiffness: The spring stiffness for this joint axis.
             """
+
             damping: float = field(
                 default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             friction: float = field(
                 default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             spring_reference: float = field(
                 default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             spring_stiffness: float = field(
                 default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
 
         @dataclass
@@ -265,47 +269,48 @@ class Joint:
             stiffness: Joint stop stiffness.
             dissipation: Joint stop dissipation.
             """
+
             lower: float = field(
-                default=-1e+16,
+                default=-1e16,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             upper: float = field(
-                default=1e+16,
+                default=1e16,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             effort: float = field(
                 default=-1.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             velocity: float = field(
                 default=-1.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             stiffness: float = field(
                 default=100000000.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             dissipation: float = field(
                 default=1.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
 
     @dataclass
@@ -325,19 +330,20 @@ class Joint:
             of the joint, particularly useful for simulation.
         limit:
         """
+
         xyz: "Joint.Axis2.Xyz" = field(
             default="0 0 1",
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         dynamics: Optional["Joint.Axis2.Dynamics"] = field(
             default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         limit: Optional["Joint.Axis2.Limit"] = field(
             default=None,
@@ -345,7 +351,7 @@ class Joint:
                 "type": "Element",
                 "namespace": "",
                 "required": True,
-            }
+            },
         )
 
         @dataclass
@@ -357,18 +363,19 @@ class Joint:
             expressed_in: Name of frame in whose coordinates the xyz
                 unit vector is expressed.
             """
+
             value: Optional[str] = field(
                 default=None,
                 metadata={
                     "required": True,
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-                }
+                },
             )
             expressed_in: Optional[str] = field(
                 default=None,
                 metadata={
                     "type": "Attribute",
-                }
+                },
             )
 
         @dataclass
@@ -389,33 +396,34 @@ class Joint:
                 joint axis.
             spring_stiffness: The spring stiffness for this joint axis.
             """
+
             damping: float = field(
                 default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             friction: float = field(
                 default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             spring_reference: float = field(
                 default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             spring_stiffness: float = field(
                 default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
 
         @dataclass
@@ -439,47 +447,48 @@ class Joint:
             dissipation: Joint stop dissipation. Supported physics
                 engines: SimBody.
             """
+
             lower: float = field(
-                default=-1e+16,
+                default=-1e16,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             upper: float = field(
-                default=1e+16,
+                default=1e16,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             effort: float = field(
                 default=-1.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             velocity: float = field(
                 default=-1.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             stiffness: float = field(
                 default=100000000.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             dissipation: float = field(
                 default=1.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
 
     @dataclass
@@ -494,26 +503,27 @@ class Joint:
         provide_feedback: If provide feedback is set to true, physics
             engine will compute the constraint forces at this joint.
         """
+
         simbody: Optional["Joint.Physics.Simbody"] = field(
             default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         ode: Optional["Joint.Physics.Ode"] = field(
             default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         provide_feedback: bool = field(
             default=False,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
 
         @dataclass
@@ -526,12 +536,13 @@ class Joint:
             must_be_loop_joint: Force cut in the multibody graph at this
                 joint.
             """
+
             must_be_loop_joint: bool = field(
                 default=False,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
 
         @dataclass
@@ -563,75 +574,76 @@ class Joint:
             limit:
             suspension:
             """
+
             cfm_damping: bool = field(
                 default=False,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             implicit_spring_damper: bool = field(
                 default=False,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             fudge_factor: float = field(
                 default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             cfm: float = field(
                 default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             erp: float = field(
                 default=0.2,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             bounce: float = field(
                 default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             max_force: float = field(
                 default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             velocity: float = field(
                 default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             limit: Optional["Joint.Physics.Ode.Limit"] = field(
                 default=None,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             suspension: Optional["Joint.Physics.Ode.Suspension"] = field(
                 default=None,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
 
             @dataclass
@@ -643,19 +655,20 @@ class Joint:
                     stop
                 erp: Error reduction parameter used by the joint stop
                 """
+
                 cfm: float = field(
                     default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 erp: float = field(
                     default=0.2,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
 
             @dataclass
@@ -666,19 +679,20 @@ class Joint:
                 cfm: Suspension constraint force mixing parameter
                 erp: Suspension error reduction parameter
                 """
+
                 cfm: float = field(
                     default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 erp: float = field(
                     default=0.2,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
 
     @dataclass
@@ -690,16 +704,17 @@ class Joint:
         relative_to: Name of frame relative to which the pose is
             applied.
         """
+
         value: Optional[str] = field(
             default=None,
             metadata={
                 "required": True,
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-            }
+            },
         )
         relative_to: Optional[str] = field(
             default=None,
             metadata={
                 "type": "Attribute",
-            }
+            },
         )

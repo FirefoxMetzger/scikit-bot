@@ -18,6 +18,7 @@ class State:
     model: Model state
     world_name: Name of the world this state applies to
     """
+
     class Meta:
         name = "state"
 
@@ -26,49 +27,49 @@ class State:
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     wall_time: float = field(
         default="0 0",
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     real_time: float = field(
         default="0 0",
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     insertions: Optional["State.Insertions"] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     deletions: Optional["State.Deletions"] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     model: List["State.Model"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     world_name: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )
 
     @dataclass
@@ -81,12 +82,13 @@ class State:
         model: The model element defines a complete robot or any other
             physical object.
         """
+
         model: List[Model] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
 
     @dataclass
@@ -98,13 +100,14 @@ class State:
         ----------
         name: The name of a deleted model
         """
+
         name: List[str] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
                 "min_occurs": 1,
-            }
+            },
         )
 
     @dataclass
@@ -119,34 +122,35 @@ class State:
         link: Link state
         name: Name of the model
         """
+
         pose: str = field(
             default="0 0 0 0 0 0",
             metadata={
                 "type": "Element",
                 "namespace": "",
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-            }
+            },
         )
         joint: List["State.Model.Joint"] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         link: List["State.Model.Link"] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         name: Optional[str] = field(
             default=None,
             metadata={
                 "type": "Attribute",
                 "required": True,
-            }
+            },
         )
 
         @dataclass
@@ -159,20 +163,21 @@ class State:
             angle: Angle of an axis
             name: Name of the joint
             """
+
             angle: List["State.Model.Joint.Angle"] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
                     "min_occurs": 1,
-                }
+                },
             )
             name: Optional[str] = field(
                 default=None,
                 metadata={
                     "type": "Attribute",
                     "required": True,
-                }
+                },
             )
 
             @dataclass
@@ -183,18 +188,19 @@ class State:
                 value:
                 axis: Index of the axis.
                 """
+
                 value: Optional[float] = field(
                     default=None,
                     metadata={
                         "required": True,
-                    }
+                    },
                 )
                 axis: Optional[int] = field(
                     default=None,
                     metadata={
                         "type": "Attribute",
                         "required": True,
-                    }
+                    },
                 )
 
         @dataclass
@@ -211,13 +217,14 @@ class State:
             collision: Collision state
             name: Name of the link
             """
+
             pose: str = field(
                 default="0 0 0 0 0 0",
                 metadata={
                     "type": "Element",
                     "namespace": "",
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-                }
+                },
             )
             velocity: str = field(
                 default="0 0 0 0 0 0",
@@ -225,7 +232,7 @@ class State:
                     "type": "Element",
                     "namespace": "",
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-                }
+                },
             )
             acceleration: str = field(
                 default="0 0 0 0 0 0",
@@ -233,7 +240,7 @@ class State:
                     "type": "Element",
                     "namespace": "",
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-                }
+                },
             )
             wrench: str = field(
                 default="0 0 0 0 0 0",
@@ -241,21 +248,21 @@ class State:
                     "type": "Element",
                     "namespace": "",
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-                }
+                },
             )
             collision: List["State.Model.Link.Collision"] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             name: Optional[str] = field(
                 default=None,
                 metadata={
                     "type": "Attribute",
                     "required": True,
-                }
+                },
             )
 
             @dataclass
@@ -268,18 +275,19 @@ class State:
                 pose: Pose of the link relative to the model
                 name: Name of the collision
                 """
+
                 pose: str = field(
                     default="0 0 0 0 0 0",
                     metadata={
                         "type": "Element",
                         "namespace": "",
                         "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-                    }
+                    },
                 )
                 name: Optional[str] = field(
                     default=None,
                     metadata={
                         "type": "Attribute",
                         "required": True,
-                    }
+                    },
                 )

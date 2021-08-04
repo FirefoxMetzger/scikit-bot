@@ -36,6 +36,7 @@ class Link:
     projector:
     name: A unique name for the link within the scope of the model.
     """
+
     class Meta:
         name = "link"
 
@@ -44,21 +45,21 @@ class Link:
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     self_collide: bool = field(
         default=False,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     kinematic: bool = field(
         default=False,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     pose: str = field(
         default="0 0 0 0 0 0",
@@ -66,7 +67,7 @@ class Link:
             "type": "Element",
             "namespace": "",
             "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-        }
+        },
     )
     velocity_decay: Optional["Link.VelocityDecay"] = field(
         default=None,
@@ -74,49 +75,49 @@ class Link:
             "type": "Element",
             "namespace": "",
             "required": True,
-        }
+        },
     )
     inertial: Optional["Link.Inertial"] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     collision: List[Collision] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     visual: List[Visual] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     sensor: Optional[Sensor] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     projector: Optional["Link.Projector"] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     name: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )
 
     @dataclass
@@ -129,19 +130,20 @@ class Link:
         linear: Linear damping
         angular: Angular damping
         """
+
         linear: float = field(
             default=0.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         angular: float = field(
             default=0.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
 
     @dataclass
@@ -162,12 +164,13 @@ class Link:
             diagonal elements of this matrix are specified here, using
             the attributes ixx, ixy, ixz, iyy, iyz, izz.
         """
+
         mass: float = field(
             default=1.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         pose: str = field(
             default="0 0 0 0 0 0",
@@ -175,14 +178,14 @@ class Link:
                 "type": "Element",
                 "namespace": "",
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-            }
+            },
         )
         inertia: Optional["Link.Inertial.Inertia"] = field(
             default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
 
         @dataclass
@@ -193,47 +196,48 @@ class Link:
             above-diagonal elements of this matrix are specified here,
             using the attributes ixx, ixy, ixz, iyy, iyz, izz.
             """
+
             ixx: float = field(
                 default=1.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             ixy: float = field(
                 default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             ixz: float = field(
                 default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             iyy: float = field(
                 default=1.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             iyz: float = field(
                 default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             izz: float = field(
                 default=1.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
 
     @dataclass
@@ -250,12 +254,13 @@ class Link:
             exist as a child of world, model, and sensor.
         name: Name of the projector
         """
+
         texture: str = field(
             default="__default__",
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         pose: str = field(
             default="0 0 0 0 0 0",
@@ -263,42 +268,42 @@ class Link:
                 "type": "Element",
                 "namespace": "",
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-            }
+            },
         )
         fov: float = field(
             default=0.785,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         near_clip: float = field(
             default=0.1,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         far_clip: float = field(
             default=10.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         plugin: List["Link.Projector.Plugin"] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         name: Optional[str] = field(
             default=None,
             metadata={
                 "type": "Attribute",
                 "required": True,
-            }
+            },
         )
 
         @dataclass
@@ -318,24 +323,25 @@ class Link:
                 filename is not a full path name, the file will be
                 searched for in the configuration paths.
             """
+
             any_element: List[object] = field(
                 default_factory=list,
                 metadata={
                     "type": "Wildcard",
                     "namespace": "##any",
-                }
+                },
             )
             name: Optional[str] = field(
                 default=None,
                 metadata={
                     "type": "Attribute",
                     "required": True,
-                }
+                },
             )
             filename: Optional[str] = field(
                 default=None,
                 metadata={
                     "type": "Attribute",
                     "required": True,
-                }
+                },
             )

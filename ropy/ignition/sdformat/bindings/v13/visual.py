@@ -26,6 +26,7 @@ class Visual:
     name: Unique name for the visual element within the scope of the
         parent link.
     """
+
     class Meta:
         name = "visual"
 
@@ -34,21 +35,21 @@ class Visual:
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     laser_retro: float = field(
         default=0.0,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     transparency: float = field(
         default=0.0,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     pose: str = field(
         default="0 0 0 0 0 0",
@@ -56,14 +57,14 @@ class Visual:
             "type": "Element",
             "namespace": "",
             "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-        }
+        },
     )
     material: Optional["Visual.Material"] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     geometry: Optional[Geometry] = field(
         default=None,
@@ -71,21 +72,21 @@ class Visual:
             "type": "Element",
             "namespace": "",
             "required": True,
-        }
+        },
     )
     plugin: List["Visual.Plugin"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     name: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )
 
     @dataclass
@@ -111,19 +112,20 @@ class Visual:
             four numbers representing red/green/blue, each in the range
             of [0,1].
         """
+
         script: Optional["Visual.Material.Script"] = field(
             default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         shader: Optional["Visual.Material.Shader"] = field(
             default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         ambient: str = field(
             default="0 0 0 1",
@@ -131,7 +133,7 @@ class Visual:
                 "type": "Element",
                 "namespace": "",
                 "pattern": r"(\s*\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){3}\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s*",
-            }
+            },
         )
         diffuse: str = field(
             default="0 0 0 1",
@@ -139,7 +141,7 @@ class Visual:
                 "type": "Element",
                 "namespace": "",
                 "pattern": r"(\s*\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){3}\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s*",
-            }
+            },
         )
         specular: str = field(
             default="0 0 0 1",
@@ -147,7 +149,7 @@ class Visual:
                 "type": "Element",
                 "namespace": "",
                 "pattern": r"(\s*\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){3}\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s*",
-            }
+            },
         )
         emissive: str = field(
             default="0 0 0 1",
@@ -155,7 +157,7 @@ class Visual:
                 "type": "Element",
                 "namespace": "",
                 "pattern": r"(\s*\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){3}\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s*",
-            }
+            },
         )
 
         @dataclass
@@ -169,20 +171,21 @@ class Visual:
             uri: URI of the material script file
             name: Name of the script within the script file
             """
+
             uri: List[str] = field(
                 default_factory=list,
                 metadata={
                     "type": "Element",
                     "namespace": "",
                     "min_occurs": 1,
-                }
+                },
             )
             name: str = field(
                 default="__default__",
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
 
         @dataclass
@@ -194,19 +197,20 @@ class Visual:
             type: vertex, pixel, normal_map_object_space,
                 normal_map_tangent_space
             """
+
             normal_map: str = field(
                 default="__default__",
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             type: Optional[str] = field(
                 default=None,
                 metadata={
                     "type": "Attribute",
                     "required": True,
-                }
+                },
             )
 
     @dataclass
@@ -226,24 +230,25 @@ class Visual:
             not a full path name, the file will be searched for in the
             configuration paths.
         """
+
         any_element: List[object] = field(
             default_factory=list,
             metadata={
                 "type": "Wildcard",
                 "namespace": "##any",
-            }
+            },
         )
         name: Optional[str] = field(
             default=None,
             metadata={
                 "type": "Attribute",
                 "required": True,
-            }
+            },
         )
         filename: Optional[str] = field(
             default=None,
             metadata={
                 "type": "Attribute",
                 "required": True,
-            }
+            },
         )

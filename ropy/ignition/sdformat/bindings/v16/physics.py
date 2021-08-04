@@ -35,6 +35,7 @@ class Physics:
     type: The type of the dynamics engine. Current options are ode,
         bullet, simbody and dart.  Defaults to ode if left unspecified.
     """
+
     class Meta:
         name = "physics"
 
@@ -43,75 +44,75 @@ class Physics:
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     real_time_factor: float = field(
         default=1.0,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     real_time_update_rate: float = field(
         default=1000.0,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     max_contacts: int = field(
         default=20,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     dart: Optional["Physics.Dart"] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     simbody: Optional["Physics.Simbody"] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     bullet: Optional["Physics.Bullet"] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     ode: Optional["Physics.Ode"] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     name: str = field(
         default="default_physics",
         metadata={
             "type": "Attribute",
-        }
+        },
     )
     default: bool = field(
         default=False,
         metadata={
             "type": "Attribute",
-        }
+        },
     )
     type: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )
 
     @dataclass
@@ -125,20 +126,21 @@ class Physics:
         collision_detector: Specify collision detector for DART to use.
             Can be dart, fcl, bullet or ode.
         """
+
         solver: Optional["Physics.Dart.Solver"] = field(
             default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
                 "required": True,
-            }
+            },
         )
         collision_detector: str = field(
             default="fcl",
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
 
         @dataclass
@@ -149,12 +151,13 @@ class Physics:
             solver_type: One of the following types: pgs, dantzig. PGS
                 stands for Projected Gauss-Seidel.
             """
+
             solver_type: str = field(
                 default="dantzig",
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
 
     @dataclass
@@ -190,33 +193,34 @@ class Physics:
             e1==e2==0                          = 2*e1*e2/(e1+e2),
             otherwise
         """
+
         min_step_size: float = field(
             default=0.0001,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         accuracy: float = field(
             default=0.001,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         max_transient_velocity: float = field(
             default=0.01,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         contact: Optional["Physics.Simbody.Contact"] = field(
             default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
 
         @dataclass
@@ -259,68 +263,69 @@ class Physics:
                 static friction force            is reached.  Combining
                 rule: use larger velocity
             """
+
             stiffness: float = field(
                 default=100000000.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             dissipation: float = field(
                 default=100.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             plastic_coef_restitution: float = field(
                 default=0.5,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             plastic_impact_velocity: float = field(
                 default=0.5,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             static_friction: float = field(
                 default=0.9,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             dynamic_friction: float = field(
                 default=0.9,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             viscous_friction: float = field(
                 default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             override_impact_capture_velocity: float = field(
                 default=0.001,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             override_stiction_transition_velocity: float = field(
                 default=0.001,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
 
     @dataclass
@@ -333,13 +338,14 @@ class Physics:
         solver:
         constraints: Bullet constraint parameters.
         """
+
         solver: Optional["Physics.Bullet.Solver"] = field(
             default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
                 "required": True,
-            }
+            },
         )
         constraints: Optional["Physics.Bullet.Constraints"] = field(
             default=None,
@@ -347,7 +353,7 @@ class Physics:
                 "type": "Element",
                 "namespace": "",
                 "required": True,
-            }
+            },
         )
 
         @dataclass
@@ -364,33 +370,34 @@ class Physics:
                 produces greater accuracy at a performance cost.
             sor: Set the successive over-relaxation parameter.
             """
+
             type: str = field(
                 default="sequential_impulse",
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             min_step_size: float = field(
                 default=0.0001,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             iters: int = field(
                 default=50,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             sor: float = field(
                 default=1.3,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
 
         @dataclass
@@ -419,40 +426,41 @@ class Physics:
                 http://web.archive.org/web/20120430155635/http://bulletphysics.org/mediawiki-1.5.8/index.php/BtContactSolverInfo#Split_Impulse
                 for more information.
             """
+
             cfm: float = field(
                 default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             erp: float = field(
                 default=0.2,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             contact_surface_layer: float = field(
                 default=0.001,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             split_impulse: bool = field(
                 default=True,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             split_impulse_penetration_threshold: float = field(
                 default=-0.01,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
 
     @dataclass
@@ -465,13 +473,14 @@ class Physics:
         solver:
         constraints: ODE constraint parameters.
         """
+
         solver: Optional["Physics.Ode.Solver"] = field(
             default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
                 "required": True,
-            }
+            },
         )
         constraints: Optional["Physics.Ode.Constraints"] = field(
             default=None,
@@ -479,7 +488,7 @@ class Physics:
                 "type": "Element",
                 "namespace": "",
                 "required": True,
-            }
+            },
         )
 
         @dataclass
@@ -518,68 +527,69 @@ class Physics:
                 pages/#!/osrf/gazebo/pull-request/1522
                 https://github.com/osrf/gazebo/commit/968dccafdfbfca09c9b3326f855612076fed7e6f
             """
+
             type: str = field(
                 default="quick",
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             min_step_size: float = field(
                 default=0.0001,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             island_threads: int = field(
                 default=0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             iters: int = field(
                 default=50,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             precon_iters: int = field(
                 default=0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             sor: float = field(
                 default=1.3,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             thread_position_correction: bool = field(
                 default=False,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             use_dynamic_moi_rescaling: bool = field(
                 default=False,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             friction_model: str = field(
                 default="pyramid_model",
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
 
         @dataclass
@@ -603,31 +613,32 @@ class Physics:
                 problems due to contacts being repeatedly made and
                 broken.
             """
+
             cfm: float = field(
                 default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             erp: float = field(
                 default=0.2,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             contact_max_correcting_vel: float = field(
                 default=100.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             contact_surface_layer: float = field(
                 default=0.001,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )

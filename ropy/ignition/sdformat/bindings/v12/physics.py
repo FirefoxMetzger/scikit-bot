@@ -20,6 +20,7 @@ class Physics:
     ode: ODE specific physics properties
     type: The type of the dynamics engine. Currently must be set to ode
     """
+
     class Meta:
         name = "physics"
 
@@ -28,14 +29,14 @@ class Physics:
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     max_contacts: int = field(
         default=20,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     gravity: str = field(
         default="0 0 -9.8",
@@ -43,28 +44,28 @@ class Physics:
             "type": "Element",
             "namespace": "",
             "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-        }
+        },
     )
     bullet: Optional["Physics.Bullet"] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     ode: Optional["Physics.Ode"] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     type: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )
 
     @dataclass
@@ -76,12 +77,13 @@ class Physics:
         ----------
         dt: Time step
         """
+
         dt: float = field(
             default=0.003,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
 
     @dataclass
@@ -89,13 +91,14 @@ class Physics:
         """
         ODE specific physics properties.
         """
+
         solver: Optional["Physics.Ode.Solver"] = field(
             default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
                 "required": True,
-            }
+            },
         )
         constraints: Optional["Physics.Ode.Constraints"] = field(
             default=None,
@@ -103,7 +106,7 @@ class Physics:
                 "type": "Element",
                 "namespace": "",
                 "required": True,
-            }
+            },
         )
 
         @dataclass
@@ -119,40 +122,41 @@ class Physics:
             precon_iters:
             sor: Set the successive over-relaxation parameter.
             """
+
             type: str = field(
                 default="quick",
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             dt: float = field(
                 default=0.001,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             iters: int = field(
                 default=50,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             precon_iters: int = field(
                 default=0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             sor: float = field(
                 default=1.3,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
 
         @dataclass
@@ -174,31 +178,32 @@ class Physics:
                 problems due to contacts being repeatedly made and
                 broken.
             """
+
             cfm: float = field(
                 default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             erp: float = field(
                 default=0.2,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             contact_max_correcting_vel: float = field(
                 default=100.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             contact_surface_layer: float = field(
                 default=0.001,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )

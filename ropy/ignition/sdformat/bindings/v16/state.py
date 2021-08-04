@@ -22,6 +22,7 @@ class Model:
     link: Link state
     name: Name of the model
     """
+
     class Meta:
         name = "model"
 
@@ -30,14 +31,14 @@ class Model:
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     model: List["Model"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     scale: str = field(
         default="1 1 1",
@@ -45,35 +46,35 @@ class Model:
             "type": "Element",
             "namespace": "",
             "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-        }
+        },
     )
     frame: List["Model.Frame"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     pose: "Model.Pose" = field(
         default="0 0 0 0 0 0",
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     link: List["Model.Link"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     name: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )
 
     @dataclass
@@ -86,20 +87,21 @@ class Model:
         angle: Angle of an axis
         name: Name of the joint
         """
+
         angle: List["Model.Joint.Angle"] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
                 "min_occurs": 1,
-            }
+            },
         )
         name: Optional[str] = field(
             default=None,
             metadata={
                 "type": "Attribute",
                 "required": True,
-            }
+            },
         )
 
         @dataclass
@@ -110,18 +112,19 @@ class Model:
             value:
             axis: Index of the axis.
             """
+
             value: Optional[float] = field(
                 default=None,
                 metadata={
                     "required": True,
-                }
+                },
             )
             axis: Optional[int] = field(
                 default=None,
                 metadata={
                     "type": "Attribute",
                     "required": True,
-                }
+                },
             )
 
     @dataclass
@@ -136,19 +139,20 @@ class Model:
         name: Name of the frame. This name must not match another frame
             defined inside the parent that this frame is attached to.
         """
+
         pose: "Model.Frame.Pose" = field(
             default="0 0 0 0 0 0",
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         name: Optional[str] = field(
             default=None,
             metadata={
                 "type": "Attribute",
                 "required": True,
-            }
+            },
         )
 
         @dataclass
@@ -159,18 +163,19 @@ class Model:
             value:
             frame: Name of frame which the pose is defined relative to.
             """
+
             value: Optional[str] = field(
                 default=None,
                 metadata={
                     "required": True,
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-                }
+                },
             )
             frame: Optional[str] = field(
                 default=None,
                 metadata={
                     "type": "Attribute",
-                }
+                },
             )
 
     @dataclass
@@ -181,18 +186,19 @@ class Model:
         value:
         frame: Name of frame which the pose is defined relative to.
         """
+
         value: Optional[str] = field(
             default=None,
             metadata={
                 "required": True,
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-            }
+            },
         )
         frame: Optional[str] = field(
             default=None,
             metadata={
                 "type": "Attribute",
-            }
+            },
         )
 
     @dataclass
@@ -220,13 +226,14 @@ class Model:
             respect to the specified frame.
         name: Name of the link
         """
+
         velocity: str = field(
             default="0 0 0 0 0 0",
             metadata={
                 "type": "Element",
                 "namespace": "",
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-            }
+            },
         )
         acceleration: str = field(
             default="0 0 0 0 0 0",
@@ -234,7 +241,7 @@ class Model:
                 "type": "Element",
                 "namespace": "",
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-            }
+            },
         )
         wrench: str = field(
             default="0 0 0 0 0 0",
@@ -242,35 +249,35 @@ class Model:
                 "type": "Element",
                 "namespace": "",
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-            }
+            },
         )
         collision: List[str] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         frame: List["Model.Link.Frame"] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         pose: "Model.Link.Pose" = field(
             default="0 0 0 0 0 0",
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         name: Optional[str] = field(
             default=None,
             metadata={
                 "type": "Attribute",
                 "required": True,
-            }
+            },
         )
 
         @dataclass
@@ -286,19 +293,20 @@ class Model:
                 frame defined inside the parent that this frame is
                 attached to.
             """
+
             pose: "Model.Link.Frame.Pose" = field(
                 default="0 0 0 0 0 0",
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             name: Optional[str] = field(
                 default=None,
                 metadata={
                     "type": "Attribute",
                     "required": True,
-                }
+                },
             )
 
             @dataclass
@@ -310,18 +318,19 @@ class Model:
                 frame: Name of frame which the pose is defined relative
                     to.
                 """
+
                 value: Optional[str] = field(
                     default=None,
                     metadata={
                         "required": True,
                         "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-                    }
+                    },
                 )
                 frame: Optional[str] = field(
                     default=None,
                     metadata={
                         "type": "Attribute",
-                    }
+                    },
                 )
 
         @dataclass
@@ -332,18 +341,19 @@ class Model:
             value:
             frame: Name of frame which the pose is defined relative to.
             """
+
             value: Optional[str] = field(
                 default=None,
                 metadata={
                     "required": True,
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-                }
+                },
             )
             frame: Optional[str] = field(
                 default=None,
                 metadata={
                     "type": "Attribute",
-                }
+                },
             )
 
 
@@ -363,6 +373,7 @@ class State:
     light: Light state
     world_name: Name of the world this state applies to
     """
+
     class Meta:
         name = "state"
 
@@ -371,63 +382,63 @@ class State:
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     wall_time: float = field(
         default="0 0",
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     real_time: float = field(
         default="0 0",
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     iterations: int = field(
         default=0,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     insertions: Optional["State.Insertions"] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     deletions: Optional["State.Deletions"] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     model: List[Model] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     light: List["State.Light"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     world_name: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )
 
     @dataclass
@@ -441,19 +452,20 @@ class State:
             physical object.
         light: The light element describes a light source.
         """
+
         model: List[ModelModel] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         light: List[Light] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
 
     @dataclass
@@ -465,13 +477,14 @@ class State:
         ----------
         name: The name of a deleted entity.
         """
+
         name: List[str] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
                 "min_occurs": 1,
-            }
+            },
         )
 
     @dataclass
@@ -486,26 +499,27 @@ class State:
             respect to the specified frame.
         name: Name of the light
         """
+
         frame: List["State.Light.Frame"] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         pose: "State.Light.Pose" = field(
             default="0 0 0 0 0 0",
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         name: Optional[str] = field(
             default=None,
             metadata={
                 "type": "Attribute",
                 "required": True,
-            }
+            },
         )
 
         @dataclass
@@ -521,19 +535,20 @@ class State:
                 frame defined inside the parent that this frame is
                 attached to.
             """
+
             pose: "State.Light.Frame.Pose" = field(
                 default="0 0 0 0 0 0",
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             name: Optional[str] = field(
                 default=None,
                 metadata={
                     "type": "Attribute",
                     "required": True,
-                }
+                },
             )
 
             @dataclass
@@ -545,18 +560,19 @@ class State:
                 frame: Name of frame which the pose is defined relative
                     to.
                 """
+
                 value: Optional[str] = field(
                     default=None,
                     metadata={
                         "required": True,
                         "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-                    }
+                    },
                 )
                 frame: Optional[str] = field(
                     default=None,
                     metadata={
                         "type": "Attribute",
-                    }
+                    },
                 )
 
         @dataclass
@@ -567,16 +583,17 @@ class State:
             value:
             frame: Name of frame which the pose is defined relative to.
             """
+
             value: Optional[str] = field(
                 default=None,
                 metadata={
                     "required": True,
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-                }
+                },
             )
             frame: Optional[str] = field(
                 default=None,
                 metadata={
                     "type": "Attribute",
-                }
+                },
             )

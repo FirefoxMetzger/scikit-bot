@@ -39,9 +39,7 @@ def test_custom_constructor(valid_sdf_string):
     else:
         ign.sdformat.loads(
             valid_sdf_string,
-            custom_constructor={
-                Model.Pose: lambda **kwargs: NewPose(**kwargs)
-            },
+            custom_constructor={Model.Pose: lambda **kwargs: NewPose(**kwargs)},
         )
 
 

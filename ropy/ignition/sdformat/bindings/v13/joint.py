@@ -37,6 +37,7 @@ class Joint:
         of freedom, (piston) similar to a Slider joint except that
         rotation around the translation axis is possible.
     """
+
     class Meta:
         name = "joint"
 
@@ -45,14 +46,14 @@ class Joint:
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     child: str = field(
         default="__default__",
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     pose: str = field(
         default="0 0 0 0 0 0",
@@ -60,14 +61,14 @@ class Joint:
             "type": "Element",
             "namespace": "",
             "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-        }
+        },
     )
     thread_pitch: float = field(
         default=1.0,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     axis: Optional["Joint.Axis"] = field(
         default=None,
@@ -75,35 +76,35 @@ class Joint:
             "type": "Element",
             "namespace": "",
             "required": True,
-        }
+        },
     )
     axis2: Optional["Joint.Axis2"] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     physics: Optional["Joint.Physics"] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     name: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )
     type: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )
 
     @dataclass
@@ -125,20 +126,21 @@ class Joint:
             of the joint, particularly useful for simulation.
         limit: specifies the limits of this joint
         """
+
         xyz: str = field(
             default="0 0 1",
             metadata={
                 "type": "Element",
                 "namespace": "",
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-            }
+            },
         )
         dynamics: Optional["Joint.Axis.Dynamics"] = field(
             default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         limit: Optional["Joint.Axis.Limit"] = field(
             default=None,
@@ -146,7 +148,7 @@ class Joint:
                 "type": "Element",
                 "namespace": "",
                 "required": True,
-            }
+            },
         )
 
         @dataclass
@@ -162,19 +164,20 @@ class Joint:
                 coefficient of the joint.
             friction: The physical static friction value of the joint.
             """
+
             damping: float = field(
                 default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             friction: float = field(
                 default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
 
         @dataclass
@@ -196,33 +199,34 @@ class Joint:
             velocity: (not implemented) An attribute for enforcing the
                 maximum joint velocity.
             """
+
             lower: float = field(
-                default=-1e+16,
+                default=-1e16,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             upper: float = field(
-                default=1e+16,
+                default=1e16,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             effort: float = field(
                 default=-1.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             velocity: float = field(
                 default=-1.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
 
     @dataclass
@@ -243,27 +247,28 @@ class Joint:
             of the joint, particularly useful for simulation.
         limit:
         """
+
         xyz: str = field(
             default="0 0 1",
             metadata={
                 "type": "Element",
                 "namespace": "",
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-            }
+            },
         )
         dynamics: Optional["Joint.Axis2.Dynamics"] = field(
             default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         limit: Optional["Joint.Axis2.Limit"] = field(
             default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
 
         @dataclass
@@ -279,19 +284,20 @@ class Joint:
                 coefficient of the joint.
             friction: The physical static friction value of the joint.
             """
+
             damping: float = field(
                 default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             friction: float = field(
                 default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
 
         @dataclass
@@ -311,33 +317,34 @@ class Joint:
             velocity: (not implemented) An attribute for enforcing the
                 maximum joint velocity.
             """
+
             lower: float = field(
-                default=-1e+16,
+                default=-1e16,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             upper: float = field(
-                default=1e+16,
+                default=1e16,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             effort: float = field(
                 default=-1.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             velocity: float = field(
                 default=-1.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
 
     @dataclass
@@ -349,12 +356,13 @@ class Joint:
         ----------
         ode: ODE specific parameters
         """
+
         ode: Optional["Joint.Physics.Ode"] = field(
             default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
 
         @dataclass
@@ -381,68 +389,69 @@ class Joint:
             limit:
             suspension:
             """
+
             provide_feedback: bool = field(
                 default=False,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             cfm_damping: bool = field(
                 default=False,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             fudge_factor: float = field(
                 default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             cfm: float = field(
                 default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             bounce: float = field(
                 default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             max_force: float = field(
                 default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             velocity: float = field(
                 default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             limit: Optional["Joint.Physics.Ode.Limit"] = field(
                 default=None,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             suspension: Optional["Joint.Physics.Ode.Suspension"] = field(
                 default=None,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
 
             @dataclass
@@ -454,19 +463,20 @@ class Joint:
                     stop
                 erp: Error reduction parameter used by the joint stop
                 """
+
                 cfm: float = field(
                     default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 erp: float = field(
                     default=0.2,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
 
             @dataclass
@@ -477,17 +487,18 @@ class Joint:
                 cfm: Suspension constraint force mixing parameter
                 erp: Suspension error reduction parameter
                 """
+
                 cfm: float = field(
                     default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 erp: float = field(
                     default=0.2,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )

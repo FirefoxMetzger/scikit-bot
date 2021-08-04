@@ -16,7 +16,7 @@ class Model:
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     link: List[Link] = field(
         default_factory=list,
@@ -24,41 +24,41 @@ class Model:
             "type": "Element",
             "namespace": "",
             "min_occurs": 1,
-        }
+        },
     )
     joint: List[Joint] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     plugin: List["Model.Plugin"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     gripper: List["Model.Gripper"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     name: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )
     static: bool = field(
         default=False,
         metadata={
             "type": "Attribute",
-        }
+        },
     )
 
     @dataclass
@@ -68,21 +68,21 @@ class Model:
             metadata={
                 "type": "Wildcard",
                 "namespace": "##any",
-            }
+            },
         )
         name: Optional[str] = field(
             default=None,
             metadata={
                 "type": "Attribute",
                 "required": True,
-            }
+            },
         )
         filename: Optional[str] = field(
             default=None,
             metadata={
                 "type": "Attribute",
                 "required": True,
-            }
+            },
         )
 
     @dataclass
@@ -92,7 +92,7 @@ class Model:
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         gripper_link: List[str] = field(
             default_factory=list,
@@ -100,19 +100,19 @@ class Model:
                 "type": "Element",
                 "namespace": "",
                 "min_occurs": 1,
-            }
+            },
         )
         palm_link: str = field(
             default="__default__",
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         name: Optional[str] = field(
             default=None,
             metadata={
                 "type": "Attribute",
                 "required": True,
-            }
+            },
         )

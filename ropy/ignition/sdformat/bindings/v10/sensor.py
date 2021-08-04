@@ -14,88 +14,88 @@ class Sensor:
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     topic: str = field(
         default="__default",
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     plugin: List["Sensor.Plugin"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     camera: Optional["Sensor.Camera"] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     ray: Optional["Sensor.Ray"] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     contact: Optional["Sensor.Contact"] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     rfidtag: Optional[str] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     rfid: Optional[str] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     name: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )
     type: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )
     always_on: bool = field(
         default=False,
         metadata={
             "type": "Attribute",
-        }
+        },
     )
     update_rate: float = field(
         default=0.0,
         metadata={
             "type": "Attribute",
-        }
+        },
     )
     visualize: bool = field(
         default=False,
         metadata={
             "type": "Attribute",
-        }
+        },
     )
 
     @dataclass
@@ -105,21 +105,21 @@ class Sensor:
             metadata={
                 "type": "Wildcard",
                 "namespace": "##any",
-            }
+            },
         )
         name: Optional[str] = field(
             default=None,
             metadata={
                 "type": "Attribute",
                 "required": True,
-            }
+            },
         )
         filename: Optional[str] = field(
             default=None,
             metadata={
                 "type": "Attribute",
                 "required": True,
-            }
+            },
         )
 
     @dataclass
@@ -130,7 +130,7 @@ class Sensor:
                 "type": "Element",
                 "namespace": "",
                 "required": True,
-            }
+            },
         )
         image: Optional[str] = field(
             default=None,
@@ -138,7 +138,7 @@ class Sensor:
                 "type": "Element",
                 "namespace": "",
                 "required": True,
-            }
+            },
         )
         clip: Optional[str] = field(
             default=None,
@@ -146,21 +146,21 @@ class Sensor:
                 "type": "Element",
                 "namespace": "",
                 "required": True,
-            }
+            },
         )
         save: Optional[str] = field(
             default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         depth_camera: Optional[str] = field(
             default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
 
     @dataclass
@@ -171,7 +171,7 @@ class Sensor:
                 "type": "Element",
                 "namespace": "",
                 "required": True,
-            }
+            },
         )
         range: Optional[str] = field(
             default=None,
@@ -179,7 +179,7 @@ class Sensor:
                 "type": "Element",
                 "namespace": "",
                 "required": True,
-            }
+            },
         )
 
         @dataclass
@@ -190,14 +190,14 @@ class Sensor:
                     "type": "Element",
                     "namespace": "",
                     "required": True,
-                }
+                },
             )
             vertical: Optional[str] = field(
                 default=None,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
 
     @dataclass
@@ -208,12 +208,12 @@ class Sensor:
                 "type": "Element",
                 "namespace": "",
                 "required": True,
-            }
+            },
         )
         topic: str = field(
             default="__default_topic__",
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )

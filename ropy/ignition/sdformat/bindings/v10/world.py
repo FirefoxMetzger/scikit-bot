@@ -21,7 +21,7 @@ class World:
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     physics: Optional[Physics] = field(
         default=None,
@@ -29,7 +29,7 @@ class World:
             "type": "Element",
             "namespace": "",
             "required": True,
-        }
+        },
     )
     scene: Optional[Scene] = field(
         default=None,
@@ -37,63 +37,63 @@ class World:
             "type": "Element",
             "namespace": "",
             "required": True,
-        }
+        },
     )
     light: List[Light] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     model: List[Model] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     actor: List[Actor] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     plugin: List["World.Plugin"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     joint: List[Joint] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     road: List["World.Road"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     state: List[State] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     name: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )
 
     @dataclass
@@ -103,13 +103,13 @@ class World:
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         fullscreen: bool = field(
             default=False,
             metadata={
                 "type": "Attribute",
-            }
+            },
         )
 
         @dataclass
@@ -119,28 +119,28 @@ class World:
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             origin: Optional[str] = field(
                 default=None,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             track_visual: Optional["World.Gui.Camera.TrackVisual"] = field(
                 default=None,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             name: Optional[str] = field(
                 default=None,
                 metadata={
                     "type": "Attribute",
                     "required": True,
-                }
+                },
             )
 
             @dataclass
@@ -150,21 +150,21 @@ class World:
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 min_dist: float = field(
                     default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 max_dist: float = field(
                     default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
 
     @dataclass
@@ -174,21 +174,21 @@ class World:
             metadata={
                 "type": "Wildcard",
                 "namespace": "##any",
-            }
+            },
         )
         name: Optional[str] = field(
             default=None,
             metadata={
                 "type": "Attribute",
                 "required": True,
-            }
+            },
         )
         filename: Optional[str] = field(
             default=None,
             metadata={
                 "type": "Attribute",
                 "required": True,
-            }
+            },
         )
 
     @dataclass
@@ -198,7 +198,7 @@ class World:
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         point: List[str] = field(
             default_factory=list,
@@ -207,12 +207,12 @@ class World:
                 "namespace": "",
                 "min_occurs": 1,
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-            }
+            },
         )
         name: Optional[str] = field(
             default=None,
             metadata={
                 "type": "Attribute",
                 "required": True,
-            }
+            },
         )

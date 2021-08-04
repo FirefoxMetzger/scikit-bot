@@ -27,6 +27,7 @@ class Actor:
         as a child of world, model, and sensor.
     name:
     """
+
     class Meta:
         name = "actor"
 
@@ -35,7 +36,7 @@ class Actor:
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     skin: Optional["Actor.Skin"] = field(
         default=None,
@@ -43,7 +44,7 @@ class Actor:
             "type": "Element",
             "namespace": "",
             "required": True,
-        }
+        },
     )
     animation: List["Actor.Animation"] = field(
         default_factory=list,
@@ -51,7 +52,7 @@ class Actor:
             "type": "Element",
             "namespace": "",
             "min_occurs": 1,
-        }
+        },
     )
     script: Optional["Actor.Script"] = field(
         default=None,
@@ -59,49 +60,49 @@ class Actor:
             "type": "Element",
             "namespace": "",
             "required": True,
-        }
+        },
     )
     frame: List["Actor.Frame"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     pose: "Actor.Pose" = field(
         default="0 0 0 0 0 0",
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     link: List[Link] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     joint: List[Joint] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     plugin: List["Actor.Plugin"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     name: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )
 
     @dataclass
@@ -111,14 +112,14 @@ class Actor:
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         scale: float = field(
             default=1.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
 
     @dataclass
@@ -128,28 +129,28 @@ class Actor:
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         scale: float = field(
             default=1.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         interpolate_x: bool = field(
             default=False,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         name: Optional[str] = field(
             default=None,
             metadata={
                 "type": "Attribute",
                 "required": True,
-            }
+            },
         )
 
     @dataclass
@@ -159,28 +160,28 @@ class Actor:
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         delay_start: float = field(
             default=0.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         auto_start: bool = field(
             default=True,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         trajectory: List["Actor.Script.Trajectory"] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
 
         @dataclass
@@ -190,21 +191,21 @@ class Actor:
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             id: Optional[int] = field(
                 default=None,
                 metadata={
                     "type": "Attribute",
                     "required": True,
-                }
+                },
             )
             type: Optional[str] = field(
                 default=None,
                 metadata={
                     "type": "Attribute",
                     "required": True,
-                }
+                },
             )
 
             @dataclass
@@ -214,7 +215,7 @@ class Actor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 pose: str = field(
                     default="0 0 0 0 0 0",
@@ -222,7 +223,7 @@ class Actor:
                         "type": "Element",
                         "namespace": "",
                         "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-                    }
+                    },
                 )
 
     @dataclass
@@ -237,19 +238,20 @@ class Actor:
         name: Name of the frame. This name must not match another frame
             defined inside the parent that this frame is attached to.
         """
+
         pose: "Actor.Frame.Pose" = field(
             default="0 0 0 0 0 0",
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         name: Optional[str] = field(
             default=None,
             metadata={
                 "type": "Attribute",
                 "required": True,
-            }
+            },
         )
 
         @dataclass
@@ -260,18 +262,19 @@ class Actor:
             value:
             frame: Name of frame which the pose is defined relative to.
             """
+
             value: Optional[str] = field(
                 default=None,
                 metadata={
                     "required": True,
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-                }
+                },
             )
             frame: Optional[str] = field(
                 default=None,
                 metadata={
                     "type": "Attribute",
-                }
+                },
             )
 
     @dataclass
@@ -282,18 +285,19 @@ class Actor:
         value:
         frame: Name of frame which the pose is defined relative to.
         """
+
         value: Optional[str] = field(
             default=None,
             metadata={
                 "required": True,
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-            }
+            },
         )
         frame: Optional[str] = field(
             default=None,
             metadata={
                 "type": "Attribute",
-            }
+            },
         )
 
     @dataclass
@@ -313,24 +317,25 @@ class Actor:
             not a full path name, the file will be searched for in the
             configuration paths.
         """
+
         any_element: List[object] = field(
             default_factory=list,
             metadata={
                 "type": "Wildcard",
                 "namespace": "##any",
-            }
+            },
         )
         name: Optional[str] = field(
             default=None,
             metadata={
                 "type": "Attribute",
                 "required": True,
-            }
+            },
         )
         filename: Optional[str] = field(
             default=None,
             metadata={
                 "type": "Attribute",
                 "required": True,
-            }
+            },
         )

@@ -32,6 +32,7 @@ class Model:
     name: A unique name for the model. This name must not match another
         model in the world.
     """
+
     class Meta:
         name = "model"
 
@@ -40,14 +41,14 @@ class Model:
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     allow_auto_disable: bool = field(
         default=True,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     pose: str = field(
         default="0 0 0 0 0 0",
@@ -55,7 +56,7 @@ class Model:
             "type": "Element",
             "namespace": "",
             "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-        }
+        },
     )
     link: List[Link] = field(
         default_factory=list,
@@ -63,35 +64,35 @@ class Model:
             "type": "Element",
             "namespace": "",
             "min_occurs": 1,
-        }
+        },
     )
     joint: List[Joint] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     plugin: List["Model.Plugin"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     gripper: List["Model.Gripper"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     name: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )
 
     @dataclass
@@ -111,26 +112,27 @@ class Model:
             not a full path name, the file will be searched for in the
             configuration paths.
         """
+
         any_element: List[object] = field(
             default_factory=list,
             metadata={
                 "type": "Wildcard",
                 "namespace": "##any",
-            }
+            },
         )
         name: Optional[str] = field(
             default=None,
             metadata={
                 "type": "Attribute",
                 "required": True,
-            }
+            },
         )
         filename: Optional[str] = field(
             default=None,
             metadata={
                 "type": "Attribute",
                 "required": True,
-            }
+            },
         )
 
     @dataclass
@@ -140,7 +142,7 @@ class Model:
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         gripper_link: List[str] = field(
             default_factory=list,
@@ -148,21 +150,21 @@ class Model:
                 "type": "Element",
                 "namespace": "",
                 "min_occurs": 1,
-            }
+            },
         )
         palm_link: str = field(
             default="__default__",
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         name: Optional[str] = field(
             default=None,
             metadata={
                 "type": "Attribute",
                 "required": True,
-            }
+            },
         )
 
         @dataclass
@@ -172,19 +174,19 @@ class Model:
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             attach_steps: int = field(
                 default=20,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             min_contact_count: int = field(
                 default=2,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )

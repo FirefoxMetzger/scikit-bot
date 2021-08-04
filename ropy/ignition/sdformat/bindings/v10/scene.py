@@ -14,35 +14,35 @@ class Scene:
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     background: Optional["Scene.Background"] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     shadows: Optional[str] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     fog: Optional[str] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     grid: Optional[str] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
 
     @dataclass
@@ -52,7 +52,7 @@ class Scene:
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         rgba: Optional[str] = field(
             default=None,
@@ -60,5 +60,5 @@ class Scene:
                 "type": "Attribute",
                 "required": True,
                 "pattern": r"(\s*\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){3}\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s*",
-            }
+            },
         )

@@ -33,6 +33,7 @@ class Sensor:
     type: The type name of the sensor. By default, SDFormat supports
         types camera, depth, multicamera, contact, imu, ir and ray.
     """
+
     class Meta:
         name = "sensor"
 
@@ -41,21 +42,21 @@ class Sensor:
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     update_rate: float = field(
         default=0.0,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     visualize: bool = field(
         default=False,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     pose: str = field(
         default="0 0 0 0 0 0",
@@ -63,77 +64,77 @@ class Sensor:
             "type": "Element",
             "namespace": "",
             "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-        }
+        },
     )
     topic: str = field(
         default="__default__",
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     plugin: List["Sensor.Plugin"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     camera: Optional["Sensor.Camera"] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     ray: Optional["Sensor.Ray"] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     contact: Optional["Sensor.Contact"] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     rfidtag: Optional[str] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     rfid: Optional[str] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     imu: Optional["Sensor.Imu"] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     name: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )
     type: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )
 
     @dataclass
@@ -153,26 +154,27 @@ class Sensor:
             not a full path name, the file will be searched for in the
             configuration paths.
         """
+
         any_element: List[object] = field(
             default_factory=list,
             metadata={
                 "type": "Wildcard",
                 "namespace": "##any",
-            }
+            },
         )
         name: Optional[str] = field(
             default=None,
             metadata={
                 "type": "Attribute",
                 "required": True,
-            }
+            },
         )
         filename: Optional[str] = field(
             default=None,
             metadata={
                 "type": "Attribute",
                 "required": True,
-            }
+            },
         )
 
     @dataclass
@@ -192,20 +194,21 @@ class Sensor:
         depth_camera: Depth camera parameters
         name: An optional name for the camera.
         """
+
         pose: str = field(
             default="0 0 0 0 0 0",
             metadata={
                 "type": "Element",
                 "namespace": "",
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-            }
+            },
         )
         horizontal_fov: float = field(
             default=1.047,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         image: Optional["Sensor.Camera.Image"] = field(
             default=None,
@@ -213,7 +216,7 @@ class Sensor:
                 "type": "Element",
                 "namespace": "",
                 "required": True,
-            }
+            },
         )
         clip: Optional["Sensor.Camera.Clip"] = field(
             default=None,
@@ -221,27 +224,27 @@ class Sensor:
                 "type": "Element",
                 "namespace": "",
                 "required": True,
-            }
+            },
         )
         save: Optional["Sensor.Camera.Save"] = field(
             default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         depth_camera: Optional["Sensor.Camera.DepthCamera"] = field(
             default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         name: str = field(
             default="__default__",
             metadata={
                 "type": "Attribute",
-            }
+            },
         )
 
         @dataclass
@@ -256,26 +259,27 @@ class Sensor:
             format:
                 (L8|R8G8B8|B8G8R8|BAYER_RGGB8|BAYER_BGGR8|BAYER_GBRG8|BAYER_GRBG8)
             """
+
             width: int = field(
                 default=320,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             height: int = field(
                 default=240,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             format: str = field(
                 default="R8G8B8",
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
 
         @dataclass
@@ -290,19 +294,20 @@ class Sensor:
             near: Near clipping plane
             far: Far clipping plane
             """
+
             near: float = field(
                 default=0.1,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             far: float = field(
                 default=100.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
 
         @dataclass
@@ -317,19 +322,20 @@ class Sensor:
                 working directory.
             enabled: True = saving enabled
             """
+
             path: str = field(
                 default="__default__",
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             enabled: Optional[bool] = field(
                 default=None,
                 metadata={
                     "type": "Attribute",
                     "required": True,
-                }
+                },
             )
 
         @dataclass
@@ -341,12 +347,13 @@ class Sensor:
             ----------
             output: Type of output
             """
+
             output: str = field(
                 default="depths",
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
 
     @dataclass
@@ -359,13 +366,14 @@ class Sensor:
         scan:
         range: specifies range properties of each simulated ray
         """
+
         scan: Optional["Sensor.Ray.Scan"] = field(
             default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
                 "required": True,
-            }
+            },
         )
         range: Optional["Sensor.Ray.Range"] = field(
             default=None,
@@ -373,7 +381,7 @@ class Sensor:
                 "type": "Element",
                 "namespace": "",
                 "required": True,
-            }
+            },
         )
 
         @dataclass
@@ -384,14 +392,14 @@ class Sensor:
                     "type": "Element",
                     "namespace": "",
                     "required": True,
-                }
+                },
             )
             vertical: Optional["Sensor.Ray.Scan.Vertical"] = field(
                 default=None,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
 
             @dataclass
@@ -409,33 +417,34 @@ class Sensor:
                 min_angle:
                 max_angle: Must be greater or equal to min_angle
                 """
+
                 samples: int = field(
                     default=640,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 resolution: float = field(
                     default=1.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 min_angle: float = field(
                     default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 max_angle: float = field(
                     default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
 
             @dataclass
@@ -453,33 +462,34 @@ class Sensor:
                 min_angle:
                 max_angle: Must be greater or equal to min_angle
                 """
+
                 samples: int = field(
                     default=1,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 resolution: float = field(
                     default=1.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 min_angle: float = field(
                     default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 max_angle: float = field(
                     default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
 
         @dataclass
@@ -493,26 +503,27 @@ class Sensor:
             max: The maximum distance for each ray.
             resolution: Linear resolution of each ray.
             """
+
             min: float = field(
                 default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             max: float = field(
                 default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             resolution: float = field(
                 default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
 
     @dataclass
@@ -526,19 +537,20 @@ class Sensor:
             as the contact sensor.
         topic: Topic on which contact data is published.
         """
+
         collision: str = field(
             default="__default__",
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         topic: str = field(
             default="__default_topic__",
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
 
     @dataclass
@@ -550,10 +562,11 @@ class Sensor:
         ----------
         topic: Topic on which data is published.
         """
+
         topic: str = field(
             default="__default_topic__",
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )

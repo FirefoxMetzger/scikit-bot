@@ -59,6 +59,7 @@ class Sensor:
         since "ray" and "gpu_ray" will be deprecated. The "ray" and
         "gpu_ray" types are maintained for legacy support.
     """
+
     class Meta:
         name = "sensor"
 
@@ -67,168 +68,168 @@ class Sensor:
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     update_rate: float = field(
         default=0.0,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     visualize: bool = field(
         default=False,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     topic: str = field(
         default="__default__",
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     frame: List["Sensor.Frame"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     pose: "Sensor.Pose" = field(
         default="0 0 0 0 0 0",
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     plugin: List["Sensor.Plugin"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     air_pressure: Optional["Sensor.AirPressure"] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     altimeter: Optional["Sensor.Altimeter"] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     camera: Optional["Sensor.Camera"] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     contact: Optional["Sensor.Contact"] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     force_torque: Optional["Sensor.ForceTorque"] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     gps: Optional["Sensor.Gps"] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     imu: Optional["Sensor.Imu"] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     lidar: Optional["Sensor.Lidar"] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     logical_camera: Optional["Sensor.LogicalCamera"] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     magnetometer: Optional["Sensor.Magnetometer"] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     ray: Optional["Sensor.Ray"] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     rfidtag: Optional[str] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     rfid: Optional[str] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     sonar: Optional["Sensor.Sonar"] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     transceiver: Optional["Sensor.Transceiver"] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     name: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )
     type: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )
 
     @dataclass
@@ -243,19 +244,20 @@ class Sensor:
         name: Name of the frame. This name must not match another frame
             defined inside the parent that this frame is attached to.
         """
+
         pose: "Sensor.Frame.Pose" = field(
             default="0 0 0 0 0 0",
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         name: Optional[str] = field(
             default=None,
             metadata={
                 "type": "Attribute",
                 "required": True,
-            }
+            },
         )
 
         @dataclass
@@ -266,18 +268,19 @@ class Sensor:
             value:
             frame: Name of frame which the pose is defined relative to.
             """
+
             value: Optional[str] = field(
                 default=None,
                 metadata={
                     "required": True,
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-                }
+                },
             )
             frame: Optional[str] = field(
                 default=None,
                 metadata={
                     "type": "Attribute",
-                }
+                },
             )
 
     @dataclass
@@ -288,18 +291,19 @@ class Sensor:
         value:
         frame: Name of frame which the pose is defined relative to.
         """
+
         value: Optional[str] = field(
             default=None,
             metadata={
                 "required": True,
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-            }
+            },
         )
         frame: Optional[str] = field(
             default=None,
             metadata={
                 "type": "Attribute",
-            }
+            },
         )
 
     @dataclass
@@ -319,26 +323,27 @@ class Sensor:
             not a full path name, the file will be searched for in the
             configuration paths.
         """
+
         any_element: List[object] = field(
             default_factory=list,
             metadata={
                 "type": "Wildcard",
                 "namespace": "##any",
-            }
+            },
         )
         name: Optional[str] = field(
             default=None,
             metadata={
                 "type": "Attribute",
                 "required": True,
-            }
+            },
         )
         filename: Optional[str] = field(
             default=None,
             metadata={
                 "type": "Attribute",
                 "required": True,
-            }
+            },
         )
 
     @dataclass
@@ -357,19 +362,20 @@ class Sensor:
             height of zero.
         pressure: Noise parameters for the pressure data.
         """
+
         reference_altitude: float = field(
             default=0.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         pressure: Optional["Sensor.AirPressure.Pressure"] = field(
             default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
 
         @dataclass
@@ -381,13 +387,14 @@ class Sensor:
             ----------
             noise: The properties of a sensor noise model.
             """
+
             noise: Optional["Sensor.AirPressure.Pressure.Noise"] = field(
                 default=None,
                 metadata={
                     "type": "Element",
                     "namespace": "",
                     "required": True,
-                }
+                },
             )
 
             @dataclass
@@ -427,61 +434,62 @@ class Sensor:
                     ("gaussian" plus quantization of outputs (ie.
                     rounding))
                 """
+
                 mean: float = field(
                     default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 stddev: float = field(
                     default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 bias_mean: float = field(
                     default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 bias_stddev: float = field(
                     default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 dynamic_bias_stddev: float = field(
                     default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 dynamic_bias_correlation_time: float = field(
                     default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 precision: float = field(
                     default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 type: Optional[str] = field(
                     default=None,
                     metadata={
                         "type": "Attribute",
                         "required": True,
-                    }
+                    },
                 )
 
     @dataclass
@@ -494,19 +502,20 @@ class Sensor:
         vertical_position: Noise parameters for vertical position
         vertical_velocity: Noise parameters for vertical velocity
         """
+
         vertical_position: Optional["Sensor.Altimeter.VerticalPosition"] = field(
             default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         vertical_velocity: Optional["Sensor.Altimeter.VerticalVelocity"] = field(
             default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
 
         @dataclass
@@ -518,13 +527,14 @@ class Sensor:
             ----------
             noise: The properties of a sensor noise model.
             """
+
             noise: Optional["Sensor.Altimeter.VerticalPosition.Noise"] = field(
                 default=None,
                 metadata={
                     "type": "Element",
                     "namespace": "",
                     "required": True,
-                }
+                },
             )
 
             @dataclass
@@ -564,61 +574,62 @@ class Sensor:
                     ("gaussian" plus quantization of outputs (ie.
                     rounding))
                 """
+
                 mean: float = field(
                     default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 stddev: float = field(
                     default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 bias_mean: float = field(
                     default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 bias_stddev: float = field(
                     default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 dynamic_bias_stddev: float = field(
                     default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 dynamic_bias_correlation_time: float = field(
                     default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 precision: float = field(
                     default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 type: Optional[str] = field(
                     default=None,
                     metadata={
                         "type": "Attribute",
                         "required": True,
-                    }
+                    },
                 )
 
         @dataclass
@@ -630,13 +641,14 @@ class Sensor:
             ----------
             noise: The properties of a sensor noise model.
             """
+
             noise: Optional["Sensor.Altimeter.VerticalVelocity.Noise"] = field(
                 default=None,
                 metadata={
                     "type": "Element",
                     "namespace": "",
                     "required": True,
-                }
+                },
             )
 
             @dataclass
@@ -676,61 +688,62 @@ class Sensor:
                     ("gaussian" plus quantization of outputs (ie.
                     rounding))
                 """
+
                 mean: float = field(
                     default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 stddev: float = field(
                     default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 bias_mean: float = field(
                     default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 bias_stddev: float = field(
                     default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 dynamic_bias_stddev: float = field(
                     default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 dynamic_bias_correlation_time: float = field(
                     default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 precision: float = field(
                     default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 type: Optional[str] = field(
                     default=None,
                     metadata={
                         "type": "Attribute",
                         "required": True,
-                    }
+                    },
                 )
 
     @dataclass
@@ -756,12 +769,13 @@ class Sensor:
             respect to the specified frame.
         name: An optional name for the camera.
         """
+
         horizontal_fov: float = field(
             default=1.047,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         image: Optional["Sensor.Camera.Image"] = field(
             default=None,
@@ -769,7 +783,7 @@ class Sensor:
                 "type": "Element",
                 "namespace": "",
                 "required": True,
-            }
+            },
         )
         clip: Optional["Sensor.Camera.Clip"] = field(
             default=None,
@@ -777,62 +791,62 @@ class Sensor:
                 "type": "Element",
                 "namespace": "",
                 "required": True,
-            }
+            },
         )
         save: Optional["Sensor.Camera.Save"] = field(
             default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         depth_camera: Optional["Sensor.Camera.DepthCamera"] = field(
             default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         noise: Optional["Sensor.Camera.Noise"] = field(
             default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         distortion: Optional["Sensor.Camera.Distortion"] = field(
             default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         lens: Optional["Sensor.Camera.Lens"] = field(
             default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         frame: List["Sensor.Camera.Frame"] = field(
             default_factory=list,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         pose: "Sensor.Camera.Pose" = field(
             default="0 0 0 0 0 0",
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         name: str = field(
             default="__default__",
             metadata={
                 "type": "Attribute",
-            }
+            },
         )
 
         @dataclass
@@ -847,26 +861,27 @@ class Sensor:
             format:
                 (L8|R8G8B8|B8G8R8|BAYER_RGGB8|BAYER_BGGR8|BAYER_GBRG8|BAYER_GRBG8)
             """
+
             width: int = field(
                 default=320,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             height: int = field(
                 default=240,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             format: str = field(
                 default="R8G8B8",
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
 
         @dataclass
@@ -881,19 +896,20 @@ class Sensor:
             near: Near clipping plane
             far: Far clipping plane
             """
+
             near: float = field(
                 default=0.1,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             far: float = field(
                 default=100.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
 
         @dataclass
@@ -908,19 +924,20 @@ class Sensor:
                 working directory.
             enabled: True = saving enabled
             """
+
             path: str = field(
                 default="__default__",
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             enabled: Optional[bool] = field(
                 default=None,
                 metadata={
                     "type": "Attribute",
                     "required": True,
-                }
+                },
             )
 
         @dataclass
@@ -935,19 +952,20 @@ class Sensor:
                 farther than these planes are not detected by the depth
                 camera.
             """
+
             output: str = field(
                 default="depths",
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             clip: Optional["Sensor.Camera.DepthCamera.Clip"] = field(
                 default=None,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
 
             @dataclass
@@ -962,19 +980,20 @@ class Sensor:
                 near: Near clipping plane for depth camera
                 far: Far clipping plane for depth camera
                 """
+
                 near: float = field(
                     default=0.1,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 far: float = field(
                     default=10.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
 
         @dataclass
@@ -993,26 +1012,27 @@ class Sensor:
             stddev: For type "gaussian," the standard deviation of the
                 Gaussian distribution from which noise values are drawn.
             """
+
             type: str = field(
                 default="gaussian",
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             mean: float = field(
                 default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             stddev: float = field(
                 default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
 
         @dataclass
@@ -1030,40 +1050,41 @@ class Sensor:
             p2: The tangential distortion coefficient p2
             center: The distortion center or principal point
             """
+
             k1: float = field(
                 default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             k2: float = field(
                 default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             k3: float = field(
                 default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             p1: float = field(
                 default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             p2: float = field(
                 default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             center: str = field(
                 default="0.5 0.5",
@@ -1071,7 +1092,7 @@ class Sensor:
                     "type": "Element",
                     "namespace": "",
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+)((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-                }
+                },
             )
 
         @dataclass
@@ -1104,47 +1125,48 @@ class Sensor:
                 focal_length_in_pixels = (image_width_in_pixels * 0.5) /
                 tan(field_of_view_in_degrees * 0.5 * PI/180)
             """
+
             type: str = field(
                 default="stereographic",
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             scale_to_hfov: bool = field(
                 default=True,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             custom_function: Optional["Sensor.Camera.Lens.CustomFunction"] = field(
                 default=None,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             cutoff_angle: float = field(
                 default=1.5707,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             env_texture_size: int = field(
                 default=256,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             intrinsics: Optional["Sensor.Camera.Lens.Intrinsics"] = field(
                 default=None,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
 
             @dataclass
@@ -1164,40 +1186,41 @@ class Sensor:
                     value is ignored if 'scale_to_fov' is set to true
                 fun: Possible values are 'sin', 'tan' and 'id'
                 """
+
                 c1: float = field(
                     default=1.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 c2: float = field(
                     default=1.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 c3: float = field(
                     default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 f: float = field(
                     default=1.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 fun: str = field(
                     default="tan",
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
 
             @dataclass
@@ -1217,40 +1240,41 @@ class Sensor:
                 cy: Y principal point (in pixels)
                 s: XY axis skew
                 """
+
                 fx: float = field(
                     default=277.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 fy: float = field(
                     default=277.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 cx: float = field(
                     default=160.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 cy: float = field(
                     default=120.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 s: float = field(
                     default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
 
         @dataclass
@@ -1266,19 +1290,20 @@ class Sensor:
                 frame defined inside the parent that this frame is
                 attached to.
             """
+
             pose: "Sensor.Camera.Frame.Pose" = field(
                 default="0 0 0 0 0 0",
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             name: Optional[str] = field(
                 default=None,
                 metadata={
                     "type": "Attribute",
                     "required": True,
-                }
+                },
             )
 
             @dataclass
@@ -1290,18 +1315,19 @@ class Sensor:
                 frame: Name of frame which the pose is defined relative
                     to.
                 """
+
                 value: Optional[str] = field(
                     default=None,
                     metadata={
                         "required": True,
                         "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-                    }
+                    },
                 )
                 frame: Optional[str] = field(
                     default=None,
                     metadata={
                         "type": "Attribute",
-                    }
+                    },
                 )
 
         @dataclass
@@ -1312,18 +1338,19 @@ class Sensor:
             value:
             frame: Name of frame which the pose is defined relative to.
             """
+
             value: Optional[str] = field(
                 default=None,
                 metadata={
                     "required": True,
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-                }
+                },
             )
             frame: Optional[str] = field(
                 default=None,
                 metadata={
                     "type": "Attribute",
-                }
+                },
             )
 
     @dataclass
@@ -1337,19 +1364,20 @@ class Sensor:
             as the contact sensor.
         topic: Topic on which contact data is published.
         """
+
         collision: str = field(
             default="__default__",
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         topic: str = field(
             default="__default_topic__",
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
 
     @dataclass
@@ -1375,19 +1403,20 @@ class Sensor:
             wrench is the one applied by the child link on the parent
             link.
         """
+
         frame: str = field(
             default="child",
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         measure_direction: str = field(
             default="child_to_parent",
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
 
     @dataclass
@@ -1402,19 +1431,20 @@ class Sensor:
         velocity_sensing: Parameters related to GPS position
             measurement.
         """
+
         position_sensing: Optional["Sensor.Gps.PositionSensing"] = field(
             default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         velocity_sensing: Optional["Sensor.Gps.VelocitySensing"] = field(
             default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
 
         @dataclass
@@ -1429,19 +1459,20 @@ class Sensor:
             vertical: Noise parameters for vertical position
                 measurement, in units of meters.
             """
+
             horizontal: Optional["Sensor.Gps.PositionSensing.Horizontal"] = field(
                 default=None,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             vertical: Optional["Sensor.Gps.PositionSensing.Vertical"] = field(
                 default=None,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
 
             @dataclass
@@ -1454,13 +1485,14 @@ class Sensor:
                 ----------
                 noise: The properties of a sensor noise model.
                 """
+
                 noise: Optional["Sensor.Gps.PositionSensing.Horizontal.Noise"] = field(
                     default=None,
                     metadata={
                         "type": "Element",
                         "namespace": "",
                         "required": True,
-                    }
+                    },
                 )
 
                 @dataclass
@@ -1502,61 +1534,62 @@ class Sensor:
                         "gaussian_quantized" ("gaussian" plus
                         quantization of outputs (ie. rounding))
                     """
+
                     mean: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     stddev: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     bias_mean: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     bias_stddev: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     dynamic_bias_stddev: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     dynamic_bias_correlation_time: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     precision: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     type: Optional[str] = field(
                         default=None,
                         metadata={
                             "type": "Attribute",
                             "required": True,
-                        }
+                        },
                     )
 
             @dataclass
@@ -1569,13 +1602,14 @@ class Sensor:
                 ----------
                 noise: The properties of a sensor noise model.
                 """
+
                 noise: Optional["Sensor.Gps.PositionSensing.Vertical.Noise"] = field(
                     default=None,
                     metadata={
                         "type": "Element",
                         "namespace": "",
                         "required": True,
-                    }
+                    },
                 )
 
                 @dataclass
@@ -1617,61 +1651,62 @@ class Sensor:
                         "gaussian_quantized" ("gaussian" plus
                         quantization of outputs (ie. rounding))
                     """
+
                     mean: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     stddev: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     bias_mean: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     bias_stddev: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     dynamic_bias_stddev: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     dynamic_bias_correlation_time: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     precision: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     type: Optional[str] = field(
                         default=None,
                         metadata={
                             "type": "Attribute",
                             "required": True,
-                        }
+                        },
                     )
 
         @dataclass
@@ -1686,19 +1721,20 @@ class Sensor:
             vertical: Noise parameters for vertical velocity
                 measurement, in units of meters/second.
             """
+
             horizontal: Optional["Sensor.Gps.VelocitySensing.Horizontal"] = field(
                 default=None,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             vertical: Optional["Sensor.Gps.VelocitySensing.Vertical"] = field(
                 default=None,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
 
             @dataclass
@@ -1711,13 +1747,14 @@ class Sensor:
                 ----------
                 noise: The properties of a sensor noise model.
                 """
+
                 noise: Optional["Sensor.Gps.VelocitySensing.Horizontal.Noise"] = field(
                     default=None,
                     metadata={
                         "type": "Element",
                         "namespace": "",
                         "required": True,
-                    }
+                    },
                 )
 
                 @dataclass
@@ -1759,61 +1796,62 @@ class Sensor:
                         "gaussian_quantized" ("gaussian" plus
                         quantization of outputs (ie. rounding))
                     """
+
                     mean: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     stddev: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     bias_mean: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     bias_stddev: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     dynamic_bias_stddev: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     dynamic_bias_correlation_time: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     precision: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     type: Optional[str] = field(
                         default=None,
                         metadata={
                             "type": "Attribute",
                             "required": True,
-                        }
+                        },
                     )
 
             @dataclass
@@ -1826,13 +1864,14 @@ class Sensor:
                 ----------
                 noise: The properties of a sensor noise model.
                 """
+
                 noise: Optional["Sensor.Gps.VelocitySensing.Vertical.Noise"] = field(
                     default=None,
                     metadata={
                         "type": "Element",
                         "namespace": "",
                         "required": True,
-                    }
+                    },
                 )
 
                 @dataclass
@@ -1874,61 +1913,62 @@ class Sensor:
                         "gaussian_quantized" ("gaussian" plus
                         quantization of outputs (ie. rounding))
                     """
+
                     mean: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     stddev: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     bias_mean: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     bias_stddev: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     dynamic_bias_stddev: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     dynamic_bias_correlation_time: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     precision: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     type: Optional[str] = field(
                         default=None,
                         metadata={
                             "type": "Attribute",
                             "required": True,
-                        }
+                        },
                     )
 
     @dataclass
@@ -1948,33 +1988,36 @@ class Sensor:
             linear acceleration,     which is expressed in meters per
             second squared
         """
-        orientation_reference_frame: Optional["Sensor.Imu.OrientationReferenceFrame"] = field(
+
+        orientation_reference_frame: Optional[
+            "Sensor.Imu.OrientationReferenceFrame"
+        ] = field(
             default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         topic: str = field(
             default="__default_topic__",
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         angular_velocity: Optional["Sensor.Imu.AngularVelocity"] = field(
             default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         linear_acceleration: Optional["Sensor.Imu.LinearAcceleration"] = field(
             default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
 
         @dataclass
@@ -2062,26 +2105,27 @@ class Sensor:
                 X-axis.         grav_dir_x is  defined in the coordinate
                 frame as defined by the parent_frame element.
             """
+
             localization: str = field(
                 default="CUSTOM",
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             custom_rpy: "Sensor.Imu.OrientationReferenceFrame.CustomRpy" = field(
                 default="0 0 0",
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             grav_dir_x: "Sensor.Imu.OrientationReferenceFrame.GravDirX" = field(
                 default="1 0 0",
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
 
             @dataclass
@@ -2096,18 +2140,19 @@ class Sensor:
                     special reserved "world" frame.           If left
                     empty, use the sensor's own local frame.
                 """
+
                 value: Optional[str] = field(
                     default=None,
                     metadata={
                         "required": True,
                         "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-                    }
+                    },
                 )
                 parent_frame: Optional[str] = field(
                     default=None,
                     metadata={
                         "type": "Attribute",
-                    }
+                    },
                 )
 
             @dataclass
@@ -2122,18 +2167,19 @@ class Sensor:
                     special reserved "world" frame.           If left
                     empty, use the sensor's own local frame.
                 """
+
                 value: Optional[str] = field(
                     default=None,
                     metadata={
                         "required": True,
                         "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-                    }
+                    },
                 )
                 parent_frame: Optional[str] = field(
                     default=None,
                     metadata={
                         "type": "Attribute",
-                    }
+                    },
                 )
 
         @dataclass
@@ -2148,26 +2194,27 @@ class Sensor:
             y: Angular velocity about the Y axis
             z: Angular velocity about the Z axis
             """
+
             x: Optional["Sensor.Imu.AngularVelocity.X"] = field(
                 default=None,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             y: Optional["Sensor.Imu.AngularVelocity.Y"] = field(
                 default=None,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             z: Optional["Sensor.Imu.AngularVelocity.Z"] = field(
                 default=None,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
 
             @dataclass
@@ -2179,13 +2226,14 @@ class Sensor:
                 ----------
                 noise: The properties of a sensor noise model.
                 """
+
                 noise: Optional["Sensor.Imu.AngularVelocity.X.Noise"] = field(
                     default=None,
                     metadata={
                         "type": "Element",
                         "namespace": "",
                         "required": True,
-                    }
+                    },
                 )
 
                 @dataclass
@@ -2227,61 +2275,62 @@ class Sensor:
                         "gaussian_quantized" ("gaussian" plus
                         quantization of outputs (ie. rounding))
                     """
+
                     mean: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     stddev: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     bias_mean: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     bias_stddev: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     dynamic_bias_stddev: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     dynamic_bias_correlation_time: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     precision: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     type: Optional[str] = field(
                         default=None,
                         metadata={
                             "type": "Attribute",
                             "required": True,
-                        }
+                        },
                     )
 
             @dataclass
@@ -2293,13 +2342,14 @@ class Sensor:
                 ----------
                 noise: The properties of a sensor noise model.
                 """
+
                 noise: Optional["Sensor.Imu.AngularVelocity.Y.Noise"] = field(
                     default=None,
                     metadata={
                         "type": "Element",
                         "namespace": "",
                         "required": True,
-                    }
+                    },
                 )
 
                 @dataclass
@@ -2341,61 +2391,62 @@ class Sensor:
                         "gaussian_quantized" ("gaussian" plus
                         quantization of outputs (ie. rounding))
                     """
+
                     mean: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     stddev: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     bias_mean: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     bias_stddev: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     dynamic_bias_stddev: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     dynamic_bias_correlation_time: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     precision: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     type: Optional[str] = field(
                         default=None,
                         metadata={
                             "type": "Attribute",
                             "required": True,
-                        }
+                        },
                     )
 
             @dataclass
@@ -2407,13 +2458,14 @@ class Sensor:
                 ----------
                 noise: The properties of a sensor noise model.
                 """
+
                 noise: Optional["Sensor.Imu.AngularVelocity.Z.Noise"] = field(
                     default=None,
                     metadata={
                         "type": "Element",
                         "namespace": "",
                         "required": True,
-                    }
+                    },
                 )
 
                 @dataclass
@@ -2455,61 +2507,62 @@ class Sensor:
                         "gaussian_quantized" ("gaussian" plus
                         quantization of outputs (ie. rounding))
                     """
+
                     mean: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     stddev: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     bias_mean: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     bias_stddev: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     dynamic_bias_stddev: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     dynamic_bias_correlation_time: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     precision: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     type: Optional[str] = field(
                         default=None,
                         metadata={
                             "type": "Attribute",
                             "required": True,
-                        }
+                        },
                     )
 
         @dataclass
@@ -2524,26 +2577,27 @@ class Sensor:
             y: Linear acceleration about the Y axis
             z: Linear acceleration about the Z axis
             """
+
             x: Optional["Sensor.Imu.LinearAcceleration.X"] = field(
                 default=None,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             y: Optional["Sensor.Imu.LinearAcceleration.Y"] = field(
                 default=None,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             z: Optional["Sensor.Imu.LinearAcceleration.Z"] = field(
                 default=None,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
 
             @dataclass
@@ -2555,13 +2609,14 @@ class Sensor:
                 ----------
                 noise: The properties of a sensor noise model.
                 """
+
                 noise: Optional["Sensor.Imu.LinearAcceleration.X.Noise"] = field(
                     default=None,
                     metadata={
                         "type": "Element",
                         "namespace": "",
                         "required": True,
-                    }
+                    },
                 )
 
                 @dataclass
@@ -2603,61 +2658,62 @@ class Sensor:
                         "gaussian_quantized" ("gaussian" plus
                         quantization of outputs (ie. rounding))
                     """
+
                     mean: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     stddev: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     bias_mean: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     bias_stddev: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     dynamic_bias_stddev: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     dynamic_bias_correlation_time: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     precision: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     type: Optional[str] = field(
                         default=None,
                         metadata={
                             "type": "Attribute",
                             "required": True,
-                        }
+                        },
                     )
 
             @dataclass
@@ -2669,13 +2725,14 @@ class Sensor:
                 ----------
                 noise: The properties of a sensor noise model.
                 """
+
                 noise: Optional["Sensor.Imu.LinearAcceleration.Y.Noise"] = field(
                     default=None,
                     metadata={
                         "type": "Element",
                         "namespace": "",
                         "required": True,
-                    }
+                    },
                 )
 
                 @dataclass
@@ -2717,61 +2774,62 @@ class Sensor:
                         "gaussian_quantized" ("gaussian" plus
                         quantization of outputs (ie. rounding))
                     """
+
                     mean: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     stddev: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     bias_mean: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     bias_stddev: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     dynamic_bias_stddev: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     dynamic_bias_correlation_time: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     precision: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     type: Optional[str] = field(
                         default=None,
                         metadata={
                             "type": "Attribute",
                             "required": True,
-                        }
+                        },
                     )
 
             @dataclass
@@ -2783,13 +2841,14 @@ class Sensor:
                 ----------
                 noise: The properties of a sensor noise model.
                 """
+
                 noise: Optional["Sensor.Imu.LinearAcceleration.Z.Noise"] = field(
                     default=None,
                     metadata={
                         "type": "Element",
                         "namespace": "",
                         "required": True,
-                    }
+                    },
                 )
 
                 @dataclass
@@ -2831,61 +2890,62 @@ class Sensor:
                         "gaussian_quantized" ("gaussian" plus
                         quantization of outputs (ie. rounding))
                     """
+
                     mean: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     stddev: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     bias_mean: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     bias_stddev: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     dynamic_bias_stddev: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     dynamic_bias_correlation_time: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     precision: float = field(
                         default=0.0,
                         metadata={
                             "type": "Element",
                             "namespace": "",
-                        }
+                        },
                     )
                     type: Optional[str] = field(
                         default=None,
                         metadata={
                             "type": "Attribute",
                             "required": True,
-                        }
+                        },
                     )
 
     @dataclass
@@ -2900,13 +2960,14 @@ class Sensor:
         noise: The properties of the noise model that should be applied
             to generated scans
         """
+
         scan: Optional["Sensor.Lidar.Scan"] = field(
             default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
                 "required": True,
-            }
+            },
         )
         range: Optional["Sensor.Lidar.Range"] = field(
             default=None,
@@ -2914,14 +2975,14 @@ class Sensor:
                 "type": "Element",
                 "namespace": "",
                 "required": True,
-            }
+            },
         )
         noise: Optional["Sensor.Lidar.Noise"] = field(
             default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
 
         @dataclass
@@ -2932,14 +2993,14 @@ class Sensor:
                     "type": "Element",
                     "namespace": "",
                     "required": True,
-                }
+                },
             )
             vertical: Optional["Sensor.Lidar.Scan.Vertical"] = field(
                 default=None,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
 
             @dataclass
@@ -2956,33 +3017,34 @@ class Sensor:
                 min_angle:
                 max_angle: Must be greater or equal to min_angle
                 """
+
                 samples: int = field(
                     default=640,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 resolution: float = field(
                     default=1.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 min_angle: float = field(
                     default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 max_angle: float = field(
                     default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
 
             @dataclass
@@ -2999,33 +3061,34 @@ class Sensor:
                 min_angle:
                 max_angle: Must be greater or equal to min_angle
                 """
+
                 samples: int = field(
                     default=1,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 resolution: float = field(
                     default=1.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 min_angle: float = field(
                     default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 max_angle: float = field(
                     default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
 
         @dataclass
@@ -3039,26 +3102,27 @@ class Sensor:
             max: The maximum distance for each lidar ray.
             resolution: Linear resolution of each lidar ray.
             """
+
             min: float = field(
                 default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             max: float = field(
                 default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             resolution: float = field(
                 default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
 
         @dataclass
@@ -3077,26 +3141,27 @@ class Sensor:
             stddev: For type "gaussian," the standard deviation of the
                 Gaussian distribution from which noise values are drawn.
             """
+
             type: str = field(
                 default="gaussian",
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             mean: float = field(
                 default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             stddev: float = field(
                 default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
 
     @dataclass
@@ -3116,33 +3181,34 @@ class Sensor:
             radians. This is the angle between the frustum's vertex and
             the edges of the near or far plane.
         """
+
         near: float = field(
             default=0.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         far: float = field(
             default=1.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         aspect_ratio: float = field(
             default=1.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         horizontal_fov: float = field(
             default=1.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
 
     @dataclass
@@ -3159,26 +3225,27 @@ class Sensor:
         z: Parameters related to the body-frame Z axis of the
             magnetometer
         """
+
         x: Optional["Sensor.Magnetometer.X"] = field(
             default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         y: Optional["Sensor.Magnetometer.Y"] = field(
             default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         z: Optional["Sensor.Magnetometer.Z"] = field(
             default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
 
         @dataclass
@@ -3190,13 +3257,14 @@ class Sensor:
             ----------
             noise: The properties of a sensor noise model.
             """
+
             noise: Optional["Sensor.Magnetometer.X.Noise"] = field(
                 default=None,
                 metadata={
                     "type": "Element",
                     "namespace": "",
                     "required": True,
-                }
+                },
             )
 
             @dataclass
@@ -3236,61 +3304,62 @@ class Sensor:
                     ("gaussian" plus quantization of outputs (ie.
                     rounding))
                 """
+
                 mean: float = field(
                     default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 stddev: float = field(
                     default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 bias_mean: float = field(
                     default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 bias_stddev: float = field(
                     default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 dynamic_bias_stddev: float = field(
                     default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 dynamic_bias_correlation_time: float = field(
                     default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 precision: float = field(
                     default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 type: Optional[str] = field(
                     default=None,
                     metadata={
                         "type": "Attribute",
                         "required": True,
-                    }
+                    },
                 )
 
         @dataclass
@@ -3302,13 +3371,14 @@ class Sensor:
             ----------
             noise: The properties of a sensor noise model.
             """
+
             noise: Optional["Sensor.Magnetometer.Y.Noise"] = field(
                 default=None,
                 metadata={
                     "type": "Element",
                     "namespace": "",
                     "required": True,
-                }
+                },
             )
 
             @dataclass
@@ -3348,61 +3418,62 @@ class Sensor:
                     ("gaussian" plus quantization of outputs (ie.
                     rounding))
                 """
+
                 mean: float = field(
                     default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 stddev: float = field(
                     default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 bias_mean: float = field(
                     default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 bias_stddev: float = field(
                     default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 dynamic_bias_stddev: float = field(
                     default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 dynamic_bias_correlation_time: float = field(
                     default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 precision: float = field(
                     default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 type: Optional[str] = field(
                     default=None,
                     metadata={
                         "type": "Attribute",
                         "required": True,
-                    }
+                    },
                 )
 
         @dataclass
@@ -3414,13 +3485,14 @@ class Sensor:
             ----------
             noise: The properties of a sensor noise model.
             """
+
             noise: Optional["Sensor.Magnetometer.Z.Noise"] = field(
                 default=None,
                 metadata={
                     "type": "Element",
                     "namespace": "",
                     "required": True,
-                }
+                },
             )
 
             @dataclass
@@ -3460,61 +3532,62 @@ class Sensor:
                     ("gaussian" plus quantization of outputs (ie.
                     rounding))
                 """
+
                 mean: float = field(
                     default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 stddev: float = field(
                     default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 bias_mean: float = field(
                     default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 bias_stddev: float = field(
                     default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 dynamic_bias_stddev: float = field(
                     default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 dynamic_bias_correlation_time: float = field(
                     default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 precision: float = field(
                     default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 type: Optional[str] = field(
                     default=None,
                     metadata={
                         "type": "Attribute",
                         "required": True,
-                    }
+                    },
                 )
 
     @dataclass
@@ -3529,13 +3602,14 @@ class Sensor:
         noise: The properties of the noise model that should be applied
             to generated scans
         """
+
         scan: Optional["Sensor.Ray.Scan"] = field(
             default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
                 "required": True,
-            }
+            },
         )
         range: Optional["Sensor.Ray.Range"] = field(
             default=None,
@@ -3543,14 +3617,14 @@ class Sensor:
                 "type": "Element",
                 "namespace": "",
                 "required": True,
-            }
+            },
         )
         noise: Optional["Sensor.Ray.Noise"] = field(
             default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
 
         @dataclass
@@ -3561,14 +3635,14 @@ class Sensor:
                     "type": "Element",
                     "namespace": "",
                     "required": True,
-                }
+                },
             )
             vertical: Optional["Sensor.Ray.Scan.Vertical"] = field(
                 default=None,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
 
             @dataclass
@@ -3586,33 +3660,34 @@ class Sensor:
                 min_angle:
                 max_angle: Must be greater or equal to min_angle
                 """
+
                 samples: int = field(
                     default=640,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 resolution: float = field(
                     default=1.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 min_angle: float = field(
                     default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 max_angle: float = field(
                     default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
 
             @dataclass
@@ -3630,33 +3705,34 @@ class Sensor:
                 min_angle:
                 max_angle: Must be greater or equal to min_angle
                 """
+
                 samples: int = field(
                     default=1,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 resolution: float = field(
                     default=1.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 min_angle: float = field(
                     default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
                 max_angle: float = field(
                     default=0.0,
                     metadata={
                         "type": "Element",
                         "namespace": "",
-                    }
+                    },
                 )
 
         @dataclass
@@ -3670,26 +3746,27 @@ class Sensor:
             max: The maximum distance for each ray.
             resolution: Linear resolution of each ray.
             """
+
             min: float = field(
                 default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             max: float = field(
                 default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             resolution: float = field(
                 default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
 
         @dataclass
@@ -3708,26 +3785,27 @@ class Sensor:
             stddev: For type "gaussian," the standard deviation of the
                 Gaussian distribution from which noise values are drawn.
             """
+
             type: str = field(
                 default="gaussian",
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             mean: float = field(
                 default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
             stddev: float = field(
                 default=0.0,
                 metadata={
                     "type": "Element",
                     "namespace": "",
-                }
+                },
             )
 
     @dataclass
@@ -3744,33 +3822,34 @@ class Sensor:
         radius: Radius of the sonar cone at max range. This parameter is
             only used if geometry is "cone".
         """
+
         geometry: str = field(
             default="cone",
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         min: float = field(
             default=0.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         max: float = field(
             default=1.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         radius: float = field(
             default=0.5,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
 
     @dataclass
@@ -3790,52 +3869,53 @@ class Sensor:
         power: Specifies the transmission power in dBm
         sensitivity: Mininum received signal power in dBm
         """
+
         essid: str = field(
             default="wireless",
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         frequency: float = field(
             default=2442.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         min_frequency: float = field(
             default=2412.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         max_frequency: float = field(
             default=2484.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         gain: float = field(
             default=2.5,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         power: float = field(
             default=14.5,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
         sensitivity: float = field(
             default=-90.0,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )

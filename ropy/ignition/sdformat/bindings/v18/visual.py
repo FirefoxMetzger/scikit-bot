@@ -34,6 +34,7 @@ class Visual:
     name: Unique name for the visual element within the scope of the
         parent link.
     """
+
     class Meta:
         name = "visual"
 
@@ -42,49 +43,49 @@ class Visual:
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     laser_retro: float = field(
         default=0.0,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     transparency: float = field(
         default=0.0,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     visibility_flags: int = field(
         default=4294967295,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     meta: Optional["Visual.MetaType"] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     pose: "Visual.Pose" = field(
         default="0 0 0 0 0 0",
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     material: Optional[Material] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     geometry: Optional[Geometry] = field(
         default=None,
@@ -92,21 +93,21 @@ class Visual:
             "type": "Element",
             "namespace": "",
             "required": True,
-        }
+        },
     )
     plugin: List["Visual.Plugin"] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     name: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )
 
     @dataclass
@@ -122,12 +123,13 @@ class Visual:
             number is useful for programs, such as Gazebo, that put
             visuals in different layers for enhanced visualization.
         """
+
         layer: int = field(
             default=0,
             metadata={
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
 
     @dataclass
@@ -139,18 +141,19 @@ class Visual:
         relative_to: Name of frame relative to which the pose is
             applied.
         """
+
         value: Optional[str] = field(
             default=None,
             metadata={
                 "required": True,
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
-            }
+            },
         )
         relative_to: Optional[str] = field(
             default=None,
             metadata={
                 "type": "Attribute",
-            }
+            },
         )
 
     @dataclass
@@ -170,24 +173,25 @@ class Visual:
             not a full path name, the file will be searched for in the
             configuration paths.
         """
+
         any_element: List[object] = field(
             default_factory=list,
             metadata={
                 "type": "Wildcard",
                 "namespace": "##any",
-            }
+            },
         )
         name: Optional[str] = field(
             default=None,
             metadata={
                 "type": "Attribute",
                 "required": True,
-            }
+            },
         )
         filename: Optional[str] = field(
             default=None,
             metadata={
                 "type": "Attribute",
                 "required": True,
-            }
+            },
         )
