@@ -29,7 +29,7 @@ convention where needed.
 {% set class_path = module_name.split(".")[-1] %}
     {{ name }}.{{ class_path }}.{{ class_path.capitalize() }}
 {% if class_path == "state" %}
-{% if not sdf_version not in ["v1.0", "v1.2"] %}
+{% if sdformat_version not in ["v1.0", "v1.2"] %}
     {{ name }}.{{ class_path }}.Model
 {% endif %}
 {% endif %}
