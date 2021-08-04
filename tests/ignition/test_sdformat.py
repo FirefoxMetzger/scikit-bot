@@ -2,6 +2,8 @@ from dataclasses import dataclass
 import numpy as np
 import pytest
 from xsdata.exceptions import ParserError
+from xsdata.formats.dataclass.parsers.handlers import XmlEventHandler
+
 from ropy.ignition.sdformat.bindings.v16.model import Model
 
 import ropy.ignition as ign
@@ -20,6 +22,11 @@ def test_valid_parsing(valid_sdf_string):
 def test_invalid_parsing(invalid_sdf_string):
     with pytest.raises(ParserError):
         ign.sdformat.loads(invalid_sdf_string)
+
+
+def test_invalid_parsing(invalid_sdf_string):
+    with pytest.raises(ParserError):
+        ign.sdformat.loads(invalid_sdf_string, handler="XmlEventHandler")
 
 
 @pytest.mark.skip(reason="Currently disabled.")

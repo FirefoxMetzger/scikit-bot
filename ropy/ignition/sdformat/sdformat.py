@@ -1,9 +1,11 @@
 from xml.etree import ElementTree
+from xsdata.formats.dataclass import parsers
 from xsdata.formats.dataclass.context import XmlContext
 from xsdata.formats.dataclass.parsers import XmlParser
 from xsdata.formats.dataclass.parsers.config import ParserConfig
 from xsdata.formats.dataclass.serializers import XmlSerializer
 from xsdata.formats.dataclass.serializers.config import SerializerConfig
+from xsdata.formats.dataclass.parsers import handlers
 from xsdata.exceptions import ParserError as XSDataParserError
 import io
 from typing import Dict, Callable, Type, TypeVar
@@ -68,6 +70,7 @@ def loads(
     *,
     version: str = None,
     custom_constructor: Dict[Type[T], Callable] = None,
+    handler: str = None,
 ):
     """Convert an XML string into a sdformat.models tree.
 
@@ -83,6 +86,19 @@ def loads(
         Overwrite the default constructor for a certain model class with
         callable. This is useful for doing pre- or post-initialization of
         bound classes or to replace them entirely.
+    handler : str
+        The handler that the parser should use when traversing the XML. If
+        unspecified the default xsData parser will be used (lxml if it is
+        installed, otherwise xml.etree). Possible values are:
+
+            "XmlEventHandler"
+                A xml.etree event-based handler.
+            "XmlSaxHandler"
+                A xml.sax SAX-based handler.
+            "LxmlEventHandler"
+                A lxml.etree event-based handler.
+            "LxmlSaxHandler"
+                A lxml.etree SAX-based handler.
 
     Returns
     -------
@@ -112,6 +128,14 @@ def loads(
     else:
         version = version
 
+    handler_class = {
+        None: handlers.default_handler(),
+        "XmlEventHandler": handlers.XmlEventHandler,
+        "XmlSaxHandler": handlers.XmlSaxHandler,
+        "LxmlEventHandler": handlers.LxmlEventHandler,
+        "LxmlSaxHandler": handlers.LxmlSaxHandler,
+    }[handler]
+
     binding_location = _parser_roots[version]
 
     if binding_location is None:
@@ -123,7 +147,7 @@ def loads(
     # sdf_parser = XmlParser(
     #     ParserConfig(class_factory=custom_class_factory), context=xml_ctx
     # )
-    sdf_parser = XmlParser(ParserConfig(), xml_ctx)
+    sdf_parser = XmlParser(ParserConfig(), xml_ctx, handler=handler_class)
 
     try:
         sdf_parser.from_string(sdf, bindings.Sdf)
