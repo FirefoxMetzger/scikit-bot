@@ -20,7 +20,7 @@
           <xs:documentation xml:lang="en">Rate at which to update the physics engine (UpdatePhysics calls per real-time second). (was physics.sdf's update_rate).</xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="max_contacts" minOccurs="0" maxOccurs="1" default="20" type="xs:int">
+      <xs:element name="max_contacts" minOccurs="1" maxOccurs="1" default="20" type="xs:int">
         <xs:annotation>
           <xs:documentation xml:lang="en">Maximum number of contacts allowed between two entities. This value can be over ridden by a max_contacts element in a collision element.</xs:documentation>
         </xs:annotation>
@@ -39,17 +39,17 @@
             <xs:documentation xml:lang="en">Simbody specific physics properties</xs:documentation>
           </xs:annotation>
           <xs:all>
-            <xs:element name="min_step_size" minOccurs="0" maxOccurs="1" default="0.0001" type="xs:double">
+            <xs:element name="min_step_size" minOccurs="1" maxOccurs="1" default="0.0001" type="xs:double">
               <xs:annotation>
                 <xs:documentation xml:lang="en">(Currently not used in simbody) The time duration which advances with each iteration of the dynamics engine, this has to be no bigger than max_step_size under physics block.  If left unspecified, min_step_size defaults to max_step_size.</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="accuracy" minOccurs="0" maxOccurs="1" default="1e-3" type="xs:double">
+            <xs:element name="accuracy" minOccurs="1" maxOccurs="1" default="1e-3" type="xs:double">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Roughly the relative error of the system.         -LOG(accuracy) is roughly the number of significant digits.</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="max_transient_velocity" minOccurs="0" maxOccurs="1" default="0.01" type="xs:double">
+            <xs:element name="max_transient_velocity" minOccurs="1" maxOccurs="1" default="0.01" type="xs:double">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Tolerable "slip" velocity allowed by the solver when static         friction is supposed to hold object in place.</xs:documentation>
               </xs:annotation>
@@ -63,47 +63,47 @@
                   <xs:documentation xml:lang="en">Relationship among dissipation, coef. restitution, etc.         d = dissipation coefficient (1/velocity)         vc = capture velocity (velocity where e=e_max)         vp = plastic velocity (smallest v where e=e_min) &amp;gt; vc         Assume real COR=1 when v=0.         e_min = given minimum COR, at v &amp;gt;= vp (a.k.a. plastic_coef_restitution)         d = slope = (1-e_min)/vp         OR, e_min = 1 - d*vp         e_max = maximum COR = 1-d*vc, reached at v=vc         e = 0,                       v &amp;lt;= vc           = 1 - d*v,               vc &amp;lt; v &amp;lt; vp           = e_min,                   v &amp;gt;= vp          dissipation factor = d*min(v,vp)   [compliant]         cor = e                            [rigid]          Combining rule e = 0,               e1==e2==0                          = 2*e1*e2/(e1+e2), otherwise</xs:documentation>
                 </xs:annotation>
                 <xs:all>
-                  <xs:element name="stiffness" minOccurs="0" maxOccurs="1" default="1e8" type="xs:double">
+                  <xs:element name="stiffness" minOccurs="1" maxOccurs="1" default="1e8" type="xs:double">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">Default contact material stiffness                      (force/dist or torque/radian).</xs:documentation>
                     </xs:annotation>
                   </xs:element>
-                  <xs:element name="dissipation" minOccurs="0" maxOccurs="1" default="100" type="xs:double">
+                  <xs:element name="dissipation" minOccurs="1" maxOccurs="1" default="100" type="xs:double">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">dissipation coefficient to be used in compliant contact;     if not given it is (1-min_cor)/plastic_impact_velocity</xs:documentation>
                     </xs:annotation>
                   </xs:element>
-                  <xs:element name="plastic_coef_restitution" minOccurs="0" maxOccurs="1" default="0.5" type="xs:double">
+                  <xs:element name="plastic_coef_restitution" minOccurs="1" maxOccurs="1" default="0.5" type="xs:double">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">this is the COR to be used at high velocities for rigid     impacts; if not given it is 1 - dissipation*plastic_impact_velocity</xs:documentation>
                     </xs:annotation>
                   </xs:element>
-                  <xs:element name="plastic_impact_velocity" minOccurs="0" maxOccurs="1" default="0.5" type="xs:double">
+                  <xs:element name="plastic_impact_velocity" minOccurs="1" maxOccurs="1" default="0.5" type="xs:double">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">smallest impact velocity at which min COR is reached; set       to zero if you want the min COR always to be used</xs:documentation>
                     </xs:annotation>
                   </xs:element>
-                  <xs:element name="static_friction" minOccurs="0" maxOccurs="1" default="0.9" type="xs:double">
+                  <xs:element name="static_friction" minOccurs="1" maxOccurs="1" default="0.9" type="xs:double">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">static friction (mu_s) as described by this plot: http://gazebosim.org/wiki/File:Stribeck_friction.png</xs:documentation>
                     </xs:annotation>
                   </xs:element>
-                  <xs:element name="dynamic_friction" minOccurs="0" maxOccurs="1" default="0.9" type="xs:double">
+                  <xs:element name="dynamic_friction" minOccurs="1" maxOccurs="1" default="0.9" type="xs:double">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">dynamic friction (mu_d) as described by this plot: http://gazebosim.org/wiki/File:Stribeck_friction.png</xs:documentation>
                     </xs:annotation>
                   </xs:element>
-                  <xs:element name="viscous_friction" minOccurs="0" maxOccurs="1" default="0.0" type="xs:double">
+                  <xs:element name="viscous_friction" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">viscous friction (mu_v) with units of (1/velocity) as described by this plot: http://gazebosim.org/wiki/File:Stribeck_friction.png</xs:documentation>
                     </xs:annotation>
                   </xs:element>
-                  <xs:element name="override_impact_capture_velocity" minOccurs="0" maxOccurs="1" default="0.001" type="xs:double">
+                  <xs:element name="override_impact_capture_velocity" minOccurs="1" maxOccurs="1" default="0.001" type="xs:double">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">for rigid impacts only, impact velocity at which           COR is set to zero; normally inherited from global default but can           be overridden here. Combining rule: use larger velocity</xs:documentation>
                     </xs:annotation>
                   </xs:element>
-                  <xs:element name="override_stiction_transition_velocity" minOccurs="0" maxOccurs="1" default="0.001" type="xs:double">
+                  <xs:element name="override_stiction_transition_velocity" minOccurs="1" maxOccurs="1" default="0.001" type="xs:double">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">This is the largest slip velocity at which            we'll consider a transition to stiction. Normally inherited            from a global default setting. For a continuous friction model            this is the velocity at which the max static friction force            is reached.  Combining rule: use larger velocity</xs:documentation>
                     </xs:annotation>
@@ -131,7 +131,7 @@
                       <xs:documentation xml:lang="en">One of the following types: sequential_impulse only.</xs:documentation>
                     </xs:annotation>
                   </xs:element>
-                  <xs:element name="min_step_size" minOccurs="0" maxOccurs="1" default="0.0001" type="xs:double">
+                  <xs:element name="min_step_size" minOccurs="1" maxOccurs="1" default="0.0001" type="xs:double">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">The time duration which advances with each iteration of the dynamics engine, this has to be no bigger than max_step_size under physics block.  If left unspecified, min_step_size defaults to max_step_size.</xs:documentation>
                     </xs:annotation>
@@ -206,7 +206,7 @@
                       <xs:documentation xml:lang="en">One of the following types: world, quick</xs:documentation>
                     </xs:annotation>
                   </xs:element>
-                  <xs:element name="min_step_size" minOccurs="0" maxOccurs="1" default="0.0001" type="xs:double">
+                  <xs:element name="min_step_size" minOccurs="1" maxOccurs="1" default="0.0001" type="xs:double">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">The time duration which advances with each iteration of the dynamics engine, this has to be no bigger than max_step_size under physics block.  If left unspecified, min_step_size defaults to max_step_size.</xs:documentation>
                     </xs:annotation>
@@ -216,7 +216,7 @@
                       <xs:documentation xml:lang="en">Number of iterations for each step. A higher number produces greater accuracy at a performance cost.</xs:documentation>
                     </xs:annotation>
                   </xs:element>
-                  <xs:element name="precon_iters" minOccurs="0" maxOccurs="1" default="0" type="xs:int">
+                  <xs:element name="precon_iters" minOccurs="1" maxOccurs="1" default="0" type="xs:int">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">Experimental parameter.</xs:documentation>
                     </xs:annotation>

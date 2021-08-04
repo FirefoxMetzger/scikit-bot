@@ -5,17 +5,17 @@
       <xs:documentation xml:lang="en">The light element describes a light source.</xs:documentation>
     </xs:annotation>
     <xs:all>
-      <xs:element name="cast_shadows" minOccurs="0" maxOccurs="1" default="false" type="xs:boolean">
+      <xs:element name="cast_shadows" minOccurs="1" maxOccurs="1" default="false" type="xs:boolean">
         <xs:annotation>
           <xs:documentation xml:lang="en">When true, the light will cast shadows.</xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="diffuse" minOccurs="0" maxOccurs="1" default="1 1 1 1" type="types:color">
+      <xs:element name="diffuse" minOccurs="1" maxOccurs="1" default="1 1 1 1" type="types:color">
         <xs:annotation>
           <xs:documentation xml:lang="en">Diffuse light color</xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="specular" minOccurs="0" maxOccurs="1" default=".1 .1 .1 1" type="types:color">
+      <xs:element name="specular" minOccurs="1" maxOccurs="1" default=".1 .1 .1 1" type="types:color">
         <xs:annotation>
           <xs:documentation xml:lang="en">Specular light color</xs:documentation>
         </xs:annotation>
@@ -34,17 +34,17 @@
                 <xs:documentation xml:lang="en">Range of the light</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="linear" minOccurs="0" maxOccurs="1" default="1" type="xs:double">
+            <xs:element name="linear" minOccurs="1" maxOccurs="1" default="1" type="xs:double">
               <xs:annotation>
                 <xs:documentation xml:lang="en">The linear attenuation factor: 1 means attenuate evenly over the distance.</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="constant" minOccurs="0" maxOccurs="1" default="1" type="xs:double">
+            <xs:element name="constant" minOccurs="1" maxOccurs="1" default="1" type="xs:double">
               <xs:annotation>
                 <xs:documentation xml:lang="en">The constant attenuation factor: 1.0 means never attenuate, 0.0 is complete attenutation.</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="quadratic" minOccurs="0" maxOccurs="1" default="0" type="xs:double">
+            <xs:element name="quadratic" minOccurs="1" maxOccurs="1" default="0" type="xs:double">
               <xs:annotation>
                 <xs:documentation xml:lang="en">The quadratic attenuation factor: adds a curvature to the attenuation.</xs:documentation>
               </xs:annotation>
@@ -84,7 +84,7 @@
           </xs:all>
         </xs:complexType>
       </xs:element>
-      <xs:element name="pose" minOccurs="0" maxOccurs="1" default="0 0 0 0 0 0">
+      <xs:element name="pose" minOccurs="1" maxOccurs="1" default="0 0 0 0 0 0">
         <xs:annotation>
           <xs:documentation xml:lang="en">A position(x,y,z) and orientation(roll, pitch yaw) with respect to the frame named in the relative_to attribute.</xs:documentation>
         </xs:annotation>

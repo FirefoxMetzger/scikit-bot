@@ -10,27 +10,27 @@
       <xs:documentation xml:lang="en">A physical link with inertia, collision, and visual properties. A link must be a child of a model, and any number of links may exist in a model.</xs:documentation>
     </xs:annotation>
     <xs:all>
-      <xs:element name="gravity" minOccurs="0" maxOccurs="1" default="true" type="xs:boolean">
+      <xs:element name="gravity" minOccurs="1" maxOccurs="1" default="true" type="xs:boolean">
         <xs:annotation>
           <xs:documentation xml:lang="en">If true, the link is affected by gravity.</xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="enable_wind" minOccurs="0" maxOccurs="1" default="false" type="xs:boolean">
+      <xs:element name="enable_wind" minOccurs="1" maxOccurs="1" default="false" type="xs:boolean">
         <xs:annotation>
           <xs:documentation xml:lang="en">If true, the link is affected by the wind.</xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="self_collide" minOccurs="0" maxOccurs="1" default="false" type="xs:boolean">
+      <xs:element name="self_collide" minOccurs="1" maxOccurs="1" default="false" type="xs:boolean">
         <xs:annotation>
           <xs:documentation xml:lang="en">If true, the link can collide with other links in the model. Two links within a model will collide if link1.self_collide OR link2.self_collide. Links connected by a joint will never collide.</xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="kinematic" minOccurs="0" maxOccurs="1" default="false" type="xs:boolean">
+      <xs:element name="kinematic" minOccurs="1" maxOccurs="1" default="false" type="xs:boolean">
         <xs:annotation>
           <xs:documentation xml:lang="en">If true, the link is kinematic only</xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="must_be_base_link" minOccurs="0" maxOccurs="1" default="false" type="xs:boolean">
+      <xs:element name="must_be_base_link" minOccurs="1" maxOccurs="1" default="false" type="xs:boolean">
         <xs:annotation>
           <xs:documentation xml:lang="en">If true, the link will have 6DOF and be a direct child of world.</xs:documentation>
         </xs:annotation>
@@ -44,12 +44,12 @@
             <xs:documentation xml:lang="en">Exponential damping of the link's velocity.</xs:documentation>
           </xs:annotation>
           <xs:all>
-            <xs:element name="linear" minOccurs="0" maxOccurs="1" default="0.0" type="xs:double">
+            <xs:element name="linear" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Linear damping</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="angular" minOccurs="0" maxOccurs="1" default="0.0" type="xs:double">
+            <xs:element name="angular" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Angular damping</xs:documentation>
               </xs:annotation>
@@ -66,7 +66,7 @@
             <xs:documentation xml:lang="en">A frame of reference to which a pose is relative.</xs:documentation>
           </xs:annotation>
           <xs:all>
-            <xs:element name="pose" minOccurs="0" maxOccurs="1" default="0 0 0 0 0 0">
+            <xs:element name="pose" minOccurs="1" maxOccurs="1" default="0 0 0 0 0 0">
               <xs:annotation>
                 <xs:documentation xml:lang="en">A position(x,y,z) and orientation(roll, pitch yaw) with respect to the specified frame.</xs:documentation>
               </xs:annotation>
@@ -89,7 +89,7 @@
           </xs:attribute>
         </xs:complexType>
       </xs:element>
-      <xs:element name="pose" minOccurs="0" maxOccurs="1" default="0 0 0 0 0 0">
+      <xs:element name="pose" minOccurs="1" maxOccurs="1" default="0 0 0 0 0 0">
         <xs:annotation>
           <xs:documentation xml:lang="en">A position(x,y,z) and orientation(roll, pitch yaw) with respect to the specified frame.</xs:documentation>
         </xs:annotation>
@@ -113,7 +113,7 @@
             <xs:documentation xml:lang="en">The inertial properties of the link.</xs:documentation>
           </xs:annotation>
           <xs:all>
-            <xs:element name="mass" minOccurs="0" maxOccurs="1" default="1.0" type="xs:double">
+            <xs:element name="mass" minOccurs="1" maxOccurs="1" default="1.0" type="xs:double">
               <xs:annotation>
                 <xs:documentation xml:lang="en">The mass of the link.</xs:documentation>
               </xs:annotation>
@@ -145,7 +145,7 @@
                   <xs:documentation xml:lang="en">A frame of reference to which a pose is relative.</xs:documentation>
                 </xs:annotation>
                 <xs:all>
-                  <xs:element name="pose" minOccurs="0" maxOccurs="1" default="0 0 0 0 0 0">
+                  <xs:element name="pose" minOccurs="1" maxOccurs="1" default="0 0 0 0 0 0">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">A position(x,y,z) and orientation(roll, pitch yaw) with respect to the specified frame.</xs:documentation>
                     </xs:annotation>
@@ -168,7 +168,7 @@
                 </xs:attribute>
               </xs:complexType>
             </xs:element>
-            <xs:element name="pose" minOccurs="0" maxOccurs="1" default="0 0 0 0 0 0">
+            <xs:element name="pose" minOccurs="1" maxOccurs="1" default="0 0 0 0 0 0">
               <xs:annotation>
                 <xs:documentation xml:lang="en">This is the pose of the inertial reference frame, relative to the specified reference frame. The origin of the inertial reference frame needs to be at the center of gravity. The axes of the inertial reference frame do not need to be aligned with the principal axes of the inertia.</xs:documentation>
               </xs:annotation>
@@ -209,17 +209,17 @@
                 <xs:documentation xml:lang="en">Texture name</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="fov" minOccurs="0" maxOccurs="1" default="0.785" type="xs:double">
+            <xs:element name="fov" minOccurs="1" maxOccurs="1" default="0.785" type="xs:double">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Field of view</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="near_clip" minOccurs="0" maxOccurs="1" default="0.1" type="xs:double">
+            <xs:element name="near_clip" minOccurs="1" maxOccurs="1" default="0.1" type="xs:double">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Near clip distance</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="far_clip" minOccurs="0" maxOccurs="1" default="10.0" type="xs:double">
+            <xs:element name="far_clip" minOccurs="1" maxOccurs="1" default="10.0" type="xs:double">
               <xs:annotation>
                 <xs:documentation xml:lang="en">far clip distance</xs:documentation>
               </xs:annotation>
@@ -233,7 +233,7 @@
                   <xs:documentation xml:lang="en">A frame of reference to which a pose is relative.</xs:documentation>
                 </xs:annotation>
                 <xs:all>
-                  <xs:element name="pose" minOccurs="0" maxOccurs="1" default="0 0 0 0 0 0">
+                  <xs:element name="pose" minOccurs="1" maxOccurs="1" default="0 0 0 0 0 0">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">A position(x,y,z) and orientation(roll, pitch yaw) with respect to the specified frame.</xs:documentation>
                     </xs:annotation>
@@ -256,7 +256,7 @@
                 </xs:attribute>
               </xs:complexType>
             </xs:element>
-            <xs:element name="pose" minOccurs="0" maxOccurs="1" default="0 0 0 0 0 0">
+            <xs:element name="pose" minOccurs="1" maxOccurs="1" default="0 0 0 0 0 0">
               <xs:annotation>
                 <xs:documentation xml:lang="en">A position(x,y,z) and orientation(roll, pitch yaw) with respect to the specified frame.</xs:documentation>
               </xs:annotation>
@@ -325,12 +325,12 @@
                 <xs:documentation xml:lang="en">URI of the audio media.</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="pitch" minOccurs="0" maxOccurs="1" default="1.0" type="xs:double">
+            <xs:element name="pitch" minOccurs="1" maxOccurs="1" default="1.0" type="xs:double">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Pitch for the audio media, in Hz</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="gain" minOccurs="0" maxOccurs="1" default="1.0" type="xs:double">
+            <xs:element name="gain" minOccurs="1" maxOccurs="1" default="1.0" type="xs:double">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Gain for the audio media, in dB.</xs:documentation>
               </xs:annotation>
@@ -352,7 +352,7 @@
                 </xs:all>
               </xs:complexType>
             </xs:element>
-            <xs:element name="loop" minOccurs="0" maxOccurs="1" default="false" type="xs:boolean">
+            <xs:element name="loop" minOccurs="1" maxOccurs="1" default="false" type="xs:boolean">
               <xs:annotation>
                 <xs:documentation xml:lang="en">True to make the audio source loop playback.</xs:documentation>
               </xs:annotation>
@@ -366,7 +366,7 @@
                   <xs:documentation xml:lang="en">A frame of reference to which a pose is relative.</xs:documentation>
                 </xs:annotation>
                 <xs:all>
-                  <xs:element name="pose" minOccurs="0" maxOccurs="1" default="0 0 0 0 0 0">
+                  <xs:element name="pose" minOccurs="1" maxOccurs="1" default="0 0 0 0 0 0">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">A position(x,y,z) and orientation(roll, pitch yaw) with respect to the specified frame.</xs:documentation>
                     </xs:annotation>
@@ -389,7 +389,7 @@
                 </xs:attribute>
               </xs:complexType>
             </xs:element>
-            <xs:element name="pose" minOccurs="0" maxOccurs="1" default="0 0 0 0 0 0">
+            <xs:element name="pose" minOccurs="1" maxOccurs="1" default="0 0 0 0 0 0">
               <xs:annotation>
                 <xs:documentation xml:lang="en">A position(x,y,z) and orientation(roll, pitch yaw) with respect to the specified frame.</xs:documentation>
               </xs:annotation>
@@ -443,57 +443,57 @@
             <xs:documentation xml:lang="en">A particle emitter that can be used to describe fog, smoke, and dust.</xs:documentation>
           </xs:annotation>
           <xs:all>
-            <xs:element name="emitting" minOccurs="0" maxOccurs="1" default="true" type="xs:boolean">
+            <xs:element name="emitting" minOccurs="1" maxOccurs="1" default="true" type="xs:boolean">
               <xs:annotation>
                 <xs:documentation xml:lang="en">True indicates that the particle emitter should generate particles when loaded</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="duration" minOccurs="0" maxOccurs="1" default="0" type="xs:double">
+            <xs:element name="duration" minOccurs="1" maxOccurs="1" default="0" type="xs:double">
               <xs:annotation>
                 <xs:documentation xml:lang="en">The number of seconds the emitter is active. A value less than or equal to zero means infinite duration.</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="size" minOccurs="0" maxOccurs="1" default="1 1 1" type="types:vector3">
+            <xs:element name="size" minOccurs="1" maxOccurs="1" default="1 1 1" type="types:vector3">
               <xs:annotation>
                 <xs:documentation xml:lang="en">The size of the emitter where the particles are sampled.     Default value is (1, 1, 1).     Note that the interpretation of the emitter area varies     depending on the emmiter type:       - point: The area is ignored.       - box: The area is interpreted as width X height X depth.       - cylinder: The area is interpreted as the bounding box of the                   cylinder. The cylinder is oriented along the Z-axis.       - ellipsoid: The area is interpreted as the bounding box of an                    ellipsoid shaped area, i.e. a sphere or                    squashed-sphere area. The parameters are again                    identical to EM_BOX, except that the dimensions                    describe the widest points along each of the axes.</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="particle_size" minOccurs="0" maxOccurs="1" default="1 1 1" type="types:vector3">
+            <xs:element name="particle_size" minOccurs="1" maxOccurs="1" default="1 1 1" type="types:vector3">
               <xs:annotation>
                 <xs:documentation xml:lang="en">The particle dimensions (width, height, depth).</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="lifetime" minOccurs="0" maxOccurs="1" default="5" type="xs:double">
+            <xs:element name="lifetime" minOccurs="1" maxOccurs="1" default="5" type="xs:double">
               <xs:annotation>
                 <xs:documentation xml:lang="en">The number of seconds each particle will &#8217;live&#8217; for before being destroyed. This value must be greater than zero.</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="rate" minOccurs="0" maxOccurs="1" default="10" type="xs:double">
+            <xs:element name="rate" minOccurs="1" maxOccurs="1" default="10" type="xs:double">
               <xs:annotation>
                 <xs:documentation xml:lang="en">The number of particles per second that should be emitted.</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="min_velocity" minOccurs="0" maxOccurs="1" default="1" type="xs:double">
+            <xs:element name="min_velocity" minOccurs="1" maxOccurs="1" default="1" type="xs:double">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Sets a minimum velocity for each particle (m/s).</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="max_velocity" minOccurs="0" maxOccurs="1" default="1" type="xs:double">
+            <xs:element name="max_velocity" minOccurs="1" maxOccurs="1" default="1" type="xs:double">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Sets a maximum velocity for each particle (m/s).</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="scale_rate" minOccurs="0" maxOccurs="1" default="0" type="xs:double">
+            <xs:element name="scale_rate" minOccurs="1" maxOccurs="1" default="0" type="xs:double">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Sets the amount by which to scale the particles in both x and y direction per second.</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="color_start" minOccurs="0" maxOccurs="1" default="1 1 1 1" type="types:color">
+            <xs:element name="color_start" minOccurs="1" maxOccurs="1" default="1 1 1 1" type="types:color">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Sets the starting color for all particles emitted.      The actual color will be interpolated between this color      and the one set under color_end.      Color::White is the default color for the particles      unless a specific function is used.      To specify a color, RGB values should be passed in.      For example, to specify red, a user should enter:      &amp;lt;color_start&amp;gt;1 0 0&amp;lt;/color_start&amp;gt;      Note that this function overrides the particle colors set      with color_range_image.</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="color_end" minOccurs="0" maxOccurs="1" default="1 1 1 1" type="types:color">
+            <xs:element name="color_end" minOccurs="1" maxOccurs="1" default="1 1 1 1" type="types:color">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Sets the end color for all particles emitted.     The actual color will be interpolated between this color     and the one set under color_start.     Color::White is the default color for the particles     unless a specific function is used (see color_start for     more information about defining custom colors with RGB     values).     Note that this function overrides the particle colors set     with color_range_image.</xs:documentation>
               </xs:annotation>
@@ -508,12 +508,12 @@
                 <xs:documentation xml:lang="en">Topic used to update particle emitter properties at runtime.      The default topic is      /model/{model_name}/particle_emitter/{emitter_name}      Note that the emitter id and name may not be changed.</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="particle_scatter_ratio" minOccurs="0" maxOccurs="1" default="0.65" type="xs:float">
+            <xs:element name="particle_scatter_ratio" minOccurs="1" maxOccurs="1" default="0.65" type="xs:float">
               <xs:annotation>
                 <xs:documentation xml:lang="en">This is used to determine the ratio of particles that will be detected     by sensors. Increasing the ratio means there is a higher chance of     particles reflecting and interfering with depth sensing, making the     emitter appear more dense. Decreasing the ratio decreases the chance     of particles reflecting and interfering with depth sensing, making it     appear less dense.</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="pose" minOccurs="0" maxOccurs="1" default="0 0 0 0 0 0">
+            <xs:element name="pose" minOccurs="1" maxOccurs="1" default="0 0 0 0 0 0">
               <xs:annotation>
                 <xs:documentation xml:lang="en">A position(x,y,z) and orientation(roll, pitch yaw) with respect to the specified frame.</xs:documentation>
               </xs:annotation>

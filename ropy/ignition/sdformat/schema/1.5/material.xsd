@@ -30,7 +30,7 @@
       <xs:element name="shader" minOccurs="0" maxOccurs="1">
         <xs:complexType>
           <xs:all>
-            <xs:element name="normal_map" minOccurs="0" maxOccurs="1" default="__default__" type="xs:string">
+            <xs:element name="normal_map" minOccurs="1" maxOccurs="1" default="__default__" type="xs:string">
               <xs:annotation>
                 <xs:documentation xml:lang="en">filename of the normal map</xs:documentation>
               </xs:annotation>
@@ -43,27 +43,27 @@
           </xs:attribute>
         </xs:complexType>
       </xs:element>
-      <xs:element name="lighting" minOccurs="0" maxOccurs="1" default="true" type="xs:boolean">
+      <xs:element name="lighting" minOccurs="1" maxOccurs="1" default="true" type="xs:boolean">
         <xs:annotation>
           <xs:documentation xml:lang="en">If false, dynamic lighting will be disabled</xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="ambient" minOccurs="0" maxOccurs="1" default="0 0 0 1" type="types:color">
+      <xs:element name="ambient" minOccurs="1" maxOccurs="1" default="0 0 0 1" type="types:color">
         <xs:annotation>
           <xs:documentation xml:lang="en">The ambient color of a material specified by set of four numbers representing red/green/blue, each in the range of [0,1].</xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="diffuse" minOccurs="0" maxOccurs="1" default="0 0 0 1" type="types:color">
+      <xs:element name="diffuse" minOccurs="1" maxOccurs="1" default="0 0 0 1" type="types:color">
         <xs:annotation>
           <xs:documentation xml:lang="en">The diffuse color of a material specified by set of four numbers representing red/green/blue/alpha, each in the range of [0,1].</xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="specular" minOccurs="0" maxOccurs="1" default="0 0 0 1" type="types:color">
+      <xs:element name="specular" minOccurs="1" maxOccurs="1" default="0 0 0 1" type="types:color">
         <xs:annotation>
           <xs:documentation xml:lang="en">The specular color of a material specified by set of four numbers representing red/green/blue/alpha, each in the range of [0,1].</xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="emissive" minOccurs="0" maxOccurs="1" default="0 0 0 1" type="types:color">
+      <xs:element name="emissive" minOccurs="1" maxOccurs="1" default="0 0 0 1" type="types:color">
         <xs:annotation>
           <xs:documentation xml:lang="en">The emissive color of a material specified by set of four numbers representing red/green/blue, each in the range of [0,1].</xs:documentation>
         </xs:annotation>

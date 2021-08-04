@@ -38,7 +38,7 @@
             <xs:documentation xml:lang="en">The wind tag specifies the type and properties of the wind.</xs:documentation>
           </xs:annotation>
           <xs:all>
-            <xs:element name="linear_velocity" minOccurs="0" maxOccurs="1" default="0 0 0" type="types:vector3">
+            <xs:element name="linear_velocity" minOccurs="1" maxOccurs="1" default="0 0 0" type="types:vector3">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Linear velocity of the wind.</xs:documentation>
               </xs:annotation>
@@ -65,7 +65,7 @@
                 <xs:documentation xml:lang="en">Override the name of the included entity.</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="static" minOccurs="0" maxOccurs="1" default="false" type="xs:boolean">
+            <xs:element name="static" minOccurs="1" maxOccurs="1" default="false" type="xs:boolean">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Override the static value of the included entity.</xs:documentation>
               </xs:annotation>
@@ -75,7 +75,7 @@
                 <xs:documentation xml:lang="en">The frame inside the included entity whose pose will be set by the specified pose element. If this element is specified, the pose must be specified.</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="pose" minOccurs="0" maxOccurs="1" default="0 0 0 0 0 0">
+            <xs:element name="pose" minOccurs="1" maxOccurs="1" default="0 0 0 0 0 0">
               <xs:annotation>
                 <xs:documentation xml:lang="en">A position(x,y,z) and orientation(roll, pitch yaw) with respect to the frame named in the relative_to attribute.</xs:documentation>
               </xs:annotation>
@@ -112,17 +112,17 @@
             <xs:documentation xml:lang="en">The atmosphere tag specifies the type and properties of the atmosphere model.</xs:documentation>
           </xs:annotation>
           <xs:all>
-            <xs:element name="temperature" minOccurs="0" maxOccurs="1" default="288.15" type="xs:double">
+            <xs:element name="temperature" minOccurs="1" maxOccurs="1" default="288.15" type="xs:double">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Temperature at sea level in kelvins.</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="pressure" minOccurs="0" maxOccurs="1" default="101325" type="xs:double">
+            <xs:element name="pressure" minOccurs="1" maxOccurs="1" default="101325" type="xs:double">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Pressure at sea level in pascals.</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="temperature_gradient" minOccurs="0" maxOccurs="1" default="-0.0065" type="xs:double">
+            <xs:element name="temperature_gradient" minOccurs="1" maxOccurs="1" default="-0.0065" type="xs:double">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Temperature gradient with respect to increasing altitude at sea level in units of K/m.</xs:documentation>
               </xs:annotation>
@@ -147,8 +147,8 @@
                   <xs:documentation xml:lang="en"></xs:documentation>
                 </xs:annotation>
                 <xs:all>
-                  <xs:element name="view_controller" minOccurs="0" maxOccurs="1" default="orbit" type="xs:string"/>
-                  <xs:element name="projection_type" minOccurs="0" maxOccurs="1" default="perspective" type="xs:string">
+                  <xs:element name="view_controller" minOccurs="1" maxOccurs="1" default="orbit" type="xs:string"/>
+                  <xs:element name="projection_type" minOccurs="1" maxOccurs="1" default="perspective" type="xs:string">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">Set the type of projection for the camera. Valid values are "perspective" and "orthographic".</xs:documentation>
                     </xs:annotation>
@@ -156,37 +156,37 @@
                   <xs:element name="track_visual" minOccurs="0" maxOccurs="1">
                     <xs:complexType>
                       <xs:all>
-                        <xs:element name="name" minOccurs="0" maxOccurs="1" default="__default__" type="xs:string">
+                        <xs:element name="name" minOccurs="1" maxOccurs="1" default="__default__" type="xs:string">
                           <xs:annotation>
                             <xs:documentation xml:lang="en">Name of the tracked visual. If no name is provided, the remaining settings will be applied whenever tracking is triggered in the GUI.</xs:documentation>
                           </xs:annotation>
                         </xs:element>
-                        <xs:element name="min_dist" minOccurs="0" maxOccurs="1" default="0" type="xs:double">
+                        <xs:element name="min_dist" minOccurs="1" maxOccurs="1" default="0" type="xs:double">
                           <xs:annotation>
                             <xs:documentation xml:lang="en">Minimum distance between the camera and the tracked visual. This parameter is only used if static is set to false.</xs:documentation>
                           </xs:annotation>
                         </xs:element>
-                        <xs:element name="max_dist" minOccurs="0" maxOccurs="1" default="0" type="xs:double">
+                        <xs:element name="max_dist" minOccurs="1" maxOccurs="1" default="0" type="xs:double">
                           <xs:annotation>
                             <xs:documentation xml:lang="en">Maximum distance between the camera and the tracked visual. This parameter is only used if static is set to false.</xs:documentation>
                           </xs:annotation>
                         </xs:element>
-                        <xs:element name="static" minOccurs="0" maxOccurs="1" default="false" type="xs:boolean">
+                        <xs:element name="static" minOccurs="1" maxOccurs="1" default="false" type="xs:boolean">
                           <xs:annotation>
                             <xs:documentation xml:lang="en">If set to true, the position of the camera is fixed relatively to the model or to the world, depending on the value of the use_model_frame element. Otherwise, the position of the camera may vary but the distance between the camera and the model will depend on the value of the min_dist and max_dist elements. In any case, the camera will always follow the model by changing its orientation.</xs:documentation>
                           </xs:annotation>
                         </xs:element>
-                        <xs:element name="use_model_frame" minOccurs="0" maxOccurs="1" default="true" type="xs:boolean">
+                        <xs:element name="use_model_frame" minOccurs="1" maxOccurs="1" default="true" type="xs:boolean">
                           <xs:annotation>
                             <xs:documentation xml:lang="en">If set to true, the position of the camera is relative to the model reference frame, which means that its position relative to the model will not change. Otherwise, the position of the camera is relative to the world reference frame, which means that its position relative to the world will not change. This parameter is only used if static is set to true.</xs:documentation>
                           </xs:annotation>
                         </xs:element>
-                        <xs:element name="xyz" minOccurs="0" maxOccurs="1" default="-5.0 0.0 3.0" type="types:vector3">
+                        <xs:element name="xyz" minOccurs="1" maxOccurs="1" default="-5.0 0.0 3.0" type="types:vector3">
                           <xs:annotation>
                             <xs:documentation xml:lang="en">The position of the camera's reference frame. This parameter is only used if static is set to true. If use_model_frame is set to true, the position is relative to the model reference frame, otherwise it represents world coordinates.</xs:documentation>
                           </xs:annotation>
                         </xs:element>
-                        <xs:element name="inherit_yaw" minOccurs="0" maxOccurs="1" default="false" type="xs:boolean">
+                        <xs:element name="inherit_yaw" minOccurs="1" maxOccurs="1" default="false" type="xs:boolean">
                           <xs:annotation>
                             <xs:documentation xml:lang="en">If set to true, the camera will inherit the yaw rotation of the tracked model. This parameter is only used if static and use_model_frame are set to true.</xs:documentation>
                           </xs:annotation>
@@ -194,7 +194,7 @@
                       </xs:all>
                     </xs:complexType>
                   </xs:element>
-                  <xs:element name="pose" minOccurs="0" maxOccurs="1" default="0 0 0 0 0 0">
+                  <xs:element name="pose" minOccurs="1" maxOccurs="1" default="0 0 0 0 0 0">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">A position(x,y,z) and orientation(roll, pitch yaw) with respect to the frame named in the relative_to attribute.</xs:documentation>
                     </xs:annotation>
@@ -268,7 +268,7 @@
             <xs:documentation xml:lang="en">A frame of reference to which a pose is relative.</xs:documentation>
           </xs:annotation>
           <xs:all>
-            <xs:element name="pose" minOccurs="0" maxOccurs="1" default="0 0 0 0 0 0">
+            <xs:element name="pose" minOccurs="1" maxOccurs="1" default="0 0 0 0 0 0">
               <xs:annotation>
                 <xs:documentation xml:lang="en">A position(x,y,z) and orientation(roll, pitch yaw) with respect to the frame named in the relative_to attribute.</xs:documentation>
               </xs:annotation>
@@ -367,7 +367,7 @@
                 <xs:documentation xml:lang="en">Name of planetary surface model, used to determine the surface altitude       at a given latitude and longitude. The default is an ellipsoid model of       the earth based on the WGS-84 standard. It is used in Gazebo's GPS sensor       implementation.</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="world_frame_orientation" minOccurs="0" maxOccurs="1" default="ENU" type="xs:string">
+            <xs:element name="world_frame_orientation" minOccurs="1" maxOccurs="1" default="ENU" type="xs:string">
               <xs:annotation>
                 <xs:documentation xml:lang="en">This field identifies how Gazebo world frame is aligned in Geographical       sense.  The final Gazebo world frame orientation is obtained by rotating       a frame aligned with following notation by the field heading_deg (Note       that heading_deg corresponds to positive yaw rotation in the NED frame,       so it's inverse specifies positive Z-rotation in ENU or NWU).       Options are:         - ENU (East-North-Up)         - NED (North-East-Down)         - NWU (North-West-Up)       For example, world frame specified by setting world_orientation="ENU"       and heading_deg=-90&#176; is effectively equivalent to NWU with heading of 0&#176;.</xs:documentation>
               </xs:annotation>
@@ -424,17 +424,17 @@
                       <xs:documentation xml:lang="en">Define how the objects will be placed in the specified region.         - random: Models placed at random.         - uniform: Models approximately placed in a 2D grid pattern with control             over the number of objects.         - grid: Models evenly placed in a 2D grid pattern. The number of objects             is not explicitly specified, it is based on the number of rows and             columns of the grid.         - linear-x: Models evently placed in a row along the global x-axis.         - linear-y: Models evently placed in a row along the global y-axis.         - linear-z: Models evently placed in a row along the global z-axis.</xs:documentation>
                     </xs:annotation>
                   </xs:element>
-                  <xs:element name="rows" minOccurs="0" maxOccurs="1" default="1" type="xs:int">
+                  <xs:element name="rows" minOccurs="1" maxOccurs="1" default="1" type="xs:int">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">Number of rows in the grid.</xs:documentation>
                     </xs:annotation>
                   </xs:element>
-                  <xs:element name="cols" minOccurs="0" maxOccurs="1" default="1" type="xs:int">
+                  <xs:element name="cols" minOccurs="1" maxOccurs="1" default="1" type="xs:int">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">Number of columns in the grid.</xs:documentation>
                     </xs:annotation>
                   </xs:element>
-                  <xs:element name="step" minOccurs="0" maxOccurs="1" default="0.5 0.5 0" type="types:vector3">
+                  <xs:element name="step" minOccurs="1" maxOccurs="1" default="0.5 0.5 0" type="types:vector3">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">Distance between elements of the grid.</xs:documentation>
                     </xs:annotation>
@@ -481,7 +481,7 @@
                 </xs:all>
               </xs:complexType>
             </xs:element>
-            <xs:element name="pose" minOccurs="0" maxOccurs="1" default="0 0 0 0 0 0">
+            <xs:element name="pose" minOccurs="1" maxOccurs="1" default="0 0 0 0 0 0">
               <xs:annotation>
                 <xs:documentation xml:lang="en">A position(x,y,z) and orientation(roll, pitch yaw) with respect to the frame named in the relative_to attribute.</xs:documentation>
               </xs:annotation>

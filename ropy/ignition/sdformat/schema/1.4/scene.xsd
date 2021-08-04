@@ -24,17 +24,17 @@
             <xs:documentation xml:lang="en">Properties for the sky</xs:documentation>
           </xs:annotation>
           <xs:all>
-            <xs:element name="time" minOccurs="0" maxOccurs="1" default="10.0" type="xs:double">
+            <xs:element name="time" minOccurs="1" maxOccurs="1" default="10.0" type="xs:double">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Time of day [0..24]</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="sunrise" minOccurs="0" maxOccurs="1" default="6.0" type="xs:double">
+            <xs:element name="sunrise" minOccurs="1" maxOccurs="1" default="6.0" type="xs:double">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Sunrise time [0..24]</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="sunset" minOccurs="0" maxOccurs="1" default="20.0" type="xs:double">
+            <xs:element name="sunset" minOccurs="1" maxOccurs="1" default="20.0" type="xs:double">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Sunset time [0..24]</xs:documentation>
               </xs:annotation>
@@ -48,27 +48,27 @@
                   <xs:documentation xml:lang="en">Sunset time [0..24]</xs:documentation>
                 </xs:annotation>
                 <xs:all>
-                  <xs:element name="speed" minOccurs="0" maxOccurs="1" default="0.6" type="xs:double">
+                  <xs:element name="speed" minOccurs="1" maxOccurs="1" default="0.6" type="xs:double">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">Speed of the clouds</xs:documentation>
                     </xs:annotation>
                   </xs:element>
-                  <xs:element name="direction" minOccurs="0" maxOccurs="1" default="0.0" type="xs:double">
+                  <xs:element name="direction" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">Direction of the cloud movement</xs:documentation>
                     </xs:annotation>
                   </xs:element>
-                  <xs:element name="humidity" minOccurs="0" maxOccurs="1" default="0.5" type="xs:double">
+                  <xs:element name="humidity" minOccurs="1" maxOccurs="1" default="0.5" type="xs:double">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">Density of clouds</xs:documentation>
                     </xs:annotation>
                   </xs:element>
-                  <xs:element name="mean_size" minOccurs="0" maxOccurs="1" default="0.5" type="xs:double">
+                  <xs:element name="mean_size" minOccurs="1" maxOccurs="1" default="0.5" type="xs:double">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">Average size of the clouds</xs:documentation>
                     </xs:annotation>
                   </xs:element>
-                  <xs:element name="ambient" minOccurs="0" maxOccurs="1" default=".8 .8 .8 1" type="types:color">
+                  <xs:element name="ambient" minOccurs="1" maxOccurs="1" default=".8 .8 .8 1" type="types:color">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">Ambient cloud color</xs:documentation>
                     </xs:annotation>
@@ -93,27 +93,27 @@
             <xs:documentation xml:lang="en">Controls fog</xs:documentation>
           </xs:annotation>
           <xs:all>
-            <xs:element name="color" minOccurs="0" maxOccurs="1" default="1 1 1 1" type="types:color">
+            <xs:element name="color" minOccurs="1" maxOccurs="1" default="1 1 1 1" type="types:color">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Fog color</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="type" minOccurs="0" maxOccurs="1" default="none" type="xs:string">
+            <xs:element name="type" minOccurs="1" maxOccurs="1" default="none" type="xs:string">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Fog type: constant, linear, quadratic</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="start" minOccurs="0" maxOccurs="1" default="1.0" type="xs:double">
+            <xs:element name="start" minOccurs="1" maxOccurs="1" default="1.0" type="xs:double">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Distance to start of fog</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="end" minOccurs="0" maxOccurs="1" default="100.0" type="xs:double">
+            <xs:element name="end" minOccurs="1" maxOccurs="1" default="100.0" type="xs:double">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Distance to end of fog</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="density" minOccurs="0" maxOccurs="1" default="1.0" type="xs:double">
+            <xs:element name="density" minOccurs="1" maxOccurs="1" default="1.0" type="xs:double">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Density of fog</xs:documentation>
               </xs:annotation>
@@ -121,7 +121,7 @@
           </xs:all>
         </xs:complexType>
       </xs:element>
-      <xs:element name="grid" minOccurs="0" maxOccurs="1" default="true" type="xs:boolean">
+      <xs:element name="grid" minOccurs="1" maxOccurs="1" default="true" type="xs:boolean">
         <xs:annotation>
           <xs:documentation xml:lang="en">Enable/disable the grid</xs:documentation>
         </xs:annotation>

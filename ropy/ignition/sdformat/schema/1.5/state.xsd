@@ -3,17 +3,17 @@
   <xs:import namespace="sdformat/v1.5/types.xsd" schemaLocation="./types.xsd"/>
   <xs:complexType name="state">
     <xs:all>
-      <xs:element name="sim_time" minOccurs="0" maxOccurs="1" default="0 0" type="types:time">
+      <xs:element name="sim_time" minOccurs="1" maxOccurs="1" default="0 0" type="types:time">
         <xs:annotation>
           <xs:documentation xml:lang="en">Simulation time stamp of the state [seconds nanoseconds]</xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="wall_time" minOccurs="0" maxOccurs="1" default="0 0" type="types:time">
+      <xs:element name="wall_time" minOccurs="1" maxOccurs="1" default="0 0" type="types:time">
         <xs:annotation>
           <xs:documentation xml:lang="en">Wall time stamp of the state [seconds nanoseconds]</xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="real_time" minOccurs="0" maxOccurs="1" default="0 0" type="types:time">
+      <xs:element name="real_time" minOccurs="1" maxOccurs="1" default="0 0" type="types:time">
         <xs:annotation>
           <xs:documentation xml:lang="en">Real time stamp of the state [seconds nanoseconds]</xs:documentation>
         </xs:annotation>
@@ -80,7 +80,7 @@
                   <xs:documentation xml:lang="en">A frame of reference to which a pose is relative.</xs:documentation>
                 </xs:annotation>
                 <xs:all>
-                  <xs:element name="pose" minOccurs="0" maxOccurs="1" default="0 0 0 0 0 0">
+                  <xs:element name="pose" minOccurs="1" maxOccurs="1" default="0 0 0 0 0 0">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">A position(x,y,z) and orientation(roll, pitch yaw) with respect to the specified frame.</xs:documentation>
                     </xs:annotation>
@@ -103,7 +103,7 @@
                 </xs:attribute>
               </xs:complexType>
             </xs:element>
-            <xs:element name="pose" minOccurs="0" maxOccurs="1" default="0 0 0 0 0 0">
+            <xs:element name="pose" minOccurs="1" maxOccurs="1" default="0 0 0 0 0 0">
               <xs:annotation>
                 <xs:documentation xml:lang="en">A position(x,y,z) and orientation(roll, pitch yaw) with respect to the specified frame.</xs:documentation>
               </xs:annotation>
@@ -184,7 +184,7 @@
             <xs:documentation xml:lang="en">A frame of reference to which a pose is relative.</xs:documentation>
           </xs:annotation>
           <xs:all>
-            <xs:element name="pose" minOccurs="0" maxOccurs="1" default="0 0 0 0 0 0">
+            <xs:element name="pose" minOccurs="1" maxOccurs="1" default="0 0 0 0 0 0">
               <xs:annotation>
                 <xs:documentation xml:lang="en">A position(x,y,z) and orientation(roll, pitch yaw) with respect to the specified frame.</xs:documentation>
               </xs:annotation>
@@ -207,7 +207,7 @@
           </xs:attribute>
         </xs:complexType>
       </xs:element>
-      <xs:element name="pose" minOccurs="0" maxOccurs="1" default="0 0 0 0 0 0">
+      <xs:element name="pose" minOccurs="1" maxOccurs="1" default="0 0 0 0 0 0">
         <xs:annotation>
           <xs:documentation xml:lang="en">A position(x,y,z) and orientation(roll, pitch yaw) with respect to the specified frame.</xs:documentation>
         </xs:annotation>
@@ -231,17 +231,17 @@
             <xs:documentation xml:lang="en">Link state</xs:documentation>
           </xs:annotation>
           <xs:all>
-            <xs:element name="velocity" minOccurs="0" maxOccurs="1" default="0 0 0 0 0 0" type="types:pose">
+            <xs:element name="velocity" minOccurs="1" maxOccurs="1" default="0 0 0 0 0 0" type="types:pose">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Velocity of the link. The x, y, z components of the pose       correspond to the linear velocity of the link, and the roll, pitch, yaw       components correspond to the angular velocity of the link</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="acceleration" minOccurs="0" maxOccurs="1" default="0 0 0 0 0 0" type="types:pose">
+            <xs:element name="acceleration" minOccurs="1" maxOccurs="1" default="0 0 0 0 0 0" type="types:pose">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Acceleration of the link. The x, y, z components of the pose       correspond to the linear acceleration of the link, and the roll,       pitch, yaw components correspond to the angular acceleration of the link</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="wrench" minOccurs="0" maxOccurs="1" default="0 0 0 0 0 0" type="types:pose">
+            <xs:element name="wrench" minOccurs="1" maxOccurs="1" default="0 0 0 0 0 0" type="types:pose">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Force and torque applied to the link. The x, y, z components       of the pose correspond to the force applied to the link, and the roll,       pitch, yaw components correspond to the torque applied to the link</xs:documentation>
               </xs:annotation>
@@ -260,7 +260,7 @@
                   <xs:documentation xml:lang="en">A frame of reference to which a pose is relative.</xs:documentation>
                 </xs:annotation>
                 <xs:all>
-                  <xs:element name="pose" minOccurs="0" maxOccurs="1" default="0 0 0 0 0 0">
+                  <xs:element name="pose" minOccurs="1" maxOccurs="1" default="0 0 0 0 0 0">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">A position(x,y,z) and orientation(roll, pitch yaw) with respect to the specified frame.</xs:documentation>
                     </xs:annotation>
@@ -283,7 +283,7 @@
                 </xs:attribute>
               </xs:complexType>
             </xs:element>
-            <xs:element name="pose" minOccurs="0" maxOccurs="1" default="0 0 0 0 0 0">
+            <xs:element name="pose" minOccurs="1" maxOccurs="1" default="0 0 0 0 0 0">
               <xs:annotation>
                 <xs:documentation xml:lang="en">A position(x,y,z) and orientation(roll, pitch yaw) with respect to the specified frame.</xs:documentation>
               </xs:annotation>

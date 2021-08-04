@@ -89,7 +89,7 @@
                       <xs:documentation xml:lang="en">Name of the submesh within the parent mesh</xs:documentation>
                     </xs:annotation>
                   </xs:element>
-                  <xs:element name="center" minOccurs="0" maxOccurs="1" default="false" type="xs:boolean">
+                  <xs:element name="center" minOccurs="1" maxOccurs="1" default="false" type="xs:boolean">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">Set to true to center the vertices of the submesh at 0,0,0. This will effectively remove any transformations on the submesh before the poses from parent links and models are applied.</xs:documentation>
                     </xs:annotation>
@@ -97,7 +97,7 @@
                 </xs:all>
               </xs:complexType>
             </xs:element>
-            <xs:element name="scale" minOccurs="0" maxOccurs="1" default="1 1 1" type="types:vector3">
+            <xs:element name="scale" minOccurs="1" maxOccurs="1" default="1 1 1" type="types:vector3">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Scaling factor applied to the mesh</xs:documentation>
               </xs:annotation>
@@ -183,7 +183,7 @@
                 <xs:documentation xml:lang="en">The size of the heightmap in world units</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="pos" minOccurs="0" maxOccurs="1" default="0 0 0" type="types:vector3">
+            <xs:element name="pos" minOccurs="1" maxOccurs="1" default="0 0 0" type="types:vector3">
               <xs:annotation>
                 <xs:documentation xml:lang="en">A position offset.</xs:documentation>
               </xs:annotation>

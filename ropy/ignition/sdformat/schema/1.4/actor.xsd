@@ -4,7 +4,7 @@
   <xs:import namespace="sdformat/v1.4/types.xsd" schemaLocation="./types.xsd"/>
   <xs:complexType name="actor">
     <xs:all>
-      <xs:element name="pose" minOccurs="0" maxOccurs="1" default="0 0 0 0 0 0" type="types:pose">
+      <xs:element name="pose" minOccurs="1" maxOccurs="1" default="0 0 0 0 0 0" type="types:pose">
         <xs:annotation>
           <xs:documentation xml:lang="en">Origin of the actor</xs:documentation>
         </xs:annotation>
@@ -13,7 +13,7 @@
         <xs:complexType>
           <xs:all>
             <xs:element name="filename" minOccurs="1" maxOccurs="1" default="__default__" type="xs:string"/>
-            <xs:element name="scale" minOccurs="0" maxOccurs="1" default="1.0" type="xs:double"/>
+            <xs:element name="scale" minOccurs="1" maxOccurs="1" default="1.0" type="xs:double"/>
           </xs:all>
         </xs:complexType>
       </xs:element>
@@ -21,8 +21,8 @@
         <xs:complexType>
           <xs:all>
             <xs:element name="filename" minOccurs="1" maxOccurs="1" default="__default__" type="xs:string"/>
-            <xs:element name="scale" minOccurs="0" maxOccurs="1" default="1.0" type="xs:double"/>
-            <xs:element name="interpolate_x" minOccurs="0" maxOccurs="1" default="false" type="xs:boolean"/>
+            <xs:element name="scale" minOccurs="1" maxOccurs="1" default="1.0" type="xs:double"/>
+            <xs:element name="interpolate_x" minOccurs="1" maxOccurs="1" default="false" type="xs:boolean"/>
           </xs:all>
           <xs:attribute name="name" type="xs:string" use="required"/>
         </xs:complexType>
@@ -30,9 +30,9 @@
       <xs:element name="script" minOccurs="1" maxOccurs="1">
         <xs:complexType>
           <xs:all>
-            <xs:element name="loop" minOccurs="0" maxOccurs="1" default="true" type="xs:boolean"/>
-            <xs:element name="delay_start" minOccurs="0" maxOccurs="1" default="0.0" type="xs:double"/>
-            <xs:element name="auto_start" minOccurs="0" maxOccurs="1" default="true" type="xs:boolean"/>
+            <xs:element name="loop" minOccurs="1" maxOccurs="1" default="true" type="xs:boolean"/>
+            <xs:element name="delay_start" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double"/>
+            <xs:element name="auto_start" minOccurs="1" maxOccurs="1" default="true" type="xs:boolean"/>
             <xs:element name="trajectory" minOccurs="0" maxOccurs="unbounded">
               <xs:complexType>
                 <xs:all>

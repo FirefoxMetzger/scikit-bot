@@ -2,8 +2,8 @@
   <xs:import namespace="sdformat/v1.0/geometry.xsd" schemaLocation="./geometry.xsd"/>
   <xs:complexType name="collision">
     <xs:all>
-      <xs:element name="max_contacts" minOccurs="0" maxOccurs="1" default="10" type="xs:int"/>
-      <xs:element name="mass" minOccurs="0" maxOccurs="1" default="0" type="xs:double"/>
+      <xs:element name="max_contacts" minOccurs="1" maxOccurs="1" default="10" type="xs:int"/>
+      <xs:element name="mass" minOccurs="1" maxOccurs="1" default="0" type="xs:double"/>
       <xs:element name="origin" minOccurs="0" maxOccurs="1" type="xs:string"/>
       <xs:element name="geometry" minOccurs="1" maxOccurs="1" type="geometry:geometry"/>
       <xs:element name="surface" minOccurs="0" maxOccurs="1">

@@ -5,7 +5,7 @@
       <xs:element name="parent" minOccurs="1" maxOccurs="1" type="xs:string"/>
       <xs:element name="child" minOccurs="1" maxOccurs="1" type="xs:string"/>
       <xs:element name="origin" minOccurs="0" maxOccurs="1" type="xs:string"/>
-      <xs:element name="thread_pitch" minOccurs="0" maxOccurs="1" default="1.0" type="xs:double"/>
+      <xs:element name="thread_pitch" minOccurs="1" maxOccurs="1" default="1.0" type="xs:double"/>
       <xs:element name="axis" minOccurs="1" maxOccurs="1">
         <xs:complexType>
           <xs:all>
@@ -30,11 +30,11 @@
             <xs:element name="ode" minOccurs="0" maxOccurs="1">
               <xs:complexType>
                 <xs:all>
-                  <xs:element name="fudge_factor" minOccurs="0" maxOccurs="1" default="0" type="xs:double"/>
-                  <xs:element name="cfm" minOccurs="0" maxOccurs="1" default="0" type="xs:double"/>
-                  <xs:element name="bounce" minOccurs="0" maxOccurs="1" default="0" type="xs:double"/>
-                  <xs:element name="max_force" minOccurs="0" maxOccurs="1" default="0" type="xs:double"/>
-                  <xs:element name="velocity" minOccurs="0" maxOccurs="1" default="0" type="xs:double"/>
+                  <xs:element name="fudge_factor" minOccurs="1" maxOccurs="1" default="0" type="xs:double"/>
+                  <xs:element name="cfm" minOccurs="1" maxOccurs="1" default="0" type="xs:double"/>
+                  <xs:element name="bounce" minOccurs="1" maxOccurs="1" default="0" type="xs:double"/>
+                  <xs:element name="max_force" minOccurs="1" maxOccurs="1" default="0" type="xs:double"/>
+                  <xs:element name="velocity" minOccurs="1" maxOccurs="1" default="0" type="xs:double"/>
                   <xs:element name="limit" minOccurs="0" maxOccurs="1" type="xs:string"/>
                   <xs:element name="suspension" minOccurs="0" maxOccurs="1" type="xs:string"/>
                 </xs:all>

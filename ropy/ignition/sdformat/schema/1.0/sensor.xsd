@@ -2,7 +2,7 @@
   <xs:complexType name="sensor">
     <xs:all>
       <xs:element name="origin" minOccurs="0" maxOccurs="1" type="xs:string"/>
-      <xs:element name="topic" minOccurs="0" maxOccurs="1" default="__default" type="xs:string"/>
+      <xs:element name="topic" minOccurs="1" maxOccurs="1" default="__default" type="xs:string"/>
       <xs:element name="plugin" minOccurs="0" maxOccurs="unbounded">
         <xs:complexType>
           <xs:all>

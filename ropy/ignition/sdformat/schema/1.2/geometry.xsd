@@ -70,7 +70,7 @@
             <xs:documentation xml:lang="en">Mesh shape</xs:documentation>
           </xs:annotation>
           <xs:all>
-            <xs:element name="filename" minOccurs="0" maxOccurs="1" default="__default__" type="xs:string">
+            <xs:element name="filename" minOccurs="1" maxOccurs="1" default="__default__" type="xs:string">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Mesh filename. DEPRECATED</xs:documentation>
               </xs:annotation>
@@ -80,7 +80,7 @@
                 <xs:documentation xml:lang="en">Mesh uri</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="scale" minOccurs="0" maxOccurs="1" default="1 1 1" type="types:vector3">
+            <xs:element name="scale" minOccurs="1" maxOccurs="1" default="1 1 1" type="types:vector3">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Scaling factor applied to the mesh</xs:documentation>
               </xs:annotation>
@@ -166,7 +166,7 @@
                 <xs:documentation xml:lang="en">The size of the heightmap in world units</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="pos" minOccurs="0" maxOccurs="1" default="0 0 0" type="types:vector3">
+            <xs:element name="pos" minOccurs="1" maxOccurs="1" default="0 0 0" type="types:vector3">
               <xs:annotation>
                 <xs:documentation xml:lang="en">A position offset.</xs:documentation>
               </xs:annotation>

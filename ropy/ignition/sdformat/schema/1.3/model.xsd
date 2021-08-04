@@ -7,17 +7,17 @@
       <xs:documentation xml:lang="en">The model element defines a complete robot or any other physical object.</xs:documentation>
     </xs:annotation>
     <xs:all>
-      <xs:element name="static" minOccurs="0" maxOccurs="1" default="false" type="xs:boolean">
+      <xs:element name="static" minOccurs="1" maxOccurs="1" default="false" type="xs:boolean">
         <xs:annotation>
           <xs:documentation xml:lang="en">If set to true, the model is immovable. Otherwise the model is simulated in the dynamics engine.</xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="allow_auto_disable" minOccurs="0" maxOccurs="1" default="true" type="xs:boolean">
+      <xs:element name="allow_auto_disable" minOccurs="1" maxOccurs="1" default="true" type="xs:boolean">
         <xs:annotation>
           <xs:documentation xml:lang="en">Allows a model to auto-disable, which is means the physics engine can skip updating the model when the model is at rest. This parameter is only used by models with no joints.</xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="pose" minOccurs="0" maxOccurs="1" default="0 0 0 0 0 0" type="types:pose">
+      <xs:element name="pose" minOccurs="1" maxOccurs="1" default="0 0 0 0 0 0" type="types:pose">
         <xs:annotation>
           <xs:documentation xml:lang="en">A position and orientation in the global coordinate frame for the model. Position(x,y,z) and rotation (roll, pitch yaw) in the global coordinate frame.</xs:documentation>
         </xs:annotation>
@@ -65,9 +65,9 @@
             <xs:element name="grasp_check" minOccurs="0" maxOccurs="1">
               <xs:complexType>
                 <xs:all>
-                  <xs:element name="detach_steps" minOccurs="0" maxOccurs="1" default="40" type="xs:int"/>
-                  <xs:element name="attach_steps" minOccurs="0" maxOccurs="1" default="20" type="xs:int"/>
-                  <xs:element name="min_contact_count" minOccurs="0" maxOccurs="1" default="2" type="xs:unsignedInt"/>
+                  <xs:element name="detach_steps" minOccurs="1" maxOccurs="1" default="40" type="xs:int"/>
+                  <xs:element name="attach_steps" minOccurs="1" maxOccurs="1" default="20" type="xs:int"/>
+                  <xs:element name="min_contact_count" minOccurs="1" maxOccurs="1" default="2" type="xs:unsignedInt"/>
                 </xs:all>
               </xs:complexType>
             </xs:element>

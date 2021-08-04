@@ -8,22 +8,22 @@
       <xs:documentation xml:lang="en">A physical link with inertia, collision, and visual properties. A link must be a child of a model, and any number of links may exist in a model.</xs:documentation>
     </xs:annotation>
     <xs:all>
-      <xs:element name="gravity" minOccurs="0" maxOccurs="1" default="true" type="xs:boolean">
+      <xs:element name="gravity" minOccurs="1" maxOccurs="1" default="true" type="xs:boolean">
         <xs:annotation>
           <xs:documentation xml:lang="en">If true, the link is affected by gravity.</xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="self_collide" minOccurs="0" maxOccurs="1" default="false" type="xs:boolean">
+      <xs:element name="self_collide" minOccurs="1" maxOccurs="1" default="false" type="xs:boolean">
         <xs:annotation>
           <xs:documentation xml:lang="en">If true, the link can collide with other links in the model. Two links within a model will collide if link1.self_collide OR link2.self_collide. Links connected by a joint will never collide.</xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="kinematic" minOccurs="0" maxOccurs="1" default="false" type="xs:boolean">
+      <xs:element name="kinematic" minOccurs="1" maxOccurs="1" default="false" type="xs:boolean">
         <xs:annotation>
           <xs:documentation xml:lang="en">If true, the link is kinematic only</xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="must_be_base_link" minOccurs="0" maxOccurs="1" default="false" type="xs:boolean">
+      <xs:element name="must_be_base_link" minOccurs="1" maxOccurs="1" default="false" type="xs:boolean">
         <xs:annotation>
           <xs:documentation xml:lang="en">If true, the link will have 6DOF and be a direct child of world.</xs:documentation>
         </xs:annotation>
@@ -37,12 +37,12 @@
             <xs:documentation xml:lang="en">Exponential damping of the link's velocity.</xs:documentation>
           </xs:annotation>
           <xs:all>
-            <xs:element name="linear" minOccurs="0" maxOccurs="1" default="0.0" type="xs:double">
+            <xs:element name="linear" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Linear damping</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="angular" minOccurs="0" maxOccurs="1" default="0.0" type="xs:double">
+            <xs:element name="angular" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Angular damping</xs:documentation>
               </xs:annotation>
@@ -59,7 +59,7 @@
             <xs:documentation xml:lang="en">A frame of reference to which a pose is relative.</xs:documentation>
           </xs:annotation>
           <xs:all>
-            <xs:element name="pose" minOccurs="0" maxOccurs="1" default="0 0 0 0 0 0">
+            <xs:element name="pose" minOccurs="1" maxOccurs="1" default="0 0 0 0 0 0">
               <xs:annotation>
                 <xs:documentation xml:lang="en">A position(x,y,z) and orientation(roll, pitch yaw) with respect to the specified frame.</xs:documentation>
               </xs:annotation>
@@ -82,7 +82,7 @@
           </xs:attribute>
         </xs:complexType>
       </xs:element>
-      <xs:element name="pose" minOccurs="0" maxOccurs="1" default="0 0 0 0 0 0">
+      <xs:element name="pose" minOccurs="1" maxOccurs="1" default="0 0 0 0 0 0">
         <xs:annotation>
           <xs:documentation xml:lang="en">A position(x,y,z) and orientation(roll, pitch yaw) with respect to the specified frame.</xs:documentation>
         </xs:annotation>
@@ -106,7 +106,7 @@
             <xs:documentation xml:lang="en">The inertial properties of the link.</xs:documentation>
           </xs:annotation>
           <xs:all>
-            <xs:element name="mass" minOccurs="0" maxOccurs="1" default="1.0" type="xs:double">
+            <xs:element name="mass" minOccurs="1" maxOccurs="1" default="1.0" type="xs:double">
               <xs:annotation>
                 <xs:documentation xml:lang="en">The mass of the link.</xs:documentation>
               </xs:annotation>
@@ -138,7 +138,7 @@
                   <xs:documentation xml:lang="en">A frame of reference to which a pose is relative.</xs:documentation>
                 </xs:annotation>
                 <xs:all>
-                  <xs:element name="pose" minOccurs="0" maxOccurs="1" default="0 0 0 0 0 0">
+                  <xs:element name="pose" minOccurs="1" maxOccurs="1" default="0 0 0 0 0 0">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">A position(x,y,z) and orientation(roll, pitch yaw) with respect to the specified frame.</xs:documentation>
                     </xs:annotation>
@@ -161,7 +161,7 @@
                 </xs:attribute>
               </xs:complexType>
             </xs:element>
-            <xs:element name="pose" minOccurs="0" maxOccurs="1" default="0 0 0 0 0 0">
+            <xs:element name="pose" minOccurs="1" maxOccurs="1" default="0 0 0 0 0 0">
               <xs:annotation>
                 <xs:documentation xml:lang="en">This is the pose of the inertial reference frame, relative to the specified reference frame. The origin of the inertial reference frame needs to be at the center of gravity. The axes of the inertial reference frame do not need to be aligned with the principal axes of the inertia.</xs:documentation>
               </xs:annotation>
@@ -202,17 +202,17 @@
                 <xs:documentation xml:lang="en">Texture name</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="fov" minOccurs="0" maxOccurs="1" default="0.785" type="xs:double">
+            <xs:element name="fov" minOccurs="1" maxOccurs="1" default="0.785" type="xs:double">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Field of view</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="near_clip" minOccurs="0" maxOccurs="1" default="0.1" type="xs:double">
+            <xs:element name="near_clip" minOccurs="1" maxOccurs="1" default="0.1" type="xs:double">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Near clip distance</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="far_clip" minOccurs="0" maxOccurs="1" default="10.0" type="xs:double">
+            <xs:element name="far_clip" minOccurs="1" maxOccurs="1" default="10.0" type="xs:double">
               <xs:annotation>
                 <xs:documentation xml:lang="en">far clip distance</xs:documentation>
               </xs:annotation>
@@ -226,7 +226,7 @@
                   <xs:documentation xml:lang="en">A frame of reference to which a pose is relative.</xs:documentation>
                 </xs:annotation>
                 <xs:all>
-                  <xs:element name="pose" minOccurs="0" maxOccurs="1" default="0 0 0 0 0 0">
+                  <xs:element name="pose" minOccurs="1" maxOccurs="1" default="0 0 0 0 0 0">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">A position(x,y,z) and orientation(roll, pitch yaw) with respect to the specified frame.</xs:documentation>
                     </xs:annotation>
@@ -249,7 +249,7 @@
                 </xs:attribute>
               </xs:complexType>
             </xs:element>
-            <xs:element name="pose" minOccurs="0" maxOccurs="1" default="0 0 0 0 0 0">
+            <xs:element name="pose" minOccurs="1" maxOccurs="1" default="0 0 0 0 0 0">
               <xs:annotation>
                 <xs:documentation xml:lang="en">A position(x,y,z) and orientation(roll, pitch yaw) with respect to the specified frame.</xs:documentation>
               </xs:annotation>
@@ -318,12 +318,12 @@
                 <xs:documentation xml:lang="en">URI of the audio media.</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="pitch" minOccurs="0" maxOccurs="1" default="1.0" type="xs:double">
+            <xs:element name="pitch" minOccurs="1" maxOccurs="1" default="1.0" type="xs:double">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Pitch for the audio media, in Hz</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="gain" minOccurs="0" maxOccurs="1" default="1.0" type="xs:double">
+            <xs:element name="gain" minOccurs="1" maxOccurs="1" default="1.0" type="xs:double">
               <xs:annotation>
                 <xs:documentation xml:lang="en">Gain for the audio media, in dB.</xs:documentation>
               </xs:annotation>
@@ -345,7 +345,7 @@
                 </xs:all>
               </xs:complexType>
             </xs:element>
-            <xs:element name="loop" minOccurs="0" maxOccurs="1" default="false" type="xs:boolean">
+            <xs:element name="loop" minOccurs="1" maxOccurs="1" default="false" type="xs:boolean">
               <xs:annotation>
                 <xs:documentation xml:lang="en">True to make the audio source loop playback.</xs:documentation>
               </xs:annotation>
@@ -359,7 +359,7 @@
                   <xs:documentation xml:lang="en">A frame of reference to which a pose is relative.</xs:documentation>
                 </xs:annotation>
                 <xs:all>
-                  <xs:element name="pose" minOccurs="0" maxOccurs="1" default="0 0 0 0 0 0">
+                  <xs:element name="pose" minOccurs="1" maxOccurs="1" default="0 0 0 0 0 0">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">A position(x,y,z) and orientation(roll, pitch yaw) with respect to the specified frame.</xs:documentation>
                     </xs:annotation>
@@ -382,7 +382,7 @@
                 </xs:attribute>
               </xs:complexType>
             </xs:element>
-            <xs:element name="pose" minOccurs="0" maxOccurs="1" default="0 0 0 0 0 0">
+            <xs:element name="pose" minOccurs="1" maxOccurs="1" default="0 0 0 0 0 0">
               <xs:annotation>
                 <xs:documentation xml:lang="en">A position(x,y,z) and orientation(roll, pitch yaw) with respect to the specified frame.</xs:documentation>
               </xs:annotation>

@@ -9,7 +9,7 @@
             <xs:element name="shader" minOccurs="0" maxOccurs="1">
               <xs:complexType>
                 <xs:all>
-                  <xs:element name="normal_map" minOccurs="0" maxOccurs="1" default="__default__" type="xs:string"/>
+                  <xs:element name="normal_map" minOccurs="1" maxOccurs="1" default="__default__" type="xs:string"/>
                 </xs:all>
                 <xs:attribute name="type" type="xs:string" use="required"/>
               </xs:complexType>

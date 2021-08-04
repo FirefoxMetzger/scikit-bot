@@ -10,7 +10,7 @@
           <xs:documentation xml:lang="en">Rate at which to update the physics engine</xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="max_contacts" minOccurs="0" maxOccurs="1" default="20" type="xs:int">
+      <xs:element name="max_contacts" minOccurs="1" maxOccurs="1" default="20" type="xs:int">
         <xs:annotation>
           <xs:documentation xml:lang="en">Maximum number of contacts allowed between two entities. This value can be over ridden by a max_contacts element in a collision element.</xs:documentation>
         </xs:annotation>
@@ -64,7 +64,7 @@
                       <xs:documentation xml:lang="en">Number of iterations for each step. A higher number produces greater accuracy at a performance cost.</xs:documentation>
                     </xs:annotation>
                   </xs:element>
-                  <xs:element name="precon_iters" minOccurs="0" maxOccurs="1" default="0" type="xs:int"/>
+                  <xs:element name="precon_iters" minOccurs="1" maxOccurs="1" default="0" type="xs:int"/>
                   <xs:element name="sor" minOccurs="1" maxOccurs="1" default="1.3" type="xs:double">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">Set the successive over-relaxation parameter.</xs:documentation>
