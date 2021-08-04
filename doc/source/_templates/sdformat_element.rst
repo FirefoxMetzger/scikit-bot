@@ -25,15 +25,15 @@
 
 {# Recursively generate nested classes #}
 {# Cuz who needs :recursive: anyway B-) xD #}
+.. currentmodule:: {{ mod_path }}
+
 {% set sub_classes = members | reject("eq", "Meta") | reject("lower") %}
 {% for el in sub_classes %}
 {% if loop.first %}
-.. rubric:: {{_("Nested Classes")}}
+.. rubric:: {{_("Nested Elements")}}
 
-A nested class, too, represents an element of SDFormat. However, it can only
-ever occur as a child of this class.
-
-.. currentmodule:: {{ mod_path }}
+Note that only complex elements are listed here. Elements that resolve to simple
+types (int, str, bool) are inlined.
 
 .. autosummary::
     :template: sdformat_element.rst
