@@ -2,10 +2,9 @@ from dataclasses import dataclass
 import numpy as np
 import pytest
 from xsdata.exceptions import ParserError
-from xsdata.formats.dataclass.parsers.handlers import XmlEventHandler
+from pathlib import Path
 
 from ropy.ignition.sdformat.bindings.v16.model import Model
-
 import ropy.ignition as ign
 
 
@@ -24,7 +23,7 @@ def test_invalid_parsing(invalid_sdf_string):
         ign.sdformat.loads(invalid_sdf_string)
 
 
-def test_invalid_parsing(invalid_sdf_string):
+def test_invalid_parsing_xml_etree(invalid_sdf_string):
     with pytest.raises(ParserError):
         ign.sdformat.loads(invalid_sdf_string, handler="XmlEventHandler")
 
@@ -55,9 +54,6 @@ def test_idempotence(valid_sdf_string):
     # the first serialization should normalize the XML
     # the second pass should make no changes
 
-    # Note: the normalized XML doesn't use new-line
-    # characters.
-
     parsed_sdf = ign.sdformat.loads(valid_sdf_string)
     normalized_sdf = ign.sdformat.dumps(parsed_sdf)
 
@@ -65,6 +61,12 @@ def test_idempotence(valid_sdf_string):
     serialized_sdf = ign.sdformat.dumps(parsed_sdf)
 
     assert serialized_sdf == normalized_sdf
+
+
+def test_force_version():
+    sdf_file = Path(__file__).parent / "sdf" / "empty.sdf"
+
+    ign.sdformat.loads(sdf_file.read_text(), version="1.8")
 
 
 def test_light(light_sdf):
