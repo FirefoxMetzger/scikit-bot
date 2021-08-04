@@ -16,10 +16,10 @@ T = TypeVar("T")
 
 # available SDF elements by version
 _parser_roots = {
-    "1.0": None,
-    "1.2": None,
-    "1.3": None,
-    "1.4": None,
+    "1.0": "..bindings.v10",
+    "1.2": "..bindings.v12",
+    "1.3": "..bindings.v13",
+    "1.4": "..bindings.v14",
     "1.5": "..bindings.v15",
     "1.6": "..bindings.v16",
     "1.7": "..bindings.v17",
@@ -137,9 +137,6 @@ def loads(
     }[handler]
 
     binding_location = _parser_roots[version]
-
-    if binding_location is None:
-        raise ParseError(f"Ropy currently doesnt support SDFormat v{version}")
 
     bindings = importlib.import_module(binding_location, __name__)
 
