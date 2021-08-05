@@ -10,6 +10,7 @@ extras_require = {
         "requests == 2.22.0",
         "xsdata == 21.7",
         "lxml == 4.6.3",
+        "cachetools == 4.2.2"
     ],
     "docs": [
         "sphinx == 4.1.2",
