@@ -6,7 +6,7 @@ from io import BytesIO
 from pathlib import Path
 
 from dataclasses import dataclass, field
-from typing import List, Optional, Callable, Union, Dict, Tuple
+from typing import List, Optional, Callable, Union
 
 
 class InternalCache:
