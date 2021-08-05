@@ -1,4 +1,5 @@
 from urllib.parse import quote
+import cachetools
 import requests
 from cachetools import TTLCache
 from zipfile import ZipFile
@@ -10,29 +11,35 @@ from typing import List, Optional, Callable, Union
 
 
 class InternalCache:
-    """Ropy's internal Fuel Model Cache"""
+    """Simple Caching structure"""
 
-    def __init__(self) -> None:
-        self._cache = TTLCache(maxsize=float("inf"), ttl=24*60*60)
+    def __init__(self, maxsize=float("inf"), time_to_live=24 * 60 * 60) -> None:
+        self._cache = TTLCache(maxsize=maxsize, ttl=time_to_live)
 
-    def update(self, url, sdf_string) -> None:
-        self._cache[url] = sdf_string
+    def update(self, url: str, value: str) -> None:
+        self._cache[url] = value
 
-    def get(self, url):
+    def get(self, url) -> Union[str, None]:
         return self._cache.get(url, None)
 
+    def clear(self) -> None:
+        self._cache.clear()
 
-memcache = InternalCache()
+
+model_cache = InternalCache()
+world_cache = InternalCache()
+metadata_cache = cachetools.LRUCache(maxsize=100)
+download_cache = cachetools.LRUCache(maxsize=5)
 
 
 class FileCache:
     """A Fuel Model cache on the local filesystem"""
 
-    def __init__(self, location:str):
-        self._base = Path(location) / "fuel.ignitionrobotics.org" 
+    def __init__(self, location: str):
+        self._base = Path(location) / "fuel.ignitionrobotics.org"
         self._base.mkdir(exist_ok=True, parents=True)
 
-    def _model_loc(self, url:str) -> Path:
+    def _model_loc(self, url: str) -> Path:
         cache_loc = self._base
         metadata = fuel_model_metadata(url)
 
@@ -40,12 +47,12 @@ class FileCache:
         model_name = quote(metadata.name)
         version = metadata.version
 
-        model_loc:Path = cache_loc / username / "models" / model_name / str(version)
+        model_loc: Path = cache_loc / username / "models" / model_name / str(version)
 
         return model_loc.expanduser()
 
-    def get(self, url:str) -> Union[str, None]:
-        """ Load the SDF from the file cache"""
+    def get(self, url: str) -> Union[str, None]:
+        """Load the SDF from the file cache"""
         file_loc = self._model_loc(url) / "model.sdf"
 
         if file_loc.exists():
@@ -53,7 +60,7 @@ class FileCache:
         else:
             return None
 
-    def update(self, url:str, sdf_string:str) -> str:
+    def update(self, url: str, sdf_string: str) -> str:
         """Update the file cache after a miss"""
         model_loc = self._model_loc(url)
         blob = download_fuel_model(url)
@@ -88,19 +95,29 @@ class ModelMetadata:
     categories: List[str] = field(default_factory=list)
 
 
+@cachetools.cached(metadata_cache)
 def fuel_model_metadata(uri: str) -> ModelMetadata:
     """Fetch a Fuel model's metadata.
 
     Parameters
     ----------
     uri : str
-        The URI of the fuel artifact (typically a model). This matches the URI used
-        in SDFormat's include tags.
+        The URI of the fuel artifact (typically a model). This matches the URI
+        used in SDFormat's include tags.
 
     Returns
     -------
     info : Metadata
         A python dict of metadata.
+
+    Notes
+    -----
+    The function caches the most recent 100 calls in an effort to ease the
+    burden on the Fuel servers and to improve performance. To manually reset
+    this cache call ``ropy.ignition.fuel.metadata_cache.clear()``. You can
+    further also this behavior by changing ``ropy.ignition.fuel.metadata_cache``
+    to a different cache instance. Check the `cachetools docs
+    <https://cachetools.readthedocs.io/en/stable/#>`_ for more information.
     """
 
     result = requests.get(uri, headers={"accept": "application/json"})
@@ -108,6 +125,7 @@ def fuel_model_metadata(uri: str) -> ModelMetadata:
     return ModelMetadata(**result.json())
 
 
+@cachetools.cached(download_cache)
 def download_fuel_model(url: str) -> bytes:
     """Download a model from the Fuel server.
 
@@ -121,6 +139,15 @@ def download_fuel_model(url: str) -> bytes:
     -------
     blob : bytes
         A gzip compressed blob containing the model files.
+
+    Notes
+    -----
+    The function caches the most recent 5 calls in an effort to ease the
+    burden on the Fuel servers and to improve performance. To manually reset
+    this cache call ``ropy.ignition.fuel.download_cache.clear()``. You can
+    further also this behavior by changing ``ropy.ignition.fuel.download_cache``
+    to a different cache instance. Check the `cachetools docs
+    <https://cachetools.readthedocs.io/en/stable/#>`_ for more information.
 
     """
 
@@ -196,21 +223,23 @@ def get_fuel_model(
     Notes
     -----
 
-    Caches are tiered and the order in which they are checked (from first to last) is: (1)
-    user_cache, (2) internal_cache, (3) file_cache. Updates are done in reverse order. Further, a cache
-    is only updated if it missed, i.e., if user_cache hits then neither the internal_cache
-    nor the file_cache are updated, even if they would have produced a miss.
+    Caches are tiered and the order in which they are checked (from first to
+    last) is: (1) user_cache, (2) internal_cache, (3) file_cache. Updates are
+    done in reverse order. Further, a cache is only updated if it would have
+    been used, i.e., if user_cache hits then neither the internal_cache nor the
+    file_cache are updated since they are never evaluated, even if they would
+    have produced a miss.
 
     The file_cache stores models at the following location::
 
-        file_cache/fuel.ignitionrobotics.org/{owner}/models/{model_name}/{version}
+        file_cache_dir/fuel.ignitionrobotics.org/{owner}/models/{model_name}/{version}
 
     This cache never evicts, so you should manually delete outdated models.
 
     """
 
-    def cache(get_fn:Optional[Callable], update_fn:Optional[Callable]):
-        def decorator(download_sdf:Callable):
+    def cache(get_fn: Optional[Callable], update_fn: Optional[Callable]):
+        def decorator(download_sdf: Callable):
             def inner(url):
                 sdf_string = None
 
@@ -224,7 +253,9 @@ def get_fuel_model(
                         update_fn(url, sdf_string)
 
                 return sdf_string
+
             return inner
+
         return decorator
 
     # set up file cache
@@ -239,16 +270,16 @@ def get_fuel_model(
     file_cache_decorator = cache(get_from_file, update_file)
 
     # set up internal cache
-    get_internal = memcache.get if use_internal_cache else None
-    update_internal = memcache.update if update_internal_cache else None
+    get_internal = model_cache.get if use_internal_cache else None
+    update_internal = model_cache.update if update_internal_cache else None
     internal_cache_decorator = cache(get_internal, update_internal)
 
     # the wrapped loading function
     @cache(user_cache, update_user_cache)
     @internal_cache_decorator
     @file_cache_decorator
-    def _fetch_online(url:str) -> str:
-        """ Download the model and extract primary SDF"""
+    def _fetch_online(url: str) -> str:
+        """Download the model and extract primary SDF"""
         blob = download_fuel_model(url)
         with ZipFile(BytesIO(blob)) as model_file:
             with model_file.open("model.sdf", "r") as sdf_file:
@@ -258,9 +289,11 @@ def get_fuel_model(
 
     return _fetch_online(url)
 
-    
+
 if __name__ == "__main__":
-    url = "https://fuel.ignitionrobotics.org/1.0/OpenRobotics/models/Construction%20Cone"
+    url = (
+        "https://fuel.ignitionrobotics.org/1.0/OpenRobotics/models/Construction%20Cone"
+    )
     sdf_string = get_fuel_model(url)
 
     print(sdf_string)
