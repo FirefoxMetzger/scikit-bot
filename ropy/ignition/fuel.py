@@ -103,13 +103,13 @@ def get_fuel_model_info(uri: str) -> ModelMetadata:
     Parameters
     ----------
     uri : str
-        The URI of the fuel artifact (typically a model). This matches the URI
+        The URI of the fuel model. This matches the URI
         used in SDFormat's include tags.
 
     Returns
     -------
     info : Metadata
-        A python dict of metadata.
+        A python dataclass of metadata.
 
     Notes
     -----
@@ -119,6 +119,36 @@ def get_fuel_model_info(uri: str) -> ModelMetadata:
     further also this behavior by changing ``ropy.ignition.fuel.metadata_cache``
     to a different cache instance. Check the `cachetools docs
     <https://cachetools.readthedocs.io/en/stable/#>`_ for more information.
+
+    Examples
+    --------
+
+    .. doctest::
+
+        >>> import ropy.ignition as ign
+        >>> ign.get_fuel_model_info(
+        ... "https://fuel.ignitionrobotics.org/1.0/OpenRobotics/models/Construction%20Cone"
+        ... )
+        ModelMetadata(createdAt='2018-01-27T00:22:54Z', updatedAt='2021-08-05T20:19:59Z', 
+        name='Construction Cone', owner='OpenRobotics', description='An orange construction cone', 
+        likes=0, downloads=3721, filesize=622427, upload_date='2018-01-27T00:22:53Z', 
+        modify_date='2018-01-27T00:22:53Z', license_id=1, 
+        license_name='Creative Commons Zero v1.0 Universal', 
+        license_url='https://creativecommons.org/publicdomain/zero/1.0/', 
+        license_image='https://i.creativecommons.org/p/88x31.png', permission=0, url_name='', 
+        thumbnail_url='/OpenRobotics/models/Construction%20Cone/tip/files/thumbnails/1.png', 
+        version=2, private=False, tags=[], categories=[])
+        >>> # notice that the second call is almost instantaneous due to in-memory caching
+        >>> foo = ign.get_fuel_model_info(
+        ... "https://fuel.ignitionrobotics.org/1.0/OpenRobotics/models/Construction%20Cone"
+        ... )
+        >>> foo.owner
+        'OpenRobotics'
+        >>> foo.version
+        2
+        >>> foo.filesize
+        622427
+
     """
 
     result = requests.get(uri, headers={"accept": "application/json"})
