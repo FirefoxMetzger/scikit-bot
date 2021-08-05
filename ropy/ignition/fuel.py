@@ -220,30 +220,28 @@ def get_fuel_model(
     user_cache : Callable[[str], Union[str, None]]
         User supplied caching logic. It is a callable that expects a string (the
         url) and returns either a string (the sdf) or None. If user_cache
-        returns a string, that string is returned; if user_cache returns None
-        this is interpreted as a cache miss. If ``user_cache is None`` it always
-        misses.
+        returns a string it is concidered a cache hit; if user_cache returns
+        ``None`` this is interpreted as a cache miss. If ``user_cache is None``
+        it always misses.
     use_internal_cache : bool
-        If True (default), use ropy's internal cache. This is a module-level
-        in-memory cache located at ropy.ignition.fuel.memcache. Models are
-        evicted after 24 hours, or when ropy is unloaded. If False, the
-        internal_cache always misses.
+        If ``True`` (default), use ropy's internal cache. This is a in-memory cache
+        that evicts files after 24 hours, or when ropy is unloaded. If ``False``,
+        the internal cache always misses.
     use_file_cache : bool
-        If True (default), check the local filesystem for a copy of the model.
+        If ``True`` (default), check the local filesystem for a copy of the model file.
     update_file_cache : str
-        If not None, update the file cache the the given location if file_cache misses.
-        The default is ``~/.igition/fuel``, which is the default location for ignition.
+        If not ``None``, update the file cache at ``file_cache_dir`` on file cache misses.
     update_internal_cache : bool
-        If True (default) update the internal cache if it missed.
+        If ``True`` (default) update the internal cache if it missed.
     update_user_cache : Callable[[str, str], None]
-        If not None and user_cache missed, update_user_cache is called with the
-        signature ``update_user_cache(url, sdf_string)``. The expected behavior
-        is that this call will update the user supplied caching mechanism.
+        If not ``None`` and user_cache missed (returns ``None`` or is ``None``),
+        update_user_cache is called with the signature ``update_user_cache(url,
+        sdf_string)``. The expected behavior is that this call will update the
+        user supplied caching mechanism.
     file_cache_dir : str
         The folder to use for the file cache. It follows the same layout as ignition's
         fuel-tools; see the Notes for more information. The default is
-        ``~/.ignition/fuel``, which is the default location for ignition. If
-        ``file_cache is None`` it always misses.
+        ``~/.ignition/fuel``, which is the default location for ignition.
 
 
     Returns
@@ -261,8 +259,10 @@ def get_fuel_model(
     file_cache are updated since they are never evaluated, even if they would
     have produced a miss.
 
-    You can manually reset the internal cache by calling
-    ``ropy.ignition.fuel.model_cache.clear()``.
+    You can manually reset the internal caches by calling::
+    
+        ropy.ignition.fuel.model_cache.clear()
+        ropy.ignition.fuel.world_cache.clear()
 
     The file_cache stores models on your local filesystem. It never evicts, so
     you should manually delete outdated models. The format of the cache
