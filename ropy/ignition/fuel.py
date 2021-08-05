@@ -17,6 +17,7 @@ class InternalCache:
         self._cache = TTLCache(maxsize=maxsize, ttl=time_to_live)
 
     def update(self, url: str, value: str) -> None:
+        # metadata = fuel_model_metadata(url)
         self._cache[url] = value
 
     def get(self, url) -> Union[str, None]:
@@ -41,7 +42,7 @@ class FileCache:
 
     def _model_loc(self, url: str) -> Path:
         cache_loc = self._base
-        metadata = fuel_model_metadata(url)
+        metadata = get_fuel_model_info(url)
 
         username = metadata.owner.lower()
         model_name = quote(metadata.name)
@@ -96,7 +97,7 @@ class ModelMetadata:
 
 
 @cachetools.cached(metadata_cache)
-def fuel_model_metadata(uri: str) -> ModelMetadata:
+def get_fuel_model_info(uri: str) -> ModelMetadata:
     """Fetch a Fuel model's metadata.
 
     Parameters
@@ -151,7 +152,7 @@ def download_fuel_model(url: str) -> bytes:
 
     """
 
-    metadata = fuel_model_metadata(url)
+    metadata = get_fuel_model_info(url)
     username = metadata.owner.lower()
     model_name = quote(metadata.name)
     version = metadata.version
@@ -230,11 +231,16 @@ def get_fuel_model(
     file_cache are updated since they are never evaluated, even if they would
     have produced a miss.
 
-    The file_cache stores models at the following location::
+    You can manually reset the internal cache by calling
+    ``ropy.ignition.fuel.model_cache.clear()``.
+
+    The file_cache stores models on your local filesystem. It never evicts, so
+    you should manually delete outdated models. The format of the cache
+    is::
 
         file_cache_dir/fuel.ignitionrobotics.org/{owner}/models/{model_name}/{version}
 
-    This cache never evicts, so you should manually delete outdated models.
+
 
     """
 
@@ -288,12 +294,3 @@ def get_fuel_model(
         return sdf_string
 
     return _fetch_online(url)
-
-
-if __name__ == "__main__":
-    url = (
-        "https://fuel.ignitionrobotics.org/1.0/OpenRobotics/models/Construction%20Cone"
-    )
-    sdf_string = get_fuel_model(url)
-
-    print(sdf_string)

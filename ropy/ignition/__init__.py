@@ -35,7 +35,7 @@ Functions
     :toctree:
 
     ropy.ignition.Subscriber
-    ropy.ignition.get_fuel_metadata
+    ropy.ignition.get_fuel_model_info
     ropy.ignition.get_fuel_model
     ropy.ignition.download_fuel_model
     ropy.ignition.FrustumProjection
@@ -148,7 +148,7 @@ from .subscriber import Subscriber
 from .transformations import FrustumProjection
 from .sdformat.create_frame_graph import create_frame_graph
 from . import sdformat
-from .fuel import fuel_model_metadata, download_fuel_model, get_fuel_model
+from .fuel import get_fuel_model_info, download_fuel_model, get_fuel_model
 
 __all__ = [
     "messages",
@@ -156,7 +156,7 @@ __all__ = [
     "FrustumProjection",
     "create_frame_graph",
     "sdformat",
-    "fuel_model_metadata",
+    "get_fuel_model_info",
     "download_fuel_model",
-    "get_fuel_model"
+    "get_fuel_model",
 ]
