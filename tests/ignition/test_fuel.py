@@ -34,6 +34,11 @@ def test_get_model(fuel_url, model_sdf, mock_download):
     assert sdf_string == model_sdf
 
 
+def test_get_model_file(fuel_url, model_config, mock_download):
+    xml_string = ign.get_fuel_model(fuel_url, file_path="./model.config")
+    assert xml_string == model_config
+
+
 def test_get_model_no_cache(
     fuel_url, model_sdf, invalid_model_cache, invalid_file_cache
 ):
@@ -236,10 +241,10 @@ def test_get_model_custom_cache_heal(
 
 def test_clear_internal_cache(fake_internal_cache: ign.fuel.InternalCache):
 
-    cache_val = fake_internal_cache.get("foo")
-    assert cache_val == "bar"
+    cache_val = fake_internal_cache.get("foo", "bar")
+    assert cache_val == "baz"
 
     fake_internal_cache.clear()
 
-    cache_val = fake_internal_cache.get("foo")
+    cache_val = fake_internal_cache.get("foo", "bar")
     assert cache_val == None

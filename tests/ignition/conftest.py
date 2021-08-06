@@ -219,6 +219,15 @@ def model_sdf(fuel_blob):
     return sdf_string
 
 
+@pytest.fixture(scope="module")
+def model_config(fuel_blob):
+    with ZipFile(BytesIO(fuel_blob)) as model_file:
+        with model_file.open("model.config", "r") as sdf_file:
+            xml_string = sdf_file.read().decode("utf-8")
+
+    return xml_string
+
+
 @pytest.fixture()
 def single_fuel_url():
     """Used for tests where testing all fuel_urls is too expensive"""
@@ -252,30 +261,35 @@ def mock_download_raise(monkeypatch):
 def empty_custom_cache():
     cache = dict()
 
-    def update(url, sdf_string):
-        cache[url] = sdf_string
+    def update(url, file_path, sdf_string):
+        key = hash((url, file_path))
+        cache[key] = sdf_string
 
-    return lambda x: cache.get(x, None), update
+    return lambda x, y: cache.get(hash((x, y)), None), update
 
 
 @pytest.fixture
 def populated_custom_cache(fuel_url, model_sdf):
-    cache = {fuel_url: model_sdf}
+    key = hash((fuel_url, "model.sdf"))
+    cache = {key: model_sdf}
 
-    def update(url, sdf_string):
-        cache[url] = sdf_string
+    def update(url, file_path, sdf_string):
+        key = hash((url, file_path))
+        cache[key] = sdf_string
 
-    return lambda x: cache.get(x, None), update
+    return lambda x, y: cache.get(hash((x, y)), None), update
 
 
 @pytest.fixture
 def invalid_custom_cache(fuel_url, model_sdf):
-    cache = {fuel_url: "Not a SDF string."}
+    key = hash((fuel_url, "model.sdf"))
+    cache = {key: "Not a SDF string."}
 
-    def update(url, sdf_string):
-        cache[url] = sdf_string
+    def update(url, file_path, sdf_string):
+        key = hash((url, file_path))
+        cache[key] = sdf_string
 
-    return lambda x: cache.get(x, None), update
+    return lambda x, y: cache.get(hash((x, y)), None), update
 
 
 @pytest.fixture()
@@ -289,12 +303,12 @@ def empty_model_cache(monkeypatch):
 
 @pytest.fixture()
 def populated_model_cache(fuel_url, model_sdf, empty_model_cache):
-    ign.fuel.model_cache.update(fuel_url, model_sdf)
+    ign.fuel.model_cache.update(fuel_url, "model.sdf", model_sdf)
 
 
 @pytest.fixture()
 def invalid_model_cache(fuel_url, empty_model_cache):
-    ign.fuel.model_cache.update(fuel_url, "incorrect SDF from model cache")
+    ign.fuel.model_cache.update(fuel_url, "model.sdf", "incorrect SDF from model cache")
 
 
 @pytest.fixture()
@@ -305,7 +319,7 @@ def empty_file_cache(tmp_path, mock_download):
 @pytest.fixture()
 def populated_file_cache(fuel_url, empty_file_cache):
     cache = ign.fuel.FileCache(empty_file_cache)
-    cache.update(fuel_url, "unused string")
+    cache.update(fuel_url, "model.sdf", "unused arg to match signature")
 
     return empty_file_cache
 
@@ -323,5 +337,5 @@ def invalid_file_cache(fuel_url, populated_file_cache):
 @pytest.fixture()
 def fake_internal_cache():
     fake_cache = ign.fuel.InternalCache()
-    fake_cache.update("foo", "bar")
+    fake_cache.update("foo", "bar", "baz")
     return fake_cache

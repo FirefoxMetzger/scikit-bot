@@ -16,12 +16,13 @@ class InternalCache:
     def __init__(self, maxsize=float("inf"), time_to_live=24 * 60 * 60) -> None:
         self._cache = TTLCache(maxsize=maxsize, ttl=time_to_live)
 
-    def update(self, url: str, value: str) -> None:
-        # metadata = fuel_model_metadata(url)
-        self._cache[url] = value
+    def update(self, url: str, file_path: str, value: str) -> None:
+        key = hash((url, file_path))
+        self._cache[key] = value
 
-    def get(self, url) -> Union[str, None]:
-        return self._cache.get(url, None)
+    def get(self, url: str, file_path: str) -> Union[str, None]:
+        key = hash((url, file_path))
+        return self._cache.get(key, None)
 
     def clear(self) -> None:
         self._cache.clear()
@@ -52,16 +53,16 @@ class FileCache:
 
         return model_loc.expanduser()
 
-    def get(self, url: str) -> Union[str, None]:
+    def get(self, url: str, file_path: str) -> Union[str, None]:
         """Load the SDF from the file cache"""
-        file_loc = self._model_loc(url) / "model.sdf"
+        file_loc = self._model_loc(url) / file_path
 
         if file_loc.exists():
             return file_loc.read_text()
         else:
             return None
 
-    def update(self, url: str, sdf_string: str) -> str:
+    def update(self, url: str, file_path: str, sdf_string: str) -> str:
         """Update the file cache after a miss"""
         model_loc = self._model_loc(url)
         blob = download_fuel_model(url)
@@ -202,46 +203,52 @@ def download_fuel_model(url: str) -> bytes:
 def get_fuel_model(
     url: str,
     *,
-    user_cache: Callable[[str], Union[str, None]] = None,
+    file_path: str = "model.sdf",
+    user_cache: Callable[[str, str], Union[str, None]] = None,
     use_internal_cache: bool = True,
     use_file_cache: bool = True,
     update_file_cache: bool = True,
     update_internal_cache: bool = True,
-    update_user_cache: Callable[[str, str], None] = None,
+    update_user_cache: Callable[[str, str, str], None] = None,
     file_cache_dir: str = "~/.ignition/fuel",
 ) -> str:
-    """Get the primary SDF of a model from the Fuel server.
+    """Get a model file from the Fuel server.
 
     Parameters
     ----------
     url : str
         The URL of the model. This is the same as the URL used for
         include elements in SDF files.
-    user_cache : Callable[[str], Union[str, None]]
-        User supplied caching logic. It is a callable that expects a string (the
-        url) and returns either a string (the sdf) or None. If user_cache
-        returns a string it is concidered a cache hit; if user_cache returns
-        ``None`` this is interpreted as a cache miss. If ``user_cache is None``
-        it always misses.
+    file_path : str
+        The path - relative to model root - to the file that should be
+        downloaded. Defaults to the model's primary SDF at "model.sdf".
+    user_cache : Callable[[str, str], Union[str, None]]
+        User supplied caching logic. It is a callable that expects two strings
+        (url and file_path) and returns either a string (the file) or None. If
+        user_cache returns a string it is considered a cache hit; if user_cache
+        returns ``None`` this is interpreted as a cache miss. If ``user_cache is
+        None`` it always misses.
     use_internal_cache : bool
-        If ``True`` (default), use ropy's internal cache. This is a in-memory cache
-        that evicts files after 24 hours, or when ropy is unloaded. If ``False``,
-        the internal cache always misses.
+        If ``True`` (default), use ropy's internal cache. This is a in-memory
+        cache that evicts files after 24 hours, or when ropy is unloaded. If
+        ``False``, the internal cache always misses.
     use_file_cache : bool
-        If ``True`` (default), check the local filesystem for a copy of the model file.
+        If ``True`` (default), check the local filesystem for a copy of the
+        model file.
     update_file_cache : str
-        If not ``None``, update the file cache at ``file_cache_dir`` on file cache misses.
+        If not ``None``, update the file cache at ``file_cache_dir`` on file
+        cache misses.
     update_internal_cache : bool
         If ``True`` (default) update the internal cache if it missed.
-    update_user_cache : Callable[[str, str], None]
+    update_user_cache : Callable[[str, str, str], None]
         If not ``None`` and user_cache missed (returns ``None`` or is ``None``),
         update_user_cache is called with the signature ``update_user_cache(url,
-        sdf_string)``. The expected behavior is that this call will update the
-        user supplied caching mechanism.
+        file_path, sdf_string)``. The expected behavior is that this call will
+        update the user supplied caching mechanism.
     file_cache_dir : str
-        The folder to use for the file cache. It follows the same layout as ignition's
-        fuel-tools; see the Notes for more information. The default is
-        ``~/.ignition/fuel``, which is the default location for ignition.
+        The folder to use for the file cache. It follows the same layout as
+        ignition's fuel-tools; see the Notes for more information. The default
+        is ``~/.ignition/fuel``, which is the default location for ignition.
 
 
     Returns
@@ -276,17 +283,19 @@ def get_fuel_model(
 
     def cache(get_fn: Optional[Callable], update_fn: Optional[Callable]):
         def decorator(download_sdf: Callable):
-            def inner(url):
+            def inner(url, file_path):
                 sdf_string = None
 
                 if get_fn:
-                    sdf_string = get_fn(url)
+                    # query cache
+                    sdf_string = get_fn(url, file_path)
 
                 if sdf_string is None:
-                    sdf_string = download_sdf(url)
+                    # cache miss
+                    sdf_string = download_sdf(url, file_path)
 
                     if update_fn is not None:
-                        update_fn(url, sdf_string)
+                        update_fn(url, file_path, sdf_string)
 
                 return sdf_string
 
@@ -314,13 +323,13 @@ def get_fuel_model(
     @cache(user_cache, update_user_cache)
     @internal_cache_decorator
     @file_cache_decorator
-    def _fetch_online(url: str) -> str:
+    def _fetch_online(url: str, file_path: str) -> str:
         """Download the model and extract primary SDF"""
         blob = download_fuel_model(url)
         with ZipFile(BytesIO(blob)) as model_file:
-            with model_file.open("model.sdf", "r") as sdf_file:
-                sdf_string = sdf_file.read().decode("utf-8")
+            with model_file.open(file_path, "r") as data_file:
+                file_content = data_file.read().decode("utf-8")
 
-        return sdf_string
+        return file_content
 
-    return _fetch_online(url)
+    return _fetch_online(url, file_path)
