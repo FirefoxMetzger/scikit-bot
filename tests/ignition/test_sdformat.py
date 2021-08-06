@@ -4,8 +4,8 @@ import pytest
 from xsdata.exceptions import ParserError
 from pathlib import Path
 
-from ropy.ignition.sdformat.bindings.v16.model import Model
-import ropy.ignition as ign
+from skbot.ignition.sdformat.bindings.v16.model import Model
+import skbot.ignition as ign
 
 
 def test_valid_parsing(valid_sdf_string):

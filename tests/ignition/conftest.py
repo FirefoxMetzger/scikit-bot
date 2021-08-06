@@ -1,6 +1,6 @@
 from pathlib import Path
-from ropy.ignition.sdformat.bindings.v13 import sdf
-from ropy.ignition import fuel
+from skbot.ignition.sdformat.bindings.v13 import sdf
+from skbot.ignition import fuel
 import pytest
 import hashlib
 from urllib.parse import quote
@@ -8,7 +8,7 @@ from zipfile import ZipFile
 from io import BytesIO
 import cachetools
 
-import ropy.ignition as ign
+import skbot.ignition as ign
 
 sdf_folder = Path(__file__).parent / "sdf"
 

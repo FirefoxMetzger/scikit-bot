@@ -27,7 +27,7 @@ else:
     os.chdir(current_path)
 
 # convert the SDF templates to XSD
-xsd_location = Path("ropy/ignition/sdformat/schema/")
+xsd_location = Path("skbot/ignition/sdformat/schema/")
 for version in sdf_versions:
     source_path = sdf_location / "sdf" / version
     out_dir = xsd_location / version
@@ -39,7 +39,7 @@ for version in sdf_versions:
 config = GeneratorConfig.read(Path(__file__).parent / "sdf_bindings_config.xml")
 for version in sdf_versions:
     config.output.package = (
-        f"ropy.ignition.sdformat.bindings.v{version.replace('.', '')}"
+        f"skbot.ignition.sdformat.bindings.v{version.replace('.', '')}"
     )
     source_path = xsd_location / version
     uris = [x.absolute().as_uri() for x in source_path.iterdir()]

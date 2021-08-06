@@ -12,7 +12,7 @@ class FrustumProjection(FrustumProjection):
     """Frustum based intrinsic camera transformation
 
     This links behavior is identical to
-    :class:`ropy.transform.FrustumProjection`; however, here the camera points
+    :class:`skbot.transform.FrustumProjection`; however, here the camera points
     along the x-axis instead of the z-axis. This is done to match the behavior
     of ignition, which applies the robotic coordinate frame standard instead of
     the computer vision standard here.
@@ -27,7 +27,7 @@ class FrustumProjection(FrustumProjection):
 
     See Also
     --------
-    :class:`ropy.transform.FrustumProjection`
+    :class:`skbot.transform.FrustumProjection`
 
     Notes
     -----

@@ -82,7 +82,7 @@ def spline_trajectory(
 
         >>> import numpy as np
         >>> import matplotlib.pyplot as plt
-        >>> from ropy.trajectory import spline_trajectory
+        >>> from skbot.trajectory import spline_trajectory
         >>> t1 = np.linspace(0, 2*np.pi, 10)
         >>> control_points = np.stack((np.cos(t1), np.sin(t1)), axis=1)
         >>> t2 = np.linspace(0, 2*np.pi, 100)

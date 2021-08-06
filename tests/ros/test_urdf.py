@@ -1,7 +1,7 @@
 from typing import Dict
 import numpy as np
-import ropy.transform as rtf
-import ropy.ros as pyros
+import skbot.transform as rtf
+import skbot.ros as pyros
 import pytest
 
 

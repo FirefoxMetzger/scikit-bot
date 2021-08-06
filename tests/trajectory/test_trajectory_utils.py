@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-import ropy.trajectory as trj
+import skbot.trajectory as trj
 
 
 @pytest.mark.parametrize(

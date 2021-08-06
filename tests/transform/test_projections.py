@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-import ropy.transform as rtf
+import skbot.transform as rtf
 
 
 @pytest.mark.parametrize(

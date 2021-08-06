@@ -11,8 +11,8 @@ combined positions and velocities.
 .. autosummary::
     :toctree:
 
-    ropy.trajectory.linear_trajectory
-    ropy.trajectory.spline_trajectory
+    skbot.trajectory.linear_trajectory
+    skbot.trajectory.spline_trajectory
 
 """
 

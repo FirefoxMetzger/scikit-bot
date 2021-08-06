@@ -3,25 +3,25 @@
 API Reference
 =============
 
-Ropy is structured into a set of independent modules which you can import via
+Scikt-bot is structured into a set of independent modules which you can import via
 
 .. autosummary::
     :toctree: _autosummary
 
-    ropy.transform
-    ropy.trajectory
-    ropy.ignition
-    ropy.ros
+    skbot.transform
+    skbot.trajectory
+    skbot.ignition
+    skbot.ros
 
 Some modules have additional dependencies on top of the scipy stack. To
-use these modules you will have to install ropy with the respective extra
+use these modules you will have to install scikit-bot with the respective extra
 requirements, e.g. you will have to use
 
 .. code-block:: bash
 
     pip install -e .[ignition]
 
-to use :mod:`ropy.ignition`. Whenever a module has additional requirements it will state
+to use :mod:`skbot.ignition`. Whenever a module has additional requirements it will state
 these in it's module-level documentation.
 
 .. _Ignitionrobotics: https://ignitionrobotics.org/

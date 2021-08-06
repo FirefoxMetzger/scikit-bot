@@ -1,8 +1,8 @@
 from math import exp
 import numpy as np
-import ropy.transform._utils as util
-from ropy.transform._utils import angle_between
-from ropy.transform._utils import vector_project, scalar_project
+import skbot.transform._utils as util
+from skbot.transform._utils import angle_between
+from skbot.transform._utils import vector_project, scalar_project
 import pytest
 
 

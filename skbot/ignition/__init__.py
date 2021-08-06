@@ -4,7 +4,7 @@ Interface with Ignitionrobotics_ libraries.
 
 .. note::
 
-    To use :mod:`ropy.ignition`, you have to install the latest version of
+    To use :mod:`skbot.ignition`, you have to install the latest version of
     Ignition_. In addition, you have to install
     additional dependencies via
 
@@ -12,7 +12,7 @@ Interface with Ignitionrobotics_ libraries.
 
         pip install -e .[ignition]
 
-:mod:`ropy.ignition` is a collection of functions to ease interfacing with the
+:mod:`skbot.ignition` is a collection of functions to ease interfacing with the
 Ignition software stack. Ignition is a collection of libraries that, when
 combined, produce a general purpose simulator for robotic applications called
 Ignition Gazebo. Ignition Gazebo superseeds Gazebo and, among many other
@@ -26,7 +26,7 @@ ScenarIO_,
 which is a part of gym-ignition_.
 
 
-.. currentmodule:: ropy.ignition
+.. currentmodule:: skbot.ignition
 
 Functions
 ---------
@@ -36,27 +36,27 @@ Functions
 .. autosummary::
     :toctree:
 
-    ropy.ignition.Subscriber
-    ropy.ignition.get_fuel_model_info
-    ropy.ignition.get_fuel_model
-    ropy.ignition.download_fuel_model
-    ropy.ignition.FrustumProjection
-    ropy.ignition.create_frame_graph
+    skbot.ignition.Subscriber
+    skbot.ignition.get_fuel_model_info
+    skbot.ignition.get_fuel_model
+    skbot.ignition.download_fuel_model
+    skbot.ignition.FrustumProjection
+    skbot.ignition.create_frame_graph
 
 .. rubric:: SDFormat Bindings
 
 .. note::
-    Ropy will automatically select the correct version when using
-    :func:`ropy.ignition.sdformat.loads`; however, it is imporant that you are
+    Scikit-bot will automatically select the correct version when using
+    :func:`skbot.ignition.sdformat.loads`; however, it is imporant that you are
     mindful of the version you are using, since SDFormat doesn't use SemVer and
     availability of elements may differ slightly across versions.
 
 .. autosummary::
     :toctree:
 
-    ropy.ignition.sdformat.get_version
-    ropy.ignition.sdformat.loads
-    ropy.ignition.sdformat.dumps
+    skbot.ignition.sdformat.get_version
+    skbot.ignition.sdformat.loads
+    skbot.ignition.sdformat.dumps
 
 
 SDFormat XML
@@ -72,8 +72,8 @@ SDFormat XML
     elements to required elements with a default value. Check the content of
     this section for details.
 
-Ropy comes with XSD1.1 schema files that describe SDFormat. You can find their
-latest versions inside the ropy/ignition/sdformat folder. You can view them on
+Scikit-bot comes with XSD1.1 schema files that describe SDFormat. You can find their
+latest versions inside the skbot/ignition/sdformat folder. You can view them on
 GitHub and a copy can be found in your local version, too. Contrary to the
 official SDFormat, schemas are provided for *all* SDF versions.
 
@@ -85,16 +85,16 @@ where possible.
 
 .. rubric:: _`SDF Bindings`
 
-Ropy features a DOM-style parser and serializer for SDFormat XML. You can load
-all SDFormat versions and ropy will construct a class tree out of it.
-Similarily, you can construct objects that represent SDF elements and ropy can
+Scikit-bot features a DOM-style parser and serializer for SDFormat XML. You can load
+all SDFormat versions and scikit-bot will construct a class tree out of it.
+Similarily, you can construct objects that represent SDF elements and scikit-bot can
 serialize them into SDF. 
 
 The API used here mimics the API used by the familiar `JSON parser <json>`_ or
 `YAML parser <yaml>`_. The main difference is that this module returns an object
 tree of dataclass objects, whilst JSON and YAML return dictionaries.
 
-While the parser is imported together with :mod:`ropy.ignition`, the individual
+While the parser is imported together with :mod:`skbot.ignition`, the individual
 models are imported on demand. This is done to keep import times low. To use the
 bindings explicitly you must import them explicitly. Check the individual
 bindings for documentation on how to do this:
@@ -104,19 +104,19 @@ bindings for documentation on how to do this:
     :toctree:
     :recursive:
 
-    ropy.ignition.sdformat.bindings.v18
-    ropy.ignition.sdformat.bindings.v17
-    ropy.ignition.sdformat.bindings.v16
-    ropy.ignition.sdformat.bindings.v15
-    ropy.ignition.sdformat.bindings.v14
-    ropy.ignition.sdformat.bindings.v13
-    ropy.ignition.sdformat.bindings.v12
-    ropy.ignition.sdformat.bindings.v10
+    skbot.ignition.sdformat.bindings.v18
+    skbot.ignition.sdformat.bindings.v17
+    skbot.ignition.sdformat.bindings.v16
+    skbot.ignition.sdformat.bindings.v15
+    skbot.ignition.sdformat.bindings.v14
+    skbot.ignition.sdformat.bindings.v13
+    skbot.ignition.sdformat.bindings.v12
+    skbot.ignition.sdformat.bindings.v10
 
 Ignition Messages
 -----------------
 
-Ropy provides python bindings to all Ignition messages. Messages are build
+Scikit-bot provides python bindings to all Ignition messages. Messages are build
 from the protocol buffer templates found in Ign-Msgs_. This allows you to decode
 messages sent by the subscriber.
 
@@ -131,7 +131,7 @@ To build the bindings yourself, run
 This will produce a file called `ignition/msgs.py` in the chosen output location
 which can be used to decode messages.
 
-Members of ``ropy.ignition.messages`` are not documented here (the class is
+Members of ``skbot.ignition.messages`` are not documented here (the class is
 fully auto-generated). Instead, an overview can be found in the `Ignition
 documentation`_.
 

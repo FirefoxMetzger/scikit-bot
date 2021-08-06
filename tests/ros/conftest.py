@@ -1,6 +1,6 @@
 import pytest
 
-import ropy.ros as pyros
+import skbot.ros as pyros
 
 
 @pytest.fixture()

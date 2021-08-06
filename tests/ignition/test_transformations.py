@@ -1,7 +1,7 @@
 import pytest
 import numpy as np
 
-import ropy.ignition as ign
+import skbot.ignition as ign
 
 
 @pytest.mark.parametrize(
