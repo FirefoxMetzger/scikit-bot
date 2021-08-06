@@ -271,6 +271,23 @@ def get_fuel_model(
     Examples
     --------
 
+    .. doctest::
+
+        >>> import ropy.ignition as ign
+        >>> sdf_string = ign.get_fuel_model(
+        ...     "https://fuel.ignitionrobotics.org/1.0/OpenRobotics/models/Construction%20Cone"
+        ... )
+        >>> sdf_string[:75]+" ..."
+        '<?xml version="1.0" ?>\\n<sdf version="1.5">\\n  <model name="Construction Cone ...'
+        >>> # Notice that (by default) the entire model is cached. Subsequent calls to
+        >>> # model files thus happen at least at filesystem speed
+        >>> model_config = ign.get_fuel_model(
+        ...     "https://fuel.ignitionrobotics.org/1.0/OpenRobotics/models/Construction%20Cone",
+        ...     file_path="model.config"
+        ... )
+        >>> model_config[:75]+" ..."
+        '<?xml version="1.0"?>\\n\\n<model>\\n  <name>Construction Cone</name>\\n  <version> ...'
+
 
     """
 
