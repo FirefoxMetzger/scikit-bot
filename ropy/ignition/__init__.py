@@ -26,6 +26,8 @@ ScenarIO_,
 which is a part of gym-ignition_.
 
 
+.. currentmodule:: ropy.ignition
+
 Functions
 ---------
 
