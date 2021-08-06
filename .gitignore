@@ -2,6 +2,7 @@ __pycache__/
 doc/build/
 doc/source/_autosummary
 .vscode/
+tools/ignition/sdformat/
 
 *.egg-info
 .coverage
