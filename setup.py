@@ -26,7 +26,7 @@ extras_require = {
     "build": [
         "build == 0.6.0.post1",
         "twine == 3.4.2",
-    ]
+    ],
 }
 
 # Note: This is a shim, because I am used to developing

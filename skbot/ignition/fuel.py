@@ -50,7 +50,7 @@ class FileCache:
         model_name = quote(metadata.name)
         version = metadata.version
 
-        model_loc = cache_loc / username / "models" 
+        model_loc = cache_loc / username / "models"
         model_loc = model_loc / model_name / str(version)
 
         return model_loc.expanduser()
