@@ -16,6 +16,13 @@
 
 # sys.path.insert(0, Path(__file__).parents[2])
 
+# -- Patch cachetools wrapper ------------------------------------------------
+import cachetools
+from functools import wraps
+
+
+cachetools.cached = lambda func: wraps(func)(cachetools.cached)
+
 
 # -- Project information -----------------------------------------------------
 
@@ -43,7 +50,7 @@ html_show_sourcelink = False
 set_type_checking_flag = True
 autosummary_generate = True
 
-autodoc_mock_imports = ["betterproto", "zmq", "xsdata", "cachetools", "requests"]
+autodoc_mock_imports = ["betterproto", "zmq", "xsdata", "requests"]
 
 numpydoc_show_class_members = False
 numpydoc_show_inherited_class_members = False
