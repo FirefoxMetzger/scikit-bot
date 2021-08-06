@@ -1,4 +1,5 @@
 __pycache__/
+dist/
 doc/build/
 doc/source/_autosummary
 .vscode/
