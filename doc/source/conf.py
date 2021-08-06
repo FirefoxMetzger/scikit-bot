@@ -16,14 +16,6 @@
 
 # sys.path.insert(0, Path(__file__).parents[2])
 
-# -- Patch cachetools wrapper ------------------------------------------------
-import cachetools
-from functools import wraps
-
-
-cachetools.cached = lambda func: wraps(func)(cachetools.cached)
-
-
 # -- Project information -----------------------------------------------------
 
 project = "ropy"
