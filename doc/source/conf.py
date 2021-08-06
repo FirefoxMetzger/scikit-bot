@@ -43,7 +43,7 @@ html_show_sourcelink = False
 set_type_checking_flag = True
 autosummary_generate = True
 
-autodoc_mock_imports = ["betterproto", "zmq", "xsdata"]
+autodoc_mock_imports = ["betterproto", "zmq", "xsdata", "cachetools"]
 
 numpydoc_show_class_members = False
 numpydoc_show_inherited_class_members = False
