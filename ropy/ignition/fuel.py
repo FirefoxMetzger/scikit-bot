@@ -98,7 +98,7 @@ class ModelMetadata:
 
 
 @cachetools.cached(metadata_cache)
-def get_fuel_model_info(uri: str) -> ModelMetadata:
+def get_fuel_model_info(url: str) -> ModelMetadata:
     """Fetch a Fuel model's metadata.
 
     Parameters
@@ -143,7 +143,7 @@ def get_fuel_model_info(uri: str) -> ModelMetadata:
 
     """
 
-    result = requests.get(uri, headers={"accept": "application/json"})
+    result = requests.get(url, headers={"accept": "application/json"})
     result.raise_for_status()
     return ModelMetadata(**result.json())
 
