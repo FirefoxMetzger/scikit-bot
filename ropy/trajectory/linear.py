@@ -25,23 +25,23 @@ def linear_trajectory(
 
     Parameters
     ----------
-    t : np.ndarray
+    t : ArrayLike
         An array containing positions at which to evaluate the trajectory.
         Elements of ``t`` must be within ``[t_min, t_max]``.
-    control_points : np.ndarray
+    control_points : ArrayLike
         A batch of control points used to construct the trajectory. The first
         dimension of the array is interpreted as batch dimension and the
         remaining dimensions are used to interpolate between. By default,
         control points are equally spaced within ``[t_min, t_max]`` unless
         ``t_control`` is given explicitly.
-    t_control : np.ndarray, None
+    t_control : ArrayLike
         A sequence of strictly increasing floats determining the position of the
         control points along the trajectory. None by default, which results in
         an equidistant spacing of points.
     t_min : float
         Minimum value of the trajectories parametrization. Must be smaller than
         ``t_max``.If ``t_control`` is set, this value is ignored in favor of
-        ``t_min=t_control[0]`
+        ``t_min=t_control[0]``.
     t_max : float
         Maximum value of the trajectories parametrization. Must be larger than
         ``t_min``. If ``t_control`` is set, this value is ignored in favor of
@@ -49,7 +49,7 @@ def linear_trajectory(
 
     Returns
     -------
-    position : np.ndarray
+    position : ArrayLike
         The value of the trajectory at ``t``.
 
     Notes

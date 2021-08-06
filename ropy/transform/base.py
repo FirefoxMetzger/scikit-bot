@@ -13,7 +13,7 @@ class Link:
     frame using the child frame.
 
     Attributes
-    ---------
+    ----------
     transformation : np.ndarray
         A affine matrix describing the transformation from the parent frame to
         the child frame.
