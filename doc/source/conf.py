@@ -16,7 +16,6 @@
 
 # sys.path.insert(0, Path(__file__).parents[2])
 
-
 # -- Project information -----------------------------------------------------
 
 project = "ropy"
@@ -30,8 +29,9 @@ author = "Sebastian Wallkötter"
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    "sphinx.ext.autodoc",
     "numpydoc",
+    "sphinx.ext.autodoc",
+    "sphinx.ext.doctest",
     "sphinx.ext.viewcode",
     "sphinx.ext.autosummary",
     "sphinx_autodoc_typehints",
@@ -42,7 +42,7 @@ html_show_sourcelink = False
 set_type_checking_flag = True
 autosummary_generate = True
 
-autodoc_mock_imports = ["betterproto", "zmq", "xsdata"]
+autodoc_mock_imports = ["betterproto", "zmq", "xsdata", "requests"]
 
 numpydoc_show_class_members = False
 numpydoc_show_inherited_class_members = False

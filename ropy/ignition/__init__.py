@@ -26,6 +26,8 @@ ScenarIO_,
 which is a part of gym-ignition_.
 
 
+.. currentmodule:: ropy.ignition
+
 Functions
 ---------
 
@@ -35,6 +37,9 @@ Functions
     :toctree:
 
     ropy.ignition.Subscriber
+    ropy.ignition.get_fuel_model_info
+    ropy.ignition.get_fuel_model
+    ropy.ignition.download_fuel_model
     ropy.ignition.FrustumProjection
     ropy.ignition.create_frame_graph
 
@@ -145,6 +150,7 @@ from .subscriber import Subscriber
 from .transformations import FrustumProjection
 from .sdformat.create_frame_graph import create_frame_graph
 from . import sdformat
+from .fuel import get_fuel_model_info, download_fuel_model, get_fuel_model
 
 __all__ = [
     "messages",
@@ -152,4 +158,7 @@ __all__ = [
     "FrustumProjection",
     "create_frame_graph",
     "sdformat",
+    "get_fuel_model_info",
+    "download_fuel_model",
+    "get_fuel_model",
 ]

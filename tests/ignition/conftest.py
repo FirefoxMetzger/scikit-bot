@@ -1,7 +1,22 @@
 from pathlib import Path
+from ropy.ignition.sdformat.bindings.v13 import sdf
+from ropy.ignition import fuel
 import pytest
+import hashlib
+from urllib.parse import quote
+from zipfile import ZipFile
+from io import BytesIO
+import cachetools
+
+import ropy.ignition as ign
 
 sdf_folder = Path(__file__).parent / "sdf"
+
+"""
+SDF Fixtures
+------------
+
+"""
 
 
 @pytest.fixture
@@ -151,3 +166,176 @@ def valid_sdf_string(request):
 def invalid_sdf_string(request):
     filename = request.param
     return (sdf_folder / filename).read_text()
+
+
+"""
+Fuel Fixtures
+-------------
+
+"""
+
+
+@pytest.fixture(
+    scope="module",
+    params=[("Gambit", "Lemon", None), ("OpenRobotics", "Construction Cone", None)],
+)
+def model_params(request):
+    owner, name, version = request.param
+    return owner, name, version
+
+
+@pytest.fixture(scope="module")
+def fuel_url(model_params):
+    owner, name, version = model_params
+
+    url = "https://fuel.ignitionrobotics.org/1.0/"
+    url += f"{owner}/models/{quote(name)}"
+
+    if version:
+        url += f"/{version}/{quote(name)}"
+
+    return url
+
+
+@pytest.fixture(scope="module")
+def fuel_blob(fuel_url):
+    blob = ign.download_fuel_model(fuel_url)
+    return blob
+
+
+@pytest.fixture(scope="module")
+def model_md5(fuel_blob):
+    hash_md5 = hashlib.md5()
+    hash_md5.update(fuel_blob)
+    return hash_md5.hexdigest()
+
+
+@pytest.fixture(scope="module")
+def model_sdf(fuel_blob):
+    with ZipFile(BytesIO(fuel_blob)) as model_file:
+        with model_file.open("model.sdf", "r") as sdf_file:
+            sdf_string = sdf_file.read().decode("utf-8")
+
+    return sdf_string
+
+
+@pytest.fixture(scope="module")
+def model_config(fuel_blob):
+    with ZipFile(BytesIO(fuel_blob)) as model_file:
+        with model_file.open("model.config", "r") as sdf_file:
+            xml_string = sdf_file.read().decode("utf-8")
+
+    return xml_string
+
+
+@pytest.fixture()
+def single_fuel_url():
+    """Used for tests where testing all fuel_urls is too expensive"""
+
+    return (
+        "https://fuel.ignitionrobotics.org/1.0/OpenRobotics/models/Construction%20Cone"
+    )
+
+
+@pytest.fixture()
+def mock_download(fuel_blob, monkeypatch):
+    def monkey_download(url: str) -> bytes:
+        return fuel_blob
+
+    with monkeypatch.context() as monkey:
+        monkey.setattr(ign, "download_fuel_model", monkey_download)
+        yield
+
+
+@pytest.fixture()
+def mock_download_raise(monkeypatch):
+    def monkey_download(url: str) -> bytes:
+        raise RuntimeError("Should not call download.")
+
+    with monkeypatch.context() as monkey:
+        monkey.setattr(ign, "download_fuel_model", monkey_download)
+        yield
+
+
+@pytest.fixture
+def empty_custom_cache():
+    cache = dict()
+
+    def update(url, file_path, sdf_string):
+        key = hash((url, file_path))
+        cache[key] = sdf_string
+
+    return lambda x, y: cache.get(hash((x, y)), None), update
+
+
+@pytest.fixture
+def populated_custom_cache(fuel_url, model_sdf):
+    key = hash((fuel_url, "model.sdf"))
+    cache = {key: model_sdf}
+
+    def update(url, file_path, sdf_string):
+        key = hash((url, file_path))
+        cache[key] = sdf_string
+
+    return lambda x, y: cache.get(hash((x, y)), None), update
+
+
+@pytest.fixture
+def invalid_custom_cache(fuel_url, model_sdf):
+    key = hash((fuel_url, "model.sdf"))
+    cache = {key: "Not a SDF string."}
+
+    def update(url, file_path, sdf_string):
+        key = hash((url, file_path))
+        cache[key] = sdf_string
+
+    return lambda x, y: cache.get(hash((x, y)), None), update
+
+
+@pytest.fixture()
+def empty_model_cache(monkeypatch):
+    tmp_cache = ign.fuel.InternalCache(maxsize=5)
+
+    with monkeypatch.context() as monkey:
+        monkey.setattr(ign.fuel, "model_cache", tmp_cache)
+        yield
+
+
+@pytest.fixture()
+def populated_model_cache(fuel_url, model_sdf, empty_model_cache):
+    ign.fuel.model_cache.update(fuel_url, "model.sdf", model_sdf)
+
+
+@pytest.fixture()
+def invalid_model_cache(fuel_url, empty_model_cache):
+    ign.fuel.model_cache.update(fuel_url, "model.sdf", "incorrect SDF from model cache")
+
+
+@pytest.fixture()
+def empty_file_cache(tmp_path, mock_download):
+    return tmp_path
+
+
+@pytest.fixture()
+def populated_file_cache(fuel_url, empty_file_cache):
+    cache = ign.fuel.FileCache(empty_file_cache)
+    cache.update(fuel_url, "model.sdf", "unused arg to match signature")
+
+    return empty_file_cache
+
+
+@pytest.fixture()
+def invalid_file_cache(fuel_url, populated_file_cache):
+    cache = ign.fuel.FileCache(populated_file_cache)
+    loc = cache._model_loc(fuel_url)
+    with open(loc / "model.sdf", "w") as file:
+        file.write("Invalid SDF file")
+
+    return populated_file_cache
+
+
+@pytest.fixture()
+def fake_internal_cache():
+    fake_cache = ign.fuel.InternalCache()
+    fake_cache.update("foo", "bar", "baz")
+    return fake_cache
