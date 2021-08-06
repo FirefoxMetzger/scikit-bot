@@ -7,7 +7,7 @@ extras_require = {
         "pyzmq == 22.2.1",
         "betterproto == 1.2.5",
         "psutil == 5.8.0",
-        "requests == 2.22.0",
+        "requests == 2.26.0",
         "xsdata == 21.8",
         "lxml == 4.6.3",
         "cachetools == 4.2.2",
