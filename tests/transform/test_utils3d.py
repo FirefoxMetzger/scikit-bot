@@ -2,7 +2,7 @@ import pytest
 import numpy as np
 from scipy.spatial.transform import Rotation as ScipyRotation
 
-import ropy.transform as rtf
+import skbot.transform as rtf
 
 
 @pytest.mark.parametrize(

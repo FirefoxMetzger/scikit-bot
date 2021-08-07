@@ -164,7 +164,7 @@ class FrustumProjection(Link):
 
     See Also
     --------
-    :class:`ropy.ignition.FrustumProjection`
+    :class:`skbot.ignition.FrustumProjection`
 
     Notes
     -----

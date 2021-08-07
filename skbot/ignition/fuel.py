@@ -38,7 +38,8 @@ class FileCache:
     """A Fuel Model cache on the local filesystem"""
 
     def __init__(self, location: str):
-        self._base = Path(location) / "fuel.ignitionrobotics.org"
+        self._base = Path(location).expanduser()
+        self._base = self._base / "fuel.ignitionrobotics.org"
         self._base.mkdir(exist_ok=True, parents=True)
 
     def _model_loc(self, url: str) -> Path:
@@ -49,7 +50,8 @@ class FileCache:
         model_name = quote(metadata.name)
         version = metadata.version
 
-        model_loc: Path = cache_loc / username / "models" / model_name / str(version)
+        model_loc = cache_loc / username / "models"
+        model_loc = model_loc / model_name / str(version)
 
         return model_loc.expanduser()
 
@@ -116,8 +118,8 @@ def get_fuel_model_info(url: str) -> ModelMetadata:
     -----
     The function caches the most recent 100 calls in an effort to ease the
     burden on the Fuel servers and to improve performance. To manually reset
-    this cache call ``ropy.ignition.fuel.metadata_cache.clear()``. You can
-    further also this behavior by changing ``ropy.ignition.fuel.metadata_cache``
+    this cache call ``skbot.ignition.fuel.metadata_cache.clear()``. You can
+    further also this behavior by changing ``skbot.ignition.fuel.metadata_cache``
     to a different cache instance. Check the `cachetools docs
     <https://cachetools.readthedocs.io/en/stable/#>`_ for more information.
 
@@ -126,7 +128,7 @@ def get_fuel_model_info(url: str) -> ModelMetadata:
 
     .. doctest::
 
-        >>> import ropy.ignition as ign
+        >>> import skbot.ignition as ign
         >>> foo = ign.get_fuel_model_info(
         ...     "https://fuel.ignitionrobotics.org/1.0/OpenRobotics/models/Construction%20Cone"
         ... )
@@ -167,8 +169,8 @@ def download_fuel_model(url: str) -> bytes:
     -----
     The function caches the most recent 5 calls in an effort to ease the
     burden on the Fuel servers and to improve performance. To manually reset
-    this cache call ``ropy.ignition.fuel.download_cache.clear()``. You can
-    further also this behavior by changing ``ropy.ignition.fuel.download_cache``
+    this cache call ``skbot.ignition.fuel.download_cache.clear()``. You can
+    further also this behavior by changing ``skbot.ignition.fuel.download_cache``
     to a different cache instance. Check the `cachetools docs
     <https://cachetools.readthedocs.io/en/stable/#>`_ for more information.
 
@@ -220,8 +222,8 @@ def get_fuel_model(
         returns ``None`` this is interpreted as a cache miss. If ``user_cache is
         None`` it always misses.
     use_internal_cache : bool
-        If ``True`` (default), use ropy's internal cache. This is a in-memory
-        cache that evicts files after 24 hours, or when ropy is unloaded. If
+        If ``True`` (default), use scikit-bot's internal cache. This is a in-memory
+        cache that evicts files after 24 hours, or when scikit-bot is unloaded. If
         ``False``, the internal cache always misses.
     use_file_cache : bool
         If ``True`` (default), check the local filesystem for a copy of the
@@ -259,8 +261,8 @@ def get_fuel_model(
 
     You can manually reset the internal caches by calling::
 
-        ropy.ignition.fuel.model_cache.clear()
-        ropy.ignition.fuel.world_cache.clear()
+        skbot.ignition.fuel.model_cache.clear()
+        skbot.ignition.fuel.world_cache.clear()
 
     The file_cache stores models on your local filesystem. It never evicts, so
     you should manually delete outdated models. The format of the cache
@@ -273,7 +275,7 @@ def get_fuel_model(
 
     .. doctest::
 
-        >>> import ropy.ignition as ign
+        >>> import skbot.ignition as ign
         >>> sdf_string = ign.get_fuel_model(
         ...     "https://fuel.ignitionrobotics.org/1.0/OpenRobotics/models/Construction%20Cone"
         ... )

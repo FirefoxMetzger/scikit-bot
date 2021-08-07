@@ -142,7 +142,7 @@ class Frame:
     """Representation of a coordinate system.
 
     Each coordinate frame is a node in a directed graph where edges
-    (:class:`ropy.transform.Link`) describe transformations between frames. This
+    (:class:`skbot.transform.Link`) describe transformations between frames. This
     transformation is not limited to neighbours, but works between any two
     frames that share a chain of links pointing from a parent to the
     (grand-)child.
@@ -236,7 +236,7 @@ class Frame:
         transformation chain is linear in ``self.ndim+1`` dimensions. Requesting
         a non-existing affine matrix will raise an Exception. In practice, this
         means that each link along the transformation chain needs to implement
-        :attr:`ropy.transform.Link.transformation`.
+        :attr:`skbot.transform.Link.transformation`.
 
         """
 

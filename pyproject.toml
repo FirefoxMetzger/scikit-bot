@@ -1,20 +1,19 @@
 [build-system]
-requires = ["setuptools", "wheel"]
+requires = ["setuptools>=42", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [tool.coverage.run]
     branch = true
-    source = ["./ropy"]
+    source = ["./skbot"]
 
 [tool.coverage.report]
     omit = [
-        "./ropy/ignition/messages.py",
+        "./skbot/ignition/messages.py",
         "*tests*",
-        "./ropy/ignition/sdformat/bindings/*"
+        "./skbot/ignition/sdformat/bindings/*"
     ]
 
     exclude_lines = [
         "pragma: no cover",
         "raise NotImplementedError"
     ]
-        

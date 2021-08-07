@@ -1,21 +1,11 @@
-name: CI
+name: CD
 
 on:
   push:
     branches:
       - main
-  pull_request:
 
 jobs:
-  linting:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
-      - uses: psf/black@stable
-        with:
-          args: ". --check"
-
   test:
     name: "CPython ${{ matrix.python-version }}"
     runs-on: ubuntu-latest
@@ -47,8 +37,9 @@ jobs:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
       shell: bash
 
-  build:
-    name: Test Wheel Building
+  build-n-publish:
+    name: 🐍 build and publish 📦
+    needs: test
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -63,3 +54,8 @@ jobs:
     - name: Build a binary wheel and a source tarball
       run: >-
         python -m build --sdist --wheel --outdir dist/
+    - name: Python Semantic Release
+      uses: relekang/python-semantic-release@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        pypi_token: ${{ secrets.PYPI_API_TOKEN }}

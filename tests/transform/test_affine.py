@@ -1,5 +1,5 @@
 import pytest
-import ropy.transform as rtf
+import skbot.transform as rtf
 import numpy as np
 
 

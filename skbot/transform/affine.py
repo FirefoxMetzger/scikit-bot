@@ -187,7 +187,7 @@ class Translation(AffineLink):
     Notes
     -----
     This class implements :func:`Link.__inverse_transform__`. You can get a syncronized inverse
-    link via ``inverse_link = ropy.transform.affine.Inverse(link)``.
+    link via ``inverse_link = skbot.transform.affine.Inverse(link)``.
 
     """
 

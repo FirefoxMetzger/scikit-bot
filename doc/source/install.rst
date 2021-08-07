@@ -6,21 +6,21 @@ Basic Installation
 
 .. code-block:: bash
 
-    pip install git+https://github.com/FirefoxMetzger/ropy.git
+    pip install scikit-bot
 
 Install with Ignition Support
 -----------------------------
 
-To use ``ropy`` together with Ignition_, you first have to install Ignition
+To use scikit-bot together with Ignition_, you first have to install Ignition
 following the `official instruction`_. Then you can install
-``ropy`` with additional dependencies
+scikit-bot with additional dependencies
 
 .. code-block:: bash
 
-    pip install git+https://github.com/FirefoxMetzger/ropy.git[ignition]
+    pip install scikit-bot[ignition]
 
 **Note**: This also works incrementally, meaning that you can do this on
-top of an existing ropy installation.
+top of an existing scikit-bot installation.
 
 Development Installation
 ------------------------

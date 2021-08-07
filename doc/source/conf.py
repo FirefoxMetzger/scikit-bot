@@ -18,7 +18,7 @@
 
 # -- Project information -----------------------------------------------------
 
-project = "ropy"
+project = "skbot"
 copyright = "2021, Sebastian Wallkötter"
 author = "Sebastian Wallkötter"
 

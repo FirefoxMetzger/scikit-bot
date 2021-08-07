@@ -1,7 +1,7 @@
 """
 Manage n-dimensional coordinate transformations via directed graphs.
 
-``ropy.transform`` allows you to change the representation of a vector from one
+``skbot.transform`` allows you to change the representation of a vector from one
 coordinate system to another, i.e., it transforms the basis of the vector.
 Contrary to similar libraries, this is not limited to 3D or affine
 transformations, but can transform in N dimensions and between different
@@ -20,7 +20,7 @@ Examples
 
 Manual construction of a 1D robot arm
 
->>> import ropy.transform as rtf
+>>> import skbot.transform as rtf
 >>> import numpy as np
 >>> arm_link = rtf.affine.Translation((1, 0))
 >>> arm_joint = rtf.affine.Rotation((1, 0), (0, 1))

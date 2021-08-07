@@ -3,7 +3,7 @@ from requests.exceptions import HTTPError
 import hashlib
 import cachetools
 
-import ropy.ignition as ign
+import skbot.ignition as ign
 
 
 def test_get_fuel_model_info(model_params, fuel_url):

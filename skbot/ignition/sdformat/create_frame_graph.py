@@ -115,7 +115,7 @@ def create_frame_graph(sdf: str) -> Tuple[Dict[str, rtf.Frame], Dict[str, rtf.Li
 
     See Also
     --------
-    :mod:`ropy.transform`
+    :mod:`skbot.transform`
 
     """
 

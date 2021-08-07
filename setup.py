@@ -23,6 +23,11 @@ extras_require = {
     "linting": ["flake8 == 3.9.2", "black == 21.7b0"],
     "testing": ["pytest == 6.2.4", "coverage[toml] == 5.5"],
     "dev": ["lxml-stubs == 0.2.0"],
+    "build": [
+        "build == 0.6.0.post1",
+        "twine == 3.4.2",
+        "python-semantic-release == 7.17.0",
+    ],
 }
 
 # Note: This is a shim, because I am used to developing

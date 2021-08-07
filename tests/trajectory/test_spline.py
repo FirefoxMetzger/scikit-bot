@@ -1,5 +1,5 @@
 import numpy as np
-import ropy.trajectory as rtj
+import skbot.trajectory as rtj
 import pytest
 
 

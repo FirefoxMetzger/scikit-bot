@@ -23,7 +23,7 @@ def create_frame_graph(urdf: str) -> Tuple[Dict[str, rtf.Frame], Dict[str, rtf.L
 
     See Also
     --------
-    :mod:`ropy.transform`
+    :mod:`skbot.transform`
 
     Notes
     -----

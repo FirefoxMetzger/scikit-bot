@@ -37,7 +37,7 @@ class Subscriber:
             is ``fn(zmq_message) -> result`` where zmq_message is a 3-tuple of the form
             (zmq_topic, protobuf_message, message_type). If None, the subscriber
             will use a default parser that converts ``protobuf_message`` into a
-            ``ropy.ignition.message.<message_type>`` data object.
+            ``skbot.ignition.message.<message_type>`` data object.
 
         Returns
         -------
@@ -80,7 +80,7 @@ class Subscriber:
         msg : PyObject
             If a parser was specified during instantiation, returns the result
             of the parser. Otherwise it will use the default parser and return a
-            ``ropy.ignition.messages.<message_type>`` data object.
+            ``skbot.ignition.messages.<message_type>`` data object.
         """
 
         self.socket.setsockopt(zmq.RCVTIMEO, timeout)

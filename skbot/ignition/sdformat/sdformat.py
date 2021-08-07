@@ -103,7 +103,7 @@ def loads(
     Returns
     -------
     SdfRoot : object
-        An instance of ``ropy.ignition.models.vXX.Sdf`` where XX corresponds to the
+        An instance of ``skbot.ignition.models.vXX.Sdf`` where XX corresponds to the
         version of the SDFormat XML.
 
     Notes
@@ -158,8 +158,8 @@ def dumps(root_element, *, format=False) -> str:
     Parameters
     ----------
     root_element : object
-        An instance of ``ropy.ignition.models.vXX.Sdf``. XX represents the SDFormat
-        version and can be any version currently supported by ropy.
+        An instance of ``skbot.ignition.models.vXX.Sdf``. XX represents the SDFormat
+        version and can be any version currently supported by scikit-bot.
     format : bool
         If true, add indentation and linebreaks to the output to increase human
         readability. If false (default) the entire XML will appear as a single

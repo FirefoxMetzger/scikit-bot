@@ -58,7 +58,7 @@ class PerspectiveProjection(AffineLink):
 
     See Also
     --------
-    :class:`ropy.transform.FrustumProjection`, :class:`ropy.ignition.FrustumProjection`
+    :class:`skbot.transform.FrustumProjection`, :class:`skbot.ignition.FrustumProjection`
 
     Notes
     -----
