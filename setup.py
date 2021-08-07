@@ -26,7 +26,7 @@ extras_require = {
     "build": [
         "build == 0.6.0.post1",
         "twine == 3.4.2",
-        "python-semantic-release == 7.17.0"
+        "python-semantic-release == 7.17.0",
     ],
 }
 
