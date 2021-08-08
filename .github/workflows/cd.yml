@@ -38,19 +38,13 @@ jobs:
       shell: bash
 
   build-n-publish:
-    name: 🐍 build and publish 📦
+    name: 🐍-semantic-release a 📦
     needs: test
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Set up Python 3.8
-      uses: actions/setup-python@v2
       with:
-        python-version: 3.8
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -e .[build]
+        fetch-depth: 0
     - name: Python Semantic Release
       uses: relekang/python-semantic-release@master
       with:
