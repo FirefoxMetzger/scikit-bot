@@ -113,15 +113,14 @@ def loads(
 
     """
 
-    # Disabled until xsData upgrades to the next version
-    # if custom_constructor is None:
-    #     custom_constructor = dict()
+    if custom_constructor is None:
+        custom_constructor = dict()
 
-    # def custom_class_factory(clazz, params):
-    #     if clazz in custom_constructor:
-    #         return custom_constructor[clazz](**params)
+    def custom_class_factory(clazz, params):
+        if clazz in custom_constructor:
+            return custom_constructor[clazz](**params)
 
-    #     return clazz(**params)
+        return clazz(**params)
 
     if version is None:
         version = get_version(sdf)
@@ -138,11 +137,11 @@ def loads(
 
     bindings = importlib.import_module(binding_location, __name__)
 
-    # Disabled until xsData upgrades to the next version
-    # sdf_parser = XmlParser(
-    #     ParserConfig(class_factory=custom_class_factory), context=xml_ctx
-    # )
-    sdf_parser = XmlParser(ParserConfig(), xml_ctx, handler=handler_class)
+    sdf_parser = XmlParser(
+        ParserConfig(class_factory=custom_class_factory),
+        context=xml_ctx,
+        handler=handler_class,
+    )
 
     try:
         sdf_parser.from_string(sdf, bindings.Sdf)

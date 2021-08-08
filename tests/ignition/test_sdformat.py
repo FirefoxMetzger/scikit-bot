@@ -28,7 +28,6 @@ def test_invalid_parsing_xml_etree(invalid_sdf_string):
         ign.sdformat.loads(invalid_sdf_string, handler="XmlEventHandler")
 
 
-@pytest.mark.skip(reason="Currently disabled.")
 def test_custom_constructor(valid_sdf_string):
     @dataclass
     class NewPose:
