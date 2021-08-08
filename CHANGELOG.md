@@ -2,6 +2,9 @@
 
 <!--next-version-placeholder-->
 
+## v0.2.2 (2021-08-08)
+
+
 ## v0.2.1 (2021-08-08)
 ### Fix
 * Pypi and GH release version mismatch ([#39](https://github.com/FirefoxMetzger/ropy/issues/39)) ([`69b36dd`](https://github.com/FirefoxMetzger/ropy/commit/69b36dd58275bd11da3e07935e3c915d9d3fb1fb))
