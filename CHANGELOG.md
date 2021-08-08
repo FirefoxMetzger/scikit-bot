@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.2.1 (2021-08-08)
+### Fix
+* Pypi and GH release version mismatch ([#39](https://github.com/FirefoxMetzger/ropy/issues/39)) ([`69b36dd`](https://github.com/FirefoxMetzger/ropy/commit/69b36dd58275bd11da3e07935e3c915d9d3fb1fb))
+
 ## v0.2.0 (2021-08-08)
 ### Feature
 * Element constructor overload ([#38](https://github.com/FirefoxMetzger/ropy/issues/38)) ([`499af62`](https://github.com/FirefoxMetzger/ropy/commit/499af62b6de3e065b0d6409842be60c7751a6e97))
