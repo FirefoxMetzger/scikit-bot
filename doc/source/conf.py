@@ -18,7 +18,7 @@
 
 # -- Project information -----------------------------------------------------
 
-project = "skbot"
+project = "scikit-bot"
 copyright = "2021, Sebastian Wallkötter"
 author = "Sebastian Wallkötter"
 
