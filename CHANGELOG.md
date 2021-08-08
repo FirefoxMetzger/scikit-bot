@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.2.3 (2021-08-08)
+### Fix
+* Semantic release doesn't install build deps ([`42794f1`](https://github.com/FirefoxMetzger/ropy/commit/42794f1f8c572fc0fd622b838d3290414b6352d1))
+
 ## v0.2.2 (2021-08-08)
 
 
