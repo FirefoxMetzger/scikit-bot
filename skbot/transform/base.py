@@ -316,8 +316,8 @@ class Frame:
         This method allows you to find reachable frames using an xpath inspired
         syntax. Path elements are spearated using the `/` character. Each
         element of the path is the name of a frame. For example,
-        `world/link1/link2/gripper`, denotes a sequence of 4 frames with names
-        ["world", "link1", "link2", "gripper"]. The final frame in the path
+        ``world/link1/link2/gripper``, denotes a sequence of 4 frames with names
+        ``["world", "link1", "link2", "gripper"]``. The final frame in the path
         (gripper) is returned.
         
         By default an element along the path is directly connected to its next
@@ -327,13 +327,13 @@ class Frame:
         its next element by a transformation chain (a sequence of
         links).
 
-        The following path elements have special meanings::
+        The following path elements have special meanings:
 
-            Ellipsis (...)
+            - Ellipsis (``...``)
                 Indicates that the previous frame and the next frame are
                 connected by a transformation chain instead of being connected
                 directly.
-            None (//)
+            - None (``//``)
                 Omitting a name indicates that the name of this frame is None.
 
 
