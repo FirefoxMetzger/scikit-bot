@@ -4,36 +4,33 @@
 
 .. autoclass:: {{ objname }}
 
-   {% block methods %}
-   {% if methods %}
-   .. rubric:: {{ _('Methods') }}
-
-   .. autosummary::
-   {% if "__call__" in members %}
-      __call__
-   {% endif %}
-   {% for item in methods %}
-      {% if not item == "__init__" %}
-      ~{{ name }}.{{ item }}
-      {% endif %}
-   {%- endfor %}
-   {% if "__inverse_transform__" in members %}
-      __inverse_transform__
-   {% endif %}
-   {% endif %}
-   {% endblock %}
-
-   {% block attributes %}
    {% if attributes %}
    .. rubric:: {{ _('Attributes') }}
 
    .. autosummary::
-   {% for item in attributes %}
+      {% for item in attributes %}
       ~{{ name }}.{{ item }}
-   {%- endfor %}
+      {% endfor %}
    {% endif %}
-   {% endblock %}
 
+   {% if methods %}
+   .. rubric:: {{ _('Method Summary') }}
+
+   .. autosummary::
+      {% if "__call__" in members %}
+      __call__
+      {% endif %}
+      {% for item in methods %}
+      {% if not item == "__init__" %}
+      ~{{ name }}.{{ item }}
+      {% endif %}
+      {%- endfor %}
+      {% if "__inverse_transform__" in members %}
+      __inverse_transform__
+      {% endif %}
+   {% endif %}
+
+   .. rubric:: Methods
 
    {% if methods %}
    {% if "__call__" in members %}
