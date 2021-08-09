@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.0 (2021-08-09)
+### Feature
+* **transform:** Add find_frame method to Frame ([#40](https://github.com/FirefoxMetzger/ropy/issues/40)) ([`59d9ad8`](https://github.com/FirefoxMetzger/ropy/commit/59d9ad8f3e180d709e18f0cf07dd6e29f304722c))
+
 ## v0.2.3 (2021-08-08)
 ### Fix
 * Semantic release doesn't install build deps ([`42794f1`](https://github.com/FirefoxMetzger/ropy/commit/42794f1f8c572fc0fd622b838d3290414b6352d1))
