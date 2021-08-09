@@ -4,7 +4,6 @@
 
 .. autoclass:: {{ objname }}
 
-   {% block methods %}
    {% if methods %}
    .. rubric:: {{ _('Methods') }}
 
@@ -21,9 +20,7 @@
       __inverse_transform__
    {% endif %}
    {% endif %}
-   {% endblock %}
 
-   {% block attributes %}
    {% if attributes %}
    .. rubric:: {{ _('Attributes') }}
 
@@ -32,7 +29,6 @@
       ~{{ name }}.{{ item }}
    {%- endfor %}
    {% endif %}
-   {% endblock %}
 
 
    {% if methods %}
