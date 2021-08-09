@@ -166,7 +166,7 @@ class Frame:
         x: ArrayLike,
         to_frame: Union[Frame, str],
         *,
-        ignore_frames: List[Frame] = None
+        ignore_frames: List[Frame] = None,
     ) -> np.ndarray:
         """Express the vector x in to_frame.
 
@@ -310,16 +310,16 @@ class Frame:
 
         raise RuntimeError("Did not find a transformation chain to the target frame.")
 
-    def find_frame(self, path:str, *, ignore_frames:List[Frame]=None) -> Frame:
+    def find_frame(self, path: str, *, ignore_frames: List[Frame] = None) -> Frame:
         """Find a frame matching a given path.
-        
+
         This method allows you to find reachable frames using an xpath inspired
         syntax. Path elements are spearated using the `/` character. Each
         element of the path is the name of a frame. For example,
         ``world/link1/link2/gripper``, denotes a sequence of 4 frames with names
         ``["world", "link1", "link2", "gripper"]``. The final frame in the path
         (gripper) is returned.
-        
+
         By default an element along the path is directly connected to its next
         element. In the previous example this means that there must exist a
         direct link from "world" to "link1". An exception to this rule is the
@@ -375,7 +375,7 @@ class Frame:
         while len(parts) > 0 and part == "...":
             indirect = True
             part = parts.pop(0)
-        
+
         if part == "...":
             raise ValueError(f"Path ends with ellipsis: {path}")
 
@@ -393,16 +393,16 @@ class Frame:
 
         if ignore_frames is None:
             ignore_frames = []
-        
+
         local_ignore = [self]
         local_ignore.extend(ignore_frames)
 
-        child_frame:Frame
+        child_frame: Frame
         for child_frame, _ in self._children:
             if child_frame in local_ignore:
                 continue
 
-            try: 
+            try:
                 return child_frame.find_frame(sub_path, ignore_frames=local_ignore)
             except RuntimeError:
                 continue

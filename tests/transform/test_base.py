@@ -18,13 +18,15 @@ def test_chain_resolution(simple_graph):
     with pytest.raises(RuntimeError):
         simple_graph[1].transform((0), simple_graph[9])
 
-    cost = simple_graph[0].transform(0, simple_graph[7], ignore_frames=[simple_graph[5]])
+    cost = simple_graph[0].transform(
+        0, simple_graph[7], ignore_frames=[simple_graph[5]]
+    )
     assert cost == 3
 
 
 def test_find_frame(simple_graph):
-    
-    start:tf.Frame = simple_graph[0]
+
+    start: tf.Frame = simple_graph[0]
     frame_seven = start.find_frame(".../frame7")
     assert frame_seven == simple_graph[7]
 

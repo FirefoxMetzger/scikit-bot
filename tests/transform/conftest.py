@@ -2,6 +2,7 @@ import pytest
 
 import skbot.transform as tf
 
+
 @pytest.fixture()
 def simple_graph():
     frames = [tf.Frame(1, name=f"frame{str(idx)}") for idx in range(10)]
