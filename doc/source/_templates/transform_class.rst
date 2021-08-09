@@ -14,7 +14,7 @@
    {% endif %}
 
    {% if methods %}
-   .. rubric:: {{ _('Methods') }}
+   .. rubric:: {{ _('Method Summary') }}
 
    .. autosummary::
       {% if "__call__" in members %}
@@ -29,6 +29,8 @@
       __inverse_transform__
       {% endif %}
    {% endif %}
+
+   .. rubric:: Methods
 
    {% if methods %}
    {% if "__call__" in members %}
