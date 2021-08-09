@@ -352,6 +352,8 @@ class Frame:
 
         Notes
         -----
+        .. versionadded:: 0.3.0
+
         In directed graphs there is no clear notion of search order; hence it is
         undefined which frame is found if multiple matches for the path exist.
         In this case an arbitrary match is returned, and you should not count on
