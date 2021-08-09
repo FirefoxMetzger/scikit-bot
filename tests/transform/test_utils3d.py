@@ -2,7 +2,7 @@ import pytest
 import numpy as np
 from scipy.spatial.transform import Rotation as ScipyRotation
 
-import skbot.transform as rtf
+import skbot.transform as tf
 
 
 @pytest.mark.parametrize(
@@ -21,7 +21,7 @@ import skbot.transform as rtf
 def test_RotvecRotation(rotvec, angle, degrees, axis):
     in_vectors = np.eye(3)
 
-    rot = rtf.RotvecRotation(rotvec, angle=angle, degrees=degrees, axis=axis)
+    rot = tf.RotvecRotation(rotvec, angle=angle, degrees=degrees, axis=axis)
     result = rot.transform(in_vectors)
 
     rotvec = np.asarray(rotvec, dtype=np.float_)
@@ -53,7 +53,7 @@ def test_vectorized_RotvecRotation(rotvec, angle, degrees, axis):
     rotvec = np.asarray(rotvec, dtype=np.float_)
     angle = np.asarray(angle)
 
-    rot = rtf.RotvecRotation(rotvec, angle=angle, degrees=degrees, axis=axis)
+    rot = tf.RotvecRotation(rotvec, angle=angle, degrees=degrees, axis=axis)
     result = rot.transform(in_vectors)
 
     rotvec = np.moveaxis(rotvec, axis, -1)
@@ -84,7 +84,7 @@ def test_EulerRotation(sequence, angles, degrees):
 
     angles = np.asarray(angles)
 
-    rot = rtf.EulerRotation(sequence, angles, degrees=degrees)
+    rot = tf.EulerRotation(sequence, angles, degrees=degrees)
     scipy_rot = ScipyRotation.from_euler(sequence, angles, degrees)
 
     result = rot.transform(in_vectors)
@@ -106,7 +106,7 @@ def test_EulerRotation(sequence, angles, degrees):
 def test_QuaternionRotation(sequence, quaternion):
     in_vectors = np.eye(3)
 
-    rot = rtf.QuaternionRotation(quaternion, sequence=sequence)
+    rot = tf.QuaternionRotation(quaternion, sequence=sequence)
 
     if sequence == "xyzw":
         scipy_rot = ScipyRotation.from_quat(quaternion)
@@ -122,7 +122,7 @@ def test_QuaternionRotation(sequence, quaternion):
 
 def test_QuaternionRotation_invalid_sequence():
     with pytest.raises(ValueError):
-        rtf.QuaternionRotation((0, 0, 0, 1), sequence="xwyz")
+        tf.QuaternionRotation((0, 0, 0, 1), sequence="xwyz")
 
 
 @pytest.mark.parametrize(
@@ -136,5 +136,5 @@ def test_QuaternionRotation_invalid_sequence():
     ],
 )
 def test_perspective_transform(point_in, fov, im_shape, point_out):
-    proj = rtf.FrustumProjection(fov, im_shape)
+    proj = tf.FrustumProjection(fov, im_shape)
     assert np.allclose(proj.transform(point_in), point_out)

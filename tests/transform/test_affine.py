@@ -1,14 +1,14 @@
 import pytest
-import skbot.transform as rtf
+import skbot.transform as tf
 import numpy as np
 
 
 def test_1d_robot():
-    arm = rtf.affine.Translation((1, 0))
-    joint = rtf.affine.Rotation((1, 0), (0, 1))
+    arm = tf.affine.Translation((1, 0))
+    joint = tf.affine.Rotation((1, 0), (0, 1))
     assert np.allclose(arm.direction, (1, 0))
 
-    tool_frame = rtf.Frame(2)
+    tool_frame = tf.Frame(2)
     ellbow_frame = arm(tool_frame)
     world_frame = joint(ellbow_frame)
 
@@ -22,8 +22,8 @@ def test_1d_robot():
 
 
 def test_inverse_transform():
-    frame1 = rtf.Frame(3)
-    frame2 = rtf.affine.Translation((0, 1, 0))(frame1)
+    frame1 = tf.Frame(3)
+    frame2 = tf.affine.Translation((0, 1, 0))(frame1)
 
     result = frame1.transform((1, 0, 0), to_frame=frame2)
     assert np.allclose(result, (1, 1, 0))
@@ -32,9 +32,9 @@ def test_inverse_transform():
 
 
 def test_matrix_identity():
-    link = rtf.affine.Rotation((0, 1, 0), (0, 0, 1))
+    link = tf.affine.Rotation((0, 1, 0), (0, 0, 1))
 
-    world_frame = rtf.Frame(3)
+    world_frame = tf.Frame(3)
     camera_frame = link(world_frame)
 
     link_mat = world_frame.get_affine_matrix(camera_frame)
@@ -54,10 +54,10 @@ def test_matrix_identity():
 
 
 def test_translation_amount():
-    link = rtf.affine.Translation((1, 0))
+    link = tf.affine.Translation((1, 0))
     assert link.amount == 1
 
-    frameA = rtf.Frame(2)
+    frameA = tf.Frame(2)
     frameB = link(frameA)
 
     point = np.array((0, 1), dtype=np.float_)
@@ -69,7 +69,7 @@ def test_translation_amount():
 
 
 def test_translation_direction():
-    link = rtf.affine.Translation((1, 0))
+    link = tf.affine.Translation((1, 0))
     assert np.allclose(link.direction, (1, 0))
 
     link.direction = (0, 1)
@@ -77,9 +77,9 @@ def test_translation_direction():
 
 
 def test_affine_matrix():
-    child = rtf.Frame(3)
-    rotated = rtf.RotvecRotation((1, 0, 0), angle=0)(child)
-    world = rtf.Translation((0, 1, 0))(rotated)
+    child = tf.Frame(3)
+    rotated = tf.RotvecRotation((1, 0, 0), angle=0)(child)
+    world = tf.Translation((0, 1, 0))(rotated)
 
     origin_in_world = child.transform((0, 0, 0), world)
     assert np.allclose(origin_in_world, (0, 1, 0))
