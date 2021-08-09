@@ -310,6 +310,105 @@ class Frame:
 
         raise RuntimeError("Did not find a transformation chain to the target frame.")
 
+    def find_frame(self, path:str, *, ignore_frames:List[Frame]=None) -> Frame:
+        """Find a frame matching a given path.
+        
+        This method allows you to find reachable frames using an xpath inspired
+        syntax. Path elements are spearated using the `/` character. Each
+        element of the path is the name of a frame. For example,
+        `world/link1/link2/gripper`, denotes a sequence of 4 frames with names
+        ["world", "link1", "link2", "gripper"]. The final frame in the path
+        (gripper) is returned.
+        
+        By default an element along the path is directly connected to its next
+        element. In the previous example this means that there must exist a
+        direct link from "world" to "link1". An exception to this rule is the
+        use of an ellipsis (...), in which case an element must be connected to
+        its next element by a transformation chain (a sequence of
+        links).
+
+        The following path elements have special meanings::
+
+            Ellipsis (...)
+                Indicates that the previous frame and the next frame are
+                connected by a transformation chain instead of being connected
+                directly.
+            None (//)
+                Omitting a name indicates that the name of this frame is None.
+
+
+        Parameters
+        ----------
+        xpath : str
+            A xpath string describing the frame to search for.
+        ignore_frames : List[Frame]
+            Any frames that should be ignored when matching the path.
+
+        Returns
+        -------
+        matched_frame : Frame
+            A frame matching the given path.
+
+
+        Notes
+        -----
+        In directed graphs there is no clear notion of search order; hence it is
+        undefined which frame is found if multiple matches for the path exist.
+        In this case an arbitrary match is returned, and you should not count on
+        the result to be deterministic.
+
+        Because ``...`` and ``//`` have special meaning, frames with names
+        ``"..."`` or ``""`` will be ignored by this method and can not be found.
+        Similarly, frames that use slashes, e.g. ``namespace/my_frame``, will be
+        ignored and instead the sequences ``["namespace", "my_frame"]`` will be
+        matched.
+
+        Each element of the path is assumed to represent a unique frame. This
+        means that circular paths will not be matched.
+
+        """
+
+        parts = path.split("/")
+        part = parts.pop(0)
+
+        indirect = False
+        while len(parts) > 0 and part == "...":
+            indirect = True
+            part = parts.pop(0)
+        
+        if part == "...":
+            raise ValueError(f"Path ends with ellipsis: {path}")
+
+        part = None if part == "" else part
+
+        if len(parts) == 0 and self.name == part:
+            return self
+        elif not indirect and self.name != part:
+            raise RuntimeError(f"No match for {path}.")
+        elif len(parts) > 0 and self.name == part:
+            sub_path = "/".join(parts)
+        else:
+            parts = ["...", part] + parts
+            sub_path = "/".join(parts)
+
+        if ignore_frames is None:
+            ignore_frames = []
+        
+        local_ignore = [self]
+        local_ignore.extend(ignore_frames)
+
+        child_frame:Frame
+        for child_frame, _ in self._children:
+            if child_frame in local_ignore:
+                continue
+
+            try: 
+                return child_frame.find_frame(sub_path, ignore_frames=local_ignore)
+            except RuntimeError:
+                continue
+        else:
+            raise RuntimeError(f"No match for {path}.")
+
 
 class CustomLink(Link):
     """A link representing a custom transformation.
