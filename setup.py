@@ -38,7 +38,5 @@ if __name__ == "__main__":
     setuptools.setup(
         install_requires=install_requires,
         extras_require=extras_require,
-        package_data= {
-            "skbot": ["ignition/sdformat/schema/**/*.xsd"]
-        }
+        package_data={"skbot": ["ignition/sdformat/schema/**/*.xsd"]},
     )
