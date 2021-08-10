@@ -45,6 +45,7 @@ class Model:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
             "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
         },
     )
@@ -60,6 +61,7 @@ class Model:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
     link: List["Model.Link"] = field(
@@ -145,6 +147,7 @@ class Model:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         name: Optional[str] = field(
@@ -164,8 +167,8 @@ class Model:
             frame: Name of frame which the pose is defined relative to.
             """
 
-            value: Optional[str] = field(
-                default=None,
+            value: str = field(
+                default="",
                 metadata={
                     "required": True,
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
@@ -187,8 +190,8 @@ class Model:
         frame: Name of frame which the pose is defined relative to.
         """
 
-        value: Optional[str] = field(
-            default=None,
+        value: str = field(
+            default="",
             metadata={
                 "required": True,
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
@@ -232,6 +235,7 @@ class Model:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
             },
         )
@@ -240,6 +244,7 @@ class Model:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
             },
         )
@@ -248,6 +253,7 @@ class Model:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
             },
         )
@@ -270,6 +276,7 @@ class Model:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         name: Optional[str] = field(
@@ -299,6 +306,7 @@ class Model:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             name: Optional[str] = field(
@@ -319,8 +327,8 @@ class Model:
                     to.
                 """
 
-                value: Optional[str] = field(
-                    default=None,
+                value: str = field(
+                    default="",
                     metadata={
                         "required": True,
                         "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
@@ -342,8 +350,8 @@ class Model:
             frame: Name of frame which the pose is defined relative to.
             """
 
-            value: Optional[str] = field(
-                default=None,
+            value: str = field(
+                default="",
                 metadata={
                     "required": True,
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
@@ -382,6 +390,7 @@ class State:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
     wall_time: float = field(
@@ -389,6 +398,7 @@ class State:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
     real_time: float = field(
@@ -396,6 +406,7 @@ class State:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
     iterations: int = field(
@@ -403,6 +414,7 @@ class State:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
     insertions: Optional["State.Insertions"] = field(
@@ -512,6 +524,7 @@ class State:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         name: Optional[str] = field(
@@ -541,6 +554,7 @@ class State:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             name: Optional[str] = field(
@@ -561,8 +575,8 @@ class State:
                     to.
                 """
 
-                value: Optional[str] = field(
-                    default=None,
+                value: str = field(
+                    default="",
                     metadata={
                         "required": True,
                         "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
@@ -584,8 +598,8 @@ class State:
             frame: Name of frame which the pose is defined relative to.
             """
 
-            value: Optional[str] = field(
-                default=None,
+            value: str = field(
+                default="",
                 metadata={
                     "required": True,
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",

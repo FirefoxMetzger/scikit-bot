@@ -33,6 +33,7 @@ class Light:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
     diffuse: str = field(
@@ -40,6 +41,7 @@ class Light:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
             "pattern": r"(\s*\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){3}\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s*",
         },
     )
@@ -48,6 +50,7 @@ class Light:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
             "pattern": r"(\s*\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){3}\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s*",
         },
     )
@@ -63,6 +66,7 @@ class Light:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
             "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
         },
     )
@@ -85,6 +89,7 @@ class Light:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
     name: Optional[str] = field(
@@ -123,6 +128,7 @@ class Light:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         linear: float = field(
@@ -130,6 +136,7 @@ class Light:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         constant: float = field(
@@ -137,6 +144,7 @@ class Light:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         quadratic: float = field(
@@ -144,6 +152,7 @@ class Light:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
 
@@ -166,6 +175,7 @@ class Light:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         outer_angle: float = field(
@@ -173,6 +183,7 @@ class Light:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         falloff: float = field(
@@ -180,6 +191,7 @@ class Light:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
 
@@ -201,6 +213,7 @@ class Light:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         name: Optional[str] = field(
@@ -220,8 +233,8 @@ class Light:
             frame: Name of frame which the pose is defined relative to.
             """
 
-            value: Optional[str] = field(
-                default=None,
+            value: str = field(
+                default="",
                 metadata={
                     "required": True,
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
@@ -243,8 +256,8 @@ class Light:
         frame: Name of frame which the pose is defined relative to.
         """
 
-        value: Optional[str] = field(
-            default=None,
+        value: str = field(
+            default="",
             metadata={
                 "required": True,
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",

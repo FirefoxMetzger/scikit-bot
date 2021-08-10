@@ -59,6 +59,7 @@ class Joint:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
     child: str = field(
@@ -66,6 +67,7 @@ class Joint:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
     gearbox_ratio: float = field(
@@ -73,6 +75,7 @@ class Joint:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
     gearbox_reference_body: str = field(
@@ -80,6 +83,7 @@ class Joint:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
     thread_pitch: float = field(
@@ -87,6 +91,7 @@ class Joint:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
     axis: Optional["Joint.Axis"] = field(
@@ -122,10 +127,11 @@ class Joint:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
-    sensor: Optional[Sensor] = field(
-        default=None,
+    sensor: List[Sensor] = field(
+        default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
@@ -174,6 +180,7 @@ class Joint:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         xyz: str = field(
@@ -181,6 +188,7 @@ class Joint:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
             },
         )
@@ -189,6 +197,7 @@ class Joint:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         dynamics: Optional["Joint.Axis.Dynamics"] = field(
@@ -229,6 +238,7 @@ class Joint:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             friction: float = field(
@@ -236,6 +246,7 @@ class Joint:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             spring_reference: float = field(
@@ -243,6 +254,7 @@ class Joint:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             spring_stiffness: float = field(
@@ -250,6 +262,7 @@ class Joint:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
 
@@ -278,6 +291,7 @@ class Joint:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             upper: float = field(
@@ -285,6 +299,7 @@ class Joint:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             effort: float = field(
@@ -292,6 +307,7 @@ class Joint:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             velocity: float = field(
@@ -299,6 +315,7 @@ class Joint:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             stiffness: float = field(
@@ -306,6 +323,7 @@ class Joint:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             dissipation: float = field(
@@ -313,6 +331,7 @@ class Joint:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
 
@@ -344,6 +363,7 @@ class Joint:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         xyz: str = field(
@@ -351,6 +371,7 @@ class Joint:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
             },
         )
@@ -359,6 +380,7 @@ class Joint:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         dynamics: Optional["Joint.Axis2.Dynamics"] = field(
@@ -401,6 +423,7 @@ class Joint:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             friction: float = field(
@@ -408,6 +431,7 @@ class Joint:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             spring_reference: float = field(
@@ -415,6 +439,7 @@ class Joint:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             spring_stiffness: float = field(
@@ -422,6 +447,7 @@ class Joint:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
 
@@ -452,6 +478,7 @@ class Joint:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             upper: float = field(
@@ -459,6 +486,7 @@ class Joint:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             effort: float = field(
@@ -466,6 +494,7 @@ class Joint:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             velocity: float = field(
@@ -473,6 +502,7 @@ class Joint:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             stiffness: float = field(
@@ -480,6 +510,7 @@ class Joint:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             dissipation: float = field(
@@ -487,6 +518,7 @@ class Joint:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
 
@@ -526,6 +558,7 @@ class Joint:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
 
@@ -545,6 +578,7 @@ class Joint:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
 
@@ -590,6 +624,7 @@ class Joint:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             cfm_damping: bool = field(
@@ -597,6 +632,7 @@ class Joint:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             implicit_spring_damper: bool = field(
@@ -604,6 +640,7 @@ class Joint:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             fudge_factor: float = field(
@@ -611,6 +648,7 @@ class Joint:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             cfm: float = field(
@@ -618,6 +656,7 @@ class Joint:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             erp: float = field(
@@ -625,6 +664,7 @@ class Joint:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             bounce: float = field(
@@ -632,6 +672,7 @@ class Joint:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             max_force: float = field(
@@ -639,6 +680,7 @@ class Joint:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             velocity: float = field(
@@ -646,6 +688,7 @@ class Joint:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             limit: Optional["Joint.Physics.Ode.Limit"] = field(
@@ -678,6 +721,7 @@ class Joint:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 erp: float = field(
@@ -685,6 +729,7 @@ class Joint:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
 
@@ -702,6 +747,7 @@ class Joint:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 erp: float = field(
@@ -709,6 +755,7 @@ class Joint:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
 
@@ -730,6 +777,7 @@ class Joint:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         name: Optional[str] = field(
@@ -749,8 +797,8 @@ class Joint:
             frame: Name of frame which the pose is defined relative to.
             """
 
-            value: Optional[str] = field(
-                default=None,
+            value: str = field(
+                default="",
                 metadata={
                     "required": True,
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
@@ -772,8 +820,8 @@ class Joint:
         frame: Name of frame which the pose is defined relative to.
         """
 
-        value: Optional[str] = field(
-            default=None,
+        value: str = field(
+            default="",
             metadata={
                 "required": True,
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",

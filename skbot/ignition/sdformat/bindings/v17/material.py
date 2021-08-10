@@ -59,6 +59,7 @@ class Material:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
     lighting: bool = field(
@@ -66,6 +67,7 @@ class Material:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
     ambient: str = field(
@@ -73,6 +75,7 @@ class Material:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
             "pattern": r"(\s*\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){3}\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s*",
         },
     )
@@ -81,6 +84,7 @@ class Material:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
             "pattern": r"(\s*\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){3}\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s*",
         },
     )
@@ -89,6 +93,7 @@ class Material:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
             "pattern": r"(\s*\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){3}\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s*",
         },
     )
@@ -97,6 +102,7 @@ class Material:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
             "pattern": r"(\s*\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){3}\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s*",
         },
     )
@@ -105,6 +111,7 @@ class Material:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
     pbr: Optional["Material.Pbr"] = field(
@@ -140,6 +147,7 @@ class Material:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
 
@@ -158,6 +166,7 @@ class Material:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         type: Optional[str] = field(
@@ -248,6 +257,7 @@ class Material:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             metalness_map: Optional[str] = field(
@@ -262,6 +272,7 @@ class Material:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             environment_map: Optional[str] = field(
@@ -310,8 +321,8 @@ class Material:
                     'object' or 'tangent'
                 """
 
-                value: Optional[str] = field(
-                    default=None,
+                value: str = field(
+                    default="",
                     metadata={
                         "required": True,
                     },
@@ -332,8 +343,8 @@ class Material:
                 uv_set: Index of the texture coordinate set to use.
                 """
 
-                value: Optional[str] = field(
-                    default=None,
+                value: str = field(
+                    default="",
                     metadata={
                         "required": True,
                     },
@@ -359,6 +370,8 @@ class Material:
                 0 represents a rough surface and 1 represents a smooth
                 surface. This is the inverse of a roughness map in a PBR
                 metal workflow.
+            environment_map: Filename of the environment / reflection
+                map, typically in the form of a cubemap
             ambient_occlusion_map: Filename of the ambient occlusion
                 map. The map defines the amount of ambient lighting on
                 the surface.
@@ -394,6 +407,14 @@ class Material:
             )
             glossiness: str = field(
                 default="0",
+                metadata={
+                    "type": "Element",
+                    "namespace": "",
+                    "required": True,
+                },
+            )
+            environment_map: Optional[str] = field(
+                default=None,
                 metadata={
                     "type": "Element",
                     "namespace": "",
@@ -438,8 +459,8 @@ class Material:
                     'object' or 'tangent'
                 """
 
-                value: Optional[str] = field(
-                    default=None,
+                value: str = field(
+                    default="",
                     metadata={
                         "required": True,
                     },
@@ -460,8 +481,8 @@ class Material:
                 uv_set: Index of the texture coordinate set to use.
                 """
 
-                value: Optional[str] = field(
-                    default=None,
+                value: str = field(
+                    default="",
                     metadata={
                         "required": True,
                     },

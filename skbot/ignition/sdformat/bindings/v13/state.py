@@ -27,6 +27,7 @@ class State:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
     wall_time: float = field(
@@ -34,6 +35,7 @@ class State:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
     real_time: float = field(
@@ -41,6 +43,7 @@ class State:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
     insertions: Optional["State.Insertions"] = field(
@@ -128,6 +131,7 @@ class State:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
             },
         )
@@ -223,6 +227,7 @@ class State:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
                 },
             )
@@ -231,6 +236,7 @@ class State:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
                 },
             )
@@ -239,6 +245,7 @@ class State:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
                 },
             )
@@ -247,6 +254,7 @@ class State:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
                 },
             )
@@ -281,6 +289,7 @@ class State:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                         "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
                     },
                 )

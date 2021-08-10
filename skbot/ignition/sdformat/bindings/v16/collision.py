@@ -36,6 +36,7 @@ class Collision:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
     max_contacts: int = field(
@@ -43,6 +44,7 @@ class Collision:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
     frame: List["Collision.Frame"] = field(
@@ -57,6 +59,7 @@ class Collision:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
     geometry: Optional[Geometry] = field(
@@ -100,6 +103,7 @@ class Collision:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         name: Optional[str] = field(
@@ -119,8 +123,8 @@ class Collision:
             frame: Name of frame which the pose is defined relative to.
             """
 
-            value: Optional[str] = field(
-                default=None,
+            value: str = field(
+                default="",
                 metadata={
                     "required": True,
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
@@ -142,8 +146,8 @@ class Collision:
         frame: Name of frame which the pose is defined relative to.
         """
 
-        value: Optional[str] = field(
-            default=None,
+        value: str = field(
+            default="",
             metadata={
                 "required": True,
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
@@ -207,6 +211,7 @@ class Collision:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             threshold: float = field(
@@ -214,6 +219,7 @@ class Collision:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
 
@@ -275,6 +281,7 @@ class Collision:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 use_patch_radius: bool = field(
@@ -282,6 +289,7 @@ class Collision:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 patch_radius: float = field(
@@ -289,6 +297,7 @@ class Collision:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 surface_radius: float = field(
@@ -296,6 +305,7 @@ class Collision:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 ode: Optional["Collision.Surface.Friction.Torsional.Ode"] = field(
@@ -325,6 +335,7 @@ class Collision:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
 
@@ -373,6 +384,7 @@ class Collision:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 mu2: float = field(
@@ -380,6 +392,7 @@ class Collision:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 fdir1: str = field(
@@ -387,6 +400,7 @@ class Collision:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                         "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
                     },
                 )
@@ -395,6 +409,7 @@ class Collision:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 slip2: float = field(
@@ -402,6 +417,7 @@ class Collision:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
 
@@ -438,6 +454,7 @@ class Collision:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 friction2: float = field(
@@ -445,6 +462,7 @@ class Collision:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 fdir1: str = field(
@@ -452,6 +470,7 @@ class Collision:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                         "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
                     },
                 )
@@ -460,6 +479,7 @@ class Collision:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
 
@@ -512,6 +532,7 @@ class Collision:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             collide_without_contact_bitmask: int = field(
@@ -519,6 +540,7 @@ class Collision:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             collide_bitmask: int = field(
@@ -526,6 +548,7 @@ class Collision:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             category_bitmask: int = field(
@@ -533,6 +556,7 @@ class Collision:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             poissons_ratio: float = field(
@@ -540,6 +564,7 @@ class Collision:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             elastic_modulus: float = field(
@@ -547,6 +572,7 @@ class Collision:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             ode: Optional["Collision.Surface.Contact.Ode"] = field(
@@ -588,6 +614,7 @@ class Collision:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 soft_erp: float = field(
@@ -595,6 +622,7 @@ class Collision:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 kp: float = field(
@@ -602,6 +630,7 @@ class Collision:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 kd: float = field(
@@ -609,6 +638,7 @@ class Collision:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 max_vel: float = field(
@@ -616,6 +646,7 @@ class Collision:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 min_depth: float = field(
@@ -623,6 +654,7 @@ class Collision:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
 
@@ -654,6 +686,7 @@ class Collision:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 soft_erp: float = field(
@@ -661,6 +694,7 @@ class Collision:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 kp: float = field(
@@ -668,6 +702,7 @@ class Collision:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 kd: float = field(
@@ -675,6 +710,7 @@ class Collision:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 split_impulse: bool = field(
@@ -682,6 +718,7 @@ class Collision:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 split_impulse_penetration_threshold: float = field(
@@ -689,6 +726,7 @@ class Collision:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
 
@@ -733,6 +771,7 @@ class Collision:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 stiffness: float = field(
@@ -740,6 +779,7 @@ class Collision:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 damping: float = field(
@@ -747,6 +787,7 @@ class Collision:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 flesh_mass_fraction: float = field(
@@ -754,5 +795,6 @@ class Collision:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )

@@ -36,6 +36,7 @@ class Actor:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
     skin: Optional["Actor.Skin"] = field(
@@ -74,6 +75,7 @@ class Actor:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
     link: List[Link] = field(
@@ -112,6 +114,7 @@ class Actor:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         scale: float = field(
@@ -119,6 +122,7 @@ class Actor:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
 
@@ -129,6 +133,7 @@ class Actor:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         scale: float = field(
@@ -136,6 +141,7 @@ class Actor:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         interpolate_x: bool = field(
@@ -143,6 +149,7 @@ class Actor:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         name: Optional[str] = field(
@@ -160,6 +167,7 @@ class Actor:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         delay_start: float = field(
@@ -167,6 +175,7 @@ class Actor:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         auto_start: bool = field(
@@ -174,6 +183,7 @@ class Actor:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         trajectory: List["Actor.Script.Trajectory"] = field(
@@ -215,6 +225,7 @@ class Actor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 pose: str = field(
@@ -222,6 +233,7 @@ class Actor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                         "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
                     },
                 )
@@ -244,6 +256,7 @@ class Actor:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         name: Optional[str] = field(
@@ -263,8 +276,8 @@ class Actor:
             frame: Name of frame which the pose is defined relative to.
             """
 
-            value: Optional[str] = field(
-                default=None,
+            value: str = field(
+                default="",
                 metadata={
                     "required": True,
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
@@ -286,8 +299,8 @@ class Actor:
         frame: Name of frame which the pose is defined relative to.
         """
 
-        value: Optional[str] = field(
-            default=None,
+        value: str = field(
+            default="",
             metadata={
                 "required": True,
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",

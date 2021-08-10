@@ -53,6 +53,7 @@ class Model:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
     self_collide: bool = field(
@@ -60,6 +61,7 @@ class Model:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
     allow_auto_disable: bool = field(
@@ -67,6 +69,7 @@ class Model:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
     include: List["Model.Include"] = field(
@@ -88,6 +91,7 @@ class Model:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
     frame: List["Model.Frame"] = field(
@@ -102,6 +106,7 @@ class Model:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
     link: List[Link] = field(
@@ -162,6 +167,7 @@ class Model:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         pose: str = field(
@@ -169,6 +175,7 @@ class Model:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
             },
         )
@@ -184,6 +191,7 @@ class Model:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
 
@@ -205,6 +213,7 @@ class Model:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         name: Optional[str] = field(
@@ -224,8 +233,8 @@ class Model:
             frame: Name of frame which the pose is defined relative to.
             """
 
-            value: Optional[str] = field(
-                default=None,
+            value: str = field(
+                default="",
                 metadata={
                     "required": True,
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
@@ -247,8 +256,8 @@ class Model:
         frame: Name of frame which the pose is defined relative to.
         """
 
-        value: Optional[str] = field(
-            default=None,
+        value: str = field(
+            default="",
             metadata={
                 "required": True,
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
@@ -323,6 +332,7 @@ class Model:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         name: Optional[str] = field(
@@ -340,6 +350,7 @@ class Model:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             attach_steps: int = field(
@@ -347,6 +358,7 @@ class Model:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             min_contact_count: int = field(
@@ -354,5 +366,6 @@ class Model:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )

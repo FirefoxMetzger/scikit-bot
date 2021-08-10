@@ -49,6 +49,7 @@ class Link:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
     self_collide: bool = field(
@@ -56,6 +57,7 @@ class Link:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
     kinematic: bool = field(
@@ -63,6 +65,7 @@ class Link:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
     pose: str = field(
@@ -70,6 +73,7 @@ class Link:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
             "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
         },
     )
@@ -78,6 +82,7 @@ class Link:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
     velocity_decay: Optional["Link.VelocityDecay"] = field(
@@ -109,8 +114,8 @@ class Link:
             "namespace": "",
         },
     )
-    sensor: Optional[Sensor] = field(
-        default=None,
+    sensor: List[Sensor] = field(
+        default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
@@ -161,6 +166,7 @@ class Link:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         angular: float = field(
@@ -168,6 +174,7 @@ class Link:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
 
@@ -195,6 +202,7 @@ class Link:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         pose: str = field(
@@ -202,6 +210,7 @@ class Link:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
             },
         )
@@ -227,6 +236,7 @@ class Link:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             ixy: float = field(
@@ -234,6 +244,7 @@ class Link:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             ixz: float = field(
@@ -241,6 +252,7 @@ class Link:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             iyy: float = field(
@@ -248,6 +260,7 @@ class Link:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             iyz: float = field(
@@ -255,6 +268,7 @@ class Link:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             izz: float = field(
@@ -262,6 +276,7 @@ class Link:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
 
@@ -285,6 +300,7 @@ class Link:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         pose: str = field(
@@ -292,6 +308,7 @@ class Link:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
             },
         )
@@ -300,6 +317,7 @@ class Link:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         near_clip: float = field(
@@ -307,6 +325,7 @@ class Link:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         far_clip: float = field(
@@ -314,6 +333,7 @@ class Link:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         plugin: List["Link.Projector.Plugin"] = field(
@@ -394,6 +414,7 @@ class Link:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         pitch: float = field(
@@ -401,6 +422,7 @@ class Link:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         gain: float = field(
@@ -408,6 +430,7 @@ class Link:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         contact: Optional["Link.AudioSource.Contact"] = field(
@@ -422,6 +445,7 @@ class Link:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         pose: str = field(
@@ -429,6 +453,7 @@ class Link:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
             },
         )

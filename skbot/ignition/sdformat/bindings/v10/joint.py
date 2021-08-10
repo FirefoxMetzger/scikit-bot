@@ -37,6 +37,7 @@ class Joint:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
     axis: Optional["Joint.Axis"] = field(
@@ -144,6 +145,7 @@ class Joint:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             cfm: float = field(
@@ -151,6 +153,7 @@ class Joint:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             bounce: float = field(
@@ -158,6 +161,7 @@ class Joint:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             max_force: float = field(
@@ -165,6 +169,7 @@ class Joint:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             velocity: float = field(
@@ -172,6 +177,7 @@ class Joint:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             limit: Optional[str] = field(

@@ -42,6 +42,7 @@ class Sensor:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
     update_rate: float = field(
@@ -49,6 +50,7 @@ class Sensor:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
     visualize: bool = field(
@@ -56,6 +58,7 @@ class Sensor:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
     pose: str = field(
@@ -63,6 +66,7 @@ class Sensor:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
             "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
         },
     )
@@ -71,6 +75,7 @@ class Sensor:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
     plugin: List["Sensor.Plugin"] = field(
@@ -200,6 +205,7 @@ class Sensor:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
             },
         )
@@ -208,6 +214,7 @@ class Sensor:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         image: Optional["Sensor.Camera.Image"] = field(
@@ -265,6 +272,7 @@ class Sensor:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             height: int = field(
@@ -272,6 +280,7 @@ class Sensor:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             format: str = field(
@@ -279,6 +288,7 @@ class Sensor:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
 
@@ -300,6 +310,7 @@ class Sensor:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             far: float = field(
@@ -307,6 +318,7 @@ class Sensor:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
 
@@ -328,6 +340,7 @@ class Sensor:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             enabled: Optional[bool] = field(
@@ -353,6 +366,7 @@ class Sensor:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
 
@@ -423,6 +437,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 resolution: float = field(
@@ -430,6 +445,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 min_angle: float = field(
@@ -437,6 +453,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 max_angle: float = field(
@@ -444,6 +461,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
 
@@ -468,6 +486,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 resolution: float = field(
@@ -475,6 +494,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 min_angle: float = field(
@@ -482,6 +502,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 max_angle: float = field(
@@ -489,6 +510,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
 
@@ -509,6 +531,7 @@ class Sensor:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             max: float = field(
@@ -516,6 +539,7 @@ class Sensor:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             resolution: float = field(
@@ -523,6 +547,7 @@ class Sensor:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
 
@@ -543,6 +568,7 @@ class Sensor:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         topic: str = field(
@@ -550,6 +576,7 @@ class Sensor:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
 
@@ -568,5 +595,6 @@ class Sensor:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )

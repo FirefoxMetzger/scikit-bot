@@ -424,7 +424,7 @@
                 </xs:attribute>
               </xs:complexType>
             </xs:element>
-            <xs:element name="model" minOccurs="0" maxOccurs="unbounded" type="model:model">
+            <xs:element name="model" minOccurs="0" maxOccurs="1" type="model:model">
               <xs:annotation>
                 <xs:documentation xml:lang="en">The model element defines a complete robot or any other physical object.</xs:documentation>
               </xs:annotation>

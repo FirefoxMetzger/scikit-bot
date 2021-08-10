@@ -160,6 +160,7 @@ class World:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
 
@@ -178,6 +179,7 @@ class World:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
 
@@ -204,6 +206,7 @@ class World:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             pose: str = field(
@@ -211,6 +214,7 @@ class World:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
                 },
             )
@@ -236,6 +240,7 @@ class World:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 min_dist: float = field(
@@ -243,6 +248,7 @@ class World:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 max_dist: float = field(
@@ -250,6 +256,7 @@ class World:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
 
@@ -308,6 +315,7 @@ class World:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         point: List[str] = field(
@@ -354,6 +362,7 @@ class World:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         latitude_deg: float = field(
@@ -361,6 +370,7 @@ class World:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         longitude_deg: float = field(
@@ -368,6 +378,7 @@ class World:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         elevation: float = field(
@@ -375,6 +386,7 @@ class World:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         heading_deg: float = field(
@@ -382,5 +394,6 @@ class World:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )

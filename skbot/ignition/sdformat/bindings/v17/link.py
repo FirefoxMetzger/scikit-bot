@@ -58,6 +58,7 @@ class Link:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
     enable_wind: bool = field(
@@ -65,6 +66,7 @@ class Link:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
     self_collide: bool = field(
@@ -72,6 +74,7 @@ class Link:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
     kinematic: bool = field(
@@ -79,6 +82,7 @@ class Link:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
     must_be_base_link: bool = field(
@@ -86,6 +90,7 @@ class Link:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
     velocity_decay: Optional["Link.VelocityDecay"] = field(
@@ -100,6 +105,7 @@ class Link:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
     inertial: Optional["Link.Inertial"] = field(
@@ -123,8 +129,8 @@ class Link:
             "namespace": "",
         },
     )
-    sensor: Optional[Sensor] = field(
-        default=None,
+    sensor: List[Sensor] = field(
+        default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "",
@@ -196,6 +202,7 @@ class Link:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         angular: float = field(
@@ -203,6 +210,7 @@ class Link:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
 
@@ -216,8 +224,8 @@ class Link:
             applied.
         """
 
-        value: Optional[str] = field(
-            default=None,
+        value: str = field(
+            default="",
             metadata={
                 "required": True,
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
@@ -254,6 +262,7 @@ class Link:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         inertia: Optional["Link.Inertial.Inertia"] = field(
@@ -268,6 +277,7 @@ class Link:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
 
@@ -285,6 +295,7 @@ class Link:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             ixy: float = field(
@@ -292,6 +303,7 @@ class Link:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             ixz: float = field(
@@ -299,6 +311,7 @@ class Link:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             iyy: float = field(
@@ -306,6 +319,7 @@ class Link:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             iyz: float = field(
@@ -313,6 +327,7 @@ class Link:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             izz: float = field(
@@ -320,6 +335,7 @@ class Link:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
 
@@ -333,8 +349,8 @@ class Link:
                 applied.
             """
 
-            value: Optional[str] = field(
-                default=None,
+            value: str = field(
+                default="",
                 metadata={
                     "required": True,
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
@@ -368,6 +384,7 @@ class Link:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         fov: float = field(
@@ -375,6 +392,7 @@ class Link:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         near_clip: float = field(
@@ -382,6 +400,7 @@ class Link:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         far_clip: float = field(
@@ -389,6 +408,7 @@ class Link:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         pose: "Link.Projector.Pose" = field(
@@ -396,6 +416,7 @@ class Link:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         plugin: List["Link.Projector.Plugin"] = field(
@@ -423,8 +444,8 @@ class Link:
                 applied.
             """
 
-            value: Optional[str] = field(
-                default=None,
+            value: str = field(
+                default="",
                 metadata={
                     "required": True,
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
@@ -499,6 +520,7 @@ class Link:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         pitch: float = field(
@@ -506,6 +528,7 @@ class Link:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         gain: float = field(
@@ -513,6 +536,7 @@ class Link:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         contact: Optional["Link.AudioSource.Contact"] = field(
@@ -527,6 +551,7 @@ class Link:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         pose: "Link.AudioSource.Pose" = field(
@@ -534,6 +559,7 @@ class Link:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
 
@@ -567,8 +593,8 @@ class Link:
                 applied.
             """
 
-            value: Optional[str] = field(
-                default=None,
+            value: str = field(
+                default="",
                 metadata={
                     "required": True,
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
@@ -597,6 +623,7 @@ class Link:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         name: Optional[str] = field(
@@ -689,6 +716,7 @@ class Link:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         duration: float = field(
@@ -696,6 +724,7 @@ class Link:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         size: str = field(
@@ -703,6 +732,7 @@ class Link:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
             },
         )
@@ -711,6 +741,7 @@ class Link:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
             },
         )
@@ -719,6 +750,7 @@ class Link:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         rate: float = field(
@@ -726,6 +758,7 @@ class Link:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         min_velocity: float = field(
@@ -733,6 +766,7 @@ class Link:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         max_velocity: float = field(
@@ -740,6 +774,7 @@ class Link:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         scale_rate: float = field(
@@ -747,6 +782,7 @@ class Link:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         color_start: str = field(
@@ -754,6 +790,7 @@ class Link:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
                 "pattern": r"(\s*\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){3}\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s*",
             },
         )
@@ -762,6 +799,7 @@ class Link:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
                 "pattern": r"(\s*\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){3}\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s*",
             },
         )
@@ -784,6 +822,7 @@ class Link:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         pose: "Link.ParticleEmitter.Pose" = field(
@@ -791,6 +830,7 @@ class Link:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         material: Optional[Material] = field(
@@ -825,8 +865,8 @@ class Link:
                 applied.
             """
 
-            value: Optional[str] = field(
-                default=None,
+            value: str = field(
+                default="",
                 metadata={
                     "required": True,
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",

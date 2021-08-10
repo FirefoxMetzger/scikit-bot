@@ -105,6 +105,7 @@ class Geometry:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             diffuse: str = field(
@@ -112,6 +113,7 @@ class Geometry:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             normal: str = field(
@@ -119,6 +121,7 @@ class Geometry:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
 
@@ -129,6 +132,7 @@ class Geometry:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             fade_dist: float = field(
@@ -136,5 +140,6 @@ class Geometry:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )

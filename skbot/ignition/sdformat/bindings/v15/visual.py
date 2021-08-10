@@ -41,6 +41,7 @@ class Visual:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
     laser_retro: float = field(
@@ -48,6 +49,7 @@ class Visual:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
     transparency: float = field(
@@ -55,6 +57,7 @@ class Visual:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
     meta: Optional["Visual.MetaType"] = field(
@@ -76,6 +79,7 @@ class Visual:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
     material: Optional[Material] = field(
@@ -127,6 +131,7 @@ class Visual:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
 
@@ -148,6 +153,7 @@ class Visual:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         name: Optional[str] = field(
@@ -167,8 +173,8 @@ class Visual:
             frame: Name of frame which the pose is defined relative to.
             """
 
-            value: Optional[str] = field(
-                default=None,
+            value: str = field(
+                default="",
                 metadata={
                     "required": True,
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
@@ -190,8 +196,8 @@ class Visual:
         frame: Name of frame which the pose is defined relative to.
         """
 
-        value: Optional[str] = field(
-            default=None,
+        value: str = field(
+            default="",
             metadata={
                 "required": True,
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",

@@ -370,7 +370,7 @@
           </xs:attribute>
         </xs:complexType>
       </xs:element>
-      <xs:element name="sensor" minOccurs="0" maxOccurs="1" type="sensor:sensor">
+      <xs:element name="sensor" minOccurs="0" maxOccurs="unbounded" type="sensor:sensor">
         <xs:annotation>
           <xs:documentation xml:lang="en">The sensor tag describes the type and properties of a sensor.</xs:documentation>
         </xs:annotation>

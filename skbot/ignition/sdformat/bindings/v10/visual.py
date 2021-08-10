@@ -109,6 +109,7 @@ class Visual:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             type: Optional[str] = field(

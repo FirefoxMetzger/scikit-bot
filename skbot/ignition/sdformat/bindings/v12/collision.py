@@ -35,6 +35,7 @@ class Collision:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
     max_contacts: int = field(
@@ -42,6 +43,7 @@ class Collision:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
     pose: str = field(
@@ -49,6 +51,7 @@ class Collision:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
             "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
         },
     )
@@ -119,6 +122,7 @@ class Collision:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             threshold: float = field(
@@ -126,6 +130,7 @@ class Collision:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
 
@@ -168,6 +173,7 @@ class Collision:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 mu2: float = field(
@@ -175,6 +181,7 @@ class Collision:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 fdir1: str = field(
@@ -182,6 +189,7 @@ class Collision:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                         "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
                     },
                 )
@@ -190,6 +198,7 @@ class Collision:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 slip2: float = field(
@@ -197,6 +206,7 @@ class Collision:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
 
@@ -240,6 +250,7 @@ class Collision:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 soft_erp: float = field(
@@ -247,6 +258,7 @@ class Collision:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 kp: float = field(
@@ -254,6 +266,7 @@ class Collision:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 kd: float = field(
@@ -261,6 +274,7 @@ class Collision:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 max_vel: float = field(
@@ -268,6 +282,7 @@ class Collision:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 min_depth: float = field(
@@ -275,5 +290,6 @@ class Collision:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )

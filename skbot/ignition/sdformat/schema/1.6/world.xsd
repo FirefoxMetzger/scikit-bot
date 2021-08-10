@@ -272,7 +272,7 @@
           <xs:attribute name="fullscreen" type="xs:boolean" use="optional" default="false"/>
         </xs:complexType>
       </xs:element>
-      <xs:element name="physics" minOccurs="1" maxOccurs="1" type="physics:physics">
+      <xs:element name="physics" minOccurs="1" maxOccurs="unbounded" type="physics:physics">
         <xs:annotation>
           <xs:documentation xml:lang="en">The physics tag specifies the type and properties of the dynamics engine.</xs:documentation>
         </xs:annotation>
@@ -524,7 +524,7 @@
                 </xs:attribute>
               </xs:complexType>
             </xs:element>
-            <xs:element name="model" minOccurs="0" maxOccurs="unbounded" type="model:model">
+            <xs:element name="model" minOccurs="0" maxOccurs="1" type="model:model">
               <xs:annotation>
                 <xs:documentation xml:lang="en">The model element defines a complete robot or any other physical object.</xs:documentation>
               </xs:annotation>

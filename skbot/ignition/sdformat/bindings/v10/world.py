@@ -119,6 +119,7 @@ class World:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             origin: Optional[str] = field(
@@ -150,6 +151,7 @@ class World:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 min_dist: float = field(
@@ -157,6 +159,7 @@ class World:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 max_dist: float = field(
@@ -164,6 +167,7 @@ class World:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
 
@@ -198,6 +202,7 @@ class World:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         point: List[str] = field(
