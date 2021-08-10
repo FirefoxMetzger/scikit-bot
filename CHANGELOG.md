@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.2 (2021-08-10)
+### Fix
+* SDFormat XSD generator ignores min/maxOccurs ([#43](https://github.com/FirefoxMetzger/ropy/issues/43)) ([`b56e71f`](https://github.com/FirefoxMetzger/ropy/commit/b56e71f1fbaead84e9a19c7b580f4826820b4d48))
+
 ## v0.3.1 (2021-08-10)
 ### Fix
 * Bump python-semantic-release from 7.17.0 to 7.18.0 ([#42](https://github.com/FirefoxMetzger/ropy/issues/42)) ([`5fb9b3f`](https://github.com/FirefoxMetzger/ropy/commit/5fb9b3f31e65b927138ff07bfb84406a97606277))
