@@ -173,6 +173,11 @@
                       <xs:documentation xml:lang="en">Material glossiness in the range of [0-1], where 0 represents a rough surface and 1 represents a smooth surface. This is the inverse of a roughness map in a PBR metal workflow.</xs:documentation>
                     </xs:annotation>
                   </xs:element>
+                  <xs:element name="environment_map" minOccurs="0" maxOccurs="1" type="xs:string">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">Filename of the environment / reflection map, typically in the form of a cubemap</xs:documentation>
+                    </xs:annotation>
+                  </xs:element>
                   <xs:element name="ambient_occlusion_map" minOccurs="0" maxOccurs="1" type="xs:string">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">Filename of the ambient occlusion map. The map defines the amount of ambient lighting on the surface.</xs:documentation>

@@ -26,7 +26,7 @@
       </xs:element>
       <xs:element name="collision" minOccurs="0" maxOccurs="unbounded" type="collision:collision"/>
       <xs:element name="visual" minOccurs="0" maxOccurs="unbounded" type="visual:visual"/>
-      <xs:element name="sensor" minOccurs="0" maxOccurs="1" type="sensor:sensor"/>
+      <xs:element name="sensor" minOccurs="0" maxOccurs="unbounded" type="sensor:sensor"/>
       <xs:element name="projector" minOccurs="0" maxOccurs="1">
         <xs:complexType>
           <xs:all>
