@@ -35,6 +35,7 @@ class Visual:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
     laser_retro: float = field(
@@ -42,6 +43,7 @@ class Visual:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
     transparency: float = field(
@@ -49,6 +51,7 @@ class Visual:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
     pose: str = field(
@@ -56,6 +59,7 @@ class Visual:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
             "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
         },
     )
@@ -132,6 +136,7 @@ class Visual:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
                 "pattern": r"(\s*\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){3}\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s*",
             },
         )
@@ -140,6 +145,7 @@ class Visual:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
                 "pattern": r"(\s*\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){3}\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s*",
             },
         )
@@ -148,6 +154,7 @@ class Visual:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
                 "pattern": r"(\s*\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){3}\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s*",
             },
         )
@@ -156,6 +163,7 @@ class Visual:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
                 "pattern": r"(\s*\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){3}\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s*",
             },
         )
@@ -185,6 +193,7 @@ class Visual:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
 
@@ -203,6 +212,7 @@ class Visual:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             type: Optional[str] = field(

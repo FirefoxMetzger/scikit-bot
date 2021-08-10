@@ -14,6 +14,7 @@ class Physics:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
     gravity: Optional[str] = field(
@@ -59,6 +60,7 @@ class Physics:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
 

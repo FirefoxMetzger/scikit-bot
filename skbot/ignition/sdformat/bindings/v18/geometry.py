@@ -121,6 +121,7 @@ class Geometry:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
             },
         )
@@ -142,6 +143,7 @@ class Geometry:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         length: float = field(
@@ -149,6 +151,7 @@ class Geometry:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
 
@@ -168,6 +171,7 @@ class Geometry:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         length: float = field(
@@ -175,6 +179,7 @@ class Geometry:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
 
@@ -195,6 +200,7 @@ class Geometry:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
             },
         )
@@ -233,6 +239,7 @@ class Geometry:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         size: str = field(
@@ -240,6 +247,7 @@ class Geometry:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
             },
         )
@@ -248,6 +256,7 @@ class Geometry:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
             },
         )
@@ -270,6 +279,7 @@ class Geometry:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         sampling: int = field(
@@ -277,6 +287,7 @@ class Geometry:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
 
@@ -301,6 +312,7 @@ class Geometry:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             diffuse: str = field(
@@ -308,6 +320,7 @@ class Geometry:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             normal: str = field(
@@ -315,6 +328,7 @@ class Geometry:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
 
@@ -336,6 +350,7 @@ class Geometry:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             fade_dist: float = field(
@@ -343,6 +358,7 @@ class Geometry:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
 
@@ -365,6 +381,7 @@ class Geometry:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         scale: float = field(
@@ -372,6 +389,7 @@ class Geometry:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         threshold: int = field(
@@ -379,6 +397,7 @@ class Geometry:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         height: float = field(
@@ -386,6 +405,7 @@ class Geometry:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         granularity: int = field(
@@ -393,6 +413,7 @@ class Geometry:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
 
@@ -414,6 +435,7 @@ class Geometry:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         submesh: Optional["Geometry.Mesh.Submesh"] = field(
@@ -428,6 +450,7 @@ class Geometry:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
             },
         )
@@ -452,6 +475,7 @@ class Geometry:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             center: bool = field(
@@ -459,6 +483,7 @@ class Geometry:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
 
@@ -484,6 +509,7 @@ class Geometry:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
             },
         )
@@ -492,6 +518,7 @@ class Geometry:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+)((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
             },
         )
@@ -521,6 +548,7 @@ class Geometry:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
 
@@ -539,5 +567,6 @@ class Geometry:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )

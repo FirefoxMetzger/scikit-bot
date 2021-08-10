@@ -38,6 +38,7 @@ class Physics:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
     real_time_factor: float = field(
@@ -45,6 +46,7 @@ class Physics:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
     real_time_update_rate: float = field(
@@ -52,6 +54,7 @@ class Physics:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
     max_contacts: int = field(
@@ -59,6 +62,7 @@ class Physics:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
     gravity: str = field(
@@ -66,6 +70,7 @@ class Physics:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
             "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
         },
     )
@@ -137,6 +142,7 @@ class Physics:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         accuracy: float = field(
@@ -144,6 +150,7 @@ class Physics:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         max_transient_velocity: float = field(
@@ -151,6 +158,7 @@ class Physics:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         contact: Optional["Physics.Simbody.Contact"] = field(
@@ -207,6 +215,7 @@ class Physics:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             dissipation: float = field(
@@ -214,6 +223,7 @@ class Physics:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             plastic_coef_restitution: float = field(
@@ -221,6 +231,7 @@ class Physics:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             plastic_impact_velocity: float = field(
@@ -228,6 +239,7 @@ class Physics:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             static_friction: float = field(
@@ -235,6 +247,7 @@ class Physics:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             dynamic_friction: float = field(
@@ -242,6 +255,7 @@ class Physics:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             viscous_friction: float = field(
@@ -249,6 +263,7 @@ class Physics:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             override_impact_capture_velocity: float = field(
@@ -256,6 +271,7 @@ class Physics:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             override_stiction_transition_velocity: float = field(
@@ -263,6 +279,7 @@ class Physics:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
 
@@ -314,6 +331,7 @@ class Physics:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             min_step_size: float = field(
@@ -321,6 +339,7 @@ class Physics:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             iters: int = field(
@@ -328,6 +347,7 @@ class Physics:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             sor: float = field(
@@ -335,6 +355,7 @@ class Physics:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
 
@@ -370,6 +391,7 @@ class Physics:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             erp: float = field(
@@ -377,6 +399,7 @@ class Physics:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             contact_surface_layer: float = field(
@@ -384,6 +407,7 @@ class Physics:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             split_impulse: bool = field(
@@ -391,6 +415,7 @@ class Physics:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             split_impulse_penetration_threshold: float = field(
@@ -398,6 +423,7 @@ class Physics:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
 
@@ -456,6 +482,7 @@ class Physics:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             min_step_size: float = field(
@@ -463,6 +490,7 @@ class Physics:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             iters: int = field(
@@ -470,6 +498,7 @@ class Physics:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             precon_iters: int = field(
@@ -477,6 +506,7 @@ class Physics:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             sor: float = field(
@@ -484,6 +514,7 @@ class Physics:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             use_dynamic_moi_rescaling: bool = field(
@@ -491,6 +522,7 @@ class Physics:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
 
@@ -521,6 +553,7 @@ class Physics:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             erp: float = field(
@@ -528,6 +561,7 @@ class Physics:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             contact_max_correcting_vel: float = field(
@@ -535,6 +569,7 @@ class Physics:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             contact_surface_layer: float = field(
@@ -542,5 +577,6 @@ class Physics:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )

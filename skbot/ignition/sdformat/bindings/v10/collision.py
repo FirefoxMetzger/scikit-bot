@@ -15,6 +15,7 @@ class Collision:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
     mass: float = field(
@@ -22,6 +23,7 @@ class Collision:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
     origin: Optional[str] = field(

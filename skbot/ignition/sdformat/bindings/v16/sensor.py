@@ -68,6 +68,7 @@ class Sensor:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
     update_rate: float = field(
@@ -75,6 +76,7 @@ class Sensor:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
     visualize: bool = field(
@@ -82,6 +84,7 @@ class Sensor:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
     topic: str = field(
@@ -89,6 +92,7 @@ class Sensor:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
     frame: List["Sensor.Frame"] = field(
@@ -103,6 +107,7 @@ class Sensor:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
     plugin: List["Sensor.Plugin"] = field(
@@ -250,6 +255,7 @@ class Sensor:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         name: Optional[str] = field(
@@ -269,8 +275,8 @@ class Sensor:
             frame: Name of frame which the pose is defined relative to.
             """
 
-            value: Optional[str] = field(
-                default=None,
+            value: str = field(
+                default="",
                 metadata={
                     "required": True,
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
@@ -292,8 +298,8 @@ class Sensor:
         frame: Name of frame which the pose is defined relative to.
         """
 
-        value: Optional[str] = field(
-            default=None,
+        value: str = field(
+            default="",
             metadata={
                 "required": True,
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
@@ -368,6 +374,7 @@ class Sensor:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         pressure: Optional["Sensor.AirPressure.Pressure"] = field(
@@ -440,6 +447,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 stddev: float = field(
@@ -447,6 +455,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 bias_mean: float = field(
@@ -454,6 +463,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 bias_stddev: float = field(
@@ -461,6 +471,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 dynamic_bias_stddev: float = field(
@@ -468,6 +479,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 dynamic_bias_correlation_time: float = field(
@@ -475,6 +487,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 precision: float = field(
@@ -482,6 +495,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 type: Optional[str] = field(
@@ -580,6 +594,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 stddev: float = field(
@@ -587,6 +602,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 bias_mean: float = field(
@@ -594,6 +610,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 bias_stddev: float = field(
@@ -601,6 +618,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 dynamic_bias_stddev: float = field(
@@ -608,6 +626,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 dynamic_bias_correlation_time: float = field(
@@ -615,6 +634,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 precision: float = field(
@@ -622,6 +642,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 type: Optional[str] = field(
@@ -694,6 +715,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 stddev: float = field(
@@ -701,6 +723,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 bias_mean: float = field(
@@ -708,6 +731,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 bias_stddev: float = field(
@@ -715,6 +739,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 dynamic_bias_stddev: float = field(
@@ -722,6 +747,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 dynamic_bias_correlation_time: float = field(
@@ -729,6 +755,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 precision: float = field(
@@ -736,6 +763,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 type: Optional[str] = field(
@@ -775,6 +803,7 @@ class Sensor:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         image: Optional["Sensor.Camera.Image"] = field(
@@ -840,6 +869,7 @@ class Sensor:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         name: str = field(
@@ -867,6 +897,7 @@ class Sensor:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             height: int = field(
@@ -874,6 +905,7 @@ class Sensor:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             format: str = field(
@@ -881,6 +913,7 @@ class Sensor:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
 
@@ -902,6 +935,7 @@ class Sensor:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             far: float = field(
@@ -909,6 +943,7 @@ class Sensor:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
 
@@ -930,6 +965,7 @@ class Sensor:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             enabled: Optional[bool] = field(
@@ -958,6 +994,7 @@ class Sensor:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             clip: Optional["Sensor.Camera.DepthCamera.Clip"] = field(
@@ -986,6 +1023,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 far: float = field(
@@ -993,6 +1031,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
 
@@ -1018,6 +1057,7 @@ class Sensor:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             mean: float = field(
@@ -1025,6 +1065,7 @@ class Sensor:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             stddev: float = field(
@@ -1032,6 +1073,7 @@ class Sensor:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
 
@@ -1056,6 +1098,7 @@ class Sensor:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             k2: float = field(
@@ -1063,6 +1106,7 @@ class Sensor:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             k3: float = field(
@@ -1070,6 +1114,7 @@ class Sensor:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             p1: float = field(
@@ -1077,6 +1122,7 @@ class Sensor:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             p2: float = field(
@@ -1084,6 +1130,7 @@ class Sensor:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             center: str = field(
@@ -1091,6 +1138,7 @@ class Sensor:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+)((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
                 },
             )
@@ -1131,6 +1179,7 @@ class Sensor:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             scale_to_hfov: bool = field(
@@ -1138,6 +1187,7 @@ class Sensor:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             custom_function: Optional["Sensor.Camera.Lens.CustomFunction"] = field(
@@ -1152,6 +1202,7 @@ class Sensor:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             env_texture_size: int = field(
@@ -1159,6 +1210,7 @@ class Sensor:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             intrinsics: Optional["Sensor.Camera.Lens.Intrinsics"] = field(
@@ -1192,6 +1244,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 c2: float = field(
@@ -1199,6 +1252,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 c3: float = field(
@@ -1206,6 +1260,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 f: float = field(
@@ -1213,6 +1268,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 fun: str = field(
@@ -1220,6 +1276,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
 
@@ -1246,6 +1303,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 fy: float = field(
@@ -1253,6 +1311,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 cx: float = field(
@@ -1260,6 +1319,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 cy: float = field(
@@ -1267,6 +1327,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 s: float = field(
@@ -1274,6 +1335,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
 
@@ -1296,6 +1358,7 @@ class Sensor:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             name: Optional[str] = field(
@@ -1316,8 +1379,8 @@ class Sensor:
                     to.
                 """
 
-                value: Optional[str] = field(
-                    default=None,
+                value: str = field(
+                    default="",
                     metadata={
                         "required": True,
                         "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
@@ -1339,8 +1402,8 @@ class Sensor:
             frame: Name of frame which the pose is defined relative to.
             """
 
-            value: Optional[str] = field(
-                default=None,
+            value: str = field(
+                default="",
                 metadata={
                     "required": True,
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
@@ -1370,6 +1433,7 @@ class Sensor:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         topic: str = field(
@@ -1377,6 +1441,7 @@ class Sensor:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
 
@@ -1409,6 +1474,7 @@ class Sensor:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         measure_direction: str = field(
@@ -1416,6 +1482,7 @@ class Sensor:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
 
@@ -1540,6 +1607,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     stddev: float = field(
@@ -1547,6 +1615,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     bias_mean: float = field(
@@ -1554,6 +1623,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     bias_stddev: float = field(
@@ -1561,6 +1631,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     dynamic_bias_stddev: float = field(
@@ -1568,6 +1639,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     dynamic_bias_correlation_time: float = field(
@@ -1575,6 +1647,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     precision: float = field(
@@ -1582,6 +1655,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     type: Optional[str] = field(
@@ -1657,6 +1731,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     stddev: float = field(
@@ -1664,6 +1739,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     bias_mean: float = field(
@@ -1671,6 +1747,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     bias_stddev: float = field(
@@ -1678,6 +1755,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     dynamic_bias_stddev: float = field(
@@ -1685,6 +1763,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     dynamic_bias_correlation_time: float = field(
@@ -1692,6 +1771,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     precision: float = field(
@@ -1699,6 +1779,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     type: Optional[str] = field(
@@ -1802,6 +1883,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     stddev: float = field(
@@ -1809,6 +1891,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     bias_mean: float = field(
@@ -1816,6 +1899,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     bias_stddev: float = field(
@@ -1823,6 +1907,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     dynamic_bias_stddev: float = field(
@@ -1830,6 +1915,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     dynamic_bias_correlation_time: float = field(
@@ -1837,6 +1923,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     precision: float = field(
@@ -1844,6 +1931,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     type: Optional[str] = field(
@@ -1919,6 +2007,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     stddev: float = field(
@@ -1926,6 +2015,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     bias_mean: float = field(
@@ -1933,6 +2023,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     bias_stddev: float = field(
@@ -1940,6 +2031,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     dynamic_bias_stddev: float = field(
@@ -1947,6 +2039,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     dynamic_bias_correlation_time: float = field(
@@ -1954,6 +2047,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     precision: float = field(
@@ -1961,6 +2055,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     type: Optional[str] = field(
@@ -2003,6 +2098,7 @@ class Sensor:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         angular_velocity: Optional["Sensor.Imu.AngularVelocity"] = field(
@@ -2111,6 +2207,7 @@ class Sensor:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             custom_rpy: "Sensor.Imu.OrientationReferenceFrame.CustomRpy" = field(
@@ -2118,6 +2215,7 @@ class Sensor:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             grav_dir_x: "Sensor.Imu.OrientationReferenceFrame.GravDirX" = field(
@@ -2125,6 +2223,7 @@ class Sensor:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
 
@@ -2141,8 +2240,8 @@ class Sensor:
                     empty, use the sensor's own local frame.
                 """
 
-                value: Optional[str] = field(
-                    default=None,
+                value: str = field(
+                    default="",
                     metadata={
                         "required": True,
                         "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
@@ -2168,8 +2267,8 @@ class Sensor:
                     empty, use the sensor's own local frame.
                 """
 
-                value: Optional[str] = field(
-                    default=None,
+                value: str = field(
+                    default="",
                     metadata={
                         "required": True,
                         "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
@@ -2281,6 +2380,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     stddev: float = field(
@@ -2288,6 +2388,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     bias_mean: float = field(
@@ -2295,6 +2396,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     bias_stddev: float = field(
@@ -2302,6 +2404,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     dynamic_bias_stddev: float = field(
@@ -2309,6 +2412,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     dynamic_bias_correlation_time: float = field(
@@ -2316,6 +2420,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     precision: float = field(
@@ -2323,6 +2428,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     type: Optional[str] = field(
@@ -2397,6 +2503,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     stddev: float = field(
@@ -2404,6 +2511,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     bias_mean: float = field(
@@ -2411,6 +2519,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     bias_stddev: float = field(
@@ -2418,6 +2527,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     dynamic_bias_stddev: float = field(
@@ -2425,6 +2535,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     dynamic_bias_correlation_time: float = field(
@@ -2432,6 +2543,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     precision: float = field(
@@ -2439,6 +2551,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     type: Optional[str] = field(
@@ -2513,6 +2626,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     stddev: float = field(
@@ -2520,6 +2634,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     bias_mean: float = field(
@@ -2527,6 +2642,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     bias_stddev: float = field(
@@ -2534,6 +2650,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     dynamic_bias_stddev: float = field(
@@ -2541,6 +2658,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     dynamic_bias_correlation_time: float = field(
@@ -2548,6 +2666,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     precision: float = field(
@@ -2555,6 +2674,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     type: Optional[str] = field(
@@ -2664,6 +2784,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     stddev: float = field(
@@ -2671,6 +2792,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     bias_mean: float = field(
@@ -2678,6 +2800,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     bias_stddev: float = field(
@@ -2685,6 +2808,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     dynamic_bias_stddev: float = field(
@@ -2692,6 +2816,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     dynamic_bias_correlation_time: float = field(
@@ -2699,6 +2824,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     precision: float = field(
@@ -2706,6 +2832,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     type: Optional[str] = field(
@@ -2780,6 +2907,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     stddev: float = field(
@@ -2787,6 +2915,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     bias_mean: float = field(
@@ -2794,6 +2923,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     bias_stddev: float = field(
@@ -2801,6 +2931,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     dynamic_bias_stddev: float = field(
@@ -2808,6 +2939,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     dynamic_bias_correlation_time: float = field(
@@ -2815,6 +2947,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     precision: float = field(
@@ -2822,6 +2955,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     type: Optional[str] = field(
@@ -2896,6 +3030,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     stddev: float = field(
@@ -2903,6 +3038,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     bias_mean: float = field(
@@ -2910,6 +3046,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     bias_stddev: float = field(
@@ -2917,6 +3054,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     dynamic_bias_stddev: float = field(
@@ -2924,6 +3062,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     dynamic_bias_correlation_time: float = field(
@@ -2931,6 +3070,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     precision: float = field(
@@ -2938,6 +3078,7 @@ class Sensor:
                         metadata={
                             "type": "Element",
                             "namespace": "",
+                            "required": True,
                         },
                     )
                     type: Optional[str] = field(
@@ -3023,6 +3164,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 resolution: float = field(
@@ -3030,6 +3172,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 min_angle: float = field(
@@ -3037,6 +3180,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 max_angle: float = field(
@@ -3044,6 +3188,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
 
@@ -3067,6 +3212,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 resolution: float = field(
@@ -3074,6 +3220,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 min_angle: float = field(
@@ -3081,6 +3228,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 max_angle: float = field(
@@ -3088,6 +3236,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
 
@@ -3108,6 +3257,7 @@ class Sensor:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             max: float = field(
@@ -3115,6 +3265,7 @@ class Sensor:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             resolution: float = field(
@@ -3122,6 +3273,7 @@ class Sensor:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
 
@@ -3147,6 +3299,7 @@ class Sensor:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             mean: float = field(
@@ -3154,6 +3307,7 @@ class Sensor:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             stddev: float = field(
@@ -3161,6 +3315,7 @@ class Sensor:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
 
@@ -3187,6 +3342,7 @@ class Sensor:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         far: float = field(
@@ -3194,6 +3350,7 @@ class Sensor:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         aspect_ratio: float = field(
@@ -3201,6 +3358,7 @@ class Sensor:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         horizontal_fov: float = field(
@@ -3208,6 +3366,7 @@ class Sensor:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
 
@@ -3310,6 +3469,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 stddev: float = field(
@@ -3317,6 +3477,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 bias_mean: float = field(
@@ -3324,6 +3485,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 bias_stddev: float = field(
@@ -3331,6 +3493,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 dynamic_bias_stddev: float = field(
@@ -3338,6 +3501,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 dynamic_bias_correlation_time: float = field(
@@ -3345,6 +3509,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 precision: float = field(
@@ -3352,6 +3517,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 type: Optional[str] = field(
@@ -3424,6 +3590,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 stddev: float = field(
@@ -3431,6 +3598,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 bias_mean: float = field(
@@ -3438,6 +3606,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 bias_stddev: float = field(
@@ -3445,6 +3614,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 dynamic_bias_stddev: float = field(
@@ -3452,6 +3622,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 dynamic_bias_correlation_time: float = field(
@@ -3459,6 +3630,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 precision: float = field(
@@ -3466,6 +3638,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 type: Optional[str] = field(
@@ -3538,6 +3711,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 stddev: float = field(
@@ -3545,6 +3719,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 bias_mean: float = field(
@@ -3552,6 +3727,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 bias_stddev: float = field(
@@ -3559,6 +3735,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 dynamic_bias_stddev: float = field(
@@ -3566,6 +3743,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 dynamic_bias_correlation_time: float = field(
@@ -3573,6 +3751,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 precision: float = field(
@@ -3580,6 +3759,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 type: Optional[str] = field(
@@ -3666,6 +3846,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 resolution: float = field(
@@ -3673,6 +3854,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 min_angle: float = field(
@@ -3680,6 +3862,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 max_angle: float = field(
@@ -3687,6 +3870,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
 
@@ -3711,6 +3895,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 resolution: float = field(
@@ -3718,6 +3903,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 min_angle: float = field(
@@ -3725,6 +3911,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
                 max_angle: float = field(
@@ -3732,6 +3919,7 @@ class Sensor:
                     metadata={
                         "type": "Element",
                         "namespace": "",
+                        "required": True,
                     },
                 )
 
@@ -3752,6 +3940,7 @@ class Sensor:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             max: float = field(
@@ -3759,6 +3948,7 @@ class Sensor:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             resolution: float = field(
@@ -3766,6 +3956,7 @@ class Sensor:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
 
@@ -3791,6 +3982,7 @@ class Sensor:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             mean: float = field(
@@ -3798,6 +3990,7 @@ class Sensor:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             stddev: float = field(
@@ -3805,6 +3998,7 @@ class Sensor:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
 
@@ -3828,6 +4022,7 @@ class Sensor:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         min: float = field(
@@ -3835,6 +4030,7 @@ class Sensor:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         max: float = field(
@@ -3842,6 +4038,7 @@ class Sensor:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         radius: float = field(
@@ -3849,6 +4046,7 @@ class Sensor:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
 
@@ -3875,6 +4073,7 @@ class Sensor:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         frequency: float = field(
@@ -3882,6 +4081,7 @@ class Sensor:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         min_frequency: float = field(
@@ -3889,6 +4089,7 @@ class Sensor:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         max_frequency: float = field(
@@ -3896,6 +4097,7 @@ class Sensor:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         gain: float = field(
@@ -3903,6 +4105,7 @@ class Sensor:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         power: float = field(
@@ -3910,6 +4113,7 @@ class Sensor:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         sensitivity: float = field(
@@ -3917,5 +4121,6 @@ class Sensor:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )

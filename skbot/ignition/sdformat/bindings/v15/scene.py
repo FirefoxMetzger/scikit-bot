@@ -28,6 +28,7 @@ class Scene:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
             "pattern": r"(\s*\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){3}\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s*",
         },
     )
@@ -36,6 +37,7 @@ class Scene:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
             "pattern": r"(\s*\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){3}\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s*",
         },
     )
@@ -51,6 +53,7 @@ class Scene:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
     fog: Optional["Scene.Fog"] = field(
@@ -65,6 +68,7 @@ class Scene:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
     origin_visual: bool = field(
@@ -72,6 +76,7 @@ class Scene:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
 
@@ -93,6 +98,7 @@ class Scene:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         sunrise: float = field(
@@ -100,6 +106,7 @@ class Scene:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         sunset: float = field(
@@ -107,6 +114,7 @@ class Scene:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         clouds: Optional["Scene.Sky.Clouds"] = field(
@@ -136,6 +144,7 @@ class Scene:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             direction: float = field(
@@ -143,6 +152,7 @@ class Scene:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             humidity: float = field(
@@ -150,6 +160,7 @@ class Scene:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             mean_size: float = field(
@@ -157,6 +168,7 @@ class Scene:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                 },
             )
             ambient: str = field(
@@ -164,6 +176,7 @@ class Scene:
                 metadata={
                     "type": "Element",
                     "namespace": "",
+                    "required": True,
                     "pattern": r"(\s*\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){3}\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s*",
                 },
             )
@@ -187,6 +200,7 @@ class Scene:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
                 "pattern": r"(\s*\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){3}\+?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s*",
             },
         )
@@ -195,6 +209,7 @@ class Scene:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         start: float = field(
@@ -202,6 +217,7 @@ class Scene:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         end: float = field(
@@ -209,6 +225,7 @@ class Scene:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
         density: float = field(
@@ -216,5 +233,6 @@ class Scene:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )

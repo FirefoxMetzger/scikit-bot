@@ -39,22 +39,22 @@ class Sdf:
             "namespace": "",
         },
     )
-    model: List[Model] = field(
-        default_factory=list,
+    model: Optional[Model] = field(
+        default=None,
         metadata={
             "type": "Element",
             "namespace": "",
         },
     )
-    actor: List[Actor] = field(
-        default_factory=list,
+    actor: Optional[Actor] = field(
+        default=None,
         metadata={
             "type": "Element",
             "namespace": "",
         },
     )
-    light: List[Light] = field(
-        default_factory=list,
+    light: Optional[Light] = field(
+        default=None,
         metadata={
             "type": "Element",
             "namespace": "",

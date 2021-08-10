@@ -21,6 +21,7 @@ class Sensor:
         metadata={
             "type": "Element",
             "namespace": "",
+            "required": True,
         },
     )
     plugin: List["Sensor.Plugin"] = field(
@@ -215,5 +216,6 @@ class Sensor:
             metadata={
                 "type": "Element",
                 "namespace": "",
+                "required": True,
             },
         )
