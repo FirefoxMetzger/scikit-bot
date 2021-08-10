@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.3 (2021-08-10)
+### Fix
+* Include schema in distributed package ([#44](https://github.com/FirefoxMetzger/ropy/issues/44)) ([`b62ae5b`](https://github.com/FirefoxMetzger/ropy/commit/b62ae5b0f15d6c87ee9cdccbaf9e166c147ea131))
+
 ## v0.3.2 (2021-08-10)
 ### Fix
 * SDFormat XSD generator ignores min/maxOccurs ([#43](https://github.com/FirefoxMetzger/ropy/issues/43)) ([`b56e71f`](https://github.com/FirefoxMetzger/ropy/commit/b56e71f1fbaead84e9a19c7b580f4826820b4d48))
