@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.1 (2021-08-10)
+### Fix
+* Bump python-semantic-release from 7.17.0 to 7.18.0 ([#42](https://github.com/FirefoxMetzger/ropy/issues/42)) ([`5fb9b3f`](https://github.com/FirefoxMetzger/ropy/commit/5fb9b3f31e65b927138ff07bfb84406a97606277))
+
 ## v0.3.0 (2021-08-09)
 ### Feature
 * **transform:** Add find_frame method to Frame ([#40](https://github.com/FirefoxMetzger/ropy/issues/40)) ([`59d9ad8`](https://github.com/FirefoxMetzger/ropy/commit/59d9ad8f3e180d709e18f0cf07dd6e29f304722c))
