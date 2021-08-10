@@ -379,7 +379,8 @@ def gen_bindings(source_dir: Path, out_dir: Path, ns_prefix="sdformat"):
                 if include.filename in filename_map.keys():
                     # this element will be converted in it's own file
                     # nullify children and set appropriate namespace ref
-                    included_el.required = include.required
+                    included_el.maxOccurs = include.maxOccurs
+                    included_el.minOccurs = included_el.minOccurs
                     included_el.type = included_el.name + ":" + included_el.name
                     included_el.element = list()
                     included_el.include = list()
