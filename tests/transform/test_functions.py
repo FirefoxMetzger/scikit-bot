@@ -1,5 +1,5 @@
 import numpy as np
-import skbot.transform as rtf
+import skbot.transform as tf
 import pytest
 
 
@@ -18,7 +18,7 @@ import pytest
     ],
 )
 def test_shear(vector, direction, amount, expected):
-    result = rtf.shear(vector, direction, amount)
+    result = tf.shear(vector, direction, amount)
     assert np.allclose(result, expected)
 
 
@@ -31,5 +31,5 @@ def test_shear(vector, direction, amount, expected):
     ],
 )
 def test_scale(vector, scalar, expected):
-    result = rtf.scale(vector, scalar)
+    result = tf.scale(vector, scalar)
     assert np.allclose(result, expected)

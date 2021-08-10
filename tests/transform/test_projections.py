@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-import skbot.transform as rtf
+import skbot.transform as tf
 
 
 @pytest.mark.parametrize(
@@ -13,6 +13,6 @@ import skbot.transform as rtf
     ],
 )
 def test_1d_projections(parent_coords, child_coords, direction, amount):
-    proj = rtf.projections.PerspectiveProjection(direction, amount)
+    proj = tf.projections.PerspectiveProjection(direction, amount)
     result = proj.transform(parent_coords)
     assert np.allclose(result, child_coords)
