@@ -35,4 +35,10 @@ extras_require = {
 # Note: This is a shim, because I am used to developing
 # under pip install -e . which PEP517 doesn't support (yet?)
 if __name__ == "__main__":
-    setuptools.setup(install_requires=install_requires, extras_require=extras_require)
+    setuptools.setup(
+        install_requires=install_requires,
+        extras_require=extras_require,
+        package_data= {
+            "skbot": ["ignition/sdformat/schema/**/*.xsd"]
+        }
+    )
