@@ -81,13 +81,14 @@
                     </xs:annotation>
                     <xs:complexType>
                       <xs:simpleContent>
-                        <xs:extension base="xs:double"/>
+                        <xs:extension base="xs:double">
+                          <xs:attribute name="axis" type="xs:unsignedInt" use="required">
+                            <xs:annotation>
+                              <xs:documentation xml:lang="en">Index of the axis.</xs:documentation>
+                            </xs:annotation>
+                          </xs:attribute>
+                        </xs:extension>
                       </xs:simpleContent>
-                      <xs:attribute name="axis" type="xs:unsignedInt" use="required">
-                        <xs:annotation>
-                          <xs:documentation xml:lang="en">Index of the axis.</xs:documentation>
-                        </xs:annotation>
-                      </xs:attribute>
                     </xs:complexType>
                   </xs:element>
                 </xs:all>

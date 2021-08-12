@@ -175,7 +175,7 @@ class Element(SdfElement):
             extension = etree.SubElement(simple_content, f"{{{xs}}}extension")
             extension.set("base", _to_xsd_type(self.type))
             for attribute in self.attribute:
-                complex_type.append(attribute.to_xsd())
+                extension.append(attribute.to_xsd())
         elif self.type:
             subtree.set("type", _to_xsd_type(self.type))
         elif len(self.element) > 0:
