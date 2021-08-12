@@ -42,6 +42,7 @@ Functions
     skbot.ignition.download_fuel_model
     skbot.ignition.FrustumProjection
     skbot.ignition.create_frame_graph
+    skbot.ignition.transform_graph_from_sdf
 
 .. rubric:: SDFormat Bindings
 
@@ -149,6 +150,7 @@ from . import messages
 from .subscriber import Subscriber
 from .transformations import FrustumProjection
 from .sdformat.create_frame_graph import create_frame_graph
+from .sdformat.tf_from_sdf import transform_graph_from_sdf
 from . import sdformat
 from .fuel import get_fuel_model_info, download_fuel_model, get_fuel_model
 
@@ -161,4 +163,5 @@ __all__ = [
     "get_fuel_model_info",
     "download_fuel_model",
     "get_fuel_model",
+    "transform_graph_from_sdf"
 ]

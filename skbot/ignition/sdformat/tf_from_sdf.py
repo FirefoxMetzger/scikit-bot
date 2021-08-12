@@ -79,7 +79,7 @@ def _v18_parser(sdf: str, *, unwrap=True) -> ConverterReturn:
             child_frame = subgraph.root_node
 
         tf_link, parent = graph.pose_to_transform(include.pose)
-        graph.connect_sdf(child_frame, parent, tf_link)
+        graph.connect_sdf(parent, child_frame, tf_link)
 
         return graph, link_dict
 
@@ -332,7 +332,7 @@ def _v18_parser(sdf: str, *, unwrap=True) -> ConverterReturn:
             if joint.axis.xyz.expressed_in is not None:
                 raise NotImplementedError()
             tf_link = tf.RotvecRotation(normal)
-            graph.connect_sdf(joint.name, joint.parent, tf_link)
+            graph.connect_sdf(joint.parent, joint.name, tf_link)
         elif joint.type == "hinge":
             raise NotImplementedError("Hinge joints have not been added yet.")
         elif joint.type == "gearbox":
@@ -344,7 +344,7 @@ def _v18_parser(sdf: str, *, unwrap=True) -> ConverterReturn:
             if joint.axis.xyz.expressed_in is not None:
                 raise NotImplementedError()
             tf_link = tf.Translation(direction)
-            graph.connect_sdf(joint.name, joint.parent, tf_link)
+            graph.connect_sdf(joint.parent, joint.name, tf_link)
         elif joint.type == "ball":
             raise NotImplementedError("Ball joints have not been added yet.")
         elif joint.type == "screw":
@@ -353,7 +353,7 @@ def _v18_parser(sdf: str, *, unwrap=True) -> ConverterReturn:
             raise NotImplementedError("Universal joints have not been added yet.")
         elif joint.type == "fixed":
             tf_link = tf.Translation((0,0,0))
-            graph.connect_sdf(joint.name, joint.parent, tf_link)
+            graph.connect_sdf(joint.parent, joint.name, tf_link)
 
         for sensor in joint.sensor:
             _convert_sensor(sensor, graph)

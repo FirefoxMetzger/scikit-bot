@@ -80,7 +80,7 @@ class Graph:
 
         if relative_to == "world":
             self.world_edges.append((path, link))
-            return
+            return path
 
         parent = self._convert_sdf_path(relative_to)
         self.edges.append((parent, path, link))
@@ -125,6 +125,11 @@ class Graph:
         """Connect nodes (relative to root)"""
         child_path = self._convert_sdf_path(child)
         parent_path = self._convert_sdf_path(parent)
+
+        if parent_path == "world":
+            self.world_edges.append((child_path, link))
+            return
+        
         self.edges.append((parent_path, child_path, link))
 
     @contextmanager
