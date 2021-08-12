@@ -22,13 +22,14 @@
         </xs:annotation>
         <xs:complexType>
           <xs:simpleContent>
-            <xs:extension base="types:pose"/>
+            <xs:extension base="types:pose">
+              <xs:attribute name="relative_to" type="xs:string" use="optional">
+                <xs:annotation>
+                  <xs:documentation xml:lang="en">Name of frame relative to which the pose is applied.</xs:documentation>
+                </xs:annotation>
+              </xs:attribute>
+            </xs:extension>
           </xs:simpleContent>
-          <xs:attribute name="relative_to" type="xs:string" use="optional">
-            <xs:annotation>
-              <xs:documentation xml:lang="en">Name of frame relative to which the pose is applied.</xs:documentation>
-            </xs:annotation>
-          </xs:attribute>
         </xs:complexType>
       </xs:element>
       <xs:element name="geometry" minOccurs="1" maxOccurs="1" type="geometry:geometry">

@@ -137,13 +137,14 @@
                     </xs:annotation>
                     <xs:complexType>
                       <xs:simpleContent>
-                        <xs:extension base="xs:string"/>
+                        <xs:extension base="xs:string">
+                          <xs:attribute name="type" type="xs:string" use="optional" default="tangent">
+                            <xs:annotation>
+                              <xs:documentation xml:lang="en">The space that the normals are in. Values are: 'object' or 'tangent'</xs:documentation>
+                            </xs:annotation>
+                          </xs:attribute>
+                        </xs:extension>
                       </xs:simpleContent>
-                      <xs:attribute name="type" type="xs:string" use="optional" default="tangent">
-                        <xs:annotation>
-                          <xs:documentation xml:lang="en">The space that the normals are in. Values are: 'object' or 'tangent'</xs:documentation>
-                        </xs:annotation>
-                      </xs:attribute>
                     </xs:complexType>
                   </xs:element>
                   <xs:element name="emissive_map" minOccurs="0" maxOccurs="1" type="xs:string">
@@ -157,13 +158,14 @@
                     </xs:annotation>
                     <xs:complexType>
                       <xs:simpleContent>
-                        <xs:extension base="xs:string"/>
+                        <xs:extension base="xs:string">
+                          <xs:attribute name="uv_set" type="xs:unsignedInt" use="optional" default="0">
+                            <xs:annotation>
+                              <xs:documentation xml:lang="en">Index of the texture coordinate set to use.</xs:documentation>
+                            </xs:annotation>
+                          </xs:attribute>
+                        </xs:extension>
                       </xs:simpleContent>
-                      <xs:attribute name="uv_set" type="xs:unsignedInt" use="optional" default="0">
-                        <xs:annotation>
-                          <xs:documentation xml:lang="en">Index of the texture coordinate set to use.</xs:documentation>
-                        </xs:annotation>
-                      </xs:attribute>
                     </xs:complexType>
                   </xs:element>
                 </xs:all>
@@ -214,13 +216,14 @@
                     </xs:annotation>
                     <xs:complexType>
                       <xs:simpleContent>
-                        <xs:extension base="xs:string"/>
+                        <xs:extension base="xs:string">
+                          <xs:attribute name="type" type="xs:string" use="optional" default="tangent">
+                            <xs:annotation>
+                              <xs:documentation xml:lang="en">The space that the normals are in. Values are: 'object' or 'tangent'</xs:documentation>
+                            </xs:annotation>
+                          </xs:attribute>
+                        </xs:extension>
                       </xs:simpleContent>
-                      <xs:attribute name="type" type="xs:string" use="optional" default="tangent">
-                        <xs:annotation>
-                          <xs:documentation xml:lang="en">The space that the normals are in. Values are: 'object' or 'tangent'</xs:documentation>
-                        </xs:annotation>
-                      </xs:attribute>
                     </xs:complexType>
                   </xs:element>
                   <xs:element name="emissive_map" minOccurs="0" maxOccurs="1" type="xs:string">
@@ -234,13 +237,14 @@
                     </xs:annotation>
                     <xs:complexType>
                       <xs:simpleContent>
-                        <xs:extension base="xs:string"/>
+                        <xs:extension base="xs:string">
+                          <xs:attribute name="uv_set" type="xs:unsignedInt" use="optional" default="0">
+                            <xs:annotation>
+                              <xs:documentation xml:lang="en">Index of the texture coordinate set to use.</xs:documentation>
+                            </xs:annotation>
+                          </xs:attribute>
+                        </xs:extension>
                       </xs:simpleContent>
-                      <xs:attribute name="uv_set" type="xs:unsignedInt" use="optional" default="0">
-                        <xs:annotation>
-                          <xs:documentation xml:lang="en">Index of the texture coordinate set to use.</xs:documentation>
-                        </xs:annotation>
-                      </xs:attribute>
                     </xs:complexType>
                   </xs:element>
                 </xs:all>

@@ -31,13 +31,14 @@
         </xs:annotation>
         <xs:complexType>
           <xs:simpleContent>
-            <xs:extension base="types:pose"/>
+            <xs:extension base="types:pose">
+              <xs:attribute name="relative_to" type="xs:string" use="optional">
+                <xs:annotation>
+                  <xs:documentation xml:lang="en">Name of frame relative to which the pose is applied.</xs:documentation>
+                </xs:annotation>
+              </xs:attribute>
+            </xs:extension>
           </xs:simpleContent>
-          <xs:attribute name="relative_to" type="xs:string" use="optional">
-            <xs:annotation>
-              <xs:documentation xml:lang="en">Name of frame relative to which the pose is applied.</xs:documentation>
-            </xs:annotation>
-          </xs:attribute>
         </xs:complexType>
       </xs:element>
       <xs:element name="plugin" minOccurs="0" maxOccurs="unbounded">
@@ -598,13 +599,14 @@
               </xs:annotation>
               <xs:complexType>
                 <xs:simpleContent>
-                  <xs:extension base="types:pose"/>
+                  <xs:extension base="types:pose">
+                    <xs:attribute name="relative_to" type="xs:string" use="optional">
+                      <xs:annotation>
+                        <xs:documentation xml:lang="en">Name of frame relative to which the pose is applied.</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                  </xs:extension>
                 </xs:simpleContent>
-                <xs:attribute name="relative_to" type="xs:string" use="optional">
-                  <xs:annotation>
-                    <xs:documentation xml:lang="en">Name of frame relative to which the pose is applied.</xs:documentation>
-                  </xs:annotation>
-                </xs:attribute>
               </xs:complexType>
             </xs:element>
           </xs:all>
@@ -974,13 +976,14 @@
                     </xs:annotation>
                     <xs:complexType>
                       <xs:simpleContent>
-                        <xs:extension base="types:vector3"/>
+                        <xs:extension base="types:vector3">
+                          <xs:attribute name="parent_frame" type="xs:string" use="optional">
+                            <xs:annotation>
+                              <xs:documentation xml:lang="en">Name of parent frame which the custom_rpy transform is defined relative to.           It can be any valid fully scoped Gazebo Link name or the special reserved "world" frame.           If left empty, use the sensor's own local frame.</xs:documentation>
+                            </xs:annotation>
+                          </xs:attribute>
+                        </xs:extension>
                       </xs:simpleContent>
-                      <xs:attribute name="parent_frame" type="xs:string" use="optional">
-                        <xs:annotation>
-                          <xs:documentation xml:lang="en">Name of parent frame which the custom_rpy transform is defined relative to.           It can be any valid fully scoped Gazebo Link name or the special reserved "world" frame.           If left empty, use the sensor's own local frame.</xs:documentation>
-                        </xs:annotation>
-                      </xs:attribute>
                     </xs:complexType>
                   </xs:element>
                   <xs:element name="grav_dir_x" minOccurs="1" maxOccurs="1" default="1 0 0">
@@ -989,13 +992,14 @@
                     </xs:annotation>
                     <xs:complexType>
                       <xs:simpleContent>
-                        <xs:extension base="types:vector3"/>
+                        <xs:extension base="types:vector3">
+                          <xs:attribute name="parent_frame" type="xs:string" use="optional">
+                            <xs:annotation>
+                              <xs:documentation xml:lang="en">Name of parent frame in which the grav_dir_x vector is defined.           It can be any valid fully scoped Gazebo Link name or the special reserved "world" frame.           If left empty, use the sensor's own local frame.</xs:documentation>
+                            </xs:annotation>
+                          </xs:attribute>
+                        </xs:extension>
                       </xs:simpleContent>
-                      <xs:attribute name="parent_frame" type="xs:string" use="optional">
-                        <xs:annotation>
-                          <xs:documentation xml:lang="en">Name of parent frame in which the grav_dir_x vector is defined.           It can be any valid fully scoped Gazebo Link name or the special reserved "world" frame.           If left empty, use the sensor's own local frame.</xs:documentation>
-                        </xs:annotation>
-                      </xs:attribute>
                     </xs:complexType>
                   </xs:element>
                 </xs:all>

@@ -77,13 +77,14 @@
               </xs:annotation>
               <xs:complexType>
                 <xs:simpleContent>
-                  <xs:extension base="types:pose"/>
+                  <xs:extension base="types:pose">
+                    <xs:attribute name="frame" type="xs:string" use="optional">
+                      <xs:annotation>
+                        <xs:documentation xml:lang="en">Name of frame which the pose is defined relative to.</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                  </xs:extension>
                 </xs:simpleContent>
-                <xs:attribute name="frame" type="xs:string" use="optional">
-                  <xs:annotation>
-                    <xs:documentation xml:lang="en">Name of frame which the pose is defined relative to.</xs:documentation>
-                  </xs:annotation>
-                </xs:attribute>
               </xs:complexType>
             </xs:element>
           </xs:all>
@@ -205,13 +206,14 @@
                           </xs:annotation>
                           <xs:complexType>
                             <xs:simpleContent>
-                              <xs:extension base="types:pose"/>
+                              <xs:extension base="types:pose">
+                                <xs:attribute name="frame" type="xs:string" use="optional">
+                                  <xs:annotation>
+                                    <xs:documentation xml:lang="en">Name of frame which the pose is defined relative to.</xs:documentation>
+                                  </xs:annotation>
+                                </xs:attribute>
+                              </xs:extension>
                             </xs:simpleContent>
-                            <xs:attribute name="frame" type="xs:string" use="optional">
-                              <xs:annotation>
-                                <xs:documentation xml:lang="en">Name of frame which the pose is defined relative to.</xs:documentation>
-                              </xs:annotation>
-                            </xs:attribute>
                           </xs:complexType>
                         </xs:element>
                       </xs:all>
@@ -228,13 +230,14 @@
                     </xs:annotation>
                     <xs:complexType>
                       <xs:simpleContent>
-                        <xs:extension base="types:pose"/>
+                        <xs:extension base="types:pose">
+                          <xs:attribute name="frame" type="xs:string" use="optional">
+                            <xs:annotation>
+                              <xs:documentation xml:lang="en">Name of frame which the pose is defined relative to.</xs:documentation>
+                            </xs:annotation>
+                          </xs:attribute>
+                        </xs:extension>
                       </xs:simpleContent>
-                      <xs:attribute name="frame" type="xs:string" use="optional">
-                        <xs:annotation>
-                          <xs:documentation xml:lang="en">Name of frame which the pose is defined relative to.</xs:documentation>
-                        </xs:annotation>
-                      </xs:attribute>
                     </xs:complexType>
                   </xs:element>
                 </xs:all>
@@ -492,13 +495,14 @@
                     </xs:annotation>
                     <xs:complexType>
                       <xs:simpleContent>
-                        <xs:extension base="types:pose"/>
+                        <xs:extension base="types:pose">
+                          <xs:attribute name="frame" type="xs:string" use="optional">
+                            <xs:annotation>
+                              <xs:documentation xml:lang="en">Name of frame which the pose is defined relative to.</xs:documentation>
+                            </xs:annotation>
+                          </xs:attribute>
+                        </xs:extension>
                       </xs:simpleContent>
-                      <xs:attribute name="frame" type="xs:string" use="optional">
-                        <xs:annotation>
-                          <xs:documentation xml:lang="en">Name of frame which the pose is defined relative to.</xs:documentation>
-                        </xs:annotation>
-                      </xs:attribute>
                     </xs:complexType>
                   </xs:element>
                 </xs:all>
@@ -515,13 +519,14 @@
               </xs:annotation>
               <xs:complexType>
                 <xs:simpleContent>
-                  <xs:extension base="types:pose"/>
+                  <xs:extension base="types:pose">
+                    <xs:attribute name="frame" type="xs:string" use="optional">
+                      <xs:annotation>
+                        <xs:documentation xml:lang="en">Name of frame which the pose is defined relative to.</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                  </xs:extension>
                 </xs:simpleContent>
-                <xs:attribute name="frame" type="xs:string" use="optional">
-                  <xs:annotation>
-                    <xs:documentation xml:lang="en">Name of frame which the pose is defined relative to.</xs:documentation>
-                  </xs:annotation>
-                </xs:attribute>
               </xs:complexType>
             </xs:element>
             <xs:element name="model" minOccurs="0" maxOccurs="1" type="model:model">

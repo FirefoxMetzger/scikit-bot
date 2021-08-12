@@ -83,13 +83,14 @@
               </xs:annotation>
               <xs:complexType>
                 <xs:simpleContent>
-                  <xs:extension base="types:pose"/>
+                  <xs:extension base="types:pose">
+                    <xs:attribute name="relative_to" type="xs:string" use="optional">
+                      <xs:annotation>
+                        <xs:documentation xml:lang="en">Name of frame relative to which the pose is applied.</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                  </xs:extension>
                 </xs:simpleContent>
-                <xs:attribute name="relative_to" type="xs:string" use="optional">
-                  <xs:annotation>
-                    <xs:documentation xml:lang="en">Name of frame relative to which the pose is applied.</xs:documentation>
-                  </xs:annotation>
-                </xs:attribute>
               </xs:complexType>
             </xs:element>
           </xs:all>
@@ -127,13 +128,14 @@
               </xs:annotation>
               <xs:complexType>
                 <xs:simpleContent>
-                  <xs:extension base="xs:double"/>
+                  <xs:extension base="xs:double">
+                    <xs:attribute name="axis" type="xs:unsignedInt" use="required">
+                      <xs:annotation>
+                        <xs:documentation xml:lang="en">Index of the axis.</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                  </xs:extension>
                 </xs:simpleContent>
-                <xs:attribute name="axis" type="xs:unsignedInt" use="required">
-                  <xs:annotation>
-                    <xs:documentation xml:lang="en">Index of the axis.</xs:documentation>
-                  </xs:annotation>
-                </xs:attribute>
               </xs:complexType>
             </xs:element>
           </xs:all>
@@ -169,13 +171,14 @@
               </xs:annotation>
               <xs:complexType>
                 <xs:simpleContent>
-                  <xs:extension base="types:pose"/>
+                  <xs:extension base="types:pose">
+                    <xs:attribute name="relative_to" type="xs:string" use="optional">
+                      <xs:annotation>
+                        <xs:documentation xml:lang="en">Name of frame relative to which the pose is applied.</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                  </xs:extension>
                 </xs:simpleContent>
-                <xs:attribute name="relative_to" type="xs:string" use="optional">
-                  <xs:annotation>
-                    <xs:documentation xml:lang="en">Name of frame relative to which the pose is applied.</xs:documentation>
-                  </xs:annotation>
-                </xs:attribute>
               </xs:complexType>
             </xs:element>
           </xs:all>
@@ -197,13 +200,14 @@
         </xs:annotation>
         <xs:complexType>
           <xs:simpleContent>
-            <xs:extension base="types:pose"/>
+            <xs:extension base="types:pose">
+              <xs:attribute name="relative_to" type="xs:string" use="optional">
+                <xs:annotation>
+                  <xs:documentation xml:lang="en">Name of frame relative to which the pose is applied.</xs:documentation>
+                </xs:annotation>
+              </xs:attribute>
+            </xs:extension>
           </xs:simpleContent>
-          <xs:attribute name="relative_to" type="xs:string" use="optional">
-            <xs:annotation>
-              <xs:documentation xml:lang="en">Name of frame relative to which the pose is applied.</xs:documentation>
-            </xs:annotation>
-          </xs:attribute>
         </xs:complexType>
       </xs:element>
       <xs:element name="link" minOccurs="0" maxOccurs="unbounded">
@@ -241,13 +245,14 @@
               </xs:annotation>
               <xs:complexType>
                 <xs:simpleContent>
-                  <xs:extension base="types:pose"/>
+                  <xs:extension base="types:pose">
+                    <xs:attribute name="relative_to" type="xs:string" use="optional">
+                      <xs:annotation>
+                        <xs:documentation xml:lang="en">Name of frame relative to which the pose is applied.</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                  </xs:extension>
                 </xs:simpleContent>
-                <xs:attribute name="relative_to" type="xs:string" use="optional">
-                  <xs:annotation>
-                    <xs:documentation xml:lang="en">Name of frame relative to which the pose is applied.</xs:documentation>
-                  </xs:annotation>
-                </xs:attribute>
               </xs:complexType>
             </xs:element>
           </xs:all>
