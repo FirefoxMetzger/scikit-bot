@@ -1,6 +1,6 @@
 import setuptools
 
-install_requires = ["numpy == 1.20.0", "scipy == 1.7.1"]
+install_requires = ["numpy == 1.21.1", "scipy == 1.7.1"]
 
 extras_require = {
     "ignition": [
