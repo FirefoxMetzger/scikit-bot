@@ -95,6 +95,10 @@ def _fetch_include_uri(
 def create_frame_graph(sdf: str) -> Tuple[Dict[str, rtf.Frame], Dict[str, rtf.Link]]:
     """Create a frame graph from a sdformat string.
 
+    .. deprecated:: 0.4.0
+        This function will be removed in skbot v1.0. Use
+        :func:`skbot.ignition.transform_graph_from_sdf` instead.
+
     Parameters
     ----------
     sdformat: TextIO
