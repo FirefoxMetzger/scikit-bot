@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.4 (2021-08-12)
+### Fix
+* XSD attributes must be inside extension ([#46](https://github.com/FirefoxMetzger/ropy/issues/46)) ([`5ee8278`](https://github.com/FirefoxMetzger/ropy/commit/5ee8278d0b1b38f1bbbda93f5560cb107587a70e))
+
 ## v0.3.3 (2021-08-10)
 ### Fix
 * Include schema in distributed package ([#44](https://github.com/FirefoxMetzger/ropy/issues/44)) ([`b62ae5b`](https://github.com/FirefoxMetzger/ropy/commit/b62ae5b0f15d6c87ee9cdccbaf9e166c147ea131))
