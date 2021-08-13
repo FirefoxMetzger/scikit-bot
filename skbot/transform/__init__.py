@@ -85,6 +85,7 @@ from .base import (
     Link,
     CustomLink,
     InvertLink,
+    CompundLink,
 )
 
 from .functions import (
@@ -111,8 +112,7 @@ __all__ = [
     "Link",
     "CustomLink",
     "InvertLink",
-    "coordinates",
-    "projections",
+    "CompundLink",
     # Affine Links
     "Translation",
     "Rotation",
