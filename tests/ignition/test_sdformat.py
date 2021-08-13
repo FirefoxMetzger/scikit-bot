@@ -63,6 +63,6 @@ def test_idempotence(valid_sdf_string):
 
 
 def test_force_version():
-    sdf_file = Path(__file__).parent / "sdf" / "empty.sdf"
+    sdf_file = Path(__file__).parent / "sdf" / "sdformat" / "empty.sdf"
 
     ign.sdformat.loads(sdf_file.read_text(), version="1.8")
