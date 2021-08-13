@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.4.0 (2021-08-13)
+### Feature
+* Add CompoundLink ([#47](https://github.com/FirefoxMetzger/scikit-bot/issues/47)) ([`9657fdb`](https://github.com/FirefoxMetzger/scikit-bot/commit/9657fdb2fea119edc0745334c259dc01431d5eb4))
+
 ## v0.3.4 (2021-08-12)
 ### Fix
 * XSD attributes must be inside extension ([#46](https://github.com/FirefoxMetzger/ropy/issues/46)) ([`5ee8278`](https://github.com/FirefoxMetzger/ropy/commit/5ee8278d0b1b38f1bbbda93f5560cb107587a70e))
