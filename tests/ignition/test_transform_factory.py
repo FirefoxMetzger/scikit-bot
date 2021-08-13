@@ -5,10 +5,8 @@ from pathlib import Path
 import skbot.ignition as ign
 
 
-def test_sdformat_transform_factory(valid_sdf_string):
-    if ign.sdformat.get_version(valid_sdf_string) != "1.8":
-        pytest.skip("Wrong Version")
-    ign.transform_graph_from_sdf(valid_sdf_string)
+def test_v18_parsing(v18_sdf):    
+    ign.transform_graph_from_sdf(v18_sdf)
 
 
 def test_panda():
