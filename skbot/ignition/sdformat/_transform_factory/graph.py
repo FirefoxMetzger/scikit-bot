@@ -3,8 +3,8 @@ from typing import Dict, Tuple, List, Any
 from contextlib import contextmanager
 import numpy as np
 
-from ... import transform as tf
-from . import sdformat
+from .... import transform as tf
+from .. import sdformat
 
 class Graph:
     def __init__(self) -> None:
