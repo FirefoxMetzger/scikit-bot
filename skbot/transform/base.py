@@ -448,3 +448,44 @@ class CustomLink(Link):
 
     def transform(self, x: ArrayLike) -> np.ndarray:
         return self._transform(x)
+
+
+class CompundLink(Link):
+    """A link representing a sequence of other links
+
+    .. versionadded:: 0.4.0
+
+    This link allows you to build a complex link from a sequence of simpler
+    links. Upon ``transform`` each link transforms the result of its predecessor
+    and the result of the last link is returned. Similarly, when
+    __inverse_transform__ is called, each link inverse transformes its
+    successor (inverse order).
+
+    Parameters
+    ----------
+    wrapped_links : List[Link]
+        A sequence of link objects. The order is first-to-last, i.e.,
+        ``wrapped_links[0]`` is applied first and ``wrapped_links[-1]`` is
+        applied last.
+
+    Notes
+    -----
+    This link will only be invertible if all wrapped links implement
+    __inverse_transform__.
+
+    """
+
+    def __init__(self, wrapped_links: List[Link]):
+        self._links = wrapped_links
+
+    def transform(self, x: ArrayLike) -> np.ndarray:
+        for link in self._links:
+            x = link.transform(x)
+
+        return x
+
+    def __inverse_transform__(self, x: ArrayLike) -> np.ndarray:
+        for link in reversed(self._links):
+            x = link.__inverse_transform__(x)
+
+        return x

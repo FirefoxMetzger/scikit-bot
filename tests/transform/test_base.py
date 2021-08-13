@@ -44,3 +44,24 @@ def test_find_frame(simple_graph):
     start = simple_graph[4]
     with pytest.raises(RuntimeError):
         start.find_frame("frame1/.../frame5")
+
+
+@pytest.mark.parametrize(
+    "vec_child, vec_parent",
+    [
+        ((0, 0, 0), (3, 1, 3)),
+        ((2, 0, 0), (3, 3, 3)),
+        ((0, 1, 0), (2, 1, 3)),
+    ],
+)
+def test_compound_frame(vec_child, vec_parent):
+    translation = tf.Translation((3, 1, 3))
+    rotation = tf.EulerRotation("Z", 90, degrees=True)
+
+    pose = tf.CompundLink([rotation, translation])
+
+    out = pose.transform(vec_child)
+    assert np.allclose(out, vec_parent)
+
+    out = pose.__inverse_transform__(vec_parent)
+    assert np.allclose(out, vec_child)
