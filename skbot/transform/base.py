@@ -457,8 +457,9 @@ class CompundLink(Link):
 
     This link allows you to build a complex link from a sequence of simpler
     links. Upon ``transform`` each link transforms the result of its predecessor
-    and the result of the last link is returned. Similarly each link inverse
-    transformes its successor when __inverse_transform__ is called.
+    and the result of the last link is returned. Similarly, when
+    __inverse_transform__ is called, each link inverse transformes its
+    successor (inverse order).
 
     Parameters
     ----------
