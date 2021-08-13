@@ -1,17 +1,53 @@
-from typing import Callable, Dict, Tuple
-
-from ... import transform as tf
-from . import sdformat
-from ._transform_factory import ConverterReturn
-
 import numpy as np
 from urllib.parse import urlparse
-from typing import Callable, Tuple, List
+from typing import Callable, Tuple, List, Any
 
 from . import ConverterReturn, LinkDict
-from ._transform_factory.graph import Graph
+from .graph import Graph
+from ...fuel import get_fuel_model
+from .. import sdformat
+from .... import transform as tf
 
-from ._transform_factory.generic import resolve_include
+
+def resolve_include(include:Any, graph:Graph) -> Tuple[Graph, LinkDict]:
+    uri_parts = urlparse(include.uri)
+    if uri_parts.scheme == "fuel":
+        sdf = get_fuel_model(include.uri)
+    else:
+        raise sdformat.ParseError(f"Unknown include scheme for URI: {include.uri}")
+
+    version = sdformat.get_version(sdf)
+    converter: Callable[[str], ConverterReturn]
+    converter = {
+        "1.0": None,
+        "1.2": None,
+        "1.3": None,
+        "1.4": None,
+        "1.5": None,
+        "1.6": None,
+        "1.7": None,
+        "1.8": _v18_parser,
+    }[version]
+
+    if converter is None:
+        raise NotImplementedError(f"Including SDFormat v{version} is not supported yet.")
+
+    subgraph, link_dict  = converter(sdf)
+    graph.extend(subgraph)
+
+    included_root = subgraph.nodes[subgraph.root_node]
+    if include.name is not None:
+        included_root.name = include.name
+
+    if include.placement_frame is not None:
+        child_frame = include.placement_frame
+    else:
+        child_frame = subgraph.root_node
+
+    tf_link, parent = graph.pose_to_transform(include.pose)
+    graph.connect_sdf(parent, child_frame, tf_link)
+
+    return graph, link_dict
 
 
 def _v18_parser(sdf: str, *, unwrap=True) -> ConverterReturn:
@@ -42,112 +78,6 @@ def _v18_parser(sdf: str, *, unwrap=True) -> ConverterReturn:
     """
 
     import skbot.ignition.sdformat.bindings.v18 as v18
-
-
-    def _convert_world(world: v18.World) -> Graph:
-        graph = Graph()
-        graph.add_node(world.name, tf.Frame(3, name=world.name))
-        with graph.scope(world.name), graph.set_root():
-            for include in world.include:
-                resolve_include(include, graph)
-                
-            
-            # TODO: GUI
-            # TODO: scene
-
-            for light in world.light:
-                subgraph = _convert_light(light)
-                graph.extend(subgraph)
-
-            for frame in world.frame:
-                graph.add_pose(frame.name, frame.pose)
-
-            for model in world.model:
-                _convert_model(model, graph=graph)
-
-            # TODO: actor
-            # TODO: road
-            # TODO: spherical coords
-            # TODO: state
-            # TODO: population
-
-        return graph
-        # # convert population
-        # for population in world.population:
-        #     tf_frame = tf.Frame(3, name=population.name)
-        #     offset = _pose_to_numpy(population.pose.value)
-        #     tf_link = tf.Translation(offset)
-
-        #     if population.pose.relative_to is not None:
-        #         parent = population.pose.relative_to
-        #         unresolved_poses.append((parent, tf_frame, tf_link))
-        #     else:
-        #         tf_link(tf_frame, world_frame)
-
-        #     num_defined = 0
-        #     if population.box is not None:
-        #         num_defined += 1
-        #     if population.cylinder is not None:
-        #         num_defined += 1
-        #     num_defined += len(population.model)
-
-        #     if len(population.model) > 1:
-        #         raise NotImplementedError("Multiple models defined for population..")
-        #     elif num_defined == 0:
-        #         raise sdformat.ParseError("No models defined for population.")
-
-        #     if population.box:
-        #         model_gen = lambda: tf.Frame(3)
-        #     elif population.cylinder:
-        #         model_gen = lambda: tf.Frame(3)
-        #     else:
-        #         model_gen = lambda: _convert_model(population.model[0])
-
-        #     step = np.array(population.distribution.step.split(" "), dtype=float)
-        #     rows = np.arange(population.distribution.rows)[:, -1, -1]
-        #     cols = np.array(population.distribution.cols)[-1, :, -1]
-
-        #     dist_kind = population.distribution.type
-        #     if dist_kind == "random":
-        #         for _ in range(population.model_count):
-        #             tf_frame = model_gen()
-        #             # TODO: randomize me
-        #             tf_link = tf.Translation((0, 0, 0))
-        #             tf_link(tf_frame, world_frame)
-        #     elif dist_kind == "uniform":
-        #         pass
-        #     elif dist_kind == "grid":
-        #         row_step, col_step, _ = [
-        #             float(x) for x in population.distribution.step.split(" ")
-        #         ]
-        #         for row in range(population.distribution.rows):
-        #             row_pos = row_step * row
-        #             for col in range(population.distribution.cols):
-        #                 col_pos = col_step * col
-        #                 tf_frame = model_gen()
-        #                 tf_frame.name = tf_frame.name + f"_clone_{col*population.distribution.rows + row}"
-        #                 tf_link = tf.Translation((row_pos, col_pos, 0))
-        #     elif dist_kind == "linear-x":
-        #         raise NotImplementedError("Linear placement not implemented yet.")
-        #     elif dist_kind == "linear-y":
-        #         raise NotImplementedError("Linear placement not implemented yet.")
-        #     elif dist_kind == "linear-z":
-        #         raise NotImplementedError("Linear placement not implemented yet.")
-
-        #     for model_idx in range(population.model_count):
-        #         pass
-
-    def _convert_state(state: v18.State) -> Graph:
-        raise NotImplementedError()
-
-    def _convert_light(light: v18.Light, *, graph:Graph=None) -> Graph:
-        if graph is None:
-            graph = Graph()
-
-        raise NotImplementedError()
-
-    def _convert_actor() -> Graph:
-        raise NotImplementedError()
 
     def _convert_model(model: v18.ModelModel, *, graph:Graph=None) -> Graph:
         if graph is None:
@@ -352,53 +282,3 @@ def _v18_parser(sdf: str, *, unwrap=True) -> ConverterReturn:
         return graph_list[0], link_dict
     else:
         return graph_list, link_dict
-
-
-
-def transform_graph_from_sdf(sdf: str) -> Tuple[Dict[str, tf.Frame], Dict[str, tf.Link]]:
-    """Create a frame graph from a sdformat string.
-
-    Parameters
-    ----------
-    sdformat: str
-        A string containing SDFormat XML.
-
-    Returns
-    -------
-    frame : transform.Frame
-        A frame of the frame graph that corresponds to the root element of
-        the SDFormat XML.
-    links : Dict[str, Frames]
-        A dict of (named) links in the graph.
-
-    See Also
-    --------
-    :mod:`skbot.transform`
-
-    Notes
-    -----
-    .. versionadded:: 0.4.0
-
-    """
-
-    version = sdformat.get_version(sdf)
-
-    converter: Callable[[str], ConverterReturn]
-    converter = {
-        "1.0": None,
-        "1.2": None,
-        "1.3": None,
-        "1.4": None,
-        "1.5": None,
-        "1.6": None,
-        "1.7": None,
-        "1.8": _v18_parser,
-    }[version]
-
-    if converter is None:
-        raise NotImplementedError(f"SDFormat v{version} is not supported yet.")
-
-    graph, link_dict  = converter(sdf)
-    graph.resolve()
-
-    return graph.nodes[graph.root_node]
