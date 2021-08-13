@@ -52,6 +52,7 @@ Basic functions
     Link
     InvertLink
     CustomLink
+    CompundLink
 
 
 Affine Transformations
