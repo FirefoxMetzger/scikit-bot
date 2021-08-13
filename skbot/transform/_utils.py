@@ -47,7 +47,9 @@ def scalar_project(
     return sign * magnitude
 
 
-def angle_between(vec_a: ArrayLike, vec_b: ArrayLike, *, axis: int = -1, eps=1e-10) -> np.ndarray:
+def angle_between(
+    vec_a: ArrayLike, vec_b: ArrayLike, *, axis: int = -1, eps=1e-10
+) -> np.ndarray:
     """Computes the angle from a to b (in a right-handed frame)
 
     Notes

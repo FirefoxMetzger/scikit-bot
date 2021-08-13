@@ -474,10 +474,10 @@ class CompundLink(Link):
 
     """
 
-    def __init__(self, wrapped_links:List[Link]):
+    def __init__(self, wrapped_links: List[Link]):
         self._links = wrapped_links
 
-    def transform(self, x: ArrayLike) -> np.ndarray:        
+    def transform(self, x: ArrayLike) -> np.ndarray:
         for link in self._links:
             x = link.transform(x)
 
