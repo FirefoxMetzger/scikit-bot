@@ -1,10 +1,127 @@
-from skbot.ignition.sdformat.bindings.v18 import sdf
-from typing import Dict, Tuple, List, Any
+from typing import Callable, Dict, Tuple, List, Any
+from dataclasses import dataclass
 from contextlib import contextmanager
 import numpy as np
+from scipy.spatial.transform import Rotation as ScipyRotation
 
 from .... import transform as tf
 from .. import sdformat
+
+
+@dataclass
+class PoseData:
+    parent: str
+    child: str
+    pose: np.ndarray
+    relative_to: str
+    parent_frame: tf.Frame = None
+    child_frame: tf.Frame = None
+    relative_frame: tf.Frame = None
+    link: tf.Link = None
+
+@dataclass
+class LinkData:
+    parent: str
+    child: str
+    link: tf.Link
+    parent_frame: tf.Frame = None
+    child_frame: tf.Frame = None
+
+
+class Scope:
+    def __init__(self, name, implicit_frame, *, parent:"Scope"=None) -> None:
+        self.nested_scopes: Dict[str,"Scope"] = dict()
+
+        self.frames: Dict[str, tf.Frame] = dict()
+        self.poses: List[PoseData] = list()
+        self.links: List[LinkData] = list()
+
+        self.declare_frame(implicit_frame)
+        self.parent = parent
+
+    def declare_frame(self, name:str) -> None:
+        if name in self.frames.keys():
+            raise IndexError("Frame already declared.")
+
+        frame = tf.Frame(3, name=name)
+        self.frames[name] = frame
+
+    def declare_link(self, parent:str, child:str, link:tf.Link):
+        self.links.append(LinkData(
+            parent,
+            child,
+            link
+        ))
+
+    def declare_pose(self, parent:str, child:str, pose:np.ndarray, relative_to:str):
+        self.poses.append(PoseData(
+            parent,
+            child,
+            pose,
+            relative_to
+        ))
+
+    def get(self, frame:str):
+        """Find the frame from a (namespaced) SDFormat name"""
+
+        if frame == "world":
+            if self.parent is None:
+                return self.frames[frame]
+            else:
+                return self.parent.get(frame)
+
+        if "::" in frame:
+            elements = frame.split("::")
+            scope = elements.pop(0)
+            frame = "::".join(elements)
+            return self.nested_scopes[scope].get(frame)
+        else:
+            return self.frames[frame]
+
+    def resolve_names(self):
+        for el in self.links:
+            el.parent_frame = self.get(el.parent)
+            el.child_frame = self.get(el.child)
+
+        for el in self.poses:
+            el.parent_frame = self.get(el.parent)
+            el.child_frame = self.get(el.child)
+            el.relative_frame = self.get(el.relative_frame)
+
+        for scope in self.nested_scopes.values():
+            scope.resolve_names()
+
+    def resolve_links(self):
+        for el in self.links:
+            el.link(el.parent_frame, el.child_frame)
+
+        for scope in self.nested_scopes.values():
+            scope.resolve_links()
+
+    def resolve_poses(self):
+        for scope in self.nested_scopes.values():
+            scope.resolve_poses()
+
+        for el in self.poses:
+            offset = el.relative_frame.transform(el.pose[:3], el.parent_frame)
+            translation = tf.Translation(offset)
+
+            rot_matrix = list()
+            for basis in np.eye(3):
+                vec = el.relative_frame.transform(basis, el.parent_frame)
+                rot_matrix.append(vec)
+            rot_matrix = np.stack(rot_matrix, axis=1)
+            rot_matrix -= offset[:, None]
+            angles = ScipyRotation.from_matrix(rot_matrix).as_euler("xyz")
+            
+            if np.any(np.abs(angles) > 1e-12):
+                rotation = tf.EulerRotation("xyz", angles)
+                tf_pose = tf.CompundLink([rotation, translation])
+            else:
+                tf_pose = translation
+
+            tf_pose(el.parent_frame, el.child_frame)
+
 
 
 class Graph:
