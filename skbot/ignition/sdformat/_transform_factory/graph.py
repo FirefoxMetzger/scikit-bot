@@ -111,7 +111,14 @@ class Graph:
             offset = _pose_to_numpy(pose.value)
             parent = pose.relative_to
 
-        return tf.Translation(offset[:3]), parent
+        translation = tf.Translation(offset[:3])
+        if np.any(offset[3:] != 0):
+            rotation = tf.EulerRotation("xyz", offset[3:])
+            tf_pose = tf.CompundLink([rotation, translation])
+        else:
+            tf_pose = translation
+
+        return tf_pose, parent
 
     def add_pose(self, name: str, pose: Any) -> str:
         """Add a SDF //pose element to the graph"""
