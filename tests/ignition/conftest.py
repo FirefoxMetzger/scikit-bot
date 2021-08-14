@@ -69,7 +69,6 @@ def sdf_string(request):
         "sdformat/joint_invalid_self_parent.sdf",
         "sdformat/world_nested_model.sdf",
         "sdformat/model_frame_attached_to.sdf",
-        "sdformat/placement_frame.sdf",
         "sdformat/empty.sdf",
         "sdformat/joint_axis_xyz_normalization.sdf",
         "sdformat/joint_child_world.sdf",
@@ -174,18 +173,10 @@ def invalid_sdf_string(request):
         "sdformat/model_relative_to_nested_reference.sdf",
         "sdformat/model_nested_static_model.sdf",
         "sdformat/joint_parent_frame.sdf",
-        "sdformat/includes_missing_uri.sdf",
-        "sdformat/includes_missing_model.sdf",
         "sdformat/world_nested_frame.sdf",
         "sdformat/world_frame_invalid_attached_to_scope.sdf",
         "sdformat/material_valid.sdf",
         "sdformat/joint_invalid_self_parent.sdf",
-        "sdformat/placement_frame.sdf",
-        "sdformat/includes_model_without_sdf.sdf",
-        "sdformat/world_invalid_root_reference.sdf",
-        "sdformat/model_include_with_interface_api.sdf",
-        "sdformat/includes_without_top_level.sdf",
-        "sdformat/include_with_interface_api_reposture.sdf",
         "sdformat/nested_model_cross_references.sdf",
         "sdformat/nested_explicit_canonical_link.sdf",
         "sdformat/material_invalid.sdf",
@@ -206,9 +197,30 @@ def invalid_sdf_string(request):
         "sdformat/model_invalid_placement_frame.sdf",
         "sdformat/world_nested_frame_attached_to.sdf",
         "sdformat/placement_frame_missing_pose.sdf",
+        "v18/fuel_include.sdf",
+        "v18/fuel_include_rename.sdf",
+        "v18/fuel_include_placement_frame.sdf",
+        "v18/complete_world.sdf",
     ]
 )
 def v18_sdf(request):
+    filename = request.param
+    return (sdf_folder / filename).read_text()
+
+@pytest.fixture(
+    params=[
+        "sdformat/includes_missing_model.sdf",
+        "sdformat/includes_missing_uri.sdf",
+        "sdformat/includes_model_without_sdf.sdf",
+        "v18/fuel_include_unknown_server.sdf",
+
+        "sdformat/world_invalid_root_reference.sdf",
+        "sdformat/model_include_with_interface_api.sdf",
+        "sdformat/includes_without_top_level.sdf",
+        "sdformat/include_with_interface_api_reposture.sdf",
+    ]
+)
+def v18_sdf_invalid(request):
     filename = request.param
     return (sdf_folder / filename).read_text()
 
