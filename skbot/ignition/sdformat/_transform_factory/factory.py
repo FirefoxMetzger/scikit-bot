@@ -13,7 +13,7 @@ _converter_roots = {
     "1.4": None,
     "1.5": None,
     "1.6": None,
-    "1.7": None,
+    "1.7": "..v17",
     "1.8": "..v18",
 }
 
@@ -23,7 +23,7 @@ class GraphFactory:
     that can then be assembled into transform graphs"""
     converters: Dict[str, Callable] = dict()
 
-    def __call__(self, sdf:str, *, unwrap=True) -> Graph:
+    def __call__(self, sdf:str, *, unwrap=True, root_uri:str=None) -> Graph:
         version = sdformat.get_version(sdf)
         if version not in self.converters.keys():
             # lazy loading of SDF bindings
@@ -33,7 +33,7 @@ class GraphFactory:
             mod = importlib.import_module(converter_module, __name__)
             self.converters[version] = mod.converter
 
-        return self.converters[version](sdf, unwrap=unwrap)
+        return self.converters[version](sdf, unwrap=unwrap, root_uri=root_uri)
 
 # a singleton
 graph_factory = GraphFactory()

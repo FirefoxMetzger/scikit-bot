@@ -6,6 +6,7 @@ import numpy as np
 from .... import transform as tf
 from .. import sdformat
 
+
 class Graph:
     def __init__(self) -> None:
         self.nodes: Dict[str, tf.Frame] = dict()
@@ -16,7 +17,7 @@ class Graph:
         self.world_edges: List[Tuple(str, tf.Link)] = list()
 
         # Typically a SDF's model or world frame
-        self.root_node:str = None
+        self.root_node: str = None
 
     @property
     def prefix(self):
@@ -43,15 +44,15 @@ class Graph:
 
         self.edges.append((parent_path, child_path, link))
 
-    def _convert_sdf_path(self, sdf_name:str, use_scope=True):
+    def _convert_sdf_path(self, sdf_name: str, use_scope=True):
         """Converts a SDF path into a transform path"""
 
         if sdf_name == "world":
             # special value, handle downstream
             return "world"
-        
-        elements = self._root 
-        
+
+        elements = self._root
+
         if use_scope:
             elements = elements + self._scope
 
@@ -87,7 +88,7 @@ class Graph:
 
         return path
 
-    def pose_to_transform(self, pose:Any) -> Tuple[tf.Link, str]:
+    def pose_to_transform(self, pose: Any) -> Tuple[tf.Link, str]:
         def _pose_to_numpy(pose: Any) -> np.ndarray:
             """Pose Value to Numpy Array"""
             pose_str: str
@@ -112,7 +113,7 @@ class Graph:
 
         return tf.Translation(offset[:3]), parent
 
-    def add_pose(self, name:str, pose:Any) -> str:
+    def add_pose(self, name: str, pose: Any) -> str:
         """Add a SDF //pose element to the graph"""
 
         tf_frame = tf.Frame(3, name=name)
@@ -121,7 +122,7 @@ class Graph:
 
         return path
 
-    def connect_sdf(self, parent:str, child:str, link:tf.Link) -> None:
+    def connect_sdf(self, parent: str, child: str, link: tf.Link) -> None:
         """Connect nodes (relative to root)"""
         child_path = self._convert_sdf_path(child)
         parent_path = self._convert_sdf_path(parent)
@@ -129,7 +130,7 @@ class Graph:
         if parent_path == "world":
             self.world_edges.append((child_path, link))
             return
-        
+
         self.edges.append((parent_path, child_path, link))
 
     @contextmanager
@@ -154,7 +155,7 @@ class Graph:
 
         old_scope = self._scope
         old_root = self._root
-        self._root =  self._root + self._scope
+        self._root = self._root + self._scope
         self._scope = list()
 
         yield
@@ -190,13 +191,43 @@ class Graph:
             link(child_frame, world_frame)
 
     def extend(self, other: "Graph") -> None:
-        for path, frame in other.nodes:
+        """Add the nodes of the other graph under the current scope.
+
+        Parameters
+        ----------
+        other : Graph
+            A (unresolved) graph that should be added to this Graph.
+
+        """
+
+        for path, frame in other.nodes.items():
             self.add_node(path, frame)
 
         for parent, child, link in other.edges:
             self.add_link(parent, child, link)
 
         for child, link in other.world_edges:
-            elements = child.split("/")
-            path = "/".join(self._root + elements)
-            self.world_edges.append((path, link))
+            self.world_edges.append((child, link))
+
+    def rename_root(self, new_name:str):
+        """Changes the name of the current root node into a new name"""
+        
+        old_name = self.root_node
+        self.nodes[self.root_node].name = new_name
+        self.root_node = new_name
+
+        for path in [key for key in self.nodes.keys()]:
+            frame = self.nodes.pop(path)
+            path = path.replace(old_name, new_name, 1)
+            self.nodes[path] = frame
+
+        for idx in range(len(self.edges)):
+            parent, child, link = self.edges[idx]
+            parent = parent.replace(old_name, new_name, 1)
+            child = child.replace(old_name, new_name, 1)
+            self.edges[idx] = (parent, child, link)
+
+        for idx in range(len(self.world_edges)):
+            child, link = self.world_edges[idx]
+            child = child.replace(old_name, new_name, 1)
+            self.world_edges[idx] = (child, link)

@@ -3,18 +3,19 @@ from urllib.parse import urlparse
 from typing import List, Union
 from pathlib import Path
 
-from requests.api import get
-
 from .graph import Graph
 from .factory import graph_factory
 from .. import sdformat
-from ..bindings import v18
+from ..bindings import v17
 from ...fuel import get_fuel_model
 from .... import transform as tf
 
 
-IncludeElement = Union[v18.ModelModel.Include, v18.World.Include]
-PoseOnlyElement = Union[v18.Collision, v18.Visual, v18.Light]
+IncludeElement = Union[v17.ModelModel.Include, v17.World.Include]
+PoseOnlyElement = Union[
+    v17.Collision,
+    v17.Visual
+]
 
 
 def resolve_include(
@@ -24,23 +25,24 @@ def resolve_include(
 
     # there is only one fuel server
     fuel_server = "fuel.ignitionrobotics.org"
-    uri_parts = urlparse(include.uri)
 
+    uri_parts = urlparse(include.uri)
     if uri_parts.scheme == "https" and uri_parts.netloc == fuel_server:
-        root_uri = include.uri
-        rel_path = "model.sdf"
-    elif uri_parts.scheme == "model":
+        sdf = get_fuel_model(include.uri)
+    elif uri_parts.scheme == "model" and uri_parts.netloc == fuel_server:
         raise NotImplementedError("Unsure how to resolve model://.")
     elif uri_parts.scheme == "":
         if root_uri is None:
-            raise sdformat.ParseError(f"Unknown URI: {include.uri}")
-        rel_path = include.uri
+            raise sdformat.ParseError("Can't resolve relative include without root_uri.")
+        root_parts = urlparse(root_uri)
+        if root_parts.scheme == "https" and root_parts.netloc == fuel_server:
+            sdf = get_fuel_model(root_uri, file_path=include.uri)
+        else:
+            sdf = (Path(root_uri) / include.uri).read_text()
     else:
-        raise sdformat.ParseError(f"Unknown URI: {include.uri}")
+        raise sdformat.ParseError(f"Failed to include: {include.uri}")
 
-    sdf = get_fuel_model(root_uri, file_path=rel_path)
-    subgraph = graph_factory(sdf, root_uri=root_uri)
-
+    subgraph = graph_factory(sdf)
     if include.name is not None:
         model_name = include.name
         subgraph.rename_root(include.name)
@@ -59,7 +61,7 @@ def resolve_include(
     return graph
 
 
-def convert_world(world: v18.World, root_uri: str = None) -> Graph:
+def convert_world(world: v17.World, root_uri: str = None) -> Graph:
     graph = Graph()
     graph.add_node(world.name, tf.Frame(3, name=world.name))
     with graph.scope(world.name), graph.set_root():
@@ -70,7 +72,8 @@ def convert_world(world: v18.World, root_uri: str = None) -> Graph:
         # TODO: scene
 
         for light in world.light:
-            convert_light(light, graph=graph)
+            subgraph = convert_light(light)
+            graph.extend(subgraph)
 
         for frame in world.frame:
             graph.add_pose(frame.name, frame.pose)
@@ -150,26 +153,19 @@ def convert_world(world: v18.World, root_uri: str = None) -> Graph:
     #     for model_idx in range(population.model_count):
     #         pass
 
-
-def convert_state(state: v18.State) -> Graph:
+def convert_state(state: v17.State) -> Graph:
     raise NotImplementedError()
 
-
-def convert_light(light: v18.Light, *, graph: Graph = None) -> Graph:
+def convert_light(light: v17.Light, *, graph: Graph = None) -> Graph:
     if graph is None:
         graph = Graph()
 
-    return convert_pose_only(light, graph)
-
-
+    raise NotImplementedError()
 
 def convert_actor() -> Graph:
     raise NotImplementedError()
 
-
-def convert_model(
-    model: v18.ModelModel, *, graph: Graph = None, root_uri: str = None
-) -> Graph:
+def convert_model(model: v17.ModelModel, *, graph: Graph = None, root_uri: str = None) -> Graph:
     if graph is None:
         graph = Graph()
         graph.add_node(model.name, tf.Frame(3, name=model.name))
@@ -199,8 +195,7 @@ def convert_model(
 
     return graph
 
-
-def convert_link(link: v18.Link, graph: Graph) -> Graph:
+def convert_link(link: v17.Link, graph: Graph) -> Graph:
     if link.must_be_base_link:
         link.pose.relative_to = "world"
 
@@ -237,8 +232,7 @@ def convert_link(link: v18.Link, graph: Graph) -> Graph:
 
     return graph
 
-
-def convert_sensor(sensor: v18.Sensor, graph: Graph) -> Graph:
+def convert_sensor(sensor: v17.Sensor, graph: Graph) -> Graph:
     graph.add_pose(sensor.name, sensor.pose)
 
     with graph.scope(sensor.name):
@@ -304,11 +298,10 @@ def convert_sensor(sensor: v18.Sensor, graph: Graph) -> Graph:
 
     return graph
 
-
-def convert_joint(joint: v18.Joint, graph: Graph) -> Graph:
+def convert_joint(joint: v17.Joint, graph: Graph) -> Graph:
     if isinstance(joint.pose, str):
         # xsData bug
-        joint.pose = v18.Joint.Pose(joint.pose)
+        joint.pose = v17.Joint.Pose(joint.pose)
     joint.pose.relative_to = joint.child
     graph.add_pose(joint.name, joint.pose)
 
@@ -345,28 +338,24 @@ def convert_joint(joint: v18.Joint, graph: Graph) -> Graph:
 
     return graph
 
-
 def convert_pose_only(element: PoseOnlyElement, graph: Graph) -> Graph:
     graph.add_pose(element.name, element.pose)
     return graph
 
 
 def converter(sdf: str, *, unwrap=True, root_uri: str = None) -> Graph:
-    """Convert v1.8 SDF into a Graph
+    """Turn v1.8 SDF into a frame graph
 
     Parameters
     ----------
     sdf_in : Sdf
-        A :class:`skbot.ignition.sdformat.bindings.v18.Sdf` element containing
+        A :class:`skbot.ignition.sdformat.bindings.v17.Sdf` element containing
         the world/model to turn into a frame graph.
     unwrap : bool
         If True (default) and the sdf only contains a single light, model, or
         world element return that element's frame. If the sdf contains multiple
         lights, models, or worlds a list of root frames is returned. If False,
         always return a list of frames.
-    root_uri : str
-        If not None, use this location as the root when resolving relative includes.
-        This can either be a location on the local file-system or a fuel URL.
 
     Returns
     -------
@@ -381,22 +370,23 @@ def converter(sdf: str, *, unwrap=True, root_uri: str = None) -> Graph:
     It is necessary to split the parsers, since versions differ so heavily.
     """
 
-    sdf_root: v18.Sdf = sdformat.loads(sdf)
+    sdf_root: v17.Sdf = sdformat.loads(sdf)
     graph_list: List[Graph] = list()
+    link_dict = dict()
 
     for world in sdf_root.world:
         graph = convert_world(world, root_uri=root_uri)
         graph.root_node = world.name
         graph_list.append(graph)
 
-    if sdf_root.model is not None:
-        graph = convert_model(sdf_root.model, root_uri=root_uri)
-        graph.root_node = sdf_root.model.name
+    for model in sdf_root.model:
+        graph = convert_model(model, root_uri=root_uri)
+        graph.root_node = model.name
         graph_list.append(graph)
 
-    if sdf_root.light is not None:
-        graph = convert_light(sdf_root.model)
-        graph.root_node = sdf_root.light.name
+    for light in sdf_root.light:
+        graph = convert_light(light)
+        graph.root_node = light.name
         graph_list.append(graph)
 
     if unwrap and len(graph_list) == 1:

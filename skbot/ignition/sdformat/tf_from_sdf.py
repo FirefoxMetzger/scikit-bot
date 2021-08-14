@@ -1,10 +1,10 @@
-from typing import Union, List
+from typing import Union, List, Tuple
 
 from ... import transform as tf
 from ._transform_factory.factory import graph_factory
 
 
-def transform_graph_from_sdf(sdf: str, *, unwrap=True, axis=-1, shape=(1,)) -> Union[tf.Frame, List[tf.Frame]]:
+def transform_graph_from_sdf(sdf: str, *, unwrap:bool=True, axis:int=-1, shape:Tuple[int]=(1,)) -> Union[tf.Frame, List[tf.Frame]]:
     """Create a frame graph from a sdformat string.
 
     .. versionadded:: 0.5.0
