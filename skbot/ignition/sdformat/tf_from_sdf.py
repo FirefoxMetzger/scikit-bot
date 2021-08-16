@@ -1,3 +1,4 @@
+from skbot.ignition.sdformat._transform_factory.graph import ModelScope, Scope, WorldScope
 from typing import Union, List, Tuple
 
 from ... import transform as tf
@@ -39,11 +40,19 @@ def transform_graph_from_sdf(
 
     """
 
-    graph_list = graph_factory(sdf, unwrap=False)
-    for graph in graph_list:
-        graph.resolve()
+    scope_list:List[Scope] = graph_factory(sdf, unwrap=False)
+    frame_list:List[tf.Frame] = list()
+    for scope in scope_list:
+        scope.build_scaffolding()
+        scope.resolve_links()
 
-    if unwrap and len(graph_list) == 1:
-        return graph_list[0].nodes[graph.root_node]
+        if isinstance(scope, WorldScope):
+            frame_list.append(scope.frames["world"])
+        elif isinstance(scope, ModelScope):
+            frame_list.append(scope.cannonical_link)
+
+
+    if unwrap and len(frame_list) == 1:
+        return frame_list[0]
     else:
-        return [graph.nodes[graph.root_node] for graph in graph_list]
+        return frame_list

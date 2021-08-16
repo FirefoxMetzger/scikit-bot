@@ -42,8 +42,8 @@ class SimplePose(SdfLink):
 
 class DynamicPose(SdfLink):
     def to_transform_link(self, scope: "Scope", *, angle_eps=1e-15) -> tf.Link:
-        child = scope.get(self.child, scaffolding=True)
         parent = scope.get(self.parent, scaffolding=True)
+        child = scope.get(self.child, scaffolding=True)
 
         translation = parent.transform((0, 0, 0), child)
 
@@ -127,10 +127,6 @@ class Scope:
             self.default_frame = tf.Frame(3, name="world")
             self.scaffold_frames["world"] = self.default_frame
             self.frames["world"] = tf.Frame(3, name="world")
-        else:
-            self.default_frame = tf.Frame(3, name="__model__")
-            self.scaffold_frames["__model__"] = self.default_frame
-            self.cannonical_link: str = None
 
     def declare_frame(self, name: str, *, scaffold=True, dynamic=True):
         if name in self.frames.keys():
@@ -183,7 +179,7 @@ class Scope:
         for el in self.scaffold_links:
             tf_link = el.to_transform_link(self)
             parent = self.get(el.parent, scaffolding=True)
-            child = self.get(el.parent, scaffolding=True)
+            child = self.get(el.child, scaffolding=True)
             tf_link(parent, child)
 
         for scope in self.nested_scopes.values():
@@ -197,7 +193,7 @@ class Scope:
                 parent = el.parent
             
             if isinstance(el.child, str):
-                child = self.get(el.parent, scaffolding=False)
+                child = self.get(el.child, scaffolding=False)
             else:
                 child = el.child
             
@@ -213,3 +209,28 @@ class Scope:
 
         self.nested_scopes[nested_scope.name] = nested_scope
         nested_scope.parent = self
+
+
+class ModelScope(Scope):
+    def __init__(self, name, *, parent: "Scope"=None, placement_frame:str=None, canonical_link:str=None) -> None:
+        super().__init__(name, parent=parent)
+
+        if placement_frame is None:
+            self.placement_frame = "__model__"
+        else:
+            self.placement_frame = placement_frame
+
+        self.default_frame = tf.Frame(3, name="__model__")
+        self.scaffold_frames["__model__"] = self.default_frame
+        
+        self.cannonical_link = canonical_link
+
+
+class WorldScope(Scope):
+    def __init__(self, name) -> None:
+        super().__init__(name, parent=None)
+
+        if self.name == "world":
+            self.default_frame = tf.Frame(3, name="world")
+            self.scaffold_frames["world"] = self.default_frame
+            self.frames["world"] = tf.Frame(3, name=name)

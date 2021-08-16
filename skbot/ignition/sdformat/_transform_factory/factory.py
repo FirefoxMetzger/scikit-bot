@@ -1,4 +1,5 @@
-from typing import Callable, Dict, Union, List
+from skbot.ignition.sdformat.bindings.v17.link import Link
+from typing import Callable, Dict, Union, List, Any
 import importlib
 from urllib.parse import urlparse
 
@@ -53,7 +54,7 @@ class GraphFactory:
     """A factory that turns SDF of different versions into generic graphs
     that can then be assembled into transform graphs"""
 
-    converters: Dict[str, Callable] = dict()
+    converters: Dict[str, Callable[[Any], Union[Scope, List[Scope]]]] = dict()
 
     def __call__(self, sdf: str, *, unwrap=True, root_uri: str = None) -> Scope:
         version = sdformat.get_version(sdf)

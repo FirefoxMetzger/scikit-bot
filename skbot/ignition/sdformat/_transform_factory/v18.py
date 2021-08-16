@@ -1,6 +1,15 @@
 from typing import List, Union
 
-from .graph import CustomLink, Scope, DynamicPose, SimplePose, RotationJoint, PrismaticJoint
+from .graph import (
+    CustomLink,
+    Scope,
+    DynamicPose,
+    SimplePose,
+    RotationJoint,
+    PrismaticJoint,
+    ModelScope,
+    WorldScope,
+)
 from .factory import ConverterBase
 from .. import sdformat
 from ..bindings import v18
@@ -81,7 +90,7 @@ class Converter(ConverterBase):
         scope.declare_link(DynamicPose(name, child))
 
     def convert_world(self, world: v18.World) -> Scope:
-        world_scope = Scope("world")
+        world_scope = WorldScope("world")
         for include in world.include:
             self.resolve_include(include, world_scope)
 
@@ -195,9 +204,11 @@ class Converter(ConverterBase):
     def convert_model(
         self, model: v18.ModelModel, *, parent_scope: Scope = None
     ) -> Scope:
-        scope = Scope(model.name)
-        scope.placement_frame = model.placement_frame
-        scope.cannonical_link = model.canonical_link
+        scope = ModelScope(
+            model.name,
+            placement_frame=model.placement_frame,
+            canonical_link=model.canonical_link,
+        )
 
         for include in model.include:
             self.resolve_include(include, scope)
@@ -237,6 +248,9 @@ class Converter(ConverterBase):
         if link.must_be_base_link:
             link.pose.relative_to = "world"
             scope.declare_link(DynamicPose("world", link.name))
+
+        if link.pose is None:
+            link.pose = v18.Link.Pose()
 
         scope.declare_frame(link.name)
         scope.add_scaffold(link.name, link.pose.value, link.pose.relative_to)
@@ -287,6 +301,9 @@ class Converter(ConverterBase):
         return scope
 
     def convert_sensor(self, sensor: v18.Sensor, scope: Scope) -> Scope:
+        if sensor.pose is None:
+            sensor.pose = v18.Sensor.Pose()
+
         scope.declare_frame(sensor.name)
         scope.add_scaffold(sensor.name, sensor.pose.value, sensor.pose.relative_to)
 
@@ -360,6 +377,9 @@ class Converter(ConverterBase):
         return scope
 
     def convert_joint(self, joint: v18.Joint, scope: Scope) -> Scope:
+        if joint.pose is None:
+            joint.pose = v18.Joint.Pose()
+
         scope.declare_frame(joint.name)
         scope.add_scaffold(joint.name, joint.pose.value, joint.pose.relative_to)
         scope.declare_link(DynamicPose(joint.child, joint.name))

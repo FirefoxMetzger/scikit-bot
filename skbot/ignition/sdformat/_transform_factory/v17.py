@@ -64,15 +64,16 @@ class Converter(ConverterBase):
 
         if include.placement_frame is not None:
             placement_frame = include.placement_frame
+            if include.pose.relative_to is None:
+                include.pose.relative_to = name
         else:
             placement_frame = subscope.placement_frame
+            if include.pose is None:
+                include.pose = v17.ModelModel.Include.Pose()
+                include.pose.relative_to = name
         placement_frame = subscope.name + "::" + placement_frame
 
-        # omitted relative to means implicit sub-model frame for //include
-        # not implicit model or world frame
-        if include.pose.relative_to is None:
-            include.pose.relative_to = name
-
+        
         scope.add_scaffold(
             placement_frame, include.pose.value, include.pose.relative_to
         )
