@@ -2,6 +2,13 @@
 
 <!--next-version-placeholder-->
 
+## v0.4.1 (2021-08-16)
+### Fix
+* **sdformat:** Correct defaults for pose ([#50](https://github.com/FirefoxMetzger/scikit-bot/issues/50)) ([`2b66afb`](https://github.com/FirefoxMetzger/scikit-bot/commit/2b66afbd8d3a6d8c6bd49d24d07456c1ca95946d))
+
+### Documentation
+* Add CD badge ([`7f9f659`](https://github.com/FirefoxMetzger/scikit-bot/commit/7f9f6593f975af20ec7c64f6c45ef87297dc58c9))
+
 ## v0.4.0 (2021-08-13)
 ### Feature
 * Add CompoundLink ([#47](https://github.com/FirefoxMetzger/scikit-bot/issues/47)) ([`9657fdb`](https://github.com/FirefoxMetzger/scikit-bot/commit/9657fdb2fea119edc0745334c259dc01431d5eb4))
