@@ -29,8 +29,6 @@ class ConverterBase:
         raise NotImplementedError()
 
     def _resolve_include(self, uri: str) -> Scope:
-        """"""
-
         # there is only one fuel server
         fuel_server = "fuel.ignitionrobotics.org"
         uri_parts = urlparse(uri)
