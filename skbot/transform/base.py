@@ -476,6 +476,7 @@ class CompundLink(Link):
     """
 
     def __init__(self, wrapped_links: List[Link]):
+        super().__init__(wrapped_links[0].parent_dim, wrapped_links[-1].child_dim)
         self._links = wrapped_links
 
     def transform(self, x: ArrayLike) -> np.ndarray:
