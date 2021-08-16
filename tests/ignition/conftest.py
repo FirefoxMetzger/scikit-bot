@@ -168,8 +168,6 @@ def invalid_sdf_string(request):
 
 @pytest.fixture(
     params=[
-        "sdformat/include_with_interface_api_frame_semantics.sdf",
-        "sdformat/includes.sdf",
         "sdformat/joint_child_frame.sdf",
         "sdformat/joint_invalid_resolved_parent_same_as_child.sdf",
         "sdformat/joint_invalid_self_child.sdf",
@@ -206,6 +204,8 @@ def v18_sdf(request):
 
 @pytest.fixture(
     params=[
+        "sdformat/includes.sdf",
+        "sdformat/include_with_interface_api_frame_semantics.sdf",
         "sdformat/include_with_interface_api_reposture.sdf",
         "sdformat/includes_missing_model.sdf",
         "sdformat/includes_missing_uri.sdf",
