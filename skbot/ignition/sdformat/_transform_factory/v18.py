@@ -3,12 +3,11 @@ from typing import List, Union
 from .graph import CustomLink, Scope, DynamicPose, SimplePose, RotationJoint, PrismaticJoint
 from .factory import ConverterBase
 from .. import sdformat
-from ..bindings import v17
+from ..bindings import v18
 from .... import transform as tf
 
 
-IncludeElement = Union[v17.ModelModel.Include, v17.World.Include]
-PoseOnlyElement = Union[v17.Collision, v17.Visual, v17.Light]
+IncludeElement = Union[v18.ModelModel.Include, v18.World.Include]
 
 
 class Converter(ConverterBase):
@@ -33,7 +32,7 @@ class Converter(ConverterBase):
         It is necessary to split the parsers, since versions differ so heavily.
         """
 
-        sdf_root: v17.Sdf = sdformat.loads(sdf)
+        sdf_root: v18.Sdf = sdformat.loads(sdf)
         graph_list: List[Scope] = list()
 
         for world in sdf_root.world:
@@ -81,7 +80,7 @@ class Converter(ConverterBase):
         child = subscope.name + "::" + subscope.cannonical_link
         scope.declare_link(DynamicPose(name, child))
 
-    def convert_world(self, world: v17.World) -> Scope:
+    def convert_world(self, world: v18.World) -> Scope:
         world_scope = Scope("world")
         for include in world.include:
             self.resolve_include(include, world_scope)
@@ -178,10 +177,10 @@ class Converter(ConverterBase):
 
         return world_scope
 
-    def convert_state(self, state: v17.State) -> Scope:
+    def convert_state(self, state: v18.State) -> Scope:
         raise NotImplementedError()
 
-    def convert_light(self, light: v17.Light, *, scope: Scope = None) -> Scope:
+    def convert_light(self, light: v18.Light, *, scope: Scope = None) -> Scope:
         if scope is None:
             scope = Scope()
 
@@ -194,7 +193,7 @@ class Converter(ConverterBase):
         raise NotImplementedError()
 
     def convert_model(
-        self, model: v17.ModelModel, *, parent_scope: Scope = None
+        self, model: v18.ModelModel, *, parent_scope: Scope = None
     ) -> Scope:
         scope = Scope(model.name)
         scope.placement_frame = model.placement_frame
@@ -234,7 +233,7 @@ class Converter(ConverterBase):
 
         return scope
 
-    def convert_link(self, link: v17.Link, scope: Scope) -> Scope:
+    def convert_link(self, link: v18.Link, scope: Scope) -> Scope:
         if link.must_be_base_link:
             link.pose.relative_to = "world"
             scope.declare_link(DynamicPose("world", link.name))
@@ -287,7 +286,7 @@ class Converter(ConverterBase):
 
         return scope
 
-    def convert_sensor(self, sensor: v17.Sensor, scope: Scope) -> Scope:
+    def convert_sensor(self, sensor: v18.Sensor, scope: Scope) -> Scope:
         scope.declare_frame(sensor.name)
         scope.add_scaffold(sensor.name, sensor.pose.value, sensor.pose.relative_to)
 
@@ -360,7 +359,7 @@ class Converter(ConverterBase):
 
         return scope
 
-    def convert_joint(self, joint: v17.Joint, scope: Scope) -> Scope:
+    def convert_joint(self, joint: v18.Joint, scope: Scope) -> Scope:
         scope.declare_frame(joint.name)
         scope.add_scaffold(joint.name, joint.pose.value, joint.pose.relative_to)
         scope.declare_link(DynamicPose(joint.child, joint.name))

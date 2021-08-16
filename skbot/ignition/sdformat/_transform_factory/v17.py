@@ -8,7 +8,6 @@ from .... import transform as tf
 
 
 IncludeElement = Union[v17.ModelModel.Include, v17.World.Include]
-PoseOnlyElement = Union[v17.Collision, v17.Visual, v17.Light]
 
 
 class Converter(ConverterBase):
