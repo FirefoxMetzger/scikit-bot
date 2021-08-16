@@ -74,8 +74,8 @@ class Visual:
             "namespace": "",
         },
     )
-    pose: "Visual.Pose" = field(
-        default="0 0 0 0 0 0",
+    pose: Optional["Visual.Pose"] = field(
+        default=None,
         metadata={
             "type": "Element",
             "namespace": "",
@@ -148,8 +148,8 @@ class Visual:
             defined inside the parent that this frame is attached to.
         """
 
-        pose: "Visual.Frame.Pose" = field(
-            default="0 0 0 0 0 0",
+        pose: Optional["Visual.Frame.Pose"] = field(
+            default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -174,7 +174,7 @@ class Visual:
             """
 
             value: str = field(
-                default="",
+                default="0 0 0 0 0 0",
                 metadata={
                     "required": True,
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
@@ -197,7 +197,7 @@ class Visual:
         """
 
         value: str = field(
-            default="",
+            default="0 0 0 0 0 0",
             metadata={
                 "required": True,
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",

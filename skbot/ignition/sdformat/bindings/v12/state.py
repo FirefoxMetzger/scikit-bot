@@ -17,7 +17,7 @@ class State:
     class Meta:
         name = "state"
 
-    time: float = field(
+    time: str = field(
         default="0 0",
         metadata={
             "type": "Element",

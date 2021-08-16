@@ -274,8 +274,8 @@ class World:
                 "required": True,
             },
         )
-        pose: "World.Include.Pose" = field(
-            default="0 0 0 0 0 0",
+        pose: Optional["World.Include.Pose"] = field(
+            default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -293,7 +293,7 @@ class World:
             """
 
             value: str = field(
-                default="",
+                default="0 0 0 0 0 0",
                 metadata={
                     "required": True,
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
@@ -431,8 +431,8 @@ class World:
                     "namespace": "",
                 },
             )
-            pose: "World.Gui.Camera.Pose" = field(
-                default="0 0 0 0 0 0",
+            pose: Optional["World.Gui.Camera.Pose"] = field(
+                default=None,
                 metadata={
                     "type": "Element",
                     "namespace": "",
@@ -560,8 +560,8 @@ class World:
                     frame is attached to.
                 """
 
-                pose: "World.Gui.Camera.Frame.Pose" = field(
-                    default="0 0 0 0 0 0",
+                pose: Optional["World.Gui.Camera.Frame.Pose"] = field(
+                    default=None,
                     metadata={
                         "type": "Element",
                         "namespace": "",
@@ -587,7 +587,7 @@ class World:
                     """
 
                     value: str = field(
-                        default="",
+                        default="0 0 0 0 0 0",
                         metadata={
                             "required": True,
                             "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
@@ -611,7 +611,7 @@ class World:
                 """
 
                 value: str = field(
-                    default="",
+                    default="0 0 0 0 0 0",
                     metadata={
                         "required": True,
                         "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
@@ -895,8 +895,8 @@ class World:
                 "namespace": "",
             },
         )
-        pose: "World.Population.Pose" = field(
-            default="0 0 0 0 0 0",
+        pose: Optional["World.Population.Pose"] = field(
+            default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -1041,8 +1041,8 @@ class World:
                 attached to.
             """
 
-            pose: "World.Population.Frame.Pose" = field(
-                default="0 0 0 0 0 0",
+            pose: Optional["World.Population.Frame.Pose"] = field(
+                default=None,
                 metadata={
                     "type": "Element",
                     "namespace": "",
@@ -1068,7 +1068,7 @@ class World:
                 """
 
                 value: str = field(
-                    default="",
+                    default="0 0 0 0 0 0",
                     metadata={
                         "required": True,
                         "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
@@ -1091,7 +1091,7 @@ class World:
             """
 
             value: str = field(
-                default="",
+                default="0 0 0 0 0 0",
                 metadata={
                     "required": True,
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",

@@ -45,8 +45,8 @@ class Model:
             "namespace": "",
         },
     )
-    pose: "Model.Pose" = field(
-        default="0 0 0 0 0 0",
+    pose: Optional["Model.Pose"] = field(
+        default=None,
         metadata={
             "type": "Element",
             "namespace": "",
@@ -131,8 +131,8 @@ class Model:
             defined inside the parent that this frame is attached to.
         """
 
-        pose: "Model.Frame.Pose" = field(
-            default="0 0 0 0 0 0",
+        pose: Optional["Model.Frame.Pose"] = field(
+            default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -157,7 +157,7 @@ class Model:
             """
 
             value: str = field(
-                default="",
+                default="0 0 0 0 0 0",
                 metadata={
                     "required": True,
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
@@ -180,7 +180,7 @@ class Model:
         """
 
         value: str = field(
-            default="",
+            default="0 0 0 0 0 0",
             metadata={
                 "required": True,
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
@@ -260,8 +260,8 @@ class Model:
                 "namespace": "",
             },
         )
-        pose: "Model.Link.Pose" = field(
-            default="0 0 0 0 0 0",
+        pose: Optional["Model.Link.Pose"] = field(
+            default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -290,8 +290,8 @@ class Model:
                 attached to.
             """
 
-            pose: "Model.Link.Frame.Pose" = field(
-                default="0 0 0 0 0 0",
+            pose: Optional["Model.Link.Frame.Pose"] = field(
+                default=None,
                 metadata={
                     "type": "Element",
                     "namespace": "",
@@ -317,7 +317,7 @@ class Model:
                 """
 
                 value: str = field(
-                    default="",
+                    default="0 0 0 0 0 0",
                     metadata={
                         "required": True,
                         "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
@@ -340,7 +340,7 @@ class Model:
             """
 
             value: str = field(
-                default="",
+                default="0 0 0 0 0 0",
                 metadata={
                     "required": True,
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
@@ -373,7 +373,7 @@ class State:
     class Meta:
         name = "state"
 
-    sim_time: float = field(
+    sim_time: str = field(
         default="0 0",
         metadata={
             "type": "Element",
@@ -381,7 +381,7 @@ class State:
             "required": True,
         },
     )
-    wall_time: float = field(
+    wall_time: str = field(
         default="0 0",
         metadata={
             "type": "Element",
@@ -389,7 +389,7 @@ class State:
             "required": True,
         },
     )
-    real_time: float = field(
+    real_time: str = field(
         default="0 0",
         metadata={
             "type": "Element",
@@ -499,8 +499,8 @@ class State:
                 "namespace": "",
             },
         )
-        pose: "State.Light.Pose" = field(
-            default="0 0 0 0 0 0",
+        pose: Optional["State.Light.Pose"] = field(
+            default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -529,8 +529,8 @@ class State:
                 attached to.
             """
 
-            pose: "State.Light.Frame.Pose" = field(
-                default="0 0 0 0 0 0",
+            pose: Optional["State.Light.Frame.Pose"] = field(
+                default=None,
                 metadata={
                     "type": "Element",
                     "namespace": "",
@@ -556,7 +556,7 @@ class State:
                 """
 
                 value: str = field(
-                    default="",
+                    default="0 0 0 0 0 0",
                     metadata={
                         "required": True,
                         "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
@@ -579,7 +579,7 @@ class State:
             """
 
             value: str = field(
-                default="",
+                default="0 0 0 0 0 0",
                 metadata={
                     "required": True,
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",

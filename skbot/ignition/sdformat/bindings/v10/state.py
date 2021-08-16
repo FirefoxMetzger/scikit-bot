@@ -24,7 +24,7 @@ class State:
             "required": True,
         },
     )
-    time: float = field(
+    time: str = field(
         default="0 0",
         metadata={
             "type": "Attribute",

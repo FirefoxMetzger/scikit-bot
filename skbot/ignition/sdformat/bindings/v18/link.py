@@ -100,8 +100,8 @@ class Link:
             "namespace": "",
         },
     )
-    pose: "Link.Pose" = field(
-        default="0 0 0 0 0 0",
+    pose: Optional["Link.Pose"] = field(
+        default=None,
         metadata={
             "type": "Element",
             "namespace": "",
@@ -225,7 +225,7 @@ class Link:
         """
 
         value: str = field(
-            default="",
+            default="0 0 0 0 0 0",
             metadata={
                 "required": True,
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
@@ -388,8 +388,8 @@ class Link:
                 "required": True,
             },
         )
-        pose: "Link.Projector.Pose" = field(
-            default="0 0 0 0 0 0",
+        pose: Optional["Link.Projector.Pose"] = field(
+            default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -422,7 +422,7 @@ class Link:
             """
 
             value: str = field(
-                default="",
+                default="0 0 0 0 0 0",
                 metadata={
                     "required": True,
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
@@ -531,8 +531,8 @@ class Link:
                 "required": True,
             },
         )
-        pose: "Link.AudioSource.Pose" = field(
-            default="0 0 0 0 0 0",
+        pose: Optional["Link.AudioSource.Pose"] = field(
+            default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -571,7 +571,7 @@ class Link:
             """
 
             value: str = field(
-                default="",
+                default="0 0 0 0 0 0",
                 metadata={
                     "required": True,
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
@@ -787,8 +787,8 @@ class Link:
                 "namespace": "",
             },
         )
-        pose: "Link.ParticleEmitter.Pose" = field(
-            default="0 0 0 0 0 0",
+        pose: Optional["Link.ParticleEmitter.Pose"] = field(
+            default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -828,7 +828,7 @@ class Link:
             """
 
             value: str = field(
-                default="",
+                default="0 0 0 0 0 0",
                 metadata={
                     "required": True,
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",

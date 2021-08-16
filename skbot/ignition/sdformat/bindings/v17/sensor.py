@@ -94,8 +94,8 @@ class Sensor:
             "required": True,
         },
     )
-    pose: "Sensor.Pose" = field(
-        default="0 0 0 0 0 0",
+    pose: Optional["Sensor.Pose"] = field(
+        default=None,
         metadata={
             "type": "Element",
             "namespace": "",
@@ -240,7 +240,7 @@ class Sensor:
         """
 
         value: str = field(
-            default="",
+            default="0 0 0 0 0 0",
             metadata={
                 "required": True,
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
@@ -808,8 +808,8 @@ class Sensor:
                 "required": True,
             },
         )
-        pose: "Sensor.Camera.Pose" = field(
-            default="0 0 0 0 0 0",
+        pose: Optional["Sensor.Camera.Pose"] = field(
+            default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -1294,7 +1294,7 @@ class Sensor:
             """
 
             value: str = field(
-                default="",
+                default="0 0 0 0 0 0",
                 metadata={
                     "required": True,
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
@@ -2091,16 +2091,20 @@ class Sensor:
                     "required": True,
                 },
             )
-            custom_rpy: "Sensor.Imu.OrientationReferenceFrame.CustomRpy" = field(
-                default="0 0 0",
+            custom_rpy: Optional[
+                "Sensor.Imu.OrientationReferenceFrame.CustomRpy"
+            ] = field(
+                default=None,
                 metadata={
                     "type": "Element",
                     "namespace": "",
                     "required": True,
                 },
             )
-            grav_dir_x: "Sensor.Imu.OrientationReferenceFrame.GravDirX" = field(
-                default="1 0 0",
+            grav_dir_x: Optional[
+                "Sensor.Imu.OrientationReferenceFrame.GravDirX"
+            ] = field(
+                default=None,
                 metadata={
                     "type": "Element",
                     "namespace": "",
@@ -2122,7 +2126,7 @@ class Sensor:
                 """
 
                 value: str = field(
-                    default="",
+                    default="0 0 0",
                     metadata={
                         "required": True,
                         "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
@@ -2149,7 +2153,7 @@ class Sensor:
                 """
 
                 value: str = field(
-                    default="",
+                    default="1 0 0",
                     metadata={
                         "required": True,
                         "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
