@@ -26,10 +26,10 @@ class CustomLink(SdfLink):
 
 class SimplePose(SdfLink):
     def __init__(
-        self, parent: str, child: Union[str, tf.Frame], pose: np.ndarray
+        self, parent: str, child: Union[str, tf.Frame], pose: str
     ) -> None:
         super().__init__(parent, child)
-        self.pose = pose
+        self.pose = np.array(pose.split(" "), dtype=float)
 
     def to_transform_link(self, scope: "Scope", *, angle_eps=1e-15) -> tf.Link:
         if np.any(np.abs(self.pose[3:]) > angle_eps):
@@ -139,30 +139,17 @@ class Scope:
             self.scaffold_frames[name] = tf.Frame(3, name=name)
 
     def add_scaffold(self, frame_name: str, pose: str, relative_to: str = None) -> None:
-        pose_array = np.array(pose.split(" "), dtype=float)
-
         parent = self.default_frame.name
         if relative_to is not None:
             parent = relative_to
 
-        self.scaffold_links.append(SimplePose(frame_name, parent, pose_array))
+        self.scaffold_links.append(SimplePose(frame_name, parent, pose))
 
     def declare_link(self, link: SdfLink) -> None:
         self.links.append(link)
 
     def get(self, name: str, scaffolding: bool) -> tf.Frame:
         """Find the frame from a (namespaced) SDFormat name"""
-
-        if name == "world":
-            if self.parent is None:
-                if self.name != "world":
-                    raise sdformat.ParseError("Not a world element.")
-                if scaffolding:
-                    return self.default_frame
-                else:
-                    return self.frames["world"]
-            else:
-                return self.parent.get(name, scaffolding)
 
         if "::" in name:
             elements = name.split("::")
@@ -225,12 +212,30 @@ class ModelScope(Scope):
         
         self.cannonical_link = canonical_link
 
+    def get(self, name: str, scaffolding: bool) -> tf.Frame:
+        """Find the frame from a (namespaced) SDFormat name"""
+
+        if name == "world":
+            return self.parent.get(name, scaffolding)
+
+        return super().get(name, scaffolding)
+
 
 class WorldScope(Scope):
     def __init__(self, name) -> None:
         super().__init__(name, parent=None)
 
-        if self.name == "world":
-            self.default_frame = tf.Frame(3, name="world")
-            self.scaffold_frames["world"] = self.default_frame
-            self.frames["world"] = tf.Frame(3, name=name)
+        self.default_frame = tf.Frame(3, name="world")
+        self.scaffold_frames["world"] = self.default_frame
+        self.frames["world"] = tf.Frame(3, name=name)
+
+    def get(self, name: str, scaffolding: bool) -> tf.Frame:
+        """Find the frame from a (namespaced) SDFormat name"""
+
+        if name == "world":
+            if scaffolding:
+                return self.default_frame
+            else:
+                return self.frames["world"]
+
+        return super().get(name, scaffolding)

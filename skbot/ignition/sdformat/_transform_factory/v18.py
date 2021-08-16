@@ -1,5 +1,7 @@
 from typing import List, Union
 
+import numpy as np
+
 from .graph import (
     CustomLink,
     Scope,
@@ -65,22 +67,22 @@ class Converter(ConverterBase):
         subscope = super()._resolve_include(include.uri)
 
         if include.name is not None:
-            name = include.name
-        else:
-            name = subscope.name
+            subscope.name = include.name
+
+        name = subscope.name
         scope.add_subscope(name, subscope)
         scope.declare_frame(name)
 
         if include.placement_frame is not None:
             placement_frame = include.placement_frame
+            if include.pose.relative_to is None:
+                include.pose.relative_to = name
         else:
             placement_frame = subscope.placement_frame
-        placement_frame = subscope.name + "::" + placement_frame
+            #TODO: deal with absend //include/pose
+            # not quite sure how yet.
 
-        # omitted relative to means implicit sub-model frame for //include
-        # not implicit model or world frame
-        if include.pose.relative_to is None:
-            include.pose.relative_to = name
+        placement_frame = subscope.name + "::" + placement_frame
 
         scope.add_scaffold(
             placement_frame, include.pose.value, include.pose.relative_to
@@ -90,7 +92,7 @@ class Converter(ConverterBase):
         scope.declare_link(DynamicPose(name, child))
 
     def convert_world(self, world: v18.World) -> Scope:
-        world_scope = WorldScope("world")
+        world_scope = WorldScope(world.name)
         for include in world.include:
             self.resolve_include(include, world_scope)
 
@@ -104,14 +106,25 @@ class Converter(ConverterBase):
             world_scope.declare_link(DynamicPose("world", light.name))
 
         for frame in world.frame:
+            if frame.pose is None:
+                frame.pose = v18.World.Frame.Pose()
+
             world_scope.declare_frame(frame.name)
             world_scope.add_scaffold(
                 frame.name, frame.pose.value, frame.pose.relative_to
             )
+
+            if frame.attached_to is None:
+                frame.attached_to = "world"
+
             world_scope.declare_link(DynamicPose(frame.attached_to, frame.name))
 
         for model in world.model:
-            self.convert_model(model, graph=world_scope)
+            self.convert_model(model, parent_scope=world_scope)
+
+            # double-check if this is correct
+            world_scope.add_scaffold(model.name, "0 0 0 0 0 0")
+            world_scope.declare_link(SimplePose("world", model.name, "0 0 0 0 0 0"))
 
         # TODO: actor
         # TODO: road
@@ -193,6 +206,9 @@ class Converter(ConverterBase):
         if scope is None:
             scope = Scope()
 
+        if light.pose is None:
+            light.pose = v18.Light.Pose()
+
         scope.declare_frame(light.name)
         scope.add_scaffold(light.name, light.pose.value, light.pose.relative_to)
 
@@ -210,19 +226,36 @@ class Converter(ConverterBase):
             canonical_link=model.canonical_link,
         )
 
+        if model.pose is None:
+            model.pose = v18.ModelModel.Pose()
+
+        for link in model.link:
+            if scope.cannonical_link is None:
+                scope.cannonical_link = link.name
+
+            self.convert_link(link, scope)
+
         for include in model.include:
             self.resolve_include(include, scope)
 
         for nested_model in model.model:
             self.convert_model(nested_model, parent_scope=scope)
 
+            # double-check if this is correct
+            scope.add_scaffold(nested_model.name, "0 0 0 0 0 0")
+            scope.declare_link(SimplePose(scope.default_frame, nested_model.name, "0 0 0 0 0 0"))
+
         for frame in model.frame:
+            if frame.pose is None:
+                frame.pose = v18.ModelModel.Frame.Pose()
+
             scope.declare_frame(frame.name)
             scope.add_scaffold(frame.name, frame.pose.value, frame.pose.relative_to)
-            scope.declare_link(DynamicPose(frame.attached_to, frame.name))
 
-        for link in model.link:
-            self.convert_link(link, scope)
+            if frame.attached_to is None:
+                frame.attached_to = scope.cannonical_link
+
+            scope.declare_link(DynamicPose(frame.attached_to, frame.name))
 
         for joint in model.joint:
             self.convert_joint(joint, scope)
