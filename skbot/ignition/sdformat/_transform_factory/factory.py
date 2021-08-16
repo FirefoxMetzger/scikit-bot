@@ -20,7 +20,7 @@ _converter_roots = {
 }
 
 
-class Converter:
+class ConverterBase:
     def __init__(self, *, unwrap=True, root_uri: str = None):
         self.root_uri: str = root_uri
         self.unwrap: bool = unwrap
@@ -65,7 +65,7 @@ class GraphFactory:
             if converter_module is None:
                 raise NotImplementedError(f"SDFormat v{version} is not supported yet.")
             mod = importlib.import_module(converter_module, __name__)
-            self.converters[version] = mod.converter
+            self.converters[version] = mod.Converter
 
         return self.converters[version](root_uri=root_uri, unwrap=unwrap)(sdf)
 

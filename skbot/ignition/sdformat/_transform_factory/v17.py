@@ -1,7 +1,7 @@
 from typing import List, Union
 
 from .graph import CustomLink, Scope, DynamicPose, SimplePose, RotationJoint, PrismaticJoint
-from .factory import Converter
+from .factory import ConverterBase
 from .. import sdformat
 from ..bindings import v17
 from .... import transform as tf
@@ -11,7 +11,7 @@ IncludeElement = Union[v17.ModelModel.Include, v17.World.Include]
 PoseOnlyElement = Union[v17.Collision, v17.Visual, v17.Light]
 
 
-class SdfV18(Converter):
+class Converter(ConverterBase):
     def __call__(self, sdf: str) -> Union[Scope, List[Scope]]:
         """Convert v1.8 SDF into a Graph
 
@@ -196,7 +196,7 @@ class SdfV18(Converter):
     def convert_model(
         self, model: v17.ModelModel, *, parent_scope: Scope = None
     ) -> Scope:
-        scope = Scope()
+        scope = Scope(model.name)
         scope.placement_frame = model.placement_frame
         scope.cannonical_link = model.canonical_link
 
