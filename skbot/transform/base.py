@@ -200,7 +200,7 @@ class Frame:
 
         """
 
-        x_new = x
+        x_new = np.asarray(x)
         for link in self._get_transform_chain(to_frame, ignore_frames):
             x_new = link.transform(x_new)
 
