@@ -1,7 +1,5 @@
 from typing import List, Union
 
-import numpy as np
-
 from .graph import (
     CustomLink,
     Scope,
@@ -70,17 +68,18 @@ class Converter(ConverterBase):
             subscope.name = include.name
 
         name = subscope.name
-        scope.add_subscope(name, subscope)
+        scope.add_subscope(subscope)
         scope.declare_frame(name)
 
         if include.placement_frame is not None:
             placement_frame = include.placement_frame
-            if include.pose.relative_to is None:
-                include.pose.relative_to = name
         else:
             placement_frame = subscope.placement_frame
             #TODO: deal with absend //include/pose
             # not quite sure how yet.
+
+        if include.pose.relative_to is None:
+            include.pose.relative_to = name
 
         placement_frame = subscope.name + "::" + placement_frame
 
@@ -115,6 +114,8 @@ class Converter(ConverterBase):
             )
 
             if frame.attached_to is None:
+                frame.attached_to = "world"
+            elif frame.attached_to == "":
                 frame.attached_to = "world"
 
             world_scope.declare_link(DynamicPose(frame.attached_to, frame.name))
@@ -254,6 +255,8 @@ class Converter(ConverterBase):
 
             if frame.attached_to is None:
                 frame.attached_to = scope.cannonical_link
+            elif frame.attached_to == "":
+                frame.attached_to = scope.cannonical_link
 
             scope.declare_link(DynamicPose(frame.attached_to, frame.name))
 
@@ -294,6 +297,9 @@ class Converter(ConverterBase):
             )
 
         for collision in link.collision:
+            if collision.pose is None:
+                collision.pose = v18.Collision.Pose()
+
             scope.declare_frame(collision.name)
             scope.add_scaffold(
                 collision.name, collision.pose.value, collision.pose.relative_to
@@ -301,6 +307,9 @@ class Converter(ConverterBase):
             scope.declare_link(DynamicPose(link.name, collision.name))
 
         for visual in link.visual:
+            if visual.pose is None:
+                visual.pose = v18.Visual.Pose()
+
             scope.declare_frame(visual.name)
             scope.add_scaffold(visual.name, visual.pose.value, visual.pose.relative_to)
             scope.declare_link(DynamicPose(link.name, visual.name))
@@ -310,6 +319,9 @@ class Converter(ConverterBase):
             scope.declare_link(DynamicPose(link.name, sensor.name))
 
         if link.projector:
+            if link.projector.pose is None:
+                link.projector.pose = v18.Link.Projector.Pose()
+
             scope.declare_frame(link.projector.name)
             scope.add_scaffold(
                 link.projector.name,
@@ -322,6 +334,9 @@ class Converter(ConverterBase):
             # docs
 
         for idx, source in enumerate(link.audio_source):
+            if source.pose is None:
+                source.pose = v18.Link.AudioSource.Pose()
+
             name = link.name + f"-audio-source-{idx}"
             scope.declare_frame(name)
             scope.add_scaffold(name, source.pose.value, source.pose.relative_to)

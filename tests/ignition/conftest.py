@@ -154,7 +154,6 @@ def valid_sdf_string(request):
         "sdformat/unrecognized_elements.sdf",
         "sdformat/unrecognized_elements_with_namespace.sdf",
         "sdformat/world_include_with_interface_api.sdf",
-        "sdformat/world_valid_root_reference.sdf",
         "sdformat/world_complete.sdf",
         "sdformat/shapes.sdf",
         "sdformat/includes.sdf",
@@ -190,12 +189,10 @@ def invalid_sdf_string(request):
         "sdformat/nested_multiple_elements_error_world.sdf",
         "sdformat/placement_frame_missing_pose.sdf",
         "sdformat/shapes_world.sdf",
-        "sdformat/unrecognized_elements_with_namespace.sdf",
         "sdformat/world_include_with_interface_api.sdf",
         "sdformat/world_nested_frame_attached_to.sdf",
         "sdformat/world_nested_frame.sdf",
         "sdformat/world_relative_to_nested_reference.sdf",
-        "sdformat/world_valid_root_reference.sdf",
         "v18/complete_world.sdf",
         "v18/fuel_include_placement_frame.sdf",
         "v18/fuel_include_rename.sdf",
@@ -218,6 +215,7 @@ def v18_sdf(request):
         "sdformat/world_frame_invalid_attached_to_scope.sdf",
         "sdformat/world_invalid_root_reference.sdf",
         "v18/fuel_include_unknown_server.sdf",
+        "sdformat/unrecognized_elements_with_namespace.sdf",
     ]
 )
 def v18_sdf_invalid(request):
