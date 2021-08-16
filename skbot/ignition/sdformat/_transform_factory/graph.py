@@ -71,16 +71,12 @@ class DynamicPose(SdfLink):
         rot_matrix -= translation[:, None]
         angles = ScipyRotation.from_matrix(rot_matrix).as_euler("xyz")
 
-
-        self.pose[:3] = translation
-        self.pose[3:] = angles
-
         if np.any(np.abs(angles) > angle_eps):
             return tf.CompundLink(
-                [tf.EulerRotation("xyz", self.pose[3:]), tf.Translation(self.pose[:3])]
+                [tf.EulerRotation("xyz", angles), tf.Translation(translation)]
             )
         else:
-            return tf.Translation(self.pose[:3])
+            return tf.Translation(translation)
 
 
 class Scope:
