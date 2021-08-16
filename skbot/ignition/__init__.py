@@ -163,5 +163,5 @@ __all__ = [
     "get_fuel_model_info",
     "download_fuel_model",
     "get_fuel_model",
-    "transform_graph_from_sdf"
+    "transform_graph_from_sdf",
 ]

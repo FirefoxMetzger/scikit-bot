@@ -4,7 +4,9 @@ from ... import transform as tf
 from ._transform_factory.factory import graph_factory
 
 
-def transform_graph_from_sdf(sdf: str, *, unwrap:bool=True, axis:int=-1, shape:Tuple[int]=(1,)) -> Union[tf.Frame, List[tf.Frame]]:
+def transform_graph_from_sdf(
+    sdf: str, *, unwrap: bool = True, axis: int = -1, shape: Tuple[int] = (1,)
+) -> Union[tf.Frame, List[tf.Frame]]:
     """Create a frame graph from a sdformat string.
 
     .. versionadded:: 0.5.0
@@ -37,7 +39,7 @@ def transform_graph_from_sdf(sdf: str, *, unwrap:bool=True, axis:int=-1, shape:T
 
     """
 
-    graph_list  = graph_factory(sdf, unwrap=False)
+    graph_list = graph_factory(sdf, unwrap=False)
     for graph in graph_list:
         graph.resolve()
 

@@ -9,8 +9,10 @@ import skbot.ignition as ign
 def test_v18_parsing(v18_sdf):
     ign.transform_graph_from_sdf(v18_sdf)
 
+
 def test_v18_parsing_no_root(v18_sdf):
     ign.transform_graph_from_sdf(v18_sdf)
+
 
 def test_v18_parsing_wrapped(v18_sdf):
     frame_list = ign.transform_graph_from_sdf(v18_sdf, unwrap=False)

@@ -207,13 +207,13 @@ def v18_sdf(request):
     filename = request.param
     return (sdf_folder / filename).read_text()
 
+
 @pytest.fixture(
     params=[
         "sdformat/includes_missing_model.sdf",
         "sdformat/includes_missing_uri.sdf",
         "sdformat/includes_model_without_sdf.sdf",
         "v18/fuel_include_unknown_server.sdf",
-
         "sdformat/world_invalid_root_reference.sdf",
         "sdformat/model_include_with_interface_api.sdf",
         "sdformat/includes_without_top_level.sdf",
@@ -223,6 +223,7 @@ def v18_sdf(request):
 def v18_sdf_invalid(request):
     filename = request.param
     return (sdf_folder / filename).read_text()
+
 
 @pytest.fixture(
     params=[
@@ -273,6 +274,7 @@ def v17_sdf(request):
     filename = request.param
     return (sdf_folder / filename).read_text()
 
+
 @pytest.fixture(
     params=[
         "sdformat/link_duplicate_cousin_visuals.sdf",
@@ -316,6 +318,7 @@ def v16_sdf(request):
     filename = request.param
     return (sdf_folder / filename).read_text()
 
+
 @pytest.fixture(
     params=[
         "sdformat/light.sdf",
@@ -337,32 +340,24 @@ def v14_sdf(request):
     filename = request.param
     return (sdf_folder / filename).read_text()
 
-@pytest.fixture(
-    params=[
-        
-    ]
-)
+
+@pytest.fixture(params=[])
 def v13_sdf(request):
     filename = request.param
     return (sdf_folder / filename).read_text()
 
-@pytest.fixture(
-    params=[
-        
-    ]
-)
+
+@pytest.fixture(params=[])
 def v12_sdf(request):
     filename = request.param
     return (sdf_folder / filename).read_text()
 
-@pytest.fixture(
-    params=[
-        
-    ]
-)
+
+@pytest.fixture(params=[])
 def v10_sdf(request):
     filename = request.param
     return (sdf_folder / filename).read_text()
+
 
 """
 Fuel Fixtures
