@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.4.3 (2021-08-16)
+### Fix
+* **transform:** Convert frame.transform to array ([#53](https://github.com/FirefoxMetzger/scikit-bot/issues/53)) ([`620fabd`](https://github.com/FirefoxMetzger/scikit-bot/commit/620fabd2995360b809bf77f86b9879d3f530cf18))
+
 ## v0.4.2 (2021-08-16)
 ### Fix
 * Bump matplotlib from 3.4.2 to 3.4.3 ([#48](https://github.com/FirefoxMetzger/scikit-bot/issues/48)) ([`c5042c4`](https://github.com/FirefoxMetzger/scikit-bot/commit/c5042c41ee2f337ead9596a6a298cb4f0c142751))
