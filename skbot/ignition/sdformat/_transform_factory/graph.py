@@ -1,6 +1,9 @@
-from typing import Callable, Dict, Tuple, List, Any
+from numpy.lib.function_base import place
+from skbot.transform.base import Frame
+from typing import Callable, Dict, Tuple, List, Any, Union
 from dataclasses import dataclass
 from contextlib import contextmanager
+from xml.etree.ElementTree import ParseError
 import numpy as np
 from scipy.spatial.transform import Rotation as ScipyRotation
 
@@ -8,120 +11,187 @@ from .... import transform as tf
 from .. import sdformat
 
 
-@dataclass
-class PoseData:
-    parent: str
-    child: str
-    pose: np.ndarray
-    relative_to: str
-    parent_frame: tf.Frame = None
-    child_frame: tf.Frame = None
-    relative_frame: tf.Frame = None
-    link: tf.Link = None
+class SdfLink:
+    def __init__(self, parent: str, child: Union[str, tf.Frame]) -> None:
+        self.parent: Union[str, tf.Frame] = parent
+        self.child: Union[str, tf.Frame] = child
 
-@dataclass
-class LinkData:
-    parent: str
-    child: str
-    link: tf.Link
-    parent_frame: tf.Frame = None
-    child_frame: tf.Frame = None
+    def to_transform_link(self) -> tf.Link:
+        raise NotImplementedError()
+
+    def resolve(self, scope: "Scope") -> bool:
+        if isinstance(self.parent, str):
+            try:
+                self.parent = scope.get(self.parent)
+            except RuntimeError:
+                return False
+
+        if isinstance(self.child, str):
+            try:
+                self.child = scope.get(self.child)
+            except RuntimeError:
+                return False
+
+        return True
+
+
+class CustomLink(SdfLink):
+    def __init__(self, parent: str, child: Union[str, tf.Frame], link: tf.Link) -> None:
+        super().__init__(parent, child)
+        self._link = link
+
+    def to_transform_link(self) -> tf.Link:
+        return self._link
+
+
+class SimplePose(SdfLink):
+    def __init__(self, parent: str, child: Union[str, tf.Frame], pose: np.ndarray) -> None:
+        super().__init__(parent, child)
+        self.pose = pose
+
+    def to_transform_link(self, *, angle_eps=1e-15) -> tf.Link:
+        if np.any(np.abs(self.pose[3:]) > angle_eps):
+            return tf.CompundLink(
+                [tf.EulerRotation("xyz", self.pose[3:]), tf.Translation(self.pose[:3])]
+            )
+        else:
+            return tf.Translation(self.pose[:3])
+
+
+class DynamicPose(SdfLink):
+    def to_transform_link(self, *, angle_eps=1e-15) -> tf.Link:
+        translation = self.parent.transform((0, 0, 0), self.child)
+
+        # link's euler angles
+        rot_matrix = list()
+        for basis in np.eye(3):
+            basis = self.parent.transform(basis, self.child)
+            rot_matrix.append(basis)
+        rot_matrix = np.stack(rot_matrix, axis=1)
+        rot_matrix -= translation[:, None]
+        angles = ScipyRotation.from_matrix(rot_matrix).as_euler("xyz")
+
+
+        self.pose[:3] = translation
+        self.pose[3:] = angles
+
+        if np.any(np.abs(angles) > angle_eps):
+            return tf.CompundLink(
+                [tf.EulerRotation("xyz", self.pose[3:]), tf.Translation(self.pose[:3])]
+            )
+        else:
+            return tf.Translation(self.pose[:3])
 
 
 class Scope:
-    def __init__(self, name, implicit_frame, *, parent:"Scope"=None) -> None:
-        self.nested_scopes: Dict[str,"Scope"] = dict()
+    """A scope within SDFormat"""
+
+    def __init__(self, name, *, parent: "Scope" = None) -> None:
+        self.nested_scopes: Dict[str, "Scope"] = dict()
 
         self.frames: Dict[str, tf.Frame] = dict()
-        self.poses: List[PoseData] = list()
-        self.links: List[LinkData] = list()
+        self.links: List[SdfLink] = list()
 
-        self.declare_frame(implicit_frame)
+        self.scaffold_frames: Dict[str, tf.Frame] = dict()
+        self.scaffold_links: List[SdfLink] = list()
+
+        # might be able to remove this
+        self.name = name
+
         self.parent = parent
+        self.placement_frame:str = None
+        if self.name == "world":
+            self.default_frame = tf.Frame(3, name="world")
+            self.scaffold_frames["world"] = self.default_frame
+            self.frames["world"] = tf.Frame(3, name="world")
+        else:
+            self.default_frame = tf.Frame(3, name="__model__")
+            self.scaffold_frames["__model__"] = self.default_frame
+            self.cannonical_link:str = None
 
-    def declare_frame(self, name:str) -> None:
+
+    def declare_frame(self, name:str, *, scaffold=True, dynamic=True):
         if name in self.frames.keys():
             raise IndexError("Frame already declared.")
 
-        frame = tf.Frame(3, name=name)
-        self.frames[name] = frame
+        if dynamic:
+            self.frames[name] = tf.Frame(3, name=name)
+        
+        if scaffold:
+            self.scaffold_frames[name] = tf.Frame(3, name=name)
 
-    def declare_link(self, parent:str, child:str, link:tf.Link):
-        self.links.append(LinkData(
-            parent,
-            child,
-            link
-        ))
 
-    def declare_pose(self, parent:str, child:str, pose:np.ndarray, relative_to:str):
-        self.poses.append(PoseData(
-            parent,
-            child,
-            pose,
-            relative_to
-        ))
+    def add_scaffold(
+        self,
+        frame_name: str,
+        pose: str,
+        relative_to: str = None
+    ) -> None:
+        pose_array = np.array(pose.split(" "), dtype=float)
 
-    def get(self, frame:str):
+        parent = self.default_frame.name
+        if relative_to is not None:
+            parent = relative_to
+
+        self.scaffold_links.append(SimplePose(frame_name, parent, pose_array))
+
+    def declare_link(self, link: SdfLink) -> None:
+        self.links.append(link)
+
+    def get(self, name: str, scaffolding:bool) -> tf.Frame:
         """Find the frame from a (namespaced) SDFormat name"""
 
-        if frame == "world":
+        if name == "world":
             if self.parent is None:
-                return self.frames[frame]
+                if self.name != "world":
+                    raise ParseError("Not a world element.")
+                if scaffolding:
+                    return self.default_frame
+                else:
+                    return self.frames["world"]
             else:
-                return self.parent.get(frame)
+                return self.parent.get(name, scaffolding)
 
-        if "::" in frame:
-            elements = frame.split("::")
+        if "::" in name:
+            elements = name.split("::")
             scope = elements.pop(0)
-            frame = "::".join(elements)
-            return self.nested_scopes[scope].get(frame)
+            name = "::".join(elements)
+            return self.nested_scopes[scope].get(name, scaffolding)
         else:
-            return self.frames[frame]
+            if scaffolding:
+                return self.scaffold_frames[name]
+            else:
+                return self.frames[name]
 
-    def resolve_names(self):
-        for el in self.links:
-            el.parent_frame = self.get(el.parent)
-            el.child_frame = self.get(el.child)
+    def build_scaffolding(self):
+        for el in self.scaffold_links:
+            if not el.resolve(self):
+                raise ParseError("Illdefined Pose.")
 
-        for el in self.poses:
-            el.parent_frame = self.get(el.parent)
-            el.child_frame = self.get(el.child)
-            el.relative_frame = self.get(el.relative_frame)
+            tf_link = el.to_transform_link()
+            tf_link(el.parent, el.child)
 
         for scope in self.nested_scopes.values():
-            scope.resolve_names()
+            scope.build_scaffolding()
 
     def resolve_links(self):
         for el in self.links:
-            el.link(el.parent_frame, el.child_frame)
+            if not el.resolve(self):
+                raise ParseError("Illdefined Pose.")
+            tf_link = el.to_transform_link()
+            tf_link(el.parent, el.child)
 
         for scope in self.nested_scopes.values():
             scope.resolve_links()
 
-    def resolve_poses(self):
-        for scope in self.nested_scopes.values():
-            scope.resolve_poses()
+    def add_subscope(
+        self, nested_scope: "Scope"
+    ) -> None:
+        if nested_scope.name in self.nested_scopes.keys():
+            raise KeyError("Nested Scope already defined.")
 
-        for el in self.poses:
-            offset = el.relative_frame.transform(el.pose[:3], el.parent_frame)
-            translation = tf.Translation(offset)
-
-            rot_matrix = list()
-            for basis in np.eye(3):
-                vec = el.relative_frame.transform(basis, el.parent_frame)
-                rot_matrix.append(vec)
-            rot_matrix = np.stack(rot_matrix, axis=1)
-            rot_matrix -= offset[:, None]
-            angles = ScipyRotation.from_matrix(rot_matrix).as_euler("xyz")
-            
-            if np.any(np.abs(angles) > 1e-12):
-                rotation = tf.EulerRotation("xyz", angles)
-                tf_pose = tf.CompundLink([rotation, translation])
-            else:
-                tf_pose = translation
-
-            tf_pose(el.parent_frame, el.child_frame)
-
+        self.nested_scopes[nested_scope.name] = nested_scope
+        nested_scope.parent = self
 
 
 class Graph:
@@ -314,7 +384,7 @@ class Graph:
             child_frame = self.nodes[child]
             link(child_frame, world_frame)
 
-    def extend(self, other: "Graph") -> None:
+    def extend(self, other: "Scope") -> None:
         """Add the nodes of the other graph under the current scope.
 
         Parameters
@@ -333,9 +403,9 @@ class Graph:
         for child, link in other.world_edges:
             self.world_edges.append((child, link))
 
-    def rename_root(self, new_name:str):
+    def rename_root(self, new_name: str):
         """Changes the name of the current root node into a new name"""
-        
+
         old_name = self.root_node
         self.nodes[self.root_node].name = new_name
         self.root_node = new_name

@@ -3,7 +3,7 @@ from urllib.parse import urlparse
 from typing import List, Union
 from pathlib import Path
 
-from .graph import Graph
+from .graph import Scope
 from .factory import graph_factory
 from .. import sdformat
 from ..bindings import v17
@@ -12,15 +12,12 @@ from .... import transform as tf
 
 
 IncludeElement = Union[v17.ModelModel.Include, v17.World.Include]
-PoseOnlyElement = Union[
-    v17.Collision,
-    v17.Visual
-]
+PoseOnlyElement = Union[v17.Collision, v17.Visual]
 
 
 def resolve_include(
-    include: IncludeElement, graph: Graph, *, root_uri: str = None
-) -> Graph:
+    include: IncludeElement, graph: Scope, *, root_uri: str = None
+) -> Scope:
     """"""
 
     # there is only one fuel server
@@ -33,7 +30,9 @@ def resolve_include(
         raise NotImplementedError("Unsure how to resolve model://.")
     elif uri_parts.scheme == "":
         if root_uri is None:
-            raise sdformat.ParseError("Can't resolve relative include without root_uri.")
+            raise sdformat.ParseError(
+                "Can't resolve relative include without root_uri."
+            )
         root_parts = urlparse(root_uri)
         if root_parts.scheme == "https" and root_parts.netloc == fuel_server:
             sdf = get_fuel_model(root_uri, file_path=include.uri)
@@ -61,8 +60,8 @@ def resolve_include(
     return graph
 
 
-def convert_world(world: v17.World, root_uri: str = None) -> Graph:
-    graph = Graph()
+def convert_world(world: v17.World, root_uri: str = None) -> Scope:
+    graph = Scope()
     graph.add_node(world.name, tf.Frame(3, name=world.name))
     with graph.scope(world.name), graph.set_root():
         for include in world.include:
@@ -153,21 +152,27 @@ def convert_world(world: v17.World, root_uri: str = None) -> Graph:
     #     for model_idx in range(population.model_count):
     #         pass
 
-def convert_state(state: v17.State) -> Graph:
+
+def convert_state(state: v17.State) -> Scope:
     raise NotImplementedError()
 
-def convert_light(light: v17.Light, *, graph: Graph = None) -> Graph:
+
+def convert_light(light: v17.Light, *, graph: Scope = None) -> Scope:
     if graph is None:
-        graph = Graph()
+        graph = Scope()
 
     raise NotImplementedError()
 
-def convert_actor() -> Graph:
+
+def convert_actor() -> Scope:
     raise NotImplementedError()
 
-def convert_model(model: v17.ModelModel, *, graph: Graph = None, root_uri: str = None) -> Graph:
+
+def convert_model(
+    model: v17.ModelModel, *, graph: Scope = None, root_uri: str = None
+) -> Scope:
     if graph is None:
-        graph = Graph()
+        graph = Scope()
         graph.add_node(model.name, tf.Frame(3, name=model.name))
     else:
         graph.add_pose(model.name, model.pose)
@@ -195,7 +200,8 @@ def convert_model(model: v17.ModelModel, *, graph: Graph = None, root_uri: str =
 
     return graph
 
-def convert_link(link: v17.Link, graph: Graph) -> Graph:
+
+def convert_link(link: v17.Link, graph: Scope) -> Scope:
     if link.must_be_base_link:
         link.pose.relative_to = "world"
 
@@ -232,7 +238,8 @@ def convert_link(link: v17.Link, graph: Graph) -> Graph:
 
     return graph
 
-def convert_sensor(sensor: v17.Sensor, graph: Graph) -> Graph:
+
+def convert_sensor(sensor: v17.Sensor, graph: Scope) -> Scope:
     graph.add_pose(sensor.name, sensor.pose)
 
     with graph.scope(sensor.name):
@@ -298,7 +305,8 @@ def convert_sensor(sensor: v17.Sensor, graph: Graph) -> Graph:
 
     return graph
 
-def convert_joint(joint: v17.Joint, graph: Graph) -> Graph:
+
+def convert_joint(joint: v17.Joint, graph: Scope) -> Scope:
     if isinstance(joint.pose, str):
         # xsData bug
         joint.pose = v17.Joint.Pose(joint.pose)
@@ -338,12 +346,13 @@ def convert_joint(joint: v17.Joint, graph: Graph) -> Graph:
 
     return graph
 
-def convert_pose_only(element: PoseOnlyElement, graph: Graph) -> Graph:
+
+def convert_pose_only(element: PoseOnlyElement, graph: Scope) -> Scope:
     graph.add_pose(element.name, element.pose)
     return graph
 
 
-def converter(sdf: str, *, unwrap=True, root_uri: str = None) -> Graph:
+def converter(sdf: str, *, unwrap=True, root_uri: str = None) -> Scope:
     """Turn v1.8 SDF into a frame graph
 
     Parameters
@@ -371,7 +380,7 @@ def converter(sdf: str, *, unwrap=True, root_uri: str = None) -> Graph:
     """
 
     sdf_root: v17.Sdf = sdformat.loads(sdf)
-    graph_list: List[Graph] = list()
+    graph_list: List[Scope] = list()
     link_dict = dict()
 
     for world in sdf_root.world:
