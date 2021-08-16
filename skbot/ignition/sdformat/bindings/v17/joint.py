@@ -115,8 +115,8 @@ class Joint:
             "namespace": "",
         },
     )
-    pose: "Joint.Pose" = field(
-        default="0 0 0 0 0 0",
+    pose: Optional["Joint.Pose"] = field(
+        default=None,
         metadata={
             "type": "Element",
             "namespace": "",
@@ -172,8 +172,8 @@ class Joint:
                 "required": True,
             },
         )
-        xyz: "Joint.Axis.Xyz" = field(
-            default="0 0 1",
+        xyz: Optional["Joint.Axis.Xyz"] = field(
+            default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -207,7 +207,7 @@ class Joint:
             """
 
             value: str = field(
-                default="",
+                default="0 0 1",
                 metadata={
                     "required": True,
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
@@ -366,8 +366,8 @@ class Joint:
                 "required": True,
             },
         )
-        xyz: "Joint.Axis2.Xyz" = field(
-            default="0 0 1",
+        xyz: Optional["Joint.Axis2.Xyz"] = field(
+            default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -401,7 +401,7 @@ class Joint:
             """
 
             value: str = field(
-                default="",
+                default="0 0 1",
                 metadata={
                     "required": True,
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){2}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
@@ -766,7 +766,7 @@ class Joint:
         """
 
         value: str = field(
-            default="",
+            default="0 0 0 0 0 0",
             metadata={
                 "required": True,
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",

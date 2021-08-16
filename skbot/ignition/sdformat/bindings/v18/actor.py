@@ -59,8 +59,8 @@ class Actor:
             "required": True,
         },
     )
-    pose: "Actor.Pose" = field(
-        default="0 0 0 0 0 0",
+    pose: Optional["Actor.Pose"] = field(
+        default=None,
         metadata={
             "type": "Element",
             "namespace": "",
@@ -314,7 +314,7 @@ class Actor:
         """
 
         value: str = field(
-            default="",
+            default="0 0 0 0 0 0",
             metadata={
                 "required": True,
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",

@@ -108,8 +108,8 @@ class Link:
             "namespace": "",
         },
     )
-    pose: "Link.Pose" = field(
-        default="0 0 0 0 0 0",
+    pose: Optional["Link.Pose"] = field(
+        default=None,
         metadata={
             "type": "Element",
             "namespace": "",
@@ -235,8 +235,8 @@ class Link:
             defined inside the parent that this frame is attached to.
         """
 
-        pose: "Link.Frame.Pose" = field(
-            default="0 0 0 0 0 0",
+        pose: Optional["Link.Frame.Pose"] = field(
+            default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -261,7 +261,7 @@ class Link:
             """
 
             value: str = field(
-                default="",
+                default="0 0 0 0 0 0",
                 metadata={
                     "required": True,
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
@@ -284,7 +284,7 @@ class Link:
         """
 
         value: str = field(
-            default="",
+            default="0 0 0 0 0 0",
             metadata={
                 "required": True,
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
@@ -339,8 +339,8 @@ class Link:
                 "namespace": "",
             },
         )
-        pose: "Link.Inertial.Pose" = field(
-            default="0 0 0 0 0 0",
+        pose: Optional["Link.Inertial.Pose"] = field(
+            default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -420,8 +420,8 @@ class Link:
                 attached to.
             """
 
-            pose: "Link.Inertial.Frame.Pose" = field(
-                default="0 0 0 0 0 0",
+            pose: Optional["Link.Inertial.Frame.Pose"] = field(
+                default=None,
                 metadata={
                     "type": "Element",
                     "namespace": "",
@@ -447,7 +447,7 @@ class Link:
                 """
 
                 value: str = field(
-                    default="",
+                    default="0 0 0 0 0 0",
                     metadata={
                         "required": True,
                         "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
@@ -470,7 +470,7 @@ class Link:
             """
 
             value: str = field(
-                default="",
+                default="0 0 0 0 0 0",
                 metadata={
                     "required": True,
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
@@ -539,8 +539,8 @@ class Link:
                 "namespace": "",
             },
         )
-        pose: "Link.Projector.Pose" = field(
-            default="0 0 0 0 0 0",
+        pose: Optional["Link.Projector.Pose"] = field(
+            default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -576,8 +576,8 @@ class Link:
                 attached to.
             """
 
-            pose: "Link.Projector.Frame.Pose" = field(
-                default="0 0 0 0 0 0",
+            pose: Optional["Link.Projector.Frame.Pose"] = field(
+                default=None,
                 metadata={
                     "type": "Element",
                     "namespace": "",
@@ -603,7 +603,7 @@ class Link:
                 """
 
                 value: str = field(
-                    default="",
+                    default="0 0 0 0 0 0",
                     metadata={
                         "required": True,
                         "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
@@ -626,7 +626,7 @@ class Link:
             """
 
             value: str = field(
-                default="",
+                default="0 0 0 0 0 0",
                 metadata={
                     "required": True,
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
@@ -743,8 +743,8 @@ class Link:
                 "namespace": "",
             },
         )
-        pose: "Link.AudioSource.Pose" = field(
-            default="0 0 0 0 0 0",
+        pose: Optional["Link.AudioSource.Pose"] = field(
+            default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -786,8 +786,8 @@ class Link:
                 attached to.
             """
 
-            pose: "Link.AudioSource.Frame.Pose" = field(
-                default="0 0 0 0 0 0",
+            pose: Optional["Link.AudioSource.Frame.Pose"] = field(
+                default=None,
                 metadata={
                     "type": "Element",
                     "namespace": "",
@@ -813,7 +813,7 @@ class Link:
                 """
 
                 value: str = field(
-                    default="",
+                    default="0 0 0 0 0 0",
                     metadata={
                         "required": True,
                         "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
@@ -836,7 +836,7 @@ class Link:
             """
 
             value: str = field(
-                default="",
+                default="0 0 0 0 0 0",
                 metadata={
                     "required": True,
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
@@ -1067,8 +1067,8 @@ class Link:
                 "required": True,
             },
         )
-        pose: "Link.ParticleEmitter.Pose" = field(
-            default="0 0 0 0 0 0",
+        pose: Optional["Link.ParticleEmitter.Pose"] = field(
+            default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -1107,7 +1107,7 @@ class Link:
             """
 
             value: str = field(
-                default="",
+                default="0 0 0 0 0 0",
                 metadata={
                     "required": True,
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",

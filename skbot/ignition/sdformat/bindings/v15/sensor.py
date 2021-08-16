@@ -94,8 +94,8 @@ class Sensor:
             "namespace": "",
         },
     )
-    pose: "Sensor.Pose" = field(
-        default="0 0 0 0 0 0",
+    pose: Optional["Sensor.Pose"] = field(
+        default=None,
         metadata={
             "type": "Element",
             "namespace": "",
@@ -228,8 +228,8 @@ class Sensor:
             defined inside the parent that this frame is attached to.
         """
 
-        pose: "Sensor.Frame.Pose" = field(
-            default="0 0 0 0 0 0",
+        pose: Optional["Sensor.Frame.Pose"] = field(
+            default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -254,7 +254,7 @@ class Sensor:
             """
 
             value: str = field(
-                default="",
+                default="0 0 0 0 0 0",
                 metadata={
                     "required": True,
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
@@ -277,7 +277,7 @@ class Sensor:
         """
 
         value: str = field(
-            default="",
+            default="0 0 0 0 0 0",
             metadata={
                 "required": True,
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
@@ -638,8 +638,8 @@ class Sensor:
                 "namespace": "",
             },
         )
-        pose: "Sensor.Camera.Pose" = field(
-            default="0 0 0 0 0 0",
+        pose: Optional["Sensor.Camera.Pose"] = field(
+            default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -1014,8 +1014,8 @@ class Sensor:
                 attached to.
             """
 
-            pose: "Sensor.Camera.Frame.Pose" = field(
-                default="0 0 0 0 0 0",
+            pose: Optional["Sensor.Camera.Frame.Pose"] = field(
+                default=None,
                 metadata={
                     "type": "Element",
                     "namespace": "",
@@ -1041,7 +1041,7 @@ class Sensor:
                 """
 
                 value: str = field(
-                    default="",
+                    default="0 0 0 0 0 0",
                     metadata={
                         "required": True,
                         "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
@@ -1064,7 +1064,7 @@ class Sensor:
             """
 
             value: str = field(
-                default="",
+                default="0 0 0 0 0 0",
                 metadata={
                     "required": True,
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",

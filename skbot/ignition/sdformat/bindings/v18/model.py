@@ -113,8 +113,8 @@ class Model:
             "namespace": "",
         },
     )
-    pose: "Model.Pose" = field(
-        default="0 0 0 0 0 0",
+    pose: Optional["Model.Pose"] = field(
+        default=None,
         metadata={
             "type": "Element",
             "namespace": "",
@@ -217,8 +217,8 @@ class Model:
                 "namespace": "",
             },
         )
-        pose: "Model.Include.Pose" = field(
-            default="0 0 0 0 0 0",
+        pose: Optional["Model.Include.Pose"] = field(
+            default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -237,7 +237,7 @@ class Model:
             """
 
             value: str = field(
-                default="",
+                default="0 0 0 0 0 0",
                 metadata={
                     "required": True,
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
@@ -268,8 +268,8 @@ class Model:
             world frame.
         """
 
-        pose: "Model.Frame.Pose" = field(
-            default="0 0 0 0 0 0",
+        pose: Optional["Model.Frame.Pose"] = field(
+            default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -301,7 +301,7 @@ class Model:
             """
 
             value: str = field(
-                default="",
+                default="0 0 0 0 0 0",
                 metadata={
                     "required": True,
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
@@ -325,7 +325,7 @@ class Model:
         """
 
         value: str = field(
-            default="",
+            default="0 0 0 0 0 0",
             metadata={
                 "required": True,
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",

@@ -22,7 +22,7 @@ class State:
     class Meta:
         name = "state"
 
-    sim_time: float = field(
+    sim_time: str = field(
         default="0 0",
         metadata={
             "type": "Element",
@@ -30,7 +30,7 @@ class State:
             "required": True,
         },
     )
-    wall_time: float = field(
+    wall_time: str = field(
         default="0 0",
         metadata={
             "type": "Element",
@@ -38,7 +38,7 @@ class State:
             "required": True,
         },
     )
-    real_time: float = field(
+    real_time: str = field(
         default="0 0",
         metadata={
             "type": "Element",

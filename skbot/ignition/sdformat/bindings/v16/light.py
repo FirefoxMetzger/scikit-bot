@@ -84,8 +84,8 @@ class Light:
             "namespace": "",
         },
     )
-    pose: "Light.Pose" = field(
-        default="0 0 0 0 0 0",
+    pose: Optional["Light.Pose"] = field(
+        default=None,
         metadata={
             "type": "Element",
             "namespace": "",
@@ -208,8 +208,8 @@ class Light:
             defined inside the parent that this frame is attached to.
         """
 
-        pose: "Light.Frame.Pose" = field(
-            default="0 0 0 0 0 0",
+        pose: Optional["Light.Frame.Pose"] = field(
+            default=None,
             metadata={
                 "type": "Element",
                 "namespace": "",
@@ -234,7 +234,7 @@ class Light:
             """
 
             value: str = field(
-                default="",
+                default="0 0 0 0 0 0",
                 metadata={
                     "required": True,
                     "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
@@ -257,7 +257,7 @@ class Light:
         """
 
         value: str = field(
-            default="",
+            default="0 0 0 0 0 0",
             metadata={
                 "required": True,
                 "pattern": r"(\s*(-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+)\s+){5}((-|\+)?(\d+(\.\d*)?|\.\d+|\d+\.\d+[eE][-\+]?[0-9]+))\s*",
