@@ -1,84 +1,109 @@
-import numpy as np
-from urllib.parse import urlparse
 from typing import List, Union
-from pathlib import Path
 
-from .graph import Scope
-from .factory import graph_factory
+from .graph import CustomLink, Scope, DynamicPose, SimplePose, RotationJoint, PrismaticJoint
+from .factory import Converter
 from .. import sdformat
 from ..bindings import v17
-from ...fuel import get_fuel_model
 from .... import transform as tf
 
 
 IncludeElement = Union[v17.ModelModel.Include, v17.World.Include]
-PoseOnlyElement = Union[v17.Collision, v17.Visual]
+PoseOnlyElement = Union[v17.Collision, v17.Visual, v17.Light]
 
 
-def resolve_include(
-    include: IncludeElement, graph: Scope, *, root_uri: str = None
-) -> Scope:
-    """"""
+class SdfV18(Converter):
+    def __call__(self, sdf: str) -> Union[Scope, List[Scope]]:
+        """Convert v1.8 SDF into a Graph
 
-    # there is only one fuel server
-    fuel_server = "fuel.ignitionrobotics.org"
+        Parameters
+        ----------
+        sdf : str
+            A string containing v1.8 SDFormat XML.
 
-    uri_parts = urlparse(include.uri)
-    if uri_parts.scheme == "https" and uri_parts.netloc == fuel_server:
-        sdf = get_fuel_model(include.uri)
-    elif uri_parts.scheme == "model" and uri_parts.netloc == fuel_server:
-        raise NotImplementedError("Unsure how to resolve model://.")
-    elif uri_parts.scheme == "":
-        if root_uri is None:
-            raise sdformat.ParseError(
-                "Can't resolve relative include without root_uri."
-            )
-        root_parts = urlparse(root_uri)
-        if root_parts.scheme == "https" and root_parts.netloc == fuel_server:
-            sdf = get_fuel_model(root_uri, file_path=include.uri)
+        Returns
+        -------
+        graph : _graph.Graph
+            A container storing the nodes and edges of the frame graph.
+
+        links : Dict[str, Frames]
+            A dict of (named) links in the graph.
+
+        Notes
+        -----
+        It is necessary to split the parsers, since versions differ so heavily.
+        """
+
+        sdf_root: v17.Sdf = sdformat.loads(sdf)
+        graph_list: List[Scope] = list()
+
+        for world in sdf_root.world:
+            graph = self.convert_world(world)
+            graph_list.append(graph)
+
+        for model in sdf_root.model:
+            graph = self.convert_model(model)
+            graph_list.append(graph)
+
+        for light in sdf_root.light:
+            graph = self.convert_light(light)
+            graph_list.append(graph)
+
+        if self.unwrap and len(graph_list) == 1:
+            return graph_list[0]
         else:
-            sdf = (Path(root_uri) / include.uri).read_text()
-    else:
-        raise sdformat.ParseError(f"Failed to include: {include.uri}")
+            return graph_list
 
-    subgraph = graph_factory(sdf)
-    if include.name is not None:
-        model_name = include.name
-        subgraph.rename_root(include.name)
-    else:
-        model_name = subgraph.root_node
-    graph.extend(subgraph)
+    def resolve_include(self, include: IncludeElement, scope: Scope) -> None:
+        subscope = super()._resolve_include(include.uri)
 
-    if include.placement_frame is not None:
-        child_frame = model_name + "/" + include.placement_frame
-    else:
-        child_frame = subgraph.root_node
+        if include.name is not None:
+            name = include.name
+        else:
+            name = subscope.name
+        scope.add_subscope(name, subscope)
+        scope.declare_frame(name)
 
-    tf_link, parent = graph.pose_to_transform(include.pose)
-    graph.connect_sdf(parent, child_frame, tf_link)
+        if include.placement_frame is not None:
+            placement_frame = include.placement_frame
+        else:
+            placement_frame = subscope.placement_frame
+        placement_frame = subscope.name + "::" + placement_frame
 
-    return graph
+        # omitted relative to means implicit sub-model frame for //include
+        # not implicit model or world frame
+        if include.pose.relative_to is None:
+            include.pose.relative_to = name
 
+        scope.add_scaffold(
+            placement_frame, include.pose.value, include.pose.relative_to
+        )
 
-def convert_world(world: v17.World, root_uri: str = None) -> Scope:
-    graph = Scope()
-    graph.add_node(world.name, tf.Frame(3, name=world.name))
-    with graph.scope(world.name), graph.set_root():
+        child = subscope.name + "::" + subscope.cannonical_link
+        scope.declare_link(DynamicPose(name, child))
+
+    def convert_world(self, world: v17.World) -> Scope:
+        world_scope = Scope("world")
         for include in world.include:
-            resolve_include(include, graph, root_uri=root_uri)
+            self.resolve_include(include, world_scope)
 
         # TODO: GUI
         # TODO: scene
 
         for light in world.light:
-            subgraph = convert_light(light)
-            graph.extend(subgraph)
+            self.convert_light(light, scope=world_scope)
+
+            # not sure if this is valid
+            world_scope.declare_link(DynamicPose("world", light.name))
 
         for frame in world.frame:
-            graph.add_pose(frame.name, frame.pose)
+            world_scope.declare_frame(frame.name)
+            world_scope.add_scaffold(
+                frame.name, frame.pose.value, frame.pose.relative_to
+            )
+            world_scope.declare_link(DynamicPose(frame.attached_to, frame.name))
 
         for model in world.model:
-            convert_model(model, graph=graph)
+            self.convert_model(model, graph=world_scope)
 
         # TODO: actor
         # TODO: road
@@ -86,163 +111,186 @@ def convert_world(world: v17.World, root_uri: str = None) -> Scope:
         # TODO: state
         # TODO: population
 
-    return graph
-    # # convert population
-    # for population in world.population:
-    #     tf_frame = tf.Frame(3, name=population.name)
-    #     offset = _pose_to_numpy(population.pose.value)
-    #     tf_link = tf.Translation(offset)
+        # # convert population
+        # for population in world.population:
+        #     tf_frame = tf.Frame(3, name=population.name)
+        #     offset = _pose_to_numpy(population.pose.value)
+        #     tf_link = tf.Translation(offset)
 
-    #     if population.pose.relative_to is not None:
-    #         parent = population.pose.relative_to
-    #         unresolved_poses.append((parent, tf_frame, tf_link))
-    #     else:
-    #         tf_link(tf_frame, world_frame)
+        #     if population.pose.relative_to is not None:
+        #         parent = population.pose.relative_to
+        #         unresolved_poses.append((parent, tf_frame, tf_link))
+        #     else:
+        #         tf_link(tf_frame, world_frame)
 
-    #     num_defined = 0
-    #     if population.box is not None:
-    #         num_defined += 1
-    #     if population.cylinder is not None:
-    #         num_defined += 1
-    #     num_defined += len(population.model)
+        #     num_defined = 0
+        #     if population.box is not None:
+        #         num_defined += 1
+        #     if population.cylinder is not None:
+        #         num_defined += 1
+        #     num_defined += len(population.model)
 
-    #     if len(population.model) > 1:
-    #         raise NotImplementedError("Multiple models defined for population..")
-    #     elif num_defined == 0:
-    #         raise sdformat.ParseError("No models defined for population.")
+        #     if len(population.model) > 1:
+        #         raise NotImplementedError("Multiple models defined for population..")
+        #     elif num_defined == 0:
+        #         raise sdformat.ParseError("No models defined for population.")
 
-    #     if population.box:
-    #         model_gen = lambda: tf.Frame(3)
-    #     elif population.cylinder:
-    #         model_gen = lambda: tf.Frame(3)
-    #     else:
-    #         model_gen = lambda: _convert_model(population.model[0])
+        #     if population.box:
+        #         model_gen = lambda: tf.Frame(3)
+        #     elif population.cylinder:
+        #         model_gen = lambda: tf.Frame(3)
+        #     else:
+        #         model_gen = lambda: _convert_model(population.model[0])
 
-    #     step = np.array(population.distribution.step.split(" "), dtype=float)
-    #     rows = np.arange(population.distribution.rows)[:, -1, -1]
-    #     cols = np.array(population.distribution.cols)[-1, :, -1]
+        #     step = np.array(population.distribution.step.split(" "), dtype=float)
+        #     rows = np.arange(population.distribution.rows)[:, -1, -1]
+        #     cols = np.array(population.distribution.cols)[-1, :, -1]
 
-    #     dist_kind = population.distribution.type
-    #     if dist_kind == "random":
-    #         for _ in range(population.model_count):
-    #             tf_frame = model_gen()
-    #             # TODO: randomize me
-    #             tf_link = tf.Translation((0, 0, 0))
-    #             tf_link(tf_frame, world_frame)
-    #     elif dist_kind == "uniform":
-    #         pass
-    #     elif dist_kind == "grid":
-    #         row_step, col_step, _ = [
-    #             float(x) for x in population.distribution.step.split(" ")
-    #         ]
-    #         for row in range(population.distribution.rows):
-    #             row_pos = row_step * row
-    #             for col in range(population.distribution.cols):
-    #                 col_pos = col_step * col
-    #                 tf_frame = model_gen()
-    #                 tf_frame.name = tf_frame.name + f"_clone_{col*population.distribution.rows + row}"
-    #                 tf_link = tf.Translation((row_pos, col_pos, 0))
-    #     elif dist_kind == "linear-x":
-    #         raise NotImplementedError("Linear placement not implemented yet.")
-    #     elif dist_kind == "linear-y":
-    #         raise NotImplementedError("Linear placement not implemented yet.")
-    #     elif dist_kind == "linear-z":
-    #         raise NotImplementedError("Linear placement not implemented yet.")
+        #     dist_kind = population.distribution.type
+        #     if dist_kind == "random":
+        #         for _ in range(population.model_count):
+        #             tf_frame = model_gen()
+        #             # TODO: randomize me
+        #             tf_link = tf.Translation((0, 0, 0))
+        #             tf_link(tf_frame, world_frame)
+        #     elif dist_kind == "uniform":
+        #         pass
+        #     elif dist_kind == "grid":
+        #         row_step, col_step, _ = [
+        #             float(x) for x in population.distribution.step.split(" ")
+        #         ]
+        #         for row in range(population.distribution.rows):
+        #             row_pos = row_step * row
+        #             for col in range(population.distribution.cols):
+        #                 col_pos = col_step * col
+        #                 tf_frame = model_gen()
+        #                 tf_frame.name = tf_frame.name + f"_clone_{col*population.distribution.rows + row}"
+        #                 tf_link = tf.Translation((row_pos, col_pos, 0))
+        #     elif dist_kind == "linear-x":
+        #         raise NotImplementedError("Linear placement not implemented yet.")
+        #     elif dist_kind == "linear-y":
+        #         raise NotImplementedError("Linear placement not implemented yet.")
+        #     elif dist_kind == "linear-z":
+        #         raise NotImplementedError("Linear placement not implemented yet.")
 
-    #     for model_idx in range(population.model_count):
-    #         pass
+        #     for model_idx in range(population.model_count):
+        #         pass
 
+        return world_scope
 
-def convert_state(state: v17.State) -> Scope:
-    raise NotImplementedError()
+    def convert_state(self, state: v17.State) -> Scope:
+        raise NotImplementedError()
 
+    def convert_light(self, light: v17.Light, *, scope: Scope = None) -> Scope:
+        if scope is None:
+            scope = Scope()
 
-def convert_light(light: v17.Light, *, graph: Scope = None) -> Scope:
-    if graph is None:
-        graph = Scope()
+        scope.declare_frame(light.name)
+        scope.add_scaffold(light.name, light.pose.value, light.pose.relative_to)
 
-    raise NotImplementedError()
+        return scope
 
+    def convert_actor(self) -> Scope:
+        raise NotImplementedError()
 
-def convert_actor() -> Scope:
-    raise NotImplementedError()
+    def convert_model(
+        self, model: v17.ModelModel, *, parent_scope: Scope = None
+    ) -> Scope:
+        scope = Scope()
+        scope.placement_frame = model.placement_frame
+        scope.cannonical_link = model.canonical_link
 
-
-def convert_model(
-    model: v17.ModelModel, *, graph: Scope = None, root_uri: str = None
-) -> Scope:
-    if graph is None:
-        graph = Scope()
-        graph.add_node(model.name, tf.Frame(3, name=model.name))
-    else:
-        graph.add_pose(model.name, model.pose)
-
-    with graph.scope(model.name), graph.set_root():
         for include in model.include:
-            resolve_include(include, graph, root_uri=root_uri)
+            self.resolve_include(include, scope)
 
         for nested_model in model.model:
-            convert_model(nested_model, graph=graph)
+            self.convert_model(nested_model, parent_scope=scope)
 
         for frame in model.frame:
-            graph.add_pose(frame.name, frame.pose)
+            scope.declare_frame(frame.name)
+            scope.add_scaffold(frame.name, frame.pose.value, frame.pose.relative_to)
+            scope.declare_link(DynamicPose(frame.attached_to, frame.name))
 
         for link in model.link:
-            convert_link(link, graph)
+            self.convert_link(link, scope)
 
         for joint in model.joint:
-            convert_joint(joint, graph)
+            self.convert_joint(joint, scope)
 
         for gripper in model.gripper:
             raise NotImplementedError(
                 "Gripper not implemented yet (lacking upstream docs)."
             )
 
-    return graph
+        if parent_scope is not None:
+            parent_scope.add_subscope(scope)
+            parent_scope.declare_frame(model.name)
+            child = scope.name + "::" + scope.placement_frame
 
+            if model.pose.relative_to is None:
+                model.pose.relative_to = model.name
 
-def convert_link(link: v17.Link, graph: Scope) -> Scope:
-    if link.must_be_base_link:
-        link.pose.relative_to = "world"
+            parent_scope.add_scaffold(child, model.pose.value, model.pose.relative_to)
 
-    graph.add_pose(link.name, link.pose)
+        return scope
 
-    with graph.scope(link.name):
+    def convert_link(self, link: v17.Link, scope: Scope) -> Scope:
+        if link.must_be_base_link:
+            link.pose.relative_to = "world"
+            scope.declare_link(DynamicPose("world", link.name))
+
+        scope.declare_frame(link.name)
+        scope.add_scaffold(link.name, link.pose.value, link.pose.relative_to)
+
         if link.inertial:
-            graph.add_pose("inertial", link.inertial.pose)
+            scope.declare_link(
+                SimplePose(link.name, tf.Frame(3, name="inertial"), link.inertial.pose)
+            )
 
         for collision in link.collision:
-            convert_pose_only(collision, graph)
+            scope.declare_frame(collision.name)
+            scope.add_scaffold(
+                collision.name, collision.pose.value, collision.pose.relative_to
+            )
+            scope.declare_link(DynamicPose(link.name, collision.name))
 
         for visual in link.visual:
-            convert_pose_only(visual, graph)
+            scope.declare_frame(visual.name)
+            scope.add_scaffold(visual.name, visual.pose.value, visual.pose.relative_to)
+            scope.declare_link(DynamicPose(link.name, visual.name))
 
         for sensor in link.sensor:
-            convert_sensor(sensor, graph)
+            self.convert_sensor(sensor, scope)
+            scope.declare_link(DynamicPose(link.name, sensor.name))
 
         if link.projector:
-            graph.add_pose(link.projector.name, link.projector.pose)
+            scope.declare_frame(link.projector.name)
+            scope.add_scaffold(
+                link.projector.name,
+                link.projector.pose.value,
+                link.projector.pose.relative_to,
+            )
+            scope.declare_link(DynamicPose(link.name, link.projector.name))
             # TODO: there might be a link into the projected frame missing
             # here I don't exactly know how projector works and didn't find
             # docs
 
         for idx, source in enumerate(link.audio_source):
-            graph.add_pose(f"audio_source_{idx}", source.pose)
-            if source.contact is not None:
-                with graph.scope(f"audio_source_{idx}"):
-                    for collision in source.contact.collision:
-                        raise NotImplementedError()
+            name = link.name + f"-audio-source-{idx}"
+            scope.declare_frame(name)
+            scope.add_scaffold(name, source.pose.value, source.pose.relative_to)
+            scope.declare_link(DynamicPose(link.name, name))
 
         for light in link.light:
-            convert_light(light, graph=graph)
+            self.convert_light(light, scope=scope)
+            scope.declare_link(DynamicPose(link.name, light.name))
 
-    return graph
+        return scope
 
+    def convert_sensor(self, sensor: v17.Sensor, scope: Scope) -> Scope:
+        scope.declare_frame(sensor.name)
+        scope.add_scaffold(sensor.name, sensor.pose.value, sensor.pose.relative_to)
 
-def convert_sensor(sensor: v17.Sensor, graph: Scope) -> Scope:
-    graph.add_pose(sensor.name, sensor.pose)
-
-    with graph.scope(sensor.name):
         if sensor.type == "air_pressure":
             raise NotImplementedError()
         elif sensor.type == "alimeter":
@@ -252,18 +300,25 @@ def convert_sensor(sensor: v17.Sensor, graph: Scope) -> Scope:
                 raise NotImplementedError()
             if sensor.camera.distortion is not None:
                 raise NotImplementedError()
-            if sensor.camera.lense is not None:
+            if sensor.camera.lens is not None:
                 raise NotImplementedError()
 
-            graph.add_pose(sensor.camera.name, sensor.camera.pose)
-            with graph.scope(sensor.camera.name):
-                graph.add_sdf_element(
-                    tf.Frame(2, name="pixel_space"),
+            name = sensor.name + "-camera-space"
+            pose = sensor.camera.pose
+            scope.declare_frame(name)
+            scope.add_scaffold(name, pose.value, pose.relative_to)
+            scope.declare_link(DynamicPose(sensor.name, name))
+
+            scope.declare_link(
+                CustomLink(
+                    sensor.name,
+                    tf.Frame(2, name="pixel-space"),
                     tf.FrustumProjection(
                         sensor.camera.horizontal_fov,
                         (sensor.camera.image.height, sensor.camera.image.width),
                     ),
                 )
+            )
         elif sensor.type == "contact":
             raise NotImplementedError()
         elif sensor.type == "depth_camera":
@@ -303,102 +358,48 @@ def convert_sensor(sensor: v17.Sensor, graph: Scope) -> Scope:
         else:
             raise sdformat.ParseError(f"Unkown sensor type: {sensor.type}")
 
-    return graph
+        return scope
 
+    def convert_joint(self, joint: v17.Joint, scope: Scope) -> Scope:
+        scope.declare_frame(joint.name)
+        scope.add_scaffold(joint.name, joint.pose.value, joint.pose.relative_to)
+        scope.declare_link(DynamicPose(joint.child, joint.name))
 
-def convert_joint(joint: v17.Joint, graph: Scope) -> Scope:
-    if isinstance(joint.pose, str):
-        # xsData bug
-        joint.pose = v17.Joint.Pose(joint.pose)
-    joint.pose.relative_to = joint.child
-    graph.add_pose(joint.name, joint.pose)
+        if joint.type == "revolute":
+            scope.declare_link(
+                RotationJoint(
+                    joint.name,
+                    joint.parent,
+                    joint.axis.xyz.value,
+                    joint.axis.xyz.expressed_in,
+                )
+            )
+        elif joint.type == "hinge":
+            raise NotImplementedError("Hinge joints have not been added yet.")
+        elif joint.type == "gearbox":
+            raise NotImplementedError("Gearbox joints have not been added yet.")
+        elif joint.type == "revolute2":
+            raise NotImplementedError("Revolute2 type joint is not added yet.")
+        elif joint.type == "prismatic":
+            scope.declare_link(
+                PrismaticJoint(
+                    joint.name,
+                    joint.parent,
+                    joint.axis.xyz.value,
+                    joint.axis.xyz.expressed_in,
+                )
+            )
+        elif joint.type == "ball":
+            raise NotImplementedError("Ball joints have not been added yet.")
+        elif joint.type == "screw":
+            raise NotImplementedError("Screw joints have not been added yet.")
+        elif joint.type == "universal":
+            raise NotImplementedError("Universal joints have not been added yet.")
+        elif joint.type == "fixed":
+            scope.declare_link(DynamicPose(joint.name, joint.parent))
 
-    if joint.type == "revolute":
-        normal = np.array(joint.axis.xyz.value.split(" "), dtype=float)
-        if joint.axis.xyz.expressed_in is not None:
-            raise NotImplementedError()
-        tf_link = tf.RotvecRotation(normal)
-        graph.connect_sdf(joint.parent, joint.name, tf_link)
-    elif joint.type == "hinge":
-        raise NotImplementedError("Hinge joints have not been added yet.")
-    elif joint.type == "gearbox":
-        raise NotImplementedError("Gearbox joints have not been added yet.")
-    elif joint.type == "revolute2":
-        raise NotImplementedError("Revolute2 type joint is not added yet.")
-    elif joint.type == "prismatic":
-        direction = np.array(joint.axis.xyz.value.split(" "), dtype=float)
-        if joint.axis.xyz.expressed_in is not None:
-            raise NotImplementedError()
-        tf_link = tf.Translation(direction)
-        graph.connect_sdf(joint.parent, joint.name, tf_link)
-    elif joint.type == "ball":
-        raise NotImplementedError("Ball joints have not been added yet.")
-    elif joint.type == "screw":
-        raise NotImplementedError("Screw joints have not been added yet.")
-    elif joint.type == "universal":
-        raise NotImplementedError("Universal joints have not been added yet.")
-    elif joint.type == "fixed":
-        tf_link = tf.Translation((0, 0, 0))
-        graph.connect_sdf(joint.parent, joint.name, tf_link)
+        for sensor in joint.sensor:
+            self.convert_sensor(sensor, scope)
+            scope.declare_link(DynamicPose(joint.name, sensor.name))
 
-    for sensor in joint.sensor:
-        convert_sensor(sensor, graph)
-
-    return graph
-
-
-def convert_pose_only(element: PoseOnlyElement, graph: Scope) -> Scope:
-    graph.add_pose(element.name, element.pose)
-    return graph
-
-
-def converter(sdf: str, *, unwrap=True, root_uri: str = None) -> Scope:
-    """Turn v1.8 SDF into a frame graph
-
-    Parameters
-    ----------
-    sdf_in : Sdf
-        A :class:`skbot.ignition.sdformat.bindings.v17.Sdf` element containing
-        the world/model to turn into a frame graph.
-    unwrap : bool
-        If True (default) and the sdf only contains a single light, model, or
-        world element return that element's frame. If the sdf contains multiple
-        lights, models, or worlds a list of root frames is returned. If False,
-        always return a list of frames.
-
-    Returns
-    -------
-    graph : _graph.Graph
-        A container storing the nodes and edges of the frame graph.
-
-    links : Dict[str, Frames]
-        A dict of (named) links in the graph.
-
-    Notes
-    -----
-    It is necessary to split the parsers, since versions differ so heavily.
-    """
-
-    sdf_root: v17.Sdf = sdformat.loads(sdf)
-    graph_list: List[Scope] = list()
-    link_dict = dict()
-
-    for world in sdf_root.world:
-        graph = convert_world(world, root_uri=root_uri)
-        graph.root_node = world.name
-        graph_list.append(graph)
-
-    for model in sdf_root.model:
-        graph = convert_model(model, root_uri=root_uri)
-        graph.root_node = model.name
-        graph_list.append(graph)
-
-    for light in sdf_root.light:
-        graph = convert_light(light)
-        graph.root_node = light.name
-        graph_list.append(graph)
-
-    if unwrap and len(graph_list) == 1:
-        return graph_list[0]
-    else:
-        return graph_list
+        return scope
