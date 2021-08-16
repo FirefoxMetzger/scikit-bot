@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.4.2 (2021-08-16)
+### Fix
+* Bump matplotlib from 3.4.2 to 3.4.3 ([#48](https://github.com/FirefoxMetzger/scikit-bot/issues/48)) ([`c5042c4`](https://github.com/FirefoxMetzger/scikit-bot/commit/c5042c41ee2f337ead9596a6a298cb4f0c142751))
+
 ## v0.4.1 (2021-08-16)
 ### Fix
 * **sdformat:** Correct defaults for pose ([#50](https://github.com/FirefoxMetzger/scikit-bot/issues/50)) ([`2b66afb`](https://github.com/FirefoxMetzger/scikit-bot/commit/2b66afbd8d3a6d8c6bd49d24d07456c1ca95946d))
