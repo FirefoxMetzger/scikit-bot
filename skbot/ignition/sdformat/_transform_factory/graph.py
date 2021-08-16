@@ -99,6 +99,29 @@ class RotationJoint(DynamicPose):
         return tf.CompundLink([joint, pose_tf])
 
 
+class PrismaticJoint (DynamicPose):
+    def __init__(self, parent: str, child: Union[str, tf.Frame], axis: str, expressed_in: str=None) -> None:
+        super().__init__(parent, child)
+        self.axis = np.array(axis.split(" "), dtype=float)
+        self.expressed_in = parent
+        if expressed_in is not None:
+            self.expressed_in: Union[str, tf.Frame] = expressed_in
+
+    def resolve(self, scope: "Scope") -> bool:
+        if isinstance(self.expressed_in, str):
+            scope.get(self.expressed_in, scaffolding=True)
+
+        return super().resolve(scope)
+
+    def to_transform_link(self, *, angle_eps=1e-15) -> tf.Link:
+        pose_tf = super().to_transform_link(angle_eps=angle_eps)
+
+        axis = self.expressed_in.transform(self.axis, self.parent)
+        axis /= np.linalg.norm(axis)
+        joint = tf.Translation(axis)
+
+        return tf.CompundLink([joint, pose_tf])
+
 class Scope:
     """A scope within SDFormat"""
 

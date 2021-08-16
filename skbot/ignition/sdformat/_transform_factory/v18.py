@@ -5,7 +5,7 @@ from typing import List, Union
 
 from requests.api import get
 
-from .graph import CustomLink, Scope, DynamicPose, SimplePose
+from .graph import CustomLink, Scope, DynamicPose, SimplePose, RotationJoint, PrismaticJoint
 from .factory import Converter
 from .. import sdformat
 from ..bindings import v18
@@ -272,7 +272,11 @@ class SdfV18(Converter):
 
         if link.projector:
             scope.declare_frame(link.projector.name)
-            scope.add_scaffold(link.projector.name, link.projector.pose.value, link.projector.pose.relative_to)
+            scope.add_scaffold(
+                link.projector.name,
+                link.projector.pose.value,
+                link.projector.pose.relative_to,
+            )
             scope.declare_link(DynamicPose(link.name, link.projector.name))
             # TODO: there might be a link into the projected frame missing
             # here I don't exactly know how projector works and didn't find
@@ -369,11 +373,14 @@ class SdfV18(Converter):
         scope.declare_link(DynamicPose(joint.child, joint.name))
 
         if joint.type == "revolute":
-            normal = np.array(joint.axis.xyz.value.split(" "), dtype=float)
-            if joint.axis.xyz.expressed_in is not None:
-                raise NotImplementedError()
-            tf_link = tf.RotvecRotation(normal)
-            scope.connect_sdf(joint.parent, joint.name, tf_link)
+            scope.declare_link(
+                RotationJoint(
+                    joint.name,
+                    joint.parent,
+                    joint.axis.xyz.value,
+                    joint.axis.xyz.expressed_in,
+                )
+            )
         elif joint.type == "hinge":
             raise NotImplementedError("Hinge joints have not been added yet.")
         elif joint.type == "gearbox":
@@ -381,11 +388,14 @@ class SdfV18(Converter):
         elif joint.type == "revolute2":
             raise NotImplementedError("Revolute2 type joint is not added yet.")
         elif joint.type == "prismatic":
-            direction = np.array(joint.axis.xyz.value.split(" "), dtype=float)
-            if joint.axis.xyz.expressed_in is not None:
-                raise NotImplementedError()
-            tf_link = tf.Translation(direction)
-            scope.connect_sdf(joint.parent, joint.name, tf_link)
+            scope.declare_link(
+                PrismaticJoint(
+                    joint.name,
+                    joint.parent,
+                    joint.axis.xyz.value,
+                    joint.axis.xyz.expressed_in,
+                )
+            )
         elif joint.type == "ball":
             raise NotImplementedError("Ball joints have not been added yet.")
         elif joint.type == "screw":
@@ -393,10 +403,10 @@ class SdfV18(Converter):
         elif joint.type == "universal":
             raise NotImplementedError("Universal joints have not been added yet.")
         elif joint.type == "fixed":
-            tf_link = tf.Translation((0, 0, 0))
-            scope.connect_sdf(joint.parent, joint.name, tf_link)
+            scope.declare_link(DynamicPose(joint.name, joint.parent))
 
         for sensor in joint.sensor:
             self.convert_sensor(sensor, scope)
+            scope.declare_link(DynamicPose(joint.name, sensor.name))
 
         return scope
