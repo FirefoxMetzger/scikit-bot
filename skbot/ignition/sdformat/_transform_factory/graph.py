@@ -25,9 +25,7 @@ class CustomLink(SdfLink):
 
 
 class SimplePose(SdfLink):
-    def __init__(
-        self, parent: str, child: Union[str, tf.Frame], pose: str
-    ) -> None:
+    def __init__(self, parent: str, child: Union[str, tf.Frame], pose: str) -> None:
         super().__init__(parent, child)
         self.pose = np.array(pose.split(" "), dtype=float)
 
@@ -154,13 +152,23 @@ class Scope:
         if "::" in name:
             elements = name.split("::")
             scope = elements.pop(0)
-            name = "::".join(elements)
-            return self.nested_scopes[scope].get(name, scaffolding)
+            subscope_name = "::".join(elements)
+
+            try:
+                frame = self.nested_scopes[scope].get(subscope_name, scaffolding)
+            except sdformat.ParseError:
+                raise sdformat.ParseError(f"No frame named: {name}") from None
         else:
+            storage = self.frames
             if scaffolding:
-                return self.scaffold_frames[name]
-            else:
-                return self.frames[name]
+                storage = self.scaffold_frames
+
+            try:
+                frame = storage[name]
+            except KeyError:
+                raise sdformat.ParseError(f"No frame named: {name}") from None
+
+        return frame
 
     def build_scaffolding(self):
         for el in self.scaffold_links:
@@ -178,12 +186,12 @@ class Scope:
                 parent = self.get(el.parent, scaffolding=False)
             else:
                 parent = el.parent
-            
+
             if isinstance(el.child, str):
                 child = self.get(el.child, scaffolding=False)
             else:
                 child = el.child
-            
+
             tf_link = el.to_transform_link(self)
             tf_link(parent, child)
 
@@ -199,7 +207,14 @@ class Scope:
 
 
 class ModelScope(Scope):
-    def __init__(self, name, *, parent: "Scope"=None, placement_frame:str=None, canonical_link:str=None) -> None:
+    def __init__(
+        self,
+        name,
+        *,
+        parent: "Scope" = None,
+        placement_frame: str = None,
+        canonical_link: str = None,
+    ) -> None:
         super().__init__(name, parent=parent)
 
         if placement_frame is None:
@@ -209,7 +224,7 @@ class ModelScope(Scope):
 
         self.default_frame = tf.Frame(3, name="__model__")
         self.scaffold_frames["__model__"] = self.default_frame
-        
+
         self.cannonical_link = canonical_link
 
     def get(self, name: str, scaffolding: bool) -> tf.Frame:
