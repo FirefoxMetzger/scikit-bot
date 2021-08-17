@@ -17,7 +17,7 @@ class PoseBearing:
 
 
 class NamedPoseBearing(PoseBearing):
-    def __init__(self, *, name:str, pose: GenericPose = None) -> None:
+    def __init__(self, *, name: str, pose: GenericPose = None) -> None:
         super().__init__(pose=pose)
         self.name = name
 
@@ -105,7 +105,7 @@ class GenericLink(PoseBearing):
         projector: NamedPoseBearing = None,
         audio_source_poses: List[GenericPose],
         sensors: List[GenericSensor],
-        lights: List["GenericLight"]
+        lights: List["GenericLight"],
     ) -> None:
         super().__init__(pose=pose)
         self.must_be_base_link = must_be_base_link
@@ -124,3 +124,58 @@ class GenericLink(PoseBearing):
 
 class GenericLight(NamedPoseBearing):
     pass
+
+
+class GenericInclude(NamedPoseBearing):
+    def __init__(
+        self, *, name: str, pose: GenericPose, placement_frame: str = None, uri: str
+    ) -> None:
+        super().__init__(name=name, pose=pose)
+        self.placement_frame = placement_frame
+        self.uri = uri
+
+
+class GenericFrame(NamedPoseBearing):
+    def __init__(
+        self, *, name: str, pose: GenericPose, attached_to: str = None
+    ) -> None:
+        super().__init__(name=name, pose=pose)
+        self.attached_to = attached_to
+
+
+class GenericModel(NamedPoseBearing):
+    def __init__(
+        self,
+        *,
+        name: str,
+        pose: GenericPose = None,
+        placement_frame: str = None,
+        canonical_link: str = None,
+        links: List[GenericLink],
+        include: List[GenericInclude],
+        models: List["GenericModel"],
+        frames: List[GenericFrame],
+        joints: List[GenericJoint],
+    ) -> None:
+        super().__init__(name=name, pose=pose)
+        self.placement_frame = (placement_frame,)
+        self.canonical_link = canonical_link
+        self.links = links
+        self.include = include
+        self.models = models
+        self.frames = frames
+        self.joints = joints
+
+        for frame in self.frames:
+            if frame.attached_to is None:
+                frame.attached_to = self.canonical_link
+            elif frame.attached_to == "":
+                frame.attached_to = self.canonical_link
+
+        if self.canonical_link is None:
+            if len(links) > 0:
+                self.canonical_link = links[0].name
+            elif len(include) > 0:
+                self.canonical_link = include[0].name
+            elif len(models) > 0:
+                self.canonical_link = models[0].name

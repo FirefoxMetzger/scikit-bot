@@ -9,8 +9,11 @@ from .links import (
     PrismaticJoint,
 )
 from .generic import (
+    GenericFrame,
+    GenericInclude,
     GenericJoint,
     GenericLink,
+    GenericModel,
     GenericPose,
     GenericSensor,
     GenericLight,
@@ -25,6 +28,7 @@ from skbot.ignition.sdformat._transform_factory import scopes
 
 
 IncludeElement = Union[v18.ModelModel.Include, v18.World.Include]
+FrameElement = Union[v18.ModelModel.Frame, v18.World.Frame]
 
 
 class Converter(FactoryBase):
@@ -212,103 +216,17 @@ class Converter(FactoryBase):
 
         return world_scope
 
-    def convert_state(self, state: v18.State) -> Scope:
-        raise NotImplementedError()
-
-    def convert_light(self, light: v18.Light, *, scope: Scope = None) -> Scope:
+    def convert_light(self, light: Union[v18.Light, GenericLight], *, scope: Scope = None) -> Scope:
+        if isinstance(light, v18.Light):
+            light = self._to_generic_light(light)
         return super().convert_light(self._to_generic_light(light), scope=scope)
 
-    def convert_actor(self) -> Scope:
-        raise NotImplementedError()
-
     def convert_model(
-        self, model: v18.ModelModel, *, parent_scope: Scope = None
+        self, model: Union[v18.ModelModel, GenericModel], *, parent_scope: Scope = None
     ) -> Scope:
-        scope = ModelScope(
-            model.name,
-            placement_frame=model.placement_frame,
-            canonical_link=model.canonical_link,
-        )
-
-        if model.pose is None:
-            model.pose = v18.ModelModel.Pose()
-
-        scope.pose = model.pose
-
-        for link in model.link:
-            if scope.cannonical_link is None:
-                scope.cannonical_link = link.name
-
-            self.convert_link(link, scope)
-
-        for include in model.include:
-            self.resolve_include(include, scope)
-
-            # double-check if this is correct
-            scope.add_scaffold(include.name, "0 0 0 0 0 0")
-            scope.declare_link(
-                SimplePose(scope.default_frame, include.name, "0 0 0 0 0 0")
-            )
-
-            if scope.cannonical_link is None:
-                scope.cannonical_link = include.name
-
-        for nested_model in model.model:
-            self.convert_model(nested_model, parent_scope=scope)
-
-            # double-check if this is correct
-            scope.add_scaffold(nested_model.name, "0 0 0 0 0 0")
-            scope.declare_link(
-                SimplePose(scope.default_frame, nested_model.name, "0 0 0 0 0 0")
-            )
-
-            if scope.cannonical_link is None:
-                scope.cannonical_link = model.name
-
-        for frame in model.frame:
-            if frame.pose is None:
-                frame.pose = v18.ModelModel.Frame.Pose()
-
-            scope.declare_frame(frame.name)
-            scope.add_scaffold(frame.name, frame.pose.value, frame.pose.relative_to)
-
-            if frame.attached_to is None:
-                frame.attached_to = scope.cannonical_link
-            elif frame.attached_to == "":
-                frame.attached_to = scope.cannonical_link
-
-            scope.declare_link(DynamicPose(frame.attached_to, frame.name))
-
-        for joint in model.joint:
-            self.convert_joint(joint, scope)
-
-        for gripper in model.gripper:
-            raise NotImplementedError(
-                "Gripper not implemented yet (lacking upstream docs)."
-            )
-
-        if parent_scope is not None:
-            parent_scope.add_subscope(scope)
-            parent_scope.declare_frame(model.name)
-            child = scope.name + "::" + scope.placement_frame
-
-            if model.pose.relative_to is None:
-                model.pose.relative_to = model.name
-
-            parent_scope.add_scaffold(child, model.pose.value, model.pose.relative_to)
-
-        return scope
-
-    def convert_link(self, link: v18.Link, scope: Scope) -> Scope:
-        return super().convert_link(self._to_generic_link(link), scope)
-
-    def convert_sensor(self, sensor: v18.Sensor, scope: Scope) -> Scope:
-        generic_sensor = self._to_generic_sensor(sensor)
-        return super().convert_sensor(generic_sensor, scope)
-
-    def convert_joint(self, joint: v18.Joint, scope: Scope) -> Scope:
-        generic_joint = self._to_generic_joint(joint)
-        return super().convert_joint(generic_joint, scope)
+        if isinstance(model, v18.ModelModel):
+            model = self._to_generic_model(model)
+        return super().convert_model(model, parent_scope=parent_scope)
 
     def _to_generic_joint(self, joint: v18.Joint) -> GenericJoint:
         sensors = list()
@@ -403,3 +321,36 @@ class Converter(FactoryBase):
         ]
 
         return GenericLink(**link_args)
+
+    def _to_generic_model(self, model: v18.ModelModel) -> GenericModel:
+        if len(model.gripper) > 0:
+            raise NotImplementedError(
+                "Gripper not implemented yet (lacking upstream docs)."
+            )
+
+        return GenericModel(
+            name=model.name,
+            pose=model.pose,
+            placement_frame=model.placement_frame,
+            canonical_link=model.canonical_link,
+            links=[self._to_generic_link(l) for l in model.link],
+            include=[self._to_generic_include(i) for i in model.include],
+            models=[self._to_generic_model(m) for m in model.model],
+            joints=[self._to_generic_joint(j) for j in model.joint],
+            frames=[self._to_generic_frame(f) for f in model.frame]
+        )
+
+    def _to_generic_frame(self, frame: FrameElement) -> GenericFrame:
+        return GenericFrame(
+            attached_to=frame.attached_to,
+            name=frame.name,
+            pose=frame.pose
+        )
+
+    def _to_generic_include(self, include: IncludeElement) -> GenericInclude:
+        return GenericInclude(
+            name=include.name,
+            pose=include.pose,
+            placement_frame=include.placement_frame,
+            uri=include.uri,
+        )

@@ -6,7 +6,7 @@ from .. import sdformat
 from .scopes import LightScope, ModelScope, Scope
 from ...fuel import get_fuel_model
 from .... import transform as tf
-from .generic import GenericJoint, GenericLight, GenericLink, GenericSensor
+from .generic import GenericJoint, GenericLight, GenericLink, GenericModel, GenericSensor
 from .links import DynamicPose, CustomLink, RotationJoint, PrismaticJoint, SimplePose
 
 
@@ -227,6 +227,67 @@ class FactoryBase:
         for light in link.lights:
             self.convert_light(light, scope=scope)
             scope.declare_link(DynamicPose(link.name, light.name))
+
+        return scope
+
+    def convert_model(
+        self, model: GenericModel, *, parent_scope: Scope = None
+    ) -> Scope:
+        scope = ModelScope(
+            model.name,
+            placement_frame=model.placement_frame,
+            canonical_link=model.canonical_link,
+        )
+
+        scope.pose = model.pose
+
+        for link in model.links:
+            if scope.cannonical_link is None:
+                scope.cannonical_link = link.name
+
+            self.convert_link(link, scope)
+
+        for include in model.include:
+            self.resolve_include(include, scope)
+
+            # double-check if this is correct
+            scope.add_scaffold(include.name, "0 0 0 0 0 0")
+            scope.declare_link(
+                SimplePose(scope.default_frame, include.name, "0 0 0 0 0 0")
+            )
+
+            if scope.cannonical_link is None:
+                scope.cannonical_link = include.name
+
+        for nested_model in model.models:
+            self.convert_model(nested_model, parent_scope=scope)
+
+            # double-check if this is correct
+            scope.add_scaffold(nested_model.name, "0 0 0 0 0 0")
+            scope.declare_link(
+                SimplePose(scope.default_frame, nested_model.name, "0 0 0 0 0 0")
+            )
+
+            if scope.cannonical_link is None:
+                scope.cannonical_link = model.name
+
+        for frame in model.frames:
+            scope.declare_frame(frame.name)
+            scope.add_scaffold(frame.name, frame.pose.value, frame.pose.relative_to)
+            scope.declare_link(DynamicPose(frame.attached_to, frame.name))
+
+        for joint in model.joints:
+            self.convert_joint(joint, scope)
+
+        if parent_scope is not None:
+            parent_scope.add_subscope(scope)
+            parent_scope.declare_frame(model.name)
+            child = scope.name + "::" + scope.placement_frame
+
+            if model.pose.relative_to is None:
+                model.pose.relative_to = model.name
+
+            parent_scope.add_scaffold(child, model.pose.value, model.pose.relative_to)
 
         return scope
 
