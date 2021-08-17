@@ -146,7 +146,9 @@ def loads(
     try:
         sdf_parser.from_string(sdf, bindings.Sdf)
     except ElementTree.ParseError as e:
-        raise ParseError("Invalid XML.") from e
+        raise ParseError("Invalid SDFormat XML.") from e
+    except XSDataParserError as e:
+        raise ParseError("Invalid SDFormat XML.") from e
 
     return sdf_parser.from_string(sdf, bindings.Sdf)
 
