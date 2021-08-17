@@ -254,3 +254,11 @@ class WorldScope(Scope):
                 return self.frames["world"]
 
         return super().get(name, scaffolding)
+
+
+class LightScope(Scope):
+    def __init__(self, name) -> None:
+        super().__init__(name, parent=None)
+        
+        self.default_frame = tf.Frame(3, name="__light__")
+        self.scaffold_frames["__light__"] = self.default_frame

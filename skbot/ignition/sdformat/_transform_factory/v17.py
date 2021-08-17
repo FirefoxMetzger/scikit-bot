@@ -200,7 +200,7 @@ class Converter(ConverterBase):
 
     def convert_light(self, light: v17.Light, *, scope: Scope = None) -> Scope:
         if scope is None:
-            scope = Scope()
+            scope = ModelScope(light.name)
 
         if light.pose is None:
             light.pose = v17.Light.Pose()
@@ -233,6 +233,10 @@ class Converter(ConverterBase):
 
         for include in model.include:
             self.resolve_include(include, scope)
+            
+            # double-check if this is correct
+            scope.add_scaffold(include.name, "0 0 0 0 0 0")
+            scope.declare_link(SimplePose(scope.default_frame, include.name, "0 0 0 0 0 0"))
 
         for nested_model in model.model:
             self.convert_model(nested_model, parent_scope=scope)

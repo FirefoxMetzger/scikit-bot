@@ -2,6 +2,7 @@ from typing import List, Union
 
 from .graph import (
     CustomLink,
+    LightScope,
     Scope,
     DynamicPose,
     SimplePose,
@@ -64,10 +65,11 @@ class Converter(ConverterBase):
     def resolve_include(self, include: IncludeElement, scope: Scope) -> None:
         subscope = super()._resolve_include(include.uri)
 
-        if include.name is not None:
-            subscope.name = include.name
+        if include.name is None:
+            include.name = subscope.name
 
-        name = subscope.name
+        name = include.name
+        subscope.name = include.name
         scope.add_subscope(subscope)
         scope.declare_frame(name)
 
@@ -205,7 +207,7 @@ class Converter(ConverterBase):
 
     def convert_light(self, light: v18.Light, *, scope: Scope = None) -> Scope:
         if scope is None:
-            scope = Scope()
+            scope = LightScope(light.name)
 
         if light.pose is None:
             light.pose = v18.Light.Pose()
@@ -239,12 +241,22 @@ class Converter(ConverterBase):
         for include in model.include:
             self.resolve_include(include, scope)
 
+            # double-check if this is correct
+            scope.add_scaffold(include.name, "0 0 0 0 0 0")
+            scope.declare_link(SimplePose(scope.default_frame, include.name, "0 0 0 0 0 0"))
+
+            if scope.cannonical_link is None:
+                scope.cannonical_link = include.name
+
         for nested_model in model.model:
             self.convert_model(nested_model, parent_scope=scope)
 
             # double-check if this is correct
             scope.add_scaffold(nested_model.name, "0 0 0 0 0 0")
             scope.declare_link(SimplePose(scope.default_frame, nested_model.name, "0 0 0 0 0 0"))
+            
+            if scope.cannonical_link is None:
+                scope.cannonical_link = model.name
 
         for frame in model.frame:
             if frame.pose is None:

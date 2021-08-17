@@ -1,4 +1,5 @@
-from skbot.ignition.sdformat._transform_factory.graph import ModelScope, Scope, WorldScope
+from numpy import isin
+from skbot.ignition.sdformat._transform_factory.graph import LightScope, ModelScope, Scope, WorldScope
 from typing import Union, List, Tuple
 
 from ... import transform as tf
@@ -49,7 +50,10 @@ def transform_graph_from_sdf(
         if isinstance(scope, WorldScope):
             frame_list.append(scope.frames["world"])
         elif isinstance(scope, ModelScope):
-            frame_list.append(scope.cannonical_link)
+            frame = scope.frames[scope.cannonical_link]
+            frame_list.append(frame)
+        elif isinstance(scope, LightScope):
+            frame = scope.frames[scope.name]
 
 
     if unwrap and len(frame_list) == 1:
