@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.4.7 (2021-08-17)
+### Fix
+* Turn xsdata errors into skbot ParseError ([#55](https://github.com/FirefoxMetzger/scikit-bot/issues/55)) ([`9d02fb4`](https://github.com/FirefoxMetzger/scikit-bot/commit/9d02fb47f6454d793921ef12ebe33451e03a2bf6))
+
 ## v0.4.6 (2021-08-17)
 ### Fix
 * Bump python-semantic-release from 7.18.0 to 7.19.0 ([#54](https://github.com/FirefoxMetzger/scikit-bot/issues/54)) ([`02170c4`](https://github.com/FirefoxMetzger/scikit-bot/commit/02170c49df4b6a513c0d6eb203039042a0cc8ae9))
