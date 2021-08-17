@@ -1,14 +1,6 @@
 <?xml version="1.0"?>
 <sdf version="1.7">
     <model name="panda">
-
-        <!-- Fix To World -->
-        <joint name="panda_joint_world" type="fixed">
-            <parent>world</parent>
-            <child>panda_link0</child>
-        </joint>
-
-
         <!-- Arm Links -->
         <link name="panda_link0">
             <visual name="panda_link0_visual">
