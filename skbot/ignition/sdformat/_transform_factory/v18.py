@@ -1,17 +1,15 @@
 from typing import List, Union
 
-from .graph import (
+from .scopes import Scope, WorldScope, ModelScope 
+from .links import (
     CustomLink,
-    LightScope,
-    Scope,
     DynamicPose,
     SimplePose,
     RotationJoint,
     PrismaticJoint,
-    ModelScope,
-    WorldScope,
 )
-from .factory import ConverterBase
+from .generic import PoseBearing
+from .factory import FactoryBase
 from .. import sdformat
 from ..bindings import v18
 from .... import transform as tf
@@ -20,7 +18,7 @@ from .... import transform as tf
 IncludeElement = Union[v18.ModelModel.Include, v18.World.Include]
 
 
-class Converter(ConverterBase):
+class Converter(FactoryBase):
     def __call__(self, sdf: str) -> Union[Scope, List[Scope]]:
         """Convert v1.8 SDF into a Graph
 
@@ -79,6 +77,9 @@ class Converter(ConverterBase):
             placement_frame = subscope.placement_frame
             #TODO: deal with absend //include/pose
             # not quite sure how yet.
+
+        if include.pose is None:
+            include.pose = subscope.pose
 
         if include.pose.relative_to is None:
             include.pose.relative_to = name
@@ -231,6 +232,8 @@ class Converter(ConverterBase):
 
         if model.pose is None:
             model.pose = v18.ModelModel.Pose()
+
+        scope.pose = model.pose
 
         for link in model.link:
             if scope.cannonical_link is None:

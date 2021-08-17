@@ -1,16 +1,14 @@
 from typing import List, Union
 
-from .graph import (
+from .scopes import Scope, WorldScope, ModelScope 
+from .links import (
     CustomLink,
-    Scope,
     DynamicPose,
     SimplePose,
     RotationJoint,
     PrismaticJoint,
-    ModelScope,
-    WorldScope,
 )
-from .factory import ConverterBase
+from .factory import FactoryBase
 from .. import sdformat
 from ..bindings import v17
 from .... import transform as tf
@@ -19,7 +17,7 @@ from .... import transform as tf
 IncludeElement = Union[v17.ModelModel.Include, v17.World.Include]
 
 
-class Converter(ConverterBase):
+class Converter(FactoryBase):
     def __call__(self, sdf: str) -> Union[Scope, List[Scope]]:
         """Convert v1.8 SDF into a Graph
 
@@ -224,6 +222,8 @@ class Converter(ConverterBase):
 
         if model.pose is None:
             model.pose = v17.ModelModel.Pose()
+
+        scope.pose = model.pose
 
         for link in model.link:
             if scope.cannonical_link is None:

@@ -1,9 +1,9 @@
 from numpy import isin
-from skbot.ignition.sdformat._transform_factory.graph import LightScope, ModelScope, Scope, WorldScope
+from skbot.ignition.sdformat._transform_factory.scopes import LightScope, ModelScope, Scope, WorldScope
 from typing import Union, List, Tuple
 
 from ... import transform as tf
-from ._transform_factory.factory import graph_factory
+from ._transform_factory.factory import transform_factory
 
 
 def transform_graph_from_sdf(
@@ -41,7 +41,7 @@ def transform_graph_from_sdf(
 
     """
 
-    scope_list:List[Scope] = graph_factory(sdf, unwrap=False)
+    scope_list:List[Scope] = transform_factory(sdf, unwrap=False)
     frame_list:List[tf.Frame] = list()
     for scope in scope_list:
         scope.build_scaffolding()

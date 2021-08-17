@@ -1,10 +1,9 @@
-from skbot.ignition.sdformat.bindings.v17.link import Link
 from typing import Callable, Dict, Union, List, Any
 import importlib
 from urllib.parse import urlparse
 
 from .. import sdformat
-from .graph import Scope
+from .scopes import ModelScope, Scope
 from ...fuel import get_fuel_model
 
 
@@ -21,7 +20,7 @@ _converter_roots = {
 }
 
 
-class ConverterBase:
+class FactoryBase:
     def __init__(self, *, unwrap=True, root_uri: str = None):
         self.root_uri: str = root_uri
         self.unwrap: bool = unwrap
@@ -29,7 +28,7 @@ class ConverterBase:
     def __call__(self, sdf: str) -> Union[Scope, List[Scope]]:
         raise NotImplementedError()
 
-    def _resolve_include(self, uri: str) -> Scope:
+    def _resolve_include(self, uri: str) -> ModelScope:
         # there is only one fuel server
         fuel_server = "fuel.ignitionrobotics.org"
         uri_parts = urlparse(uri)
@@ -45,10 +44,10 @@ class ConverterBase:
             raise sdformat.ParseError(f"Unknown URI: {uri}")
 
         sdf = get_fuel_model(root_uri, file_path=rel_path)
-        return graph_factory(sdf, root_uri=root_uri)
+        return transform_factory(sdf, root_uri=root_uri)
 
 
-class GraphFactory:
+class TransformFactory:
     """A factory that turns SDF of different versions into generic graphs
     that can then be assembled into transform graphs"""
 
@@ -68,4 +67,4 @@ class GraphFactory:
 
 
 # a singleton
-graph_factory = GraphFactory()
+transform_factory = TransformFactory()
