@@ -1,6 +1,6 @@
 from typing import List, Union
 
-from .scopes import Scope, WorldScope, ModelScope 
+from .scopes import Scope, WorldScope, ModelScope, LightScope
 from .links import (
     CustomLink,
     DynamicPose,
@@ -8,11 +8,20 @@ from .links import (
     RotationJoint,
     PrismaticJoint,
 )
-from .generic import PoseBearing
+from .generic import (
+    GenericJoint,
+    GenericLink,
+    GenericPose,
+    GenericSensor,
+    GenericLight,
+    NamedPoseBearing,
+    PoseBearing,
+)
 from .factory import FactoryBase
 from .. import sdformat
 from ..bindings import v18
 from .... import transform as tf
+from skbot.ignition.sdformat._transform_factory import scopes
 
 
 IncludeElement = Union[v18.ModelModel.Include, v18.World.Include]
@@ -75,7 +84,7 @@ class Converter(FactoryBase):
             placement_frame = include.placement_frame
         else:
             placement_frame = subscope.placement_frame
-            #TODO: deal with absend //include/pose
+            # TODO: deal with absend //include/pose
             # not quite sure how yet.
 
         if include.pose is None:
@@ -207,16 +216,7 @@ class Converter(FactoryBase):
         raise NotImplementedError()
 
     def convert_light(self, light: v18.Light, *, scope: Scope = None) -> Scope:
-        if scope is None:
-            scope = LightScope(light.name)
-
-        if light.pose is None:
-            light.pose = v18.Light.Pose()
-
-        scope.declare_frame(light.name)
-        scope.add_scaffold(light.name, light.pose.value, light.pose.relative_to)
-
-        return scope
+        return super().convert_light(self._to_generic_light(light), scope=scope)
 
     def convert_actor(self) -> Scope:
         raise NotImplementedError()
@@ -246,7 +246,9 @@ class Converter(FactoryBase):
 
             # double-check if this is correct
             scope.add_scaffold(include.name, "0 0 0 0 0 0")
-            scope.declare_link(SimplePose(scope.default_frame, include.name, "0 0 0 0 0 0"))
+            scope.declare_link(
+                SimplePose(scope.default_frame, include.name, "0 0 0 0 0 0")
+            )
 
             if scope.cannonical_link is None:
                 scope.cannonical_link = include.name
@@ -256,8 +258,10 @@ class Converter(FactoryBase):
 
             # double-check if this is correct
             scope.add_scaffold(nested_model.name, "0 0 0 0 0 0")
-            scope.declare_link(SimplePose(scope.default_frame, nested_model.name, "0 0 0 0 0 0"))
-            
+            scope.declare_link(
+                SimplePose(scope.default_frame, nested_model.name, "0 0 0 0 0 0")
+            )
+
             if scope.cannonical_link is None:
                 scope.cannonical_link = model.name
 
@@ -296,192 +300,106 @@ class Converter(FactoryBase):
         return scope
 
     def convert_link(self, link: v18.Link, scope: Scope) -> Scope:
-        if link.must_be_base_link:
-            link.pose.relative_to = "world"
-            scope.declare_link(DynamicPose("world", link.name))
-
-        if link.pose is None:
-            link.pose = v18.Link.Pose()
-
-        scope.declare_frame(link.name)
-        scope.add_scaffold(link.name, link.pose.value, link.pose.relative_to)
-
-        if link.inertial:
-            scope.declare_link(
-                SimplePose(link.name, tf.Frame(3, name="inertial"), link.inertial.pose)
-            )
-
-        for collision in link.collision:
-            if collision.pose is None:
-                collision.pose = v18.Collision.Pose()
-
-            scope.declare_frame(collision.name)
-            scope.add_scaffold(
-                collision.name, collision.pose.value, collision.pose.relative_to
-            )
-            scope.declare_link(DynamicPose(link.name, collision.name))
-
-        for visual in link.visual:
-            if visual.pose is None:
-                visual.pose = v18.Visual.Pose()
-
-            scope.declare_frame(visual.name)
-            scope.add_scaffold(visual.name, visual.pose.value, visual.pose.relative_to)
-            scope.declare_link(DynamicPose(link.name, visual.name))
-
-        for sensor in link.sensor:
-            self.convert_sensor(sensor, scope)
-            scope.declare_link(DynamicPose(link.name, sensor.name))
-
-        if link.projector:
-            if link.projector.pose is None:
-                link.projector.pose = v18.Link.Projector.Pose()
-
-            scope.declare_frame(link.projector.name)
-            scope.add_scaffold(
-                link.projector.name,
-                link.projector.pose.value,
-                link.projector.pose.relative_to,
-            )
-            scope.declare_link(DynamicPose(link.name, link.projector.name))
-            # TODO: there might be a link into the projected frame missing
-            # here I don't exactly know how projector works and didn't find
-            # docs
-
-        for idx, source in enumerate(link.audio_source):
-            if source.pose is None:
-                source.pose = v18.Link.AudioSource.Pose()
-
-            name = link.name + f"-audio-source-{idx}"
-            scope.declare_frame(name)
-            scope.add_scaffold(name, source.pose.value, source.pose.relative_to)
-            scope.declare_link(DynamicPose(link.name, name))
-
-        for light in link.light:
-            self.convert_light(light, scope=scope)
-            scope.declare_link(DynamicPose(link.name, light.name))
-
-        return scope
+        return super().convert_link(self._to_generic_link(link), scope)
 
     def convert_sensor(self, sensor: v18.Sensor, scope: Scope) -> Scope:
-        if sensor.pose is None:
-            sensor.pose = v18.Sensor.Pose()
-
-        scope.declare_frame(sensor.name)
-        scope.add_scaffold(sensor.name, sensor.pose.value, sensor.pose.relative_to)
-
-        if sensor.type == "air_pressure":
-            raise NotImplementedError()
-        elif sensor.type == "alimeter":
-            raise NotImplementedError()
-        elif sensor.type == "camera":
-            if sensor.camera.noise is not None:
-                raise NotImplementedError()
-            if sensor.camera.distortion is not None:
-                raise NotImplementedError()
-            if sensor.camera.lens is not None:
-                raise NotImplementedError()
-
-            name = sensor.name + "-camera-space"
-            pose = sensor.camera.pose
-            scope.declare_frame(name)
-            scope.add_scaffold(name, pose.value, pose.relative_to)
-            scope.declare_link(DynamicPose(sensor.name, name))
-
-            scope.declare_link(
-                CustomLink(
-                    sensor.name,
-                    tf.Frame(2, name="pixel-space"),
-                    tf.FrustumProjection(
-                        sensor.camera.horizontal_fov,
-                        (sensor.camera.image.height, sensor.camera.image.width),
-                    ),
-                )
-            )
-        elif sensor.type == "contact":
-            raise NotImplementedError()
-        elif sensor.type == "depth_camera":
-            raise NotImplementedError()
-        elif sensor.type == "force_torque":
-            raise NotImplementedError()
-        elif sensor.type == "gps":
-            raise NotImplementedError()
-        elif sensor.type == "gpu_lidar":
-            raise NotImplementedError()
-        elif sensor.type == "gpu_ray":
-            raise NotImplementedError()
-        elif sensor.type == "imu":
-            raise NotImplementedError()
-        elif sensor.type == "lidar":
-            raise NotImplementedError()
-        elif sensor.type == "logica_camera":
-            raise NotImplementedError()
-        elif sensor.type == "magnetometer":
-            raise NotImplementedError()
-        elif sensor.type == "multicamera":
-            raise NotImplementedError()
-        elif sensor.type == "rfid":
-            raise NotImplementedError()
-        elif sensor.type == "rfidtag":
-            raise NotImplementedError()
-        elif sensor.type == "rgbd_camera":
-            raise NotImplementedError()
-        elif sensor.type == "sonar":
-            raise NotImplementedError()
-        elif sensor.type == "thermal_camera":
-            raise NotImplementedError()
-        elif sensor.type == "wireless_receiver":
-            raise NotImplementedError()
-        elif sensor.type == "wireless_transmitter":
-            raise NotImplementedError()
-        else:
-            raise sdformat.ParseError(f"Unkown sensor type: {sensor.type}")
-
-        return scope
+        generic_sensor = self._to_generic_sensor(sensor)
+        return super().convert_sensor(generic_sensor, scope)
 
     def convert_joint(self, joint: v18.Joint, scope: Scope) -> Scope:
-        if joint.pose is None:
-            joint.pose = v18.Joint.Pose()
+        generic_joint = self._to_generic_joint(joint)
+        return super().convert_joint(generic_joint, scope)
 
-        scope.declare_frame(joint.name)
-        scope.add_scaffold(joint.name, joint.pose.value, joint.pose.relative_to)
-        scope.declare_link(DynamicPose(joint.child, joint.name))
-
-        if joint.type == "revolute":
-            scope.declare_link(
-                RotationJoint(
-                    joint.name,
-                    joint.parent,
-                    joint.axis.xyz.value,
-                    joint.axis.xyz.expressed_in,
-                )
-            )
-        elif joint.type == "hinge":
-            raise NotImplementedError("Hinge joints have not been added yet.")
-        elif joint.type == "gearbox":
-            raise NotImplementedError("Gearbox joints have not been added yet.")
-        elif joint.type == "revolute2":
-            raise NotImplementedError("Revolute2 type joint is not added yet.")
-        elif joint.type == "prismatic":
-            scope.declare_link(
-                PrismaticJoint(
-                    joint.name,
-                    joint.parent,
-                    joint.axis.xyz.value,
-                    joint.axis.xyz.expressed_in,
-                )
-            )
-        elif joint.type == "ball":
-            raise NotImplementedError("Ball joints have not been added yet.")
-        elif joint.type == "screw":
-            raise NotImplementedError("Screw joints have not been added yet.")
-        elif joint.type == "universal":
-            raise NotImplementedError("Universal joints have not been added yet.")
-        elif joint.type == "fixed":
-            scope.declare_link(DynamicPose(joint.name, joint.parent))
-
+    def _to_generic_joint(self, joint: v18.Joint) -> GenericJoint:
+        sensors = list()
         for sensor in joint.sensor:
-            self.convert_sensor(sensor, scope)
-            scope.declare_link(DynamicPose(joint.name, sensor.name))
+            sensors.append(self._to_generic_sensor(sensor))
 
-        return scope
+        joint_args = {
+            "name": joint.name,
+            "kind": joint.type,
+            "parent": joint.parent,
+            "child": joint.child,
+            "pose": None,
+            "sensor": sensors,
+        }
+
+        if joint.pose is not None:
+            joint_args["pose"] = joint.pose
+
+        if joint.axis is not None:
+            axis = GenericJoint.Axis()
+
+            if joint.axis.xyz is not None:
+                axis.xyz.value = joint.axis.xyz.value
+                axis.xyz.expressed_in = joint.axis.xyz.expressed_in
+
+            joint_args["axis"] = axis
+
+        return GenericJoint(**joint_args)
+
+    def _to_generic_sensor(self, sensor: v18.Sensor) -> GenericSensor:
+        if sensor.pose is None:
+            sensor.pose = v18.Sensor.Pose()
+        if sensor.camera is not None:
+            if sensor.camera.pose is None:
+                sensor.camera.pose = v18.Sensor.Camera.Pose()
+
+        return GenericSensor(
+            name=sensor.name,
+            type=sensor.type,
+            pose=GenericPose(
+                value=sensor.pose.value, relative_to=sensor.pose.relative_to
+            ),
+            camera=GenericSensor.Camera(
+                name=sensor.camera.name,
+                pose=GenericPose(
+                    value=sensor.camera.pose.value,
+                    relative_to=sensor.camera.pose.relative_to,
+                ),
+            ),
+        )
+
+    def _to_generic_light(self, light: v18.Light) -> GenericLight:
+        return GenericLight(name=light.name, pose=light.pose)
+
+    def _to_generic_link(self, link: v18.Link) -> GenericLink:
+        link_args = {
+            "name": link.name,
+            "must_be_base_link": link.must_be_base_link,
+            "pose": link.pose,
+            "inertial": None,
+            "projector": None,
+            "sensors": [self._to_generic_sensor(sensor) for sensor in link.sensor],
+            "lights": [self._to_generic_light(light) for light in link.light],
+        }
+
+        if link.inertial is not None:
+            link_args["inertial_pose"] = PoseBearing(
+                value=link.inertial.pose, relative_to=link.name
+            )
+
+        link_args["collisions"] = [
+            NamedPoseBearing(name=c.name, pose=c.pose)
+            if c.pose is not None
+            else NamedPoseBearing(name=c.name)
+            for c in link.collision
+        ]
+
+        link_args["visuals"] = [
+            NamedPoseBearing(name=v.name, pose=v.pose)
+            if v.pose is not None
+            else NamedPoseBearing(name=v.name)
+            for v in link.visual
+        ]
+
+        if link.projector is not None:
+            link_args["projector_pose"] = NamedPoseBearing(
+                name=link.projector.name, pose=link.projector.pose
+            )
+
+        link_args["audio_source_poses"] = [
+            a.pose if a.pose is not None else GenericPose() for a in link.audio_source
+        ]
+
+        return GenericLink(**link_args)

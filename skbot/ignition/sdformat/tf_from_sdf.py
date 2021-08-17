@@ -48,12 +48,13 @@ def transform_graph_from_sdf(
         scope.resolve_links()
 
         if isinstance(scope, WorldScope):
-            frame_list.append(scope.frames["world"])
+            frame_list.append(scope.get("world", scaffolding=False))
         elif isinstance(scope, ModelScope):
-            frame = scope.frames[scope.cannonical_link]
+            frame = scope.get(scope.cannonical_link, scaffolding=False)
             frame_list.append(frame)
         elif isinstance(scope, LightScope):
-            frame = scope.frames[scope.name]
+            frame = scope.get(scope.name, scaffolding=False)
+            frame_list.append(frame)
 
 
     if unwrap and len(frame_list) == 1:
