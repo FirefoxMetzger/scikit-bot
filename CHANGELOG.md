@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.4.4 (2021-08-17)
+### Fix
+* **transform:** Correctly initialize CompoundLink ([#51](https://github.com/FirefoxMetzger/scikit-bot/issues/51)) ([`b7ac19f`](https://github.com/FirefoxMetzger/scikit-bot/commit/b7ac19fdf7d92450e6515a41a05ef796b89af758))
+
 ## v0.4.3 (2021-08-16)
 ### Fix
 * **transform:** Convert frame.transform to array ([#53](https://github.com/FirefoxMetzger/scikit-bot/issues/53)) ([`620fabd`](https://github.com/FirefoxMetzger/scikit-bot/commit/620fabd2995360b809bf77f86b9879d3f530cf18))
