@@ -73,39 +73,6 @@ class Converter(FactoryBase):
         else:
             return graph_list
 
-    def resolve_include(self, include: IncludeElement, scope: Scope) -> None:
-        subscope = super()._resolve_include(include.uri)
-
-        if include.name is None:
-            include.name = subscope.name
-
-        name = include.name
-        subscope.name = include.name
-        scope.add_subscope(subscope)
-        scope.declare_frame(name)
-
-        if include.placement_frame is not None:
-            placement_frame = include.placement_frame
-        else:
-            placement_frame = subscope.placement_frame
-            # TODO: deal with absend //include/pose
-            # not quite sure how yet.
-
-        if include.pose is None:
-            include.pose = subscope.pose
-
-        if include.pose.relative_to is None:
-            include.pose.relative_to = name
-
-        placement_frame = subscope.name + "::" + placement_frame
-
-        scope.add_scaffold(
-            placement_frame, include.pose.value, include.pose.relative_to
-        )
-
-        child = subscope.name + "::" + subscope.cannonical_link
-        scope.declare_link(DynamicPose(name, child))
-
     def convert_world(self, world: v18.World) -> Scope:
         world_scope = WorldScope(world.name)
         for include in world.include:

@@ -73,6 +73,9 @@ class Scope:
     def get(self, name: str, scaffolding: bool) -> tf.Frame:
         """Find the frame from a (namespaced) SDFormat name"""
 
+        if name is None:
+            print("")
+
         if "::" in name:
             elements = name.split("::")
             scope = elements.pop(0)
@@ -149,7 +152,7 @@ class ModelScope(Scope):
         self.default_frame = tf.Frame(3, name="__model__")
         self.scaffold_frames["__model__"] = self.default_frame
 
-        self.cannonical_link = canonical_link
+        self.canonical_link = canonical_link
 
         self.pose = None
 

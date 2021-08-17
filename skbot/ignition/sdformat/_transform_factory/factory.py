@@ -1,12 +1,15 @@
+from skbot.ignition.messages import Model
 from typing import Callable, Dict, Union, List, Any
 import importlib
 from urllib.parse import urlparse
+
+from numpy import isin
 
 from .. import sdformat
 from .scopes import LightScope, ModelScope, Scope
 from ...fuel import get_fuel_model
 from .... import transform as tf
-from .generic import GenericJoint, GenericLight, GenericLink, GenericModel, GenericSensor
+from .generic import GenericInclude, GenericJoint, GenericLight, GenericLink, GenericModel, GenericSensor
 from .links import DynamicPose, CustomLink, RotationJoint, PrismaticJoint, SimplePose
 
 
@@ -242,9 +245,6 @@ class FactoryBase:
         scope.pose = model.pose
 
         for link in model.links:
-            if scope.cannonical_link is None:
-                scope.cannonical_link = link.name
-
             self.convert_link(link, scope)
 
         for include in model.include:
@@ -256,9 +256,6 @@ class FactoryBase:
                 SimplePose(scope.default_frame, include.name, "0 0 0 0 0 0")
             )
 
-            if scope.cannonical_link is None:
-                scope.cannonical_link = include.name
-
         for nested_model in model.models:
             self.convert_model(nested_model, parent_scope=scope)
 
@@ -268,13 +265,13 @@ class FactoryBase:
                 SimplePose(scope.default_frame, nested_model.name, "0 0 0 0 0 0")
             )
 
-            if scope.cannonical_link is None:
-                scope.cannonical_link = model.name
-
         for frame in model.frames:
             scope.declare_frame(frame.name)
             scope.add_scaffold(frame.name, frame.pose.value, frame.pose.relative_to)
-            scope.declare_link(DynamicPose(frame.attached_to, frame.name))
+            if frame.attached_to == "__model__":
+                scope.declare_link(DynamicPose(scope.canonical_link, frame.name))
+            else:
+                scope.declare_link(DynamicPose(frame.attached_to, frame.name))
 
         for joint in model.joints:
             self.convert_joint(joint, scope)
@@ -290,6 +287,43 @@ class FactoryBase:
             parent_scope.add_scaffold(child, model.pose.value, model.pose.relative_to)
 
         return scope
+
+    def resolve_include(self, include: GenericInclude, scope: Scope) -> None:
+        subscope = self._resolve_include(include.uri)
+
+        if include.name is None:
+            include.name = subscope.name
+
+        name = include.name
+        subscope.name = include.name
+        scope.add_subscope(subscope)
+        scope.declare_frame(name)
+
+        if isinstance(scope, ModelScope):
+            if scope.canonical_link is None:
+                scope.canonical_link = name
+
+        if include.placement_frame is not None:
+            placement_frame = include.placement_frame
+        else:
+            placement_frame = subscope.placement_frame
+            # TODO: deal with absend //include/pose
+            # not quite sure how yet.
+
+        if include.pose is None:
+            include.pose = subscope.pose
+
+        if include.pose.relative_to is None:
+            include.pose.relative_to = name
+
+        placement_frame = subscope.name + "::" + placement_frame
+
+        scope.add_scaffold(
+            placement_frame, include.pose.value, include.pose.relative_to
+        )
+
+        child = subscope.name + "::" + subscope.canonical_link
+        scope.declare_link(DynamicPose(name, child))
 
 
 class TransformFactory:

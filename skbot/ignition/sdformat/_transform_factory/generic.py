@@ -158,7 +158,7 @@ class GenericModel(NamedPoseBearing):
         joints: List[GenericJoint],
     ) -> None:
         super().__init__(name=name, pose=pose)
-        self.placement_frame = (placement_frame,)
+        self.placement_frame = placement_frame
         self.canonical_link = canonical_link
         self.links = links
         self.include = include
@@ -166,16 +166,21 @@ class GenericModel(NamedPoseBearing):
         self.frames = frames
         self.joints = joints
 
-        for frame in self.frames:
-            if frame.attached_to is None:
-                frame.attached_to = self.canonical_link
-            elif frame.attached_to == "":
-                frame.attached_to = self.canonical_link
-
         if self.canonical_link is None:
             if len(links) > 0:
                 self.canonical_link = links[0].name
             elif len(include) > 0:
                 self.canonical_link = include[0].name
             elif len(models) > 0:
-                self.canonical_link = models[0].name
+                self.canonical_link = models[0].canonical_link
+
+        if self.placement_frame is None:
+            self.placement_frame = "__model__"
+
+        for frame in self.frames:
+            if frame.attached_to is None:
+                frame.attached_to = self.placement_frame
+            elif frame.attached_to == "":
+                frame.attached_to = self.placement_frame
+
+

@@ -50,7 +50,7 @@ def transform_graph_from_sdf(
         if isinstance(scope, WorldScope):
             frame_list.append(scope.get("world", scaffolding=False))
         elif isinstance(scope, ModelScope):
-            frame = scope.get(scope.cannonical_link, scaffolding=False)
+            frame = scope.get(scope.canonical_link, scaffolding=False)
             frame_list.append(frame)
         elif isinstance(scope, LightScope):
             frame = scope.get(scope.name, scaffolding=False)
