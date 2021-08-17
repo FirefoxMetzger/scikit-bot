@@ -195,7 +195,9 @@ def invalid_sdf_string(request):
         "v18/fuel_include_placement_frame.sdf",
         "v18/fuel_include_rename.sdf",
         "v18/fuel_include.sdf",
-        "v18/light_only.sdf"
+        "v18/light_only.sdf",
+        "v18/fuel_include_no_pose.sdf",
+        "v18/fuel_include_relative_to.sdf"
     ]
 )
 def v18_sdf(request):
