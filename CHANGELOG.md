@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.4.6 (2021-08-17)
+### Fix
+* Bump python-semantic-release from 7.18.0 to 7.19.0 ([#54](https://github.com/FirefoxMetzger/scikit-bot/issues/54)) ([`02170c4`](https://github.com/FirefoxMetzger/scikit-bot/commit/02170c49df4b6a513c0d6eb203039042a0cc8ae9))
+
 ## v0.4.5 (2021-08-17)
 ### Fix
 * Bump numpy from 1.20.0 to 1.21.2 ([#52](https://github.com/FirefoxMetzger/scikit-bot/issues/52)) ([`f365da4`](https://github.com/FirefoxMetzger/scikit-bot/commit/f365da471d0c24841b5cc56741570abfcab33745))
