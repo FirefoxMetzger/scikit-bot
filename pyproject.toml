@@ -10,7 +10,8 @@ build-backend = "setuptools.build_meta"
     omit = [
         "./skbot/ignition/messages.py",
         "*tests*",
-        "./skbot/ignition/sdformat/bindings/*"
+        "./skbot/ignition/sdformat/bindings/*",
+        "./skbot/ignition/sdformat/create_frame_graph.py"
     ]
 
     exclude_lines = [
