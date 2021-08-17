@@ -2,8 +2,7 @@ from skbot.ignition.messages import Model
 from typing import Callable, Dict, Union, List, Any
 import importlib
 from urllib.parse import urlparse
-
-from numpy import isin
+from requests.exceptions import RequestException
 
 from .. import sdformat
 from .scopes import LightScope, ModelScope, Scope
@@ -45,11 +44,15 @@ class FactoryBase:
         elif uri_parts.scheme == "model":
             raise NotImplementedError("Unsure how to resolve model://.")
         elif uri_parts.scheme == "":
+            root_uri = self.root_uri
             rel_path = uri
         else:
             raise sdformat.ParseError(f"Unknown URI: {uri}")
 
-        sdf = get_fuel_model(root_uri, file_path=rel_path)
+        try:
+            sdf = get_fuel_model(root_uri, file_path=rel_path)
+        except RequestException:
+            raise sdformat.ParseError(f"Unable to read '{str(rel_path)}' from '{str(root_uri)}'")
         return transform_factory(sdf, root_uri=root_uri)
 
     def convert_sensor(self, sensor: GenericSensor, scope: Scope) -> Scope:

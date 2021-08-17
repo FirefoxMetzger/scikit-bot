@@ -172,7 +172,7 @@ class GenericModel(NamedPoseBearing):
             elif len(include) > 0:
                 self.canonical_link = include[0].name
             elif len(models) > 0:
-                self.canonical_link = models[0].canonical_link
+                self.canonical_link = models[0].name
 
         if self.placement_frame is None:
             self.placement_frame = "__model__"

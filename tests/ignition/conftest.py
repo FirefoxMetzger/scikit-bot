@@ -177,17 +177,13 @@ def invalid_sdf_string(request):
         "sdformat/material_invalid.sdf",
         "sdformat/material_valid.sdf",
         "sdformat/model_invalid_placement_frame.sdf",
-        "sdformat/model_invalid_root_reference.sdf",
         "sdformat/model_nested_frame_attached_to.sdf",
         "sdformat/model_nested_static_model.sdf",
         "sdformat/model_relative_to_nested_reference.sdf",
         "sdformat/model_with_placement_frame_attribute.sdf",
         "sdformat/nested_explicit_canonical_link.sdf",
         "sdformat/nested_model_cross_references.sdf",
-        "sdformat/nested_multiple_elements_error_world.sdf",
-        "sdformat/placement_frame_missing_pose.sdf",
         "sdformat/shapes_world.sdf",
-        "sdformat/world_include_with_interface_api.sdf",
         "sdformat/world_nested_frame_attached_to.sdf",
         "sdformat/world_nested_frame.sdf",
         "sdformat/world_relative_to_nested_reference.sdf",
@@ -219,9 +215,13 @@ def v18_sdf(request):
         "sdformat/world_invalid_root_reference.sdf",
         "v18/fuel_include_unknown_server.sdf",
         "sdformat/unrecognized_elements_with_namespace.sdf",
+        "sdformat/model_invalid_root_reference.sdf",
+        "sdformat/nested_multiple_elements_error_world.sdf",
+        "sdformat/placement_frame_missing_pose.sdf",
+        "sdformat/world_include_with_interface_api.sdf",
     ]
 )
-def v18_sdf_invalid(request):
+def v18_sdf_refuted(request):
     filename = request.param
     return (sdf_folder / filename).read_text()
 

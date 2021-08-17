@@ -68,6 +68,9 @@ class Converter(FactoryBase):
             graph = self.convert_light(sdf_root.light)
             graph_list.append(graph)
 
+        if sdf_root.actor is not None:
+            raise NotImplementedError("Actors are not implemented yet.")
+
         if self.unwrap and len(graph_list) == 1:
             return graph_list[0]
         else:
