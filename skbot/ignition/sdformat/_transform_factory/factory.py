@@ -40,8 +40,6 @@ class ConverterBase:
         elif uri_parts.scheme == "model":
             raise NotImplementedError("Unsure how to resolve model://.")
         elif uri_parts.scheme == "":
-            if self.root_uri is None:
-                raise sdformat.ParseError(f"Unknown URI: {uri}")
             rel_path = uri
         else:
             raise sdformat.ParseError(f"Unknown URI: {uri}")
