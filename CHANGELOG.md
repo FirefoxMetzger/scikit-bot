@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.4.5 (2021-08-17)
+### Fix
+* Bump numpy from 1.20.0 to 1.21.2 ([#52](https://github.com/FirefoxMetzger/scikit-bot/issues/52)) ([`f365da4`](https://github.com/FirefoxMetzger/scikit-bot/commit/f365da471d0c24841b5cc56741570abfcab33745))
+
 ## v0.4.4 (2021-08-17)
 ### Fix
 * **transform:** Correctly initialize CompoundLink ([#51](https://github.com/FirefoxMetzger/scikit-bot/issues/51)) ([`b7ac19f`](https://github.com/FirefoxMetzger/scikit-bot/commit/b7ac19fdf7d92450e6515a41a05ef796b89af758))
