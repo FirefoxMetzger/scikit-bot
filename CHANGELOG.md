@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.4.8 (2021-08-18)
+### Fix
+* Sync SDF schema (time update) ([#56](https://github.com/FirefoxMetzger/scikit-bot/issues/56)) ([`c22fe94`](https://github.com/FirefoxMetzger/scikit-bot/commit/c22fe94b5d462c9516c06abacad0e6f2d0336fb1))
+
 ## v0.4.7 (2021-08-17)
 ### Fix
 * Turn xsdata errors into skbot ParseError ([#55](https://github.com/FirefoxMetzger/scikit-bot/issues/55)) ([`9d02fb4`](https://github.com/FirefoxMetzger/scikit-bot/commit/9d02fb47f6454d793921ef12ebe33451e03a2bf6))
