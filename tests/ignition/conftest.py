@@ -196,6 +196,8 @@ def invalid_sdf_string(request):
         "v18/crooked_double_pendulum.sdf",
         "v18/camera.sdf",
         "v18/world_with_state.sdf",
+        "v18/audio_source.sdf",
+        "v18/projector.sdf"
     ]
 )
 def v18_sdf(request):
@@ -222,7 +224,9 @@ def v18_sdf(request):
         "sdformat/placement_frame_missing_pose.sdf",
         "sdformat/world_include_with_interface_api.sdf",
         "sdformat/model_nested_static_model.sdf",
-        "v18/invalid_same_scope_twice.sdf"
+        "v18/invalid_same_scope_twice.sdf",
+        "v18/invalid_joint_type.sdf",
+        "v18/invalid_sensor_type.sdf",
     ]
 )
 def v18_sdf_refuted(request):

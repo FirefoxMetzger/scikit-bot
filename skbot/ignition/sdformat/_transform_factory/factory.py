@@ -180,6 +180,8 @@ class FactoryBase:
             raise NotImplementedError("Universal joints have not been added yet.")
         elif joint.type == "fixed":
             scope.declare_link(DynamicPose(joint.name, joint.parent))
+        else:
+            raise sdformat.ParseError(f"Unknown Joint type: {joint.type}")
 
         for sensor in joint.sensor:
             self.convert_sensor(sensor, scope, attached_to=joint)
@@ -234,13 +236,14 @@ class FactoryBase:
             self.convert_sensor(sensor, scope, attached_to=link)
 
         if link.projector:
-            scope.declare_frame(link.projector.name)
+            frame = tf.Frame(3, name=link.projector.name)
+            scaffold_frame = tf.Frame(3, name=link.projector.name)
             scope.add_scaffold(
-                link.projector.name,
-                link.projector.pose.value,
-                link.projector.pose.relative_to,
+                scaffold_frame, link.projector.pose.value, link.projector.pose.relative_to
             )
-            scope.declare_link(DynamicPose(link.name, link.projector.name))
+            scope.declare_link(
+                DynamicPose(link.name, frame, scaffold_child=scaffold_frame)
+            )
             # TODO: there might be a link into the projected frame missing
             # here I don't exactly know how projector works and didn't find
             # docs

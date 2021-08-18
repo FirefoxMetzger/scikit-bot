@@ -71,6 +71,7 @@
         <pose>4 5 6 0 0 0</pose>
       </frame>
       <link name="link">
+        <must_be_base_link>true</must_be_base_link>
         <particle_emitter name="emitter" type="box">
           <pose>7 8 9 0 0 0</pose>
           <emitting>true</emitting>
