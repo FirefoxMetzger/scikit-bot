@@ -38,37 +38,30 @@ class Scope:
         self.links: List[SdfLink] = list()
 
         self.scaffold_frames: Dict[str, tf.Frame] = dict()
-        self.scaffold_links: List[SdfLink] = list()
+        self.scaffold_links: List[ScaffoldPose] = list()
 
         # might be able to remove this
         self.name = name
 
         self.parent = parent
         self.placement_frame: str = None
-        if self.name == "world":
-            self.default_frame = tf.Frame(3, name="world")
-            self.scaffold_frames["world"] = self.default_frame
-            self.frames["world"] = tf.Frame(3, name="world")
 
-    def declare_frame(self, name: str, *, scaffold=True, dynamic=True):
+    def declare_frame(self, name: str):
         if name in self.frames.keys():
             raise sdformat.ParseError(f"Frame '{name}' already declared.")
         
         if name == "world":
             raise sdformat.ParseError("Can not create a frame named 'world' (reserved name).")
 
-        if dynamic:
-            self.frames[name] = tf.Frame(3, name=name)
-
-        if scaffold:
-            self.scaffold_frames[name] = tf.Frame(3, name=name)
+        self.frames[name] = tf.Frame(3, name=name)
+        self.scaffold_frames[name] = tf.Frame(3, name=name)
 
     def add_scaffold(self, frame_name: str, pose: str, relative_to: str = None) -> None:
         parent = self.default_frame.name
         if relative_to is not None and not relative_to == "":
             parent = relative_to
 
-        self.scaffold_links.append(ScaffoldPose(frame_name, parent, pose))
+        self.scaffold_links.append(ScaffoldPose(parent, frame_name, pose))
 
     def declare_link(self, link: SdfLink) -> None:
         self.links.append(link)
@@ -99,9 +92,7 @@ class Scope:
         for el in self.scaffold_links:
             tf_link = el.to_transform_link(self)
 
-            parent = el.parent
-            if isinstance(parent, str):
-                parent = self.get(parent, scaffolding=True)
+            parent = self.get(el.parent, scaffolding=True)
             
             child = el.child
             if isinstance(child, str):
@@ -135,7 +126,7 @@ class Scope:
 
     def add_subscope(self, nested_scope: "Scope") -> None:
         if nested_scope.name in self.nested_scopes.keys():
-            raise KeyError("Nested Scope already defined.")
+            raise sdformat.ParseError(f"Nested Scope '{nested_scope.name}' already defined.")
 
         self.nested_scopes[nested_scope.name] = nested_scope
         nested_scope.parent = self
@@ -152,10 +143,7 @@ class ModelScope(Scope):
     ) -> None:
         super().__init__(name, parent=parent)
 
-        if placement_frame is None:
-            self.placement_frame = "__model__"
-        else:
-            self.placement_frame = placement_frame
+        self.placement_frame = placement_frame
 
         self.default_frame = tf.Frame(3, name="__model__")
         self.scaffold_frames["__model__"] = self.default_frame
