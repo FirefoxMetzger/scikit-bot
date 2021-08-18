@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.4.9 (2021-08-18)
+### Fix
+* Bump python-semantic-release from 7.19.0 to 7.19.1 ([#57](https://github.com/FirefoxMetzger/scikit-bot/issues/57)) ([`2bf071b`](https://github.com/FirefoxMetzger/scikit-bot/commit/2bf071b2b99bcb4df767b3a23ac82f580496e33a))
+
 ## v0.4.8 (2021-08-18)
 ### Fix
 * Sync SDF schema (time update) ([#56](https://github.com/FirefoxMetzger/scikit-bot/issues/56)) ([`c22fe94`](https://github.com/FirefoxMetzger/scikit-bot/commit/c22fe94b5d462c9516c06abacad0e6f2d0336fb1))
