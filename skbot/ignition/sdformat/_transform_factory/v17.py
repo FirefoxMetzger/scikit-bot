@@ -1,13 +1,6 @@
 from typing import List, Union
 
-from .scopes import Scope, WorldScope, ModelScope
-from .links import (
-    CustomLink,
-    DynamicPose,
-    SimplePose,
-    RotationJoint,
-    PrismaticJoint,
-)
+from .scopes import Scope
 from .factory import FactoryBase
 from .. import sdformat
 from ..bindings import v17
@@ -79,18 +72,6 @@ class Converter(FactoryBase):
     def convert_state(self, state: v17.State) -> Scope:
         raise NotImplementedError()
 
-    def convert_light(self, light: Union[v17.Light, GenericLight], *, scope: Scope = None) -> Scope:
-        if isinstance(light, v17.Light):
-            light = self._to_generic_light(light)
-        return super().convert_light(self._to_generic_light(light), scope=scope)
-
-    def convert_model(
-        self, model: Union[v17.ModelModel, GenericModel], *, parent_scope: Scope = None
-    ) -> Scope:
-        if isinstance(model, v17.ModelModel):
-            model = self._to_generic_model(model)
-        return super().convert_model(model, parent_scope=parent_scope)
-
     def _to_generic_joint(self, joint: v17.Joint) -> GenericJoint:
         sensors = list()
         for sensor in joint.sensor:
@@ -125,6 +106,14 @@ class Converter(FactoryBase):
             "type": sensor.type,
             "pose": sensor.pose
         }
+
+        if sensor.camera is not None:
+            if sensor.camera.noise is not None:
+                raise NotImplementedError()
+            if sensor.camera.distortion is not None:
+                raise NotImplementedError()
+            if sensor.camera.lens is not None:
+                raise NotImplementedError()
 
         if sensor.camera is not None:
             sensor_args["camera"] = GenericSensor.Camera(

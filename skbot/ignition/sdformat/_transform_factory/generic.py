@@ -1,4 +1,4 @@
-from skbot.ignition.messages import Pose
+from skbot.ignition.messages import ImageGeom, Pose
 from skbot.ignition.sdformat.bindings.v17 import light
 from typing import List
 
@@ -44,6 +44,9 @@ class GenericSensor(PoseBearing):
             self.horizontal_fov = horizontal_fov
             self.image = image
             self.name = name
+
+            if self.image is None:
+                self.image = GenericSensor.Camera.Image()
 
         class Image:
             def __init__(

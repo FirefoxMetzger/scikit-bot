@@ -8,7 +8,16 @@ from .. import sdformat
 from .scopes import LightScope, ModelScope, Scope, WorldScope
 from ...fuel import get_fuel_model
 from .... import transform as tf
-from .generic import GenericInclude, GenericJoint, GenericLight, GenericLink, GenericModel, GenericSensor, GenericWorld
+from .generic import (
+    GenericInclude,
+    GenericJoint,
+    GenericLight,
+    GenericLink,
+    GenericModel,
+    GenericSensor,
+    GenericWorld,
+    NamedPoseBearing,
+)
 from .links import DynamicPose, CustomLink, RotationJoint, PrismaticJoint, SimplePose
 
 
@@ -52,34 +61,41 @@ class FactoryBase:
         try:
             sdf = get_fuel_model(root_uri, file_path=rel_path)
         except RequestException:
-            raise sdformat.ParseError(f"Unable to read '{str(rel_path)}' from '{str(root_uri)}'")
+            raise sdformat.ParseError(
+                f"Unable to read '{str(rel_path)}' from '{str(root_uri)}'"
+            )
         return transform_factory(sdf, root_uri=root_uri)
 
-    def convert_sensor(self, sensor: GenericSensor, scope: Scope) -> Scope:
-        scope.declare_frame(sensor.name)
-        scope.add_scaffold(sensor.name, sensor.pose.value, sensor.pose.relative_to)
+    def convert_sensor(
+        self, sensor: GenericSensor, scope: Scope, attached_to: NamedPoseBearing
+    ) -> tf.Frame:
+        sensor_frame = tf.Frame(3, name=sensor.name)
+        sensor_scaffold = tf.Frame(3, name=sensor.name)
+        scope.add_scaffold(sensor_scaffold, sensor.pose.value, sensor.pose.relative_to)
+        scope.declare_link(
+            DynamicPose(attached_to.name, sensor_frame, scaffold_child=sensor_scaffold)
+        )
 
         if sensor.type == "air_pressure":
             raise NotImplementedError()
         elif sensor.type == "altimeter":
             raise NotImplementedError()
         elif sensor.type == "camera":
-            if sensor.camera.noise is not None:
-                raise NotImplementedError()
-            if sensor.camera.distortion is not None:
-                raise NotImplementedError()
-            if sensor.camera.lens is not None:
-                raise NotImplementedError()
-
-            name = sensor.name + "-camera-space"
             pose = sensor.camera.pose
-            scope.declare_frame(name)
-            scope.add_scaffold(name, pose.value, pose.relative_to)
-            scope.declare_link(DynamicPose(sensor.name, name))
-
+            camera_frame = tf.Frame(3, name="camera-space")
+            camera_scaffold = tf.Frame(3, name="camera-space")
+            scope.add_scaffold(camera_scaffold, pose.value, pose.relative_to)
+            scope.declare_link(
+                DynamicPose(
+                    sensor_frame,
+                    camera_frame,
+                    scaffold_parent=sensor_scaffold,
+                    scaffold_child=camera_scaffold,
+                )
+            )
             scope.declare_link(
                 CustomLink(
-                    sensor.name,
+                    camera_frame,
                     tf.Frame(2, name="pixel-space"),
                     tf.FrustumProjection(
                         sensor.camera.horizontal_fov,
@@ -126,7 +142,7 @@ class FactoryBase:
         else:
             raise sdformat.ParseError(f"Unkown sensor type: {sensor.type}")
 
-        return scope
+        return sensor_scaffold
 
     def convert_joint(self, joint: GenericJoint, scope: Scope) -> Scope:
         scope.declare_frame(joint.name)
@@ -167,8 +183,7 @@ class FactoryBase:
             scope.declare_link(DynamicPose(joint.name, joint.parent))
 
         for sensor in joint.sensor:
-            self.convert_sensor(sensor, scope)
-            scope.declare_link(DynamicPose(joint.name, sensor.name))
+            self.convert_sensor(sensor, scope, attached_to=joint)
 
         return scope
 
@@ -202,7 +217,9 @@ class FactoryBase:
             scope.add_scaffold(
                 scaffold_frame, collision.pose.value, collision.pose.relative_to
             )
-            scope.declare_link(DynamicPose(link.name, frame, scaffold_child=scaffold_frame))
+            scope.declare_link(
+                DynamicPose(link.name, frame, scaffold_child=scaffold_frame)
+            )
 
         for visual in link.visual:
             frame = tf.Frame(3, name=visual.name)
@@ -210,11 +227,12 @@ class FactoryBase:
             scope.add_scaffold(
                 scaffold_frame, visual.pose.value, visual.pose.relative_to
             )
-            scope.declare_link(DynamicPose(link.name, frame, scaffold_child=scaffold_frame))
+            scope.declare_link(
+                DynamicPose(link.name, frame, scaffold_child=scaffold_frame)
+            )
 
         for sensor in link.sensors:
-            self.convert_sensor(sensor, scope)
-            scope.declare_link(DynamicPose(link.name, sensor.name))
+            self.convert_sensor(sensor, scope, attached_to=link)
 
         if link.projector:
             scope.declare_frame(link.projector.name)
@@ -294,7 +312,9 @@ class FactoryBase:
             parent_scope.add_scaffold(child, model.pose.value, model.pose.relative_to)
 
         if scope.canonical_link is None:
-            raise sdformat.ParseError(f"Unable to determine canonical link for model '{model.name}'")
+            raise sdformat.ParseError(
+                f"Unable to determine canonical link for model '{model.name}'"
+            )
 
         return scope
 
@@ -441,6 +461,8 @@ class FactoryBase:
         #         pass
 
         return world_scope
+
+
 class TransformFactory:
     """A factory that turns SDF of different versions into generic graphs
     that can then be assembled into transform graphs"""

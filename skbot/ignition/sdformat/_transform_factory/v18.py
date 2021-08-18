@@ -1,13 +1,6 @@
 from typing import Generic, List, Union
 
-from .scopes import Scope, WorldScope, ModelScope, LightScope
-from .links import (
-    CustomLink,
-    DynamicPose,
-    SimplePose,
-    RotationJoint,
-    PrismaticJoint,
-)
+from .scopes import Scope
 from .generic import (
     GenericFrame,
     GenericInclude,
@@ -25,7 +18,6 @@ from .factory import FactoryBase
 from .. import sdformat
 from ..bindings import v18
 from .... import transform as tf
-from skbot.ignition.sdformat._transform_factory import scopes
 
 
 IncludeElement = Union[v18.ModelModel.Include, v18.World.Include]
@@ -80,18 +72,6 @@ class Converter(FactoryBase):
         else:
             return graph_list
 
-    def convert_light(self, light: Union[v18.Light, GenericLight], *, scope: Scope = None) -> Scope:
-        if isinstance(light, v18.Light):
-            light = self._to_generic_light(light)
-        return super().convert_light(self._to_generic_light(light), scope=scope)
-
-    def convert_model(
-        self, model: Union[v18.ModelModel, GenericModel], *, parent_scope: Scope = None
-    ) -> Scope:
-        if isinstance(model, v18.ModelModel):
-            model = self._to_generic_model(model)
-        return super().convert_model(model, parent_scope=parent_scope)
-
     def _to_generic_joint(self, joint: v18.Joint) -> GenericJoint:
         sensors = list()
         for sensor in joint.sensor:
@@ -126,6 +106,14 @@ class Converter(FactoryBase):
             "type": sensor.type,
             "pose": sensor.pose
         }
+
+        if sensor.camera is not None:
+            if sensor.camera.noise is not None:
+                raise NotImplementedError()
+            if sensor.camera.distortion is not None:
+                raise NotImplementedError()
+            if sensor.camera.lens is not None:
+                raise NotImplementedError()
 
         if sensor.camera is not None:
             sensor_args["camera"] = GenericSensor.Camera(
@@ -171,7 +159,7 @@ class Converter(FactoryBase):
         ]
 
         if link.projector is not None:
-            link_args["projector_pose"] = NamedPoseBearing(
+            link_args["projector"] = NamedPoseBearing(
                 name=link.projector.name, pose=link.projector.pose
             )
 

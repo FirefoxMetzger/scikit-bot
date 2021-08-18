@@ -87,13 +87,12 @@ class SingleAxisJoint(DynamicPose):
         parent: Union[str, tf.Frame],
         child: Union[str, tf.Frame],
         axis: str,
-        expressed_in: str = None,
+        expressed_in: str,
     ) -> None:
         super().__init__(parent, child)
         self.axis = np.array(axis.split(" "), dtype=float)
         self.expressed_in = parent
-        if expressed_in is not None:
-            self.expressed_in: Union[str, tf.Frame] = expressed_in
+        self.expressed_in: Union[str, tf.Frame] = expressed_in
 
 
 class RotationJoint(SingleAxisJoint):
