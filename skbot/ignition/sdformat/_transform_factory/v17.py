@@ -64,13 +64,7 @@ class Converter(FactoryBase):
             graph = self.convert_light(generic_light)
             graph_list.append(graph)
 
-        if self.unwrap and len(graph_list) == 1:
-            return graph_list[0]
-        else:
-            return graph_list
-
-    def convert_state(self, state: v17.State) -> Scope:
-        raise NotImplementedError()
+        return graph_list
 
     def _to_generic_joint(self, joint: v17.Joint) -> GenericJoint:
         sensors = list()

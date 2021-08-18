@@ -67,10 +67,7 @@ class Converter(FactoryBase):
         if sdf_root.actor is not None:
             raise NotImplementedError("Actors are not implemented yet.")
 
-        if self.unwrap and len(graph_list) == 1:
-            return graph_list[0]
-        else:
-            return graph_list
+        return graph_list
 
     def _to_generic_joint(self, joint: v18.Joint) -> GenericJoint:
         sensors = list()

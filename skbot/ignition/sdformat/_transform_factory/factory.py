@@ -35,9 +35,8 @@ _converter_roots = {
 
 
 class FactoryBase:
-    def __init__(self, *, unwrap=True, root_uri: str = None):
+    def __init__(self, *, root_uri: str = None):
         self.root_uri: str = root_uri
-        self.unwrap: bool = unwrap
 
     def __call__(self, sdf: str) -> Union[Scope, List[Scope]]:
         raise NotImplementedError()
@@ -64,7 +63,7 @@ class FactoryBase:
             raise sdformat.ParseError(
                 f"Unable to read '{str(rel_path)}' from '{str(root_uri)}'"
             )
-        return transform_factory(sdf, root_uri=root_uri)
+        return transform_factory(sdf, root_uri=root_uri)[0]
 
     def convert_sensor(
         self, sensor: GenericSensor, scope: Scope, attached_to: NamedPoseBearing
@@ -469,7 +468,7 @@ class TransformFactory:
 
     converters: Dict[str, Callable[[Any], Union[Scope, List[Scope]]]] = dict()
 
-    def __call__(self, sdf: str, *, unwrap=True, root_uri: str = None) -> Scope:
+    def __call__(self, sdf: str, *, root_uri: str = None) -> Scope:
         version = sdformat.get_version(sdf)
         if version not in self.converters.keys():
             # lazy loading of SDF bindings
@@ -479,7 +478,7 @@ class TransformFactory:
             mod = importlib.import_module(converter_module, __name__)
             self.converters[version] = mod.Converter
 
-        return self.converters[version](root_uri=root_uri, unwrap=unwrap)(sdf)
+        return self.converters[version](root_uri=root_uri)(sdf)
 
 
 # a singleton

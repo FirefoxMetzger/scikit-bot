@@ -41,7 +41,7 @@ def transform_graph_from_sdf(
 
     """
 
-    scope_list:List[Scope] = transform_factory(sdf, unwrap=False)
+    scope_list:List[Scope] = transform_factory(sdf)
     frame_list:List[tf.Frame] = list()
     for scope in scope_list:
         scope.build_scaffolding()
