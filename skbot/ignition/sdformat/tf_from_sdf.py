@@ -1,3 +1,4 @@
+from skbot.ignition.messages import Light
 from typing import Union, List, Tuple
 
 from ... import transform as tf
@@ -51,7 +52,8 @@ def transform_graph_from_sdf(
         elif isinstance(scope, ModelScope):
             frame = scope.get(scope.canonical_link, scaffolding=False)
             frame_list.append(frame)
-        elif isinstance(scope, LightScope):
+        else:
+            scope: LightScope
             frame = scope.get(scope.name, scaffolding=False)
             frame_list.append(frame)
 
