@@ -193,7 +193,7 @@ def invalid_sdf_string(request):
         "v18/light_only.sdf",
         "v18/fuel_include_no_pose.sdf",
         "v18/fuel_include_relative_to.sdf",
-        "v18/double_pendulum.sdf",
+        "v18/crooked_double_pendulum.sdf",
         "v18/camera.sdf",
         "v18/world_with_state.sdf",
     ]
@@ -259,6 +259,7 @@ def v18_sdf_refuted(request):
         "sdformat/world_frame_relative_to.sdf",
         "sdformat/world_with_state.sdf",
         "v17/light_only.sdf",
+        "v17/crooked_double_pendulum.sdf",
     ]
 )
 def v17_sdf(request):
