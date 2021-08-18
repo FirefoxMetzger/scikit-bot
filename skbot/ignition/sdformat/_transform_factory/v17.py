@@ -129,7 +129,13 @@ class Converter(FactoryBase):
         if sensor.camera is not None:
             sensor_args["camera"] = GenericSensor.Camera(
                 name=sensor.camera.name,
-                pose = sensor.camera.pose
+                pose = sensor.camera.pose,
+                horizontal_fov= sensor.camera.horizontal_fov,
+                image = GenericSensor.Camera.Image(
+                    width = sensor.camera.image.width,
+                    height = sensor.camera.image.height,
+                    format = sensor.camera.image.format
+                )
             )
 
         return GenericSensor(**sensor_args)
@@ -173,7 +179,7 @@ class Converter(FactoryBase):
         ]
 
         if link.projector is not None:
-            link_args["projector_pose"] = NamedPoseBearing(
+            link_args["projector"] = NamedPoseBearing(
                 name=link.projector.name, pose=link.projector.pose
             )
 

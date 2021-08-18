@@ -17,7 +17,7 @@ class SdfLink:
 class ScaffoldPose(SdfLink):
     def __init__(self, parent: str, child: Union[str, tf.Frame], pose: str) -> None:
         super().__init__(parent, child)
-        self.pose = np.array(pose.split(" "), dtype=float)
+        self.pose = np.array(pose.split(), dtype=float)
 
     def to_transform_link(self, scope: "Scope", *, angle_eps=1e-15) -> tf.Link:
         if np.any(np.abs(self.pose[3:]) > angle_eps):
@@ -52,7 +52,7 @@ class Scope:
 
     def declare_frame(self, name: str, *, scaffold=True, dynamic=True):
         if name in self.frames.keys():
-            raise IndexError("Frame already declared.")
+            raise sdformat.ParseError(f"Frame '{name}' already declared.")
         
         if name == "world":
             raise sdformat.ParseError("Can not create a frame named 'world' (reserved name).")
@@ -77,9 +77,7 @@ class Scope:
         """Find the frame from a (namespaced) SDFormat name"""
 
         if "::" in name:
-            elements = name.split("::")
-            scope = elements.pop(0)
-            subscope_name = "::".join(elements)
+            scope, subscope_name = name.split("::", 1)
 
             try:
                 frame = self.nested_scopes[scope].get(subscope_name, scaffolding)

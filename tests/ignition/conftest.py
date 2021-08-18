@@ -178,7 +178,6 @@ def invalid_sdf_string(request):
         "sdformat/material_valid.sdf",
         "sdformat/model_invalid_placement_frame.sdf",
         "sdformat/model_nested_frame_attached_to.sdf",
-        "sdformat/model_nested_static_model.sdf",
         "sdformat/model_relative_to_nested_reference.sdf",
         "sdformat/model_with_placement_frame_attribute.sdf",
         "sdformat/nested_explicit_canonical_link.sdf",
@@ -193,7 +192,8 @@ def invalid_sdf_string(request):
         "v18/fuel_include.sdf",
         "v18/light_only.sdf",
         "v18/fuel_include_no_pose.sdf",
-        "v18/fuel_include_relative_to.sdf"
+        "v18/fuel_include_relative_to.sdf",
+        "v18/double_pendulum.sdf"
     ]
 )
 def v18_sdf(request):
@@ -219,19 +219,19 @@ def v18_sdf(request):
         "sdformat/nested_multiple_elements_error_world.sdf",
         "sdformat/placement_frame_missing_pose.sdf",
         "sdformat/world_include_with_interface_api.sdf",
+        "sdformat/model_nested_static_model.sdf",
     ]
 )
 def v18_sdf_refuted(request):
+    # refuted means that the XML validates, but doesn't verify
     filename = request.param
     return (sdf_folder / filename).read_text()
 
 
 @pytest.fixture(
     params=[
-        "sdformat/custom_and_unknown_elements.sdf",
         "sdformat/empty_road_sph_coords.sdf",
         "sdformat/flattened_test_nested_model_with_frames.sdf",
-        "sdformat/ignore_sdf_in_namespaced_elements.sdf",
         "sdformat/ignore_sdf_in_plugin.sdf",
         "sdformat/joint_sensors.sdf",
         "sdformat/material.sdf",
@@ -240,38 +240,49 @@ def v18_sdf_refuted(request):
         "sdformat/model_frame_attached_to_nested_model.sdf",
         "sdformat/model_frame_attached_to.sdf",
         "sdformat/model_frame_invalid_attached_to_cycle.sdf",
-        "sdformat/model_frame_invalid_attached_to.sdf",
         "sdformat/model_frame_relative_to_joint.sdf",
         "sdformat/model_frame_relative_to.sdf",
+        "sdformat/model_joint_axis_expressed_in.sdf",
+        "sdformat/model_joint_relative_to.sdf",
+        "sdformat/model_link_relative_to.sdf",
+        "sdformat/model_multi_nested_model.sdf",
+        "sdformat/model_nested_model_relative_to.sdf",
+        "sdformat/nested_canonical_link.sdf",
+        "sdformat/panda_world.sdf",
+        "sdformat/root_duplicate_models.sdf",
+        "sdformat/scene_with_sky.sdf",
+        "sdformat/sensors.sdf",
+        # "sdformat/world_complete.sdf",  # potentially broken file. Tracking Issue: https://github.com/ignitionrobotics/sdformat/issues/670
+        "sdformat/world_frame_attached_to.sdf",
+        "sdformat/world_frame_relative_to.sdf",
+        "sdformat/world_with_state.sdf",
+    ]
+)
+def v17_sdf(request):
+    filename = request.param
+    return (sdf_folder / filename).read_text()
+
+
+@pytest.fixture(
+    params=[
+        "sdformat/custom_and_unknown_elements.sdf",
+        "sdformat/ignore_sdf_in_namespaced_elements.sdf",
+        "sdformat/model_frame_invalid_attached_to.sdf",
         "sdformat/model_invalid_canonical_link.sdf",
         "sdformat/model_invalid_frame_relative_to_cycle.sdf",
         "sdformat/model_invalid_frame_relative_to.sdf",
         "sdformat/model_invalid_joint_relative_to.sdf",
         "sdformat/model_invalid_link_relative_to.sdf",
         "sdformat/model_invalid_reserved_names.sdf",
-        "sdformat/model_joint_axis_expressed_in.sdf",
-        "sdformat/model_joint_relative_to.sdf",
-        "sdformat/model_link_relative_to.sdf",
-        "sdformat/model_multi_nested_model.sdf",
-        "sdformat/model_nested_model_relative_to.sdf",
         "sdformat/model_without_links.sdf",
-        "sdformat/nested_canonical_link.sdf",
         "sdformat/nested_without_links_invalid.sdf",
-        "sdformat/panda_world.sdf",
-        "sdformat/root_duplicate_models.sdf",
         "sdformat/root_multiple_models.sdf",
-        "sdformat/scene_with_sky.sdf",
-        "sdformat/sensors.sdf",
-        "sdformat/world_complete.sdf",
-        "sdformat/world_frame_attached_to.sdf",
         "sdformat/world_frame_invalid_attached_to.sdf",
         "sdformat/world_frame_invalid_relative_to.sdf",
-        "sdformat/world_frame_relative_to.sdf",
         "sdformat/world_model_frame_same_name.sdf",
-        "sdformat/world_with_state.sdf",
     ]
 )
-def v17_sdf(request):
+def v17_sdf_refuted(request):
     filename = request.param
     return (sdf_folder / filename).read_text()
 

@@ -121,26 +121,19 @@ class Converter(FactoryBase):
         return GenericJoint(**joint_args)
 
     def _to_generic_sensor(self, sensor: v18.Sensor) -> GenericSensor:
-        if sensor.pose is None:
-            sensor.pose = v18.Sensor.Pose()
-        if sensor.camera is not None:
-            if sensor.camera.pose is None:
-                sensor.camera.pose = v18.Sensor.Camera.Pose()
+        sensor_args = {
+            "name": sensor.name,
+            "type": sensor.type,
+            "pose": sensor.pose
+        }
 
-        return GenericSensor(
-            name=sensor.name,
-            type=sensor.type,
-            pose=GenericPose(
-                value=sensor.pose.value, relative_to=sensor.pose.relative_to
-            ),
-            camera=GenericSensor.Camera(
+        if sensor.camera is not None:
+            sensor_args["camera"] = GenericSensor.Camera(
                 name=sensor.camera.name,
-                pose=GenericPose(
-                    value=sensor.camera.pose.value,
-                    relative_to=sensor.camera.pose.relative_to,
-                ),
-            ),
-        )
+                pose = sensor.camera.pose
+            )
+
+        return GenericSensor(**sensor_args)
 
     def _to_generic_light(self, light: v18.Light) -> GenericLight:
         return GenericLight(name=light.name, pose=light.pose)
@@ -157,8 +150,10 @@ class Converter(FactoryBase):
         }
 
         if link.inertial is not None:
-            link_args["inertial_pose"] = PoseBearing(
-                value=link.inertial.pose, relative_to=link.name
+            link_args["inertial"] = PoseBearing(
+                pose = GenericPose(
+                    value=link.inertial.pose, relative_to=link.name
+                )
             )
 
         link_args["collisions"] = [
@@ -225,5 +220,5 @@ class Converter(FactoryBase):
             includes= [self._to_generic_include(i) for i in world.include],
             models=[self._to_generic_model(m) for m in world.model],
             frames=[self._to_generic_frame(f) for f in world.frame],
-            light=[self._to_generic_light(l) for l in world.light]
+            lights=[self._to_generic_light(l) for l in world.light]
         )

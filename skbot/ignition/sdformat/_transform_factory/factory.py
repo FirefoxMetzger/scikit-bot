@@ -61,7 +61,7 @@ class FactoryBase:
 
         if sensor.type == "air_pressure":
             raise NotImplementedError()
-        elif sensor.type == "alimeter":
+        elif sensor.type == "altimeter":
             raise NotImplementedError()
         elif sensor.type == "camera":
             if sensor.camera.noise is not None:
@@ -205,9 +205,12 @@ class FactoryBase:
             scope.declare_link(DynamicPose(link.name, frame, scaffold_child=scaffold_frame))
 
         for visual in link.visual:
-            scope.declare_frame(visual.name)
-            scope.add_scaffold(visual.name, visual.pose.value, visual.pose.relative_to)
-            scope.declare_link(DynamicPose(link.name, visual.name))
+            frame = tf.Frame(3, name=visual.name)
+            scaffold_frame = tf.Frame(3, name=visual.name)
+            scope.add_scaffold(
+                scaffold_frame, visual.pose.value, visual.pose.relative_to
+            )
+            scope.declare_link(DynamicPose(link.name, frame, scaffold_child=scaffold_frame))
 
         for sensor in link.sensors:
             self.convert_sensor(sensor, scope)
@@ -290,7 +293,7 @@ class FactoryBase:
 
             parent_scope.add_scaffold(child, model.pose.value, model.pose.relative_to)
 
-        if model.canonical_link is None:
+        if scope.canonical_link is None:
             raise sdformat.ParseError(f"Unable to determine canonical link for model '{model.name}'")
 
         return scope

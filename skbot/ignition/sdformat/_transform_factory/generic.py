@@ -81,10 +81,8 @@ class GenericJoint(PoseBearing):
             self.axis.xyz.expressed_in = self.child
 
     class Axis:
-        def __init__(self, *, xyz: "GenericJoint.Axis.Xyz" = None) -> None:
-            self.xyz = xyz
-            if xyz is None:
-                self.xyz = GenericJoint.Axis.Xyz()
+        def __init__(self) -> None:
+            self.xyz = GenericJoint.Axis.Xyz()
 
         class Xyz:
             def __init__(self, *, value: str = "0 0 1", expressed_in=None) -> None:
@@ -116,9 +114,6 @@ class GenericLink(PoseBearing):
         self.visual = visuals
         self.sensors = sensors
         self.lights = lights
-
-        if audio_source_poses is None:
-            audio_source_poses = list()
         self.audio_sources = [PoseBearing(pose=p) for p in audio_source_poses]
 
 
