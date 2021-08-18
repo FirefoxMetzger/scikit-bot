@@ -1,4 +1,4 @@
-from typing import List, Union
+from typing import Generic, List, Union
 
 from .scopes import Scope, WorldScope, ModelScope, LightScope
 from .links import (
@@ -17,6 +17,7 @@ from .generic import (
     GenericPose,
     GenericSensor,
     GenericLight,
+    GenericWorld,
     NamedPoseBearing,
     PoseBearing,
 )
@@ -57,15 +58,18 @@ class Converter(FactoryBase):
         graph_list: List[Scope] = list()
 
         for world in sdf_root.world:
-            graph = self.convert_world(world)
+            generic_world = self._to_generic_world(world)
+            graph = self.convert_world(generic_world)
             graph_list.append(graph)
 
         if sdf_root.model is not None:
-            graph = self.convert_model(sdf_root.model)
+            generic_model = self._to_generic_model(sdf_root.model)
+            graph = self.convert_model(generic_model)
             graph_list.append(graph)
 
         if sdf_root.light is not None:
-            graph = self.convert_light(sdf_root.light)
+            generic_light = self._to_generic_light(sdf_root.light)
+            graph = self.convert_light(generic_light)
             graph_list.append(graph)
 
         if sdf_root.actor is not None:
@@ -75,116 +79,6 @@ class Converter(FactoryBase):
             return graph_list[0]
         else:
             return graph_list
-
-    def convert_world(self, world: v18.World) -> Scope:
-        world_scope = WorldScope(world.name)
-        for include in world.include:
-            self.resolve_include(include, world_scope)
-
-        # TODO: GUI
-        # TODO: scene
-
-        for light in world.light:
-            self.convert_light(light, scope=world_scope)
-
-            # not sure if this is valid
-            world_scope.declare_link(DynamicPose("world", light.name))
-
-        for frame in world.frame:
-            if frame.pose is None:
-                frame.pose = v18.World.Frame.Pose()
-
-            world_scope.declare_frame(frame.name)
-            world_scope.add_scaffold(
-                frame.name, frame.pose.value, frame.pose.relative_to
-            )
-
-            if frame.attached_to is None:
-                frame.attached_to = "world"
-            elif frame.attached_to == "":
-                frame.attached_to = "world"
-
-            world_scope.declare_link(DynamicPose(frame.attached_to, frame.name))
-
-        for model in world.model:
-            self.convert_model(model, parent_scope=world_scope)
-
-            # double-check if this is correct
-            world_scope.add_scaffold(model.name, "0 0 0 0 0 0")
-            world_scope.declare_link(SimplePose("world", model.name, "0 0 0 0 0 0"))
-
-        # TODO: actor
-        # TODO: road
-        # TODO: spherical coords
-        # TODO: state
-        # TODO: population
-
-        # # convert population
-        # for population in world.population:
-        #     tf_frame = tf.Frame(3, name=population.name)
-        #     offset = _pose_to_numpy(population.pose.value)
-        #     tf_link = tf.Translation(offset)
-
-        #     if population.pose.relative_to is not None:
-        #         parent = population.pose.relative_to
-        #         unresolved_poses.append((parent, tf_frame, tf_link))
-        #     else:
-        #         tf_link(tf_frame, world_frame)
-
-        #     num_defined = 0
-        #     if population.box is not None:
-        #         num_defined += 1
-        #     if population.cylinder is not None:
-        #         num_defined += 1
-        #     num_defined += len(population.model)
-
-        #     if len(population.model) > 1:
-        #         raise NotImplementedError("Multiple models defined for population..")
-        #     elif num_defined == 0:
-        #         raise sdformat.ParseError("No models defined for population.")
-
-        #     if population.box:
-        #         model_gen = lambda: tf.Frame(3)
-        #     elif population.cylinder:
-        #         model_gen = lambda: tf.Frame(3)
-        #     else:
-        #         model_gen = lambda: _convert_model(population.model[0])
-
-        #     step = np.array(population.distribution.step.split(" "), dtype=float)
-        #     rows = np.arange(population.distribution.rows)[:, -1, -1]
-        #     cols = np.array(population.distribution.cols)[-1, :, -1]
-
-        #     dist_kind = population.distribution.type
-        #     if dist_kind == "random":
-        #         for _ in range(population.model_count):
-        #             tf_frame = model_gen()
-        #             # TODO: randomize me
-        #             tf_link = tf.Translation((0, 0, 0))
-        #             tf_link(tf_frame, world_frame)
-        #     elif dist_kind == "uniform":
-        #         pass
-        #     elif dist_kind == "grid":
-        #         row_step, col_step, _ = [
-        #             float(x) for x in population.distribution.step.split(" ")
-        #         ]
-        #         for row in range(population.distribution.rows):
-        #             row_pos = row_step * row
-        #             for col in range(population.distribution.cols):
-        #                 col_pos = col_step * col
-        #                 tf_frame = model_gen()
-        #                 tf_frame.name = tf_frame.name + f"_clone_{col*population.distribution.rows + row}"
-        #                 tf_link = tf.Translation((row_pos, col_pos, 0))
-        #     elif dist_kind == "linear-x":
-        #         raise NotImplementedError("Linear placement not implemented yet.")
-        #     elif dist_kind == "linear-y":
-        #         raise NotImplementedError("Linear placement not implemented yet.")
-        #     elif dist_kind == "linear-z":
-        #         raise NotImplementedError("Linear placement not implemented yet.")
-
-        #     for model_idx in range(population.model_count):
-        #         pass
-
-        return world_scope
 
     def convert_light(self, light: Union[v18.Light, GenericLight], *, scope: Scope = None) -> Scope:
         if isinstance(light, v18.Light):
@@ -323,4 +217,13 @@ class Converter(FactoryBase):
             pose=include.pose,
             placement_frame=include.placement_frame,
             uri=include.uri,
+        )
+
+    def _to_generic_world(self, world: v18.World) -> GenericWorld:
+        return GenericWorld(
+            name = world.name,
+            includes= [self._to_generic_include(i) for i in world.include],
+            models=[self._to_generic_model(m) for m in world.model],
+            frames=[self._to_generic_frame(f) for f in world.frame],
+            light=[self._to_generic_light(l) for l in world.light]
         )

@@ -184,3 +184,19 @@ class GenericModel(NamedPoseBearing):
                 frame.attached_to = self.placement_frame
 
 
+class GenericWorld:
+    def __init__(
+        self,
+        *,
+        name: str,
+        includes: List[GenericInclude],
+        lights: List[GenericLight],
+        frames: List[GenericFrame],
+        models: List[GenericModel],
+    ) -> None:
+        self.name = name
+        self.includes = includes
+        self.lights = lights
+        self.frames = frames
+        self.models = models
+

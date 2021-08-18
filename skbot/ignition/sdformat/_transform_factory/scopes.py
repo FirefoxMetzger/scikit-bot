@@ -6,7 +6,7 @@ from .. import sdformat
 
 
 class SdfLink:
-    def __init__(self, parent: str, child: Union[str, tf.Frame]) -> None:
+    def __init__(self, parent: Union[str, tf.Frame], child: Union[str, tf.Frame]) -> None:
         self.parent: Union[str, tf.Frame] = parent
         self.child: Union[str, tf.Frame] = child
 
@@ -53,6 +53,9 @@ class Scope:
     def declare_frame(self, name: str, *, scaffold=True, dynamic=True):
         if name in self.frames.keys():
             raise IndexError("Frame already declared.")
+        
+        if name == "world":
+            raise sdformat.ParseError("Can not create a frame named 'world' (reserved name).")
 
         if dynamic:
             self.frames[name] = tf.Frame(3, name=name)
@@ -62,7 +65,7 @@ class Scope:
 
     def add_scaffold(self, frame_name: str, pose: str, relative_to: str = None) -> None:
         parent = self.default_frame.name
-        if relative_to is not None:
+        if relative_to is not None and not relative_to == "":
             parent = relative_to
 
         self.scaffold_links.append(ScaffoldPose(frame_name, parent, pose))
@@ -73,9 +76,6 @@ class Scope:
     def get(self, name: str, scaffolding: bool) -> tf.Frame:
         """Find the frame from a (namespaced) SDFormat name"""
 
-        if name is None:
-            print("")
-
         if "::" in name:
             elements = name.split("::")
             scope = elements.pop(0)
@@ -84,7 +84,7 @@ class Scope:
             try:
                 frame = self.nested_scopes[scope].get(subscope_name, scaffolding)
             except sdformat.ParseError:
-                raise sdformat.ParseError(f"No frame named: {name}") from None
+                raise sdformat.ParseError(f"No frame named '{name}' in scope '{self.name}'") from None
         else:
             storage = self.frames
             if scaffolding:
@@ -93,15 +93,22 @@ class Scope:
             try:
                 frame = storage[name]
             except KeyError:
-                raise sdformat.ParseError(f"No frame named: {name}") from None
+                raise sdformat.ParseError(f"No frame named '{name}' in scope '{self.name}'") from None
 
         return frame
 
     def build_scaffolding(self):
         for el in self.scaffold_links:
             tf_link = el.to_transform_link(self)
-            parent = self.get(el.parent, scaffolding=True)
-            child = self.get(el.child, scaffolding=True)
+
+            parent = el.parent
+            if isinstance(parent, str):
+                parent = self.get(parent, scaffolding=True)
+            
+            child = el.child
+            if isinstance(child, str):
+                child = self.get(child, scaffolding=True)
+
             tf_link(parent, child)
 
         for scope in self.nested_scopes.values():
@@ -119,7 +126,10 @@ class Scope:
             else:
                 child = el.child
 
-            tf_link = el.to_transform_link(self)
+            try:
+                tf_link = el.to_transform_link(self)
+            except RuntimeError:
+                raise sdformat.ParseError(f"Unable to express pose of '{child.name}' in frame '{parent.name}'.")
             tf_link(parent, child)
 
         for scope in self.nested_scopes.values():

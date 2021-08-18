@@ -7,7 +7,9 @@ from .scopes import Scope, SdfLink
 
 
 class CustomLink(SdfLink):
-    def __init__(self, parent: str, child: Union[str, tf.Frame], link: tf.Link) -> None:
+    def __init__(
+        self, parent: Union[str, tf.Frame], child: Union[str, tf.Frame], link: tf.Link
+    ) -> None:
         super().__init__(parent, child)
         self._link = link
 
@@ -16,7 +18,9 @@ class CustomLink(SdfLink):
 
 
 class SimplePose(SdfLink):
-    def __init__(self, parent: str, child: Union[str, tf.Frame], pose: str) -> None:
+    def __init__(
+        self, parent: Union[str, tf.Frame], child: Union[str, tf.Frame], pose: str
+    ) -> None:
         super().__init__(parent, child)
         self.pose = np.array(pose.split(" "), dtype=float)
 
@@ -30,9 +34,33 @@ class SimplePose(SdfLink):
 
 
 class DynamicPose(SdfLink):
+    def __init__(
+        self,
+        parent: Union[str, tf.Frame],
+        child: Union[str, tf.Frame],
+        *,
+        scaffold_parent: Union[str, tf.Frame] = None,
+        scaffold_child: Union[str, tf.Frame] = None
+    ) -> None:
+        super().__init__(parent, child)
+
+        self.scaffold_parent = scaffold_parent
+        if scaffold_parent is None:
+            self.scaffold_parent = parent
+
+        self.scaffold_child = scaffold_child
+        if scaffold_child is None:
+            self.scaffold_child = child
+
     def to_transform_link(self, scope: "Scope", *, angle_eps=1e-15) -> tf.Link:
-        parent = scope.get(self.parent, scaffolding=True)
-        child = scope.get(self.child, scaffolding=True)
+        parent = self.scaffold_parent
+        child = self.scaffold_child
+        
+        if isinstance(parent, str):
+            parent = scope.get(parent, scaffolding=True)
+
+        if isinstance(child, str):
+            child = scope.get(child, scaffolding=True)
 
         translation = parent.transform((0, 0, 0), child)
 
@@ -56,7 +84,7 @@ class DynamicPose(SdfLink):
 class SingleAxisJoint(DynamicPose):
     def __init__(
         self,
-        parent: str,
+        parent: Union[str, tf.Frame],
         child: Union[str, tf.Frame],
         axis: str,
         expressed_in: str = None,

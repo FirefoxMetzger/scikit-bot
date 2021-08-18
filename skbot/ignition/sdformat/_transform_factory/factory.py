@@ -5,10 +5,10 @@ from urllib.parse import urlparse
 from requests.exceptions import RequestException
 
 from .. import sdformat
-from .scopes import LightScope, ModelScope, Scope
+from .scopes import LightScope, ModelScope, Scope, WorldScope
 from ...fuel import get_fuel_model
 from .... import transform as tf
-from .generic import GenericInclude, GenericJoint, GenericLight, GenericLink, GenericModel, GenericSensor
+from .generic import GenericInclude, GenericJoint, GenericLight, GenericLink, GenericModel, GenericSensor, GenericWorld
 from .links import DynamicPose, CustomLink, RotationJoint, PrismaticJoint, SimplePose
 
 
@@ -197,11 +197,12 @@ class FactoryBase:
             )
 
         for collision in link.collision:
-            scope.declare_frame(collision.name)
+            frame = tf.Frame(3, name=collision.name)
+            scaffold_frame = tf.Frame(3, name=collision.name)
             scope.add_scaffold(
-                collision.name, collision.pose.value, collision.pose.relative_to
+                scaffold_frame, collision.pose.value, collision.pose.relative_to
             )
-            scope.declare_link(DynamicPose(link.name, collision.name))
+            scope.declare_link(DynamicPose(link.name, frame, scaffold_child=scaffold_frame))
 
         for visual in link.visual:
             scope.declare_frame(visual.name)
@@ -289,6 +290,9 @@ class FactoryBase:
 
             parent_scope.add_scaffold(child, model.pose.value, model.pose.relative_to)
 
+        if model.canonical_link is None:
+            raise sdformat.ParseError(f"Unable to determine canonical link for model '{model.name}'")
+
         return scope
 
     def resolve_include(self, include: GenericInclude, scope: Scope) -> None:
@@ -328,7 +332,112 @@ class FactoryBase:
         child = subscope.name + "::" + subscope.canonical_link
         scope.declare_link(DynamicPose(name, child))
 
+    def convert_world(self, world: GenericWorld) -> Scope:
+        world_scope = WorldScope(world.name)
+        for include in world.includes:
+            self.resolve_include(include, world_scope)
 
+        # TODO: GUI
+        # TODO: scene
+
+        for light in world.lights:
+            self.convert_light(light, scope=world_scope)
+
+            # not sure if this is valid
+            world_scope.declare_link(DynamicPose("world", light.name))
+
+        for frame in world.frames:
+            world_scope.declare_frame(frame.name)
+            world_scope.add_scaffold(
+                frame.name, frame.pose.value, frame.pose.relative_to
+            )
+
+            if frame.attached_to is None:
+                frame.attached_to = "world"
+            elif frame.attached_to == "":
+                frame.attached_to = "world"
+
+            world_scope.declare_link(DynamicPose(frame.attached_to, frame.name))
+
+        for model in world.models:
+            self.convert_model(model, parent_scope=world_scope)
+
+            # double-check if this is correct
+            world_scope.add_scaffold(model.name, "0 0 0 0 0 0")
+            world_scope.declare_link(SimplePose("world", model.name, "0 0 0 0 0 0"))
+
+        # TODO: actor
+        # TODO: road
+        # TODO: spherical coords
+        # TODO: state
+        # TODO: population
+
+        # # convert population
+        # for population in world.population:
+        #     tf_frame = tf.Frame(3, name=population.name)
+        #     offset = _pose_to_numpy(population.pose.value)
+        #     tf_link = tf.Translation(offset)
+
+        #     if population.pose.relative_to is not None:
+        #         parent = population.pose.relative_to
+        #         unresolved_poses.append((parent, tf_frame, tf_link))
+        #     else:
+        #         tf_link(tf_frame, world_frame)
+
+        #     num_defined = 0
+        #     if population.box is not None:
+        #         num_defined += 1
+        #     if population.cylinder is not None:
+        #         num_defined += 1
+        #     num_defined += len(population.model)
+
+        #     if len(population.model) > 1:
+        #         raise NotImplementedError("Multiple models defined for population..")
+        #     elif num_defined == 0:
+        #         raise sdformat.ParseError("No models defined for population.")
+
+        #     if population.box:
+        #         model_gen = lambda: tf.Frame(3)
+        #     elif population.cylinder:
+        #         model_gen = lambda: tf.Frame(3)
+        #     else:
+        #         model_gen = lambda: _convert_model(population.model[0])
+
+        #     step = np.array(population.distribution.step.split(" "), dtype=float)
+        #     rows = np.arange(population.distribution.rows)[:, -1, -1]
+        #     cols = np.array(population.distribution.cols)[-1, :, -1]
+
+        #     dist_kind = population.distribution.type
+        #     if dist_kind == "random":
+        #         for _ in range(population.model_count):
+        #             tf_frame = model_gen()
+        #             # TODO: randomize me
+        #             tf_link = tf.Translation((0, 0, 0))
+        #             tf_link(tf_frame, world_frame)
+        #     elif dist_kind == "uniform":
+        #         pass
+        #     elif dist_kind == "grid":
+        #         row_step, col_step, _ = [
+        #             float(x) for x in population.distribution.step.split(" ")
+        #         ]
+        #         for row in range(population.distribution.rows):
+        #             row_pos = row_step * row
+        #             for col in range(population.distribution.cols):
+        #                 col_pos = col_step * col
+        #                 tf_frame = model_gen()
+        #                 tf_frame.name = tf_frame.name + f"_clone_{col*population.distribution.rows + row}"
+        #                 tf_link = tf.Translation((row_pos, col_pos, 0))
+        #     elif dist_kind == "linear-x":
+        #         raise NotImplementedError("Linear placement not implemented yet.")
+        #     elif dist_kind == "linear-y":
+        #         raise NotImplementedError("Linear placement not implemented yet.")
+        #     elif dist_kind == "linear-z":
+        #         raise NotImplementedError("Linear placement not implemented yet.")
+
+        #     for model_idx in range(population.model_count):
+        #         pass
+
+        return world_scope
 class TransformFactory:
     """A factory that turns SDF of different versions into generic graphs
     that can then be assembled into transform graphs"""
