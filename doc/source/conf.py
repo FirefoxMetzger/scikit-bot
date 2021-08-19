@@ -49,8 +49,8 @@ numpydoc_show_class_members = False
 numpydoc_show_inherited_class_members = False
 
 sphinx_gallery_conf = {
-     'examples_dirs': '../../examples',
-     'gallery_dirs': '_gallery',
+    "examples_dirs": "../../examples",
+    "gallery_dirs": "_gallery",
 }
 
 # Add any paths that contain templates here, relative to this directory.

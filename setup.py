@@ -21,6 +21,7 @@ extras_require = {
         "cachetools == 4.2.2",
         "sphinx-gallery == 0.9.0",
         "xsdata == 21.8",
+        "lxml == 4.6.3",
     ],
     "linting": ["flake8 == 3.9.2", "black == 21.7b0"],
     "testing": ["pytest == 6.2.4", "coverage[toml] == 5.5"],
