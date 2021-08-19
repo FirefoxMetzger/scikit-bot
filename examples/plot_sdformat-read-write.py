@@ -80,7 +80,7 @@ sdf_string = """<?xml version="1.0" ?>
     <link name="camera_link">
         <pose>1 2 3 0 0 0</pose>
         <sensor name="camera_sensor" type="camera">
-            <camera>
+            <camera name="awesome_camera">
                 <image></image>
             </camera>
         </sensor>
@@ -112,17 +112,12 @@ sdf_root: v18.Sdf = ign.sdformat.loads(sdf_string)
 # to auto-completion within most modern IDEs and allows static type validation
 # via `mypy <http://mypy-lang.org/>`_.
 
-@dataclass
-class Foo:
-    bar:int
-
 img_dims = (
     sdf_root.model.link[0].sensor[0].camera.image.height,
     sdf_root.model.link[0].sensor[0].camera.image.width,
 )
 print(f"The camera resolution is: {img_dims}")
 
-Foo(sdf_root.model.link[0].sensor[0].camera.image.height)
 #%%
 # Auto-populated defaults is one of the advantages of using data-bindings
 # compared to parsing with generic XML parsers like ``xml.etree`` or `lxml
@@ -138,10 +133,17 @@ Foo(sdf_root.model.link[0].sensor[0].camera.image.height)
 # the one reported in the file. You can do this by specifying the version to use.
 
 v17_string = ign.sdformat.loads(sdf_string, version="1.7")
+print(f"Forced version loading: {type(v17_string)}")
+print(f"Default version loading: {type(sdf_root)}")
 
 #%%
-# You can also check the version of a given SDF without fully parsing it, which
-# can be faster and also doesn't load any bindings.
+# As you can see, the object tree was built out of objects from the v1.7 bindings;
+# which were imported on-demand.
+#
+# Sometimes, you may wish to check the version of a SDF string programatically
+# without loading any bindings. In such cases you can use the function below. It
+# will be faster for large SDF compared to fully parsing it, since it doesn't
+# parse the entire string; only until the opening <sdf> element.
 
 ver = ign.sdformat.get_version(sdf_string)
 
@@ -152,10 +154,10 @@ ver = ign.sdformat.get_version(sdf_string)
 
 @dataclass
 class MyImage(v18.Sensor.Camera.Image):
-    image_dim: Tuple[int, int] = field(init=False)
+    im_shape: Tuple[int, int] = field(init=False)
 
     def __post_init__(self):
-        self.image_dim = (
+        self.im_shape = (
             sdf_root.model.link[0].sensor[0].camera.image.height,
             sdf_root.model.link[0].sensor[0].camera.image.width,
         )
@@ -165,21 +167,18 @@ v18_string: v18.Sdf = ign.sdformat.loads(
     sdf_string, custom_constructor={v18.Sensor.Camera.Image: MyImage}
 )
 
-#%%
-# and now every camera in the parsed SDF will have a ``image_dim`` property which you can use
-
-camera = v18_string.model.link[0].sensor[0].camera
-print(f"The camera resolution is: {camera.image.image_dim}")
+im_shape = v18_string.model.link[0].sensor[0].camera.image.im_shape
+print(f"The camera resolution is: {im_shape}")
 
 #%%
-# How do you know which class to overwrite? Scikit-bot's binding layout follows
+# **How do you know which class to overwrite?** Scikit-bot's binding layout follows
 # the layout of the spec. On the `spec's website <http://sdformat.org/spec>`_
 # you can find several tabs, each representing a SDF element. Each tab then
 # lists a tree of sub-elements and where they can appear. The data-bindings have
 # the same layout, with exception of ``Model``, which is called ``ModelModel``
 # and ``State.Model`` which is called ``StateModel``. This is done to avoid a
 # name collision in both the bindings and the XSD schemata. Alternatively, you
-# can look up each attribute in the binding's `API documentation
+# can look up each element in the binding's `API documentation
 # <https://scikit-bot.org/en/latest/_autosummary/skbot.ignition.html#sdformat-xml>`_.
 #
 # Writing / Serialization
@@ -198,92 +197,153 @@ print(result_string)
 # white-space is removed. To get a neatly-formatted, human-readable string you
 # have to set the ``format=True`` flag.
 
-ign.sdformat.dumps(sdf_root, format=True)
+serialized_sdf = ign.sdformat.dumps(sdf_root, format=True)
+print(serialized_sdf)
+
+# %%
+# Fuel Support
+# ------------
+#
+# One of the more advanced - but very awesome - features of SDF is that you can
+# include models from other sources; in particular the `fuel server
+# <https://app.ignitionrobotics.org/fuel>`_. This allows you to compose a
+# simulation world from several files and re-use them many times.
+#
+# By default, the parser provided by scikit-bot `does not` auto-include models.
+# This is a conscious choice, as we want to remain unoppinionated as to what you
+# wish to do with the include tag. You may indeed wish to download the model;
+# however, you may alternatively whish to validate a SDF file and need the
+# actual include element. Another aspect is that the included model may be
+# specified in a different SDFormat version than the one that is currently being
+# parsed. Hence, simply copying it into the current object-tree may be a bad
+# idea (SDF isn't allways comptible between versions). As such, the bindings
+# don't resolve include elements.
+#
+# That said, you can very easily download and parse nested fuel models using
+# scikit-bot.
+
+sdf_string = """<?xml version="1.0" ?>
+<sdf version="1.8">
+  <model name="parent_model">
+    <include>
+      <uri>https://fuel.ignitionrobotics.org/1.0/Gambit/models/Pitcher Base</uri>
+      <name>Awesome Pitcher</name>
+      <pose>0 0 0 0 -0 1.5708</pose>
+    </include>
+  </model>
+</sdf>
+"""
+
+sdf_root: v18.Sdf = ign.sdformat.loads(sdf_string)
+
+nested_models = list()
+for include_el in sdf_root.model.include:
+    nested_sdf = ign.get_fuel_model(include_el.uri)
+    nested_models.append(ign.sdformat.loads(nested_sdf))
+
+nested_sdf_string = ign.sdformat.dumps(nested_models[0], format=True)
+
+print(f"The included model:\n{nested_sdf_string}")
 
 #%%
 #
 # Building SDF from Scratch
 # -------------------------
 #
-# Finally, you can use explicitly instantiate SDF objects and build your own file.
+# Finally, we can use the data-bindings explicitly to create an object tree of
+# SDF elements that can then be converted into a SDF string.
+#
+# We can choose a declarative style and nest constructors
 
-
-#%%
-
-# declarative style
-# nesting objects inside the constructor
 ground_plane = v18.model.Model(
     static=True,
     name="ground_plane",
     link=[
         v18.Link(
+            name="ground_plane_link",
             collision=v18.Collision(
-                v18.Geometry(plane=v18.Geometry.Plane(normal="1 0 0", size="1.4 6.3"))
+                geometry=v18.Geometry(
+                    plane=v18.Geometry.Plane(normal="1 0 0", size="1.4 6.3")
+                )
             ),
             visual=v18.Visual(
-                v18.Geometry(plane=v18.Geometry.Plane(normal="0 1 0", size="2 4"))
+                geometry=v18.Geometry(
+                    plane=v18.Geometry.Plane(normal="0 1 0", size="2 4")
+                )
             ),
         )
     ],
 )
 
-# # procedual style
-# box = v18.model.Model()
-# box.pose = v18.model.Model.Pose("0 0 2.5 0 0 0", relative_to="ground_plane")
-# box.link.append(v18.Link())  # link is a list; a model can have many links
-# box.link[0].name = "link"
-# # set-up collision
-# box.link[0].collision.append(v18.Collision())
-# box.link[0].collision[0].name = "collision"
-# box.link[0].collision[0].geometry = v18.Geometry.Box("1 2 3")
-# box.link[0].collision[0].surface = v18.Collision.Surface()
-# box.link[0].collision[0].surface.contact = v18.Collision.Surface.Contact(
-#     collide_bitmask=171
-# )
-# # set-up visual
-# box.link[0].visual.append(v18.Visual())
-# box.link[0].visual[0].name = "box_vis"
-# box.link[0].visual[0].geometry = v18.Geometry.Box("1 2 3")
+# %%
+# Or we can use a procedual style that sequentially constructs the objects and
+# assigns them.
 
-# root = v18.Sdf(world=[v18.World(name="shapes_world", model=[ground_plane, box])])
+# create an empty model
+box = v18.model.Model()
+box.pose = v18.model.Model.Pose("0 0 2.5 0 0 0", relative_to="ground_plane")
+box.link.append(v18.Link())  # link is a list; a model can have many links
+box.link[0].name = "link"
 
-# # elements are populated with default values where applicable
-# print(f"Gravity set to: {root.world[0].gravity}")
-# # Gravity set to: 0 0 -9.8
+# set-up collision
+box.link[0].collision.append(v18.Collision())
+box.link[0].collision[0].name = "collision"
+box.link[0].collision[0].geometry = v18.Geometry()
+box.link[0].collision[0].geometry.box = v18.Geometry.Box("1 2 3")
+box.link[0].collision[0].surface = v18.Collision.Surface()
+box.link[0].collision[0].surface.contact = v18.Collision.Surface.Contact(
+    collide_bitmask=171
+)
 
-# # and of course you can serialize to SDF
-# sdf_string = ign.sdformat.dumps(root, format=True)
+# set-up visual
+box.link[0].visual.append(v18.Visual())
+box.link[0].visual[0].name = "box_vis"
+box.link[0].visual[0].geometry = v18.Geometry()
+box.link[0].visual[0].geometry.box = v18.Geometry.Box("1 2 3")
 
-# # and write the string into a file
-# Path("my_world.sdf").write_text(sdf_string)
+# %%
+# and once done we can serialize the object tree to string. We can then use
+# python to write the resulting string to disk
 
-# # or (more old-school) via open(...)
-# with open("my_world.sdf", "w") as sdf_file:
-#     print(sdf_string, file=sdf_file)
+root = v18.Sdf(
+    version="1.8", world=[v18.World(name="shapes_world", model=[ground_plane, box])]
+)
+sdf_string = ign.sdformat.dumps(root, format=True)
+print(sdf_string)
+
+Path("my_world.sdf").write_text(sdf_string)
+
+# or (more old-school) via open(...)
+with open("my_world.sdf", "w") as sdf_file:
+    print(sdf_string, file=sdf_file)
+
+# %%
+# to show the counterpart of the above, this is how you would read SDF from disk
+
+sdf_string = Path("my_world.sdf").read_text()
+root = ign.sdformat.loads(sdf_string)
+
+# or again via open(...)
+with open("my_world.sdf", "r") as sdf_file:
+    sdf_string = sdf_file.read()
+root = ign.sdformat.loads(sdf_string)
+
+# %%
+# A interesting use-case for manually specifying SDF is that we can let objects
+# share child elements and, once we update the properties of the child, they
+# will update in all the places where the child is used inside the SDF. Note,
+# however, that elements will (of course) not share a child anymore once they
+# have been serialized.
 
 
-# # loading is similary straight forward
-# sdf_string = Path("my_world.sdf").read_text()
-# root = ign.sdformat.loads(sdf_string)
+box_geometry = v18.Geometry()
+box_geometry.box = v18.Geometry.Box("1 2 3")
+box.link[0].collision[0].geometry = box_geometry
+box.link[0].visual[0].geometry = box_geometry
 
-# # or again via open(...)
-# with open("my_world.sdf", "r") as sdf_file:
-#     sdf_string = sdf_file.read()
-# root = ign.sdformat.loads(sdf_string)
+print(ign.sdformat.dumps(box, format=True))
 
-# # Note that scikit-bot will by default auto-detect the SDF version from sdf's version
-# # attribute (all versions are supported). Alternatively, you can manually
-# # overwrite the auto-detect with a specific version.
-# sdf_reloaded = ign.sdformat.reads(sdf_string, version="1.6")
+# %%
 
-# # you can assign the same object in multiple places to link the properties
-# box_geometry = v18.Geometry()
-# box_geometry.box = v18.Geometry.Box("1 2 3")
-# box.link[0].collision[0].geometry = box_geometry
-# box.link[0].visual[0].geometry = box_geometry
-
-# # and change both properties at the same time
-# box_geometry.box.size = "2 5 2"
-# print(ign.sdformat.dumps(root, format=True))
-
-# # however this linking will (of course) not survive serialization.
+box_geometry.box.size = "2 5 2"
+print(ign.sdformat.dumps(box, format=True))
