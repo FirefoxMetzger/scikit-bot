@@ -30,6 +30,7 @@ author = "Sebastian Wallkötter"
 # ones.
 extensions = [
     "numpydoc",
+    "sphinx_gallery.gen_gallery",
     "sphinx.ext.autodoc",
     "sphinx.ext.doctest",
     "sphinx.ext.viewcode",
@@ -46,6 +47,11 @@ autodoc_mock_imports = ["betterproto", "zmq", "xsdata", "requests"]
 
 numpydoc_show_class_members = False
 numpydoc_show_inherited_class_members = False
+
+sphinx_gallery_conf = {
+     'examples_dirs': '../../examples',
+     'gallery_dirs': '_gallery',
+}
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
