@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.4.10 (2021-08-19)
+### Fix
+* Type hint for get_version + refactor ([#58](https://github.com/FirefoxMetzger/scikit-bot/issues/58)) ([`6f74aa1`](https://github.com/FirefoxMetzger/scikit-bot/commit/6f74aa161fbad8aec4030905a45b013308d15978))
+
 ## v0.4.9 (2021-08-18)
 ### Fix
 * Bump python-semantic-release from 7.19.0 to 7.19.1 ([#57](https://github.com/FirefoxMetzger/scikit-bot/issues/57)) ([`2bf071b`](https://github.com/FirefoxMetzger/scikit-bot/commit/2bf071b2b99bcb4df767b3a23ac82f580496e33a))
