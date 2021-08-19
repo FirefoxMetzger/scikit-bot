@@ -51,6 +51,8 @@ numpydoc_show_inherited_class_members = False
 sphinx_gallery_conf = {
     "examples_dirs": "../../examples",
     "gallery_dirs": "_gallery",
+    "backreferences_dir": "_gallery/backreferences",
+    "doc_module": "skbot",
 }
 
 # Add any paths that contain templates here, relative to this directory.
