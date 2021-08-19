@@ -35,7 +35,7 @@ class ParseError(XSDataParserError):
     pass
 
 
-def get_version(sdf: str):
+def get_version(sdf: str) -> str:
     """Returns the version of a SDF string.
 
     Parameters
@@ -144,13 +144,13 @@ def loads(
     )
 
     try:
-        sdf_parser.from_string(sdf, bindings.Sdf)
+        root_el = sdf_parser.from_string(sdf, bindings.Sdf)
     except ElementTree.ParseError as e:
         raise ParseError("Invalid SDFormat XML.") from e
     except XSDataParserError as e:
         raise ParseError("Invalid SDFormat XML.") from e
 
-    return sdf_parser.from_string(sdf, bindings.Sdf)
+    return root_el
 
 
 def dumps(root_element, *, format=False) -> str:
