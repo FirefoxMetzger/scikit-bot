@@ -5,41 +5,53 @@ Reading and Writing SDFormat XML
 
 .. currentmodule:: skbot.ignition
 
-Scikit-bot comes with bindings and schemata to read and write SDFormat. SDFormat
-(Simulation Description Format) is a - pretty extensive - XML format that is
-primarily intended to describe simulation worlds and robots. It was originially
-developed for the `Gazebo simulator <http://gazebosim.org/>`_ (now superseeded by
-`Ignition Gazebo <https://ignitionrobotics.org/home>`_) and is developed by
-Ignition robotics. If you are unfamiliar with SDFormat, take a look at their
-`official website <http://sdformat.org/>`_ and check the specification and
-documentation.
-
-The bindings provided by scikit-bot aim to help you write and modify SDFormat
-files, and to allow python code to consume SDF files in a natural manner.
-Examples for the former are (a) validation and verification of existing SDF, or
-(b) procedual generation of SDF files for simulation. An example for the latter
-is scikit-bot itself, which can build a frame graph from SDF, which - among
-other things - gives you easy access to things like forward kinematics.
-
-.. note::
-    While this example is primarily concerned with reading/writing SDF in
-    python, it is worthwhile to point out that scikit-bot ships with XSD1.1
-    bindings for SDFormat. You can find them in your module folder or `here on
-    GitHub
-    <https://github.com/FirefoxMetzger/scikit-bot/tree/main/skbot/ignition/sdformat/schema>`_.
-
 """
 
+import matplotlib.image as mpimg
+import matplotlib.pyplot as plt
+
+# create the thumbnail image for this example
+header = mpimg.imread("sdformat-read-write-thumb.png")
+fig, ax = plt.subplots(figsize=(3, 3), dpi=80)
+ax.imshow(header)
+ax.axis('off')
+fig.show()
+
 # %%
+#Scikit-bot comes with bindings and schemata to read and write SDFormat. SDFormat
+#(Simulation Description Format) is a - pretty extensive - XML format that is
+#primarily intended to describe simulation worlds and robots. It was originially
+#developed for the `Gazebo simulator <http://gazebosim.org/>`_ (now superseeded by
+#`Ignition Gazebo <https://ignitionrobotics.org/home>`_) and is developed by
+#Ignition robotics. If you are unfamiliar with SDFormat, take a look at their
+#`official website <http://sdformat.org/>`_ and check the specification and
+#documentation.
+#
+#The bindings provided by scikit-bot aim to help you write and modify SDFormat
+#files, and to allow python code to consume SDF files in a natural manner.
+#Examples for the former are (a) validation and verification of existing SDF, or
+#(b) procedual generation of SDF files for simulation. An example for the latter
+#is scikit-bot itself, which can build a frame graph from SDF, which - among
+#other things - gives you easy access to things like forward kinematics.
+#
+#.. note::
+#    While this example is primarily concerned with reading/writing SDF in
+#    python, it is worthwhile to point out that scikit-bot ships with XSD1.1
+#    bindings for SDFormat. You can find them in your module folder or `here on
+#    GitHub
+#    <https://github.com/FirefoxMetzger/scikit-bot/tree/main/skbot/ignition/sdformat/schema>`_.
+#
+#
 # Importing the Bindings
 # ----------------------
 #
 
+from dataclasses import dataclass, field
+from pathlib import Path
+from typing import Tuple
+
 import skbot.ignition as ign
 from skbot.ignition.sdformat.bindings import v18
-from pathlib import Path
-from dataclasses import dataclass, field
-from typing import Tuple
 
 # %%
 # The SDFormat bindings are part of scikit-bot's :mod:`ignition module
