@@ -220,32 +220,31 @@ print(serialized_sdf)
 # don't resolve include elements.
 #
 # That said, you can very easily download and parse nested fuel models using
-# scikit-bot.
-
-sdf_string = """<?xml version="1.0" ?>
-<sdf version="1.8">
-  <model name="parent_model">
-    <include>
-      <uri>https://fuel.ignitionrobotics.org/1.0/Gambit/models/Pitcher Base</uri>
-      <name>Awesome Pitcher</name>
-      <pose>0 0 0 0 -0 1.5708</pose>
-    </include>
-  </model>
-</sdf>
-"""
-
-sdf_root: v18.Sdf = ign.sdformat.loads(sdf_string)
-
-nested_models = list()
-for include_el in sdf_root.model.include:
-    nested_sdf = ign.get_fuel_model(include_el.uri)
-    nested_models.append(ign.sdformat.loads(nested_sdf))
-
-nested_sdf_string = ign.sdformat.dumps(nested_models[0], format=True)
-
-print(f"The included model:\n{nested_sdf_string}")
-
-#%%
+# scikit-bot::
+#
+#    sdf_string = """<?xml version="1.0" ?>
+#    <sdf version="1.8">
+#    <model name="parent_model">
+#        <include>
+#        <uri>https://fuel.ignitionrobotics.org/1.0/Gambit/models/Pitcher Base</uri>
+#        <name>Awesome Pitcher</name>
+#        <pose>0 0 0 0 -0 1.5708</pose>
+#        </include>
+#    </model>
+#    </sdf>
+#    """
+#
+#    sdf_root: v18.Sdf = ign.sdformat.loads(sdf_string)
+#
+#    nested_models = list()
+#    for include_el in sdf_root.model.include:
+#        nested_sdf = ign.get_fuel_model(include_el.uri)
+#        nested_models.append(ign.sdformat.loads(nested_sdf))
+#
+#    nested_sdf_string = ign.sdformat.dumps(nested_models[0], format=True)
+#
+#    print(f"The included model:\n{nested_sdf_string}")
+#
 #
 # Building SDF from Scratch
 # -------------------------
