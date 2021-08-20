@@ -8,3 +8,5 @@ tools/ignition/sdformat/
 
 *.egg-info
 .coverage
+/examples/my_world.sdf
+my_world.sdf

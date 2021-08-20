@@ -9,9 +9,10 @@ Reading and Writing SDFormat XML
 
 import matplotlib.image as mpimg
 import matplotlib.pyplot as plt
+from pathlib import Path
 
 # create the thumbnail image for this example
-header = mpimg.imread("sdformat-read-write-thumb.png")
+header = mpimg.imread(Path(__file__).parent / "sdformat-read-write-thumb.png")
 fig, ax = plt.subplots(figsize=(3, 3), dpi=80)
 ax.imshow(header)
 ax.axis("off")
@@ -26,13 +27,6 @@ fig.show()
 # Ignition robotics. If you are unfamiliar with SDFormat, take a look at their
 # `official website <http://sdformat.org/>`_ and check the specification and
 # documentation.
-#
-# The bindings provided by scikit-bot aim to help you write and modify SDFormat
-# files, and to allow python code to consume SDF files in a natural manner.
-# Examples for the former are (a) validation and verification of existing SDF, or
-# (b) procedual generation of SDF files for simulation. An example for the latter
-# is scikit-bot itself, which can build a frame graph from SDF, which - among
-# other things - gives you easy access to things like forward kinematics.
 #
 # .. note::
 #    While this example is primarily concerned with reading/writing SDF in
@@ -49,6 +43,7 @@ fig.show()
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Tuple
+import traceback
 
 import skbot.ignition as ign
 from skbot.ignition.sdformat.bindings import v18
@@ -56,7 +51,7 @@ from skbot.ignition.sdformat.bindings import v18
 # %%
 # The SDFormat bindings are part of scikit-bot's :mod:`ignition module
 # <skbot.ignition>`. The ignition module has additional dependencies, and
-# - as such - you will have to install these as well. instructions on how to do
+# - as such - you will have to install these as well. Instructions on how to do
 # this can be found in the :mod:`module's documentation <skbot.ignition>`.
 #
 # Another thing to note is that the SDFormat bindings are not imported together
@@ -67,7 +62,7 @@ from skbot.ignition.sdformat.bindings import v18
 #
 #    from skbot.ignition.sdformat.bindings import vXX
 #
-# where ``vXX``` is the version you wish to use. In this example we use ``v18``
+# where ``vXX`` is the version you wish to use. In this example we use ``v18``
 # for SDFormat v1.8.
 #
 # Reading / Deserialization
@@ -105,12 +100,13 @@ sdf_string = """<?xml version="1.0" ?>
 # If you use the above SDF in Ignition Gazebo, it will place a basic perspective
 # camera into your world at position (1, 2, 3) relative to the world's reference
 # frame. There is, of course, much more to SDF and you can express entire robot
-# kinematics, animated models, worlds for accurate phyics simulation, and much
-# more. However, a tutorial on these is out of scope here, so please refer to
-# the official docs for more information on that. Here, the above will serve as
-# a nice example.
+# kinematics, animated models (actors), worlds for accurate phyics simulation,
+# and much more. However, a tutorial on these is out of scope here, so please
+# refer to the official docs for more information on that. Here, the above will
+# serve as a nice example.
 #
-# To read / deserialize the above SDF simply feed it into skbot's SDF reader
+# To read / deserialize the above SDF simply feed it into scikit-bot's SDF
+# reader
 #
 
 sdf_root: v18.Sdf = ign.sdformat.loads(sdf_string)
@@ -137,8 +133,18 @@ print(f"The camera resolution is: {img_dims}")
 # SDF contains invalid elements, you will get an exception telling you
 # what's off.
 
-# TODO: example of ign.loads on invalid SDF
+invalid_sdf_string = """<?xml version="1.0" ?>
+<sdf version="1.8">
+  <model name="camera_model">
+    <invalid_tag />
+  </model>
+</sdf>
+"""
 
+try:
+    ign.sdformat.loads(invalid_sdf_string)
+except ign.sdformat.sdformat.ParseError:
+    traceback.print_exc()
 #%%
 # :func:`sdformat.loads` comes with a few keyword arguments that are noteworthy.
 # Sometimes you may wish to force loading SDF as a certain version that differs from
