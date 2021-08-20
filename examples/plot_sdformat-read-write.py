@@ -9,10 +9,9 @@ Reading and Writing SDFormat XML
 
 import matplotlib.image as mpimg
 import matplotlib.pyplot as plt
-from pathlib import Path
 
 # create the thumbnail image for this example
-header = mpimg.imread(Path(__file__).parent / "sdformat-read-write-thumb.png")
+header = mpimg.imread("sdformat-read-write-thumb.png")
 fig, ax = plt.subplots(figsize=(3, 3), dpi=80)
 ax.imshow(header)
 ax.axis("off")
