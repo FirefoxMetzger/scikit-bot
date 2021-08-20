@@ -266,10 +266,10 @@ class Frame:
     def _get_transform_chain(
         self, to_frame: Union[Frame, str], visited: List[Frame] = None
     ) -> List[Link]:
-        """Find a chain of transformations from this frame to to_frame.
+        """Find a sequence of transformations from this frame into to_frame.
 
         This function performs a recursive depth-first search on the frame graph defined by this
-        frame and its (recursively) connected links. Previously visited frames are pruned to avoid
+        frame and its (recursively) connected frames. Previously visited frames are pruned to avoid
         cycles.
 
         Parameters
@@ -305,10 +305,13 @@ class Frame:
                 new_links = child._get_transform_chain(to_frame, visited=visited)
             except RuntimeError:
                 continue
+            else:
+                break
+        else:
+            raise RuntimeError("Did not find a transformation chain to the target frame.")
 
-            return [link] + new_links
+        return [link] + new_links
 
-        raise RuntimeError("Did not find a transformation chain to the target frame.")
 
     def find_frame(self, path: str, *, ignore_frames: List[Frame] = None) -> Frame:
         """Find a frame matching a given path.
