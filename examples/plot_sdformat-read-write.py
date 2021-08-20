@@ -156,7 +156,7 @@ print(f"Default version loading: {type(sdf_root)}")
 
 #%%
 # As you can see, the object tree was built out of objects from the v1.7 bindings;
-# which were imported on-demand.
+# which - as hinted above - were imported on-demand.
 #
 # Sometimes, you may wish to check the version of a SDF string programatically
 # without loading any bindings. In such cases you can use the function below. It
@@ -229,12 +229,12 @@ print(serialized_sdf)
 #
 # By default, the parser provided by scikit-bot `does not` auto-include models.
 # This is a conscious choice, as we want to remain unoppinionated as to what you
-# wish to do with the include tag. You may indeed wish to download the model;
-# however, you may alternatively whish to validate a SDF file and need the
+# wish to do with the include element. You may indeed wish to download the model;
+# however, you may alternatively whish to validate the SDF file and need the
 # actual include element. Another aspect is that the included model may be
 # specified in a different SDFormat version than the one that is currently being
 # parsed. Hence, simply copying it into the current object-tree may be a bad
-# idea (SDF isn't allways comptible between versions). As such, the bindings
+# idea (SDF isn't always comptible between versions). As such, the bindings
 # don't resolve include elements.
 #
 # That said, you can very easily download and parse nested fuel models using
@@ -347,7 +347,7 @@ root = ign.sdformat.loads(sdf_string)
 
 # %%
 # A interesting use-case for manually specifying SDF is that we can let objects
-# share child elements and, once we update the properties of the child, they
+# share child elements and once we update the properties of the child they
 # will update in all the places where the child is used inside the SDF. Note,
 # however, that elements will (of course) not share a child anymore once they
 # have been serialized.
