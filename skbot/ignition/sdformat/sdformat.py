@@ -43,9 +43,18 @@ def get_version(sdf: str) -> str:
     sdf : str
         The SDFormat XML to be parsed.
 
+    Returns
+    -------
+    version : str
+        A string containing the SDF version, e.g. "1.8".
+
     Notes
     -----
     This function only checks the root tag and does not parse the entire string.
+
+    Examples
+    --------
+    .. minigallery:: skbot.ignition.sdformat.get_version
 
     """
 
@@ -111,6 +120,10 @@ def loads(
     ``custom_constructure`` is currently disabled and has no effect. It will
     become available with xsData v21.8.
 
+    Examples
+    --------
+    .. minigallery:: skbot.ignition.sdformat.loads
+
     """
 
     if custom_constructor is None:
@@ -170,6 +183,10 @@ def dumps(root_element, *, format=False) -> str:
     -------
     sdformat_string : str
         A string containing SDFormat XML representing the given input.
+
+    Examples
+    --------
+    .. minigallery:: skbot.ignition.sdformat.dumps
 
     """
     serializer = XmlSerializer(config=SerializerConfig(pretty_print=format))

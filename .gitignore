@@ -2,8 +2,11 @@ __pycache__/
 dist/
 doc/build/
 doc/source/_autosummary
+doc/source/_gallery
 .vscode/
 tools/ignition/sdformat/
 
 *.egg-info
 .coverage
+/examples/my_world.sdf
+my_world.sdf

@@ -313,6 +313,9 @@ class Frame:
     def find_frame(self, path: str, *, ignore_frames: List[Frame] = None) -> Frame:
         """Find a frame matching a given path.
 
+        .. versionadded:: 0.3.0
+            This method was added to frame.
+
         This method allows you to find reachable frames using an xpath inspired
         syntax. Path elements are spearated using the `/` character. Each
         element of the path is the name of a frame. For example,
@@ -352,7 +355,6 @@ class Frame:
 
         Notes
         -----
-        .. versionadded:: 0.3.0
 
         In directed graphs there is no clear notion of search order; hence it is
         undefined which frame is found if multiple matches for the path exist.

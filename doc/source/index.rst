@@ -5,7 +5,7 @@ Scikit-bot
    :hidden:
 
    install
-   examples
+   _gallery/index.rst
    api_reference
 
 You have found to the documentation of scikit-bot. You can find API
