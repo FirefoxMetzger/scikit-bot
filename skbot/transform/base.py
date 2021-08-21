@@ -5,12 +5,15 @@ from dataclasses import dataclass, field
 from queue import PriorityQueue
 
 
-def DepthFirst(frames:Tuple["Frame"], links:Tuple["Link"]) -> float:
+def DepthFirst(frames: Tuple["Frame"], links: Tuple["Link"]) -> float:
+    """Depth-first search metric for Frame.transform_chain"""
+
     return -len(links)
 
 
-def BreadthFirst(frames:Tuple["Frame"], links:Tuple["Link"]) -> float:
-    return -1/len(frames)
+def BreadthFirst(frames: Tuple["Frame"], links: Tuple["Link"]) -> float:
+    """Beadth-first search metric for Frame.transform_chain"""
+    return -1 / len(frames)
 
 
 @dataclass(order=True)
@@ -323,38 +326,39 @@ class Frame:
         metric: Callable[[Tuple["Frame"], Tuple[Link]], float] = DepthFirst,
         max_depth: int = None,
     ) -> List[Link]:
-        """Get links transforming a vector into to_frame.
+        """Transformation sequence into ``to_frame``.
 
-        This function searches the graph for a chain of transformations from
-        this frame into ``to_frame`` and returns a list of links of links
-        involved in this transformation. The list transforms vectors in
-        increasing order, i.e., chain[0] is applied first all the way through to
-        chain[-1]. The result of chain[-1] will then be in ``to_frame``.
+        This function searches the frame graph for a chain of transformations
+        from this frame into ``to_frame`` and returns the sequence of links
+        involved in this transformation. The first element takes as input the
+        vector expressed in the current frame; each following element takes as
+        input the vector expressed in it's predecessor's output frame. The last
+        element outputs the vector expressed in ``to_frame``.
 
         Parameters
         ----------
         to_frame : Frame, str
-            The frame in which to express vectors. If str, the graph is searched
-            for a node matching that name (pathing rules apply) and the first
-            node matching the name is returned.
+            The frame in which to express vectors. If ``str``, the graph is
+            searched for any node matching that name and the transformation
+            chain to the first node matching the name is returned.
         ignore_frames : List[Frame]
-            A list of frames to avoid while searching for a transformation
+            A list of frames to exclude while searching for a transformation
             chain.
         metric : Callable[[Tuple[Frame], Tuple[Link]], float]
             A function to compute the priority of a sub-chain. Sub-chains are
-            searched in order of priority, with higher priority sub-chains being
-            searched first. The first chain that matches ``to_frame`` is
-            returned. You can use a custom function that takes the visited
-            frames and sub-chain as input and returns a float (signature
+            searched in order of priority starting with the lowest value. The
+            first chain that matches ``to_frame`` is returned. You can use a
+            custom function that takes a sequence of frames and links involved
+            in the sub-chain as input and returns a float (signature
             ``custom_fn(frames, links) -> float``), or you can use a pre-build
-            function. Available functions are
+            function:
 
                 skbot.transform.metric.DepthFirst
-                    (default) Sub-chains are searched depth-first with no
-                    preference among frames.
+                    The frame graph is searched depth-first with no
+                    preference among frames (default).
                 skbot.transform.metric.BreadthFirst
-                    Sub-chains are searched breadth-first with no preference
-                    among frames.
+                    The frame graph is searched breadth-first with no
+                    preference among frames.
         max_depth : int
             If not None, the maximum depth to search, i.e., the maximum length
             of the transform chain.

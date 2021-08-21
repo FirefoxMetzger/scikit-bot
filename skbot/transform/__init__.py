@@ -9,7 +9,7 @@ dimensions, too. Additionally, you can create chains - more precisely directed
 graphs - of transformations between different frames, which allows you to
 express quite complicated transformations.
 
-If you come from a robotics background, this module is very similar to ROS tf2,
+If you come from a robotics background, this module is analogous to ROS tf2,
 but works in (and between) n-dimensions. This means it naturally includes
 projections, e.g. world space to pixel space, and it allows you to use more
 esoteric transformations like spherical coordinates, too.
@@ -107,10 +107,14 @@ from .utils3d import (
     RotvecRotation,
 )
 
+from . import metrics
+
 __all__ = [
     # Core Classes for Frame Management
     "Frame",
+    "metrics",  # transform chain metrics
     "Link",
+    # Meta Links
     "CustomLink",
     "InvertLink",
     "CompundLink",

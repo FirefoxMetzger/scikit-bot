@@ -11,7 +11,7 @@ def test_missing_tf_matrix():
         link.invert()
 
 
-def test_chain_resolution_dfs(simple_graph:List[tf.Frame]):
+def test_chain_resolution_dfs(simple_graph: List[tf.Frame]):
     # search order is not guaranteed
     cost = simple_graph[0].transform(0, simple_graph[7])
     assert cost == 5 or cost == 3
@@ -26,13 +26,23 @@ def test_chain_resolution_dfs(simple_graph:List[tf.Frame]):
     assert cost == 3
 
 
-def test_chain_resolution_bfs(simple_graph:List[tf.Frame]):    
-    links = simple_graph[0].transform_chain(simple_graph[7], metric=tf.base.BreadthFirst)
+def test_chain_resolution_bfs(simple_graph: List[tf.Frame]):
+    links = simple_graph[0].transform_chain(
+        simple_graph[7], metric=tf.metrics.BreadthFirst
+    )
     assert len(links) == 3
 
-def test_transform_chain_max_depth(simple_graph:List[tf.Frame]):
+    # depends on which link is expanded first
+    links = simple_graph[0].transform_chain(
+        simple_graph[7], metric=tf.metrics.DepthFirst
+    )
+    assert len(links) == 3 or len(links) == 5
+
+
+def test_transform_chain_max_depth(simple_graph: List[tf.Frame]):
     with pytest.raises(RuntimeError):
         simple_graph[0].transform_chain(simple_graph[7], max_depth=2)
+
 
 def test_find_frame(simple_graph):
     start: tf.Frame = simple_graph[0]
