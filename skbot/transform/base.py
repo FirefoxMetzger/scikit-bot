@@ -326,7 +326,7 @@ class Frame:
         metric: Callable[[Tuple["Frame"], Tuple[Link]], float] = DepthFirst,
         max_depth: int = None,
     ) -> List[Link]:
-        """Transformation sequence into ``to_frame``.
+        """Get a transformation chain into ``to_frame``.
 
         This function searches the frame graph for a chain of transformations
         from this frame into ``to_frame`` and returns the sequence of links
