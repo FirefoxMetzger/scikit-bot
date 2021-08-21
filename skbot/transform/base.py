@@ -333,10 +333,11 @@ class Frame:
 
         This function searches the frame graph for a chain of transformations
         from the current frame into ``to_frame`` and returns the sequence of
-        links involved in this transformation. The first element takes as input
-        the vector expressed in the current frame; each following element takes
-        as input the vector expressed in its predecessor's output frame. The
-        last element outputs the vector expressed in ``to_frame``.
+        links involved in this transformation. The first element of the returned
+        sequence takes as input the vector expressed in the current frame; each
+        following element takes as input the vector expressed in its
+        predecessor's output frame. The last element outputs the vector
+        expressed in ``to_frame``.
 
         Parameters
         ----------
