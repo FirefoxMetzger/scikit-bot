@@ -1,6 +1,8 @@
 import numpy as np
-import skbot.transform as tf
 import pytest
+from typing import List
+
+import skbot.transform as tf
 
 
 def test_missing_tf_matrix():
@@ -9,10 +11,10 @@ def test_missing_tf_matrix():
         link.invert()
 
 
-def test_chain_resolution(simple_graph):
-    # DFS finds sub-optial chains
+def test_chain_resolution_dfs(simple_graph:List[tf.Frame]):
+    # search order is not guaranteed
     cost = simple_graph[0].transform(0, simple_graph[7])
-    assert cost == 5
+    assert cost == 5 or cost == 3
 
     # no path exists
     with pytest.raises(RuntimeError):
@@ -24,8 +26,15 @@ def test_chain_resolution(simple_graph):
     assert cost == 3
 
 
-def test_find_frame(simple_graph):
+def test_chain_resolution_bfs(simple_graph:List[tf.Frame]):    
+    links = simple_graph[0].transform_chain(simple_graph[7], metric=tf.base.BreadthFirst)
+    assert len(links) == 3
 
+def test_transform_chain_max_depth(simple_graph:List[tf.Frame]):
+    with pytest.raises(RuntimeError):
+        simple_graph[0].transform_chain(simple_graph[7], max_depth=2)
+
+def test_find_frame(simple_graph):
     start: tf.Frame = simple_graph[0]
     frame_seven = start.find_frame(".../frame7")
     assert frame_seven == simple_graph[7]

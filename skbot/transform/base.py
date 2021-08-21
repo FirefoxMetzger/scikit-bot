@@ -1,8 +1,28 @@
-from __future__ import annotations  # life's too short for comments
-from math import sin, cos
 from numpy.typing import ArrayLike
 from typing import List, Tuple, Union, Callable
 import numpy as np
+from dataclasses import dataclass, field
+from queue import PriorityQueue
+
+
+def DepthFirst(frames:Tuple["Frame"], links:Tuple["Link"]) -> float:
+    return -len(links)
+
+
+def BreadthFirst(frames:Tuple["Frame"], links:Tuple["Link"]) -> float:
+    return -1/len(frames)
+
+
+@dataclass(order=True)
+class QueueItem:
+    priority: float
+    frames: List["Frame"] = field(compare=False)
+    links: List["Link"] = field(compare=False)
+
+
+class FramePath(str):
+    def matches(self, frames: Tuple["Frame"]) -> bool:
+        return frames[-1].name == self
 
 
 class Link:
@@ -30,8 +50,8 @@ class Link:
         self.child_dim: int = child_dim
 
     def __call__(
-        self, parent: Frame, child: Frame = None, *, add_inverse: bool = True
-    ) -> Frame:
+        self, parent: "Frame", child: "Frame" = None, *, add_inverse: bool = True
+    ) -> "Frame":
         """Add this link to the parent frame.
 
         Parameters
@@ -67,7 +87,7 @@ class Link:
 
         return child
 
-    def invert(self) -> Frame:
+    def invert(self) -> "Frame":
         """Returns a new link that is the inverse of this link.
 
         The links share parameters, i.e., if the transform of a link changes,
@@ -164,9 +184,9 @@ class Frame:
     def transform(
         self,
         x: ArrayLike,
-        to_frame: Union[Frame, str],
+        to_frame: Union["Frame", str],
         *,
-        ignore_frames: List[Frame] = None,
+        ignore_frames: List["Frame"] = None,
     ) -> np.ndarray:
         """Express the vector x in to_frame.
 
@@ -201,13 +221,13 @@ class Frame:
         """
 
         x_new = np.asarray(x)
-        for link in self._get_transform_chain(to_frame, ignore_frames):
+        for link in self.transform_chain(to_frame, ignore_frames=ignore_frames):
             x_new = link.transform(x_new)
 
         return x_new
 
     def get_affine_matrix(
-        self, to_frame: Union[Frame, str], *, ignore_frames: List[Frame] = None
+        self, to_frame: Union["Frame", str], *, ignore_frames: List["Frame"] = None
     ) -> np.ndarray:
         """Affine transformation matrix to ``to_frame`` (if existant).
 
@@ -241,12 +261,12 @@ class Frame:
         """
 
         tf_matrix = np.eye(self.ndim + 1)
-        for link in self._get_transform_chain(to_frame, ignore_frames):
+        for link in self.transform_chain(to_frame, ignore_frames=ignore_frames):
             tf_matrix = link.affine_matrix @ tf_matrix
 
         return tf_matrix
 
-    def add_link(self, edge: Link, child: Frame) -> None:
+    def add_link(self, edge: Link, child: "Frame") -> None:
         """Add an edge to the frame graph.
 
         The edge is directional and points from this frame to another (possibliy
@@ -263,57 +283,128 @@ class Frame:
 
         self._children.append((child, edge))
 
-    def _get_transform_chain(
-        self, to_frame: Union[Frame, str], visited: List[Frame] = None
-    ) -> List[Link]:
-        """Find a sequence of transformations from this frame into to_frame.
+    def _enqueue_children(
+        self,
+        queue: PriorityQueue,
+        queue_item: QueueItem,
+        *,
+        visited: List["Frame"],
+        metric: Callable[[Tuple["Frame"], Tuple[Link]], float],
+        max_depth: int,
+    ) -> None:
+        """Internal logic for :func:transform_chain.
 
-        This function performs a recursive depth-first search on the frame graph defined by this
-        frame and its (recursively) connected frames. Previously visited frames are pruned to avoid
-        cycles.
-
-        Parameters
-        ----------
-        to_frame : Frame
-            The frame to reach.
-        visited : List[Frame]
-            The frames that were already checked
-
-        Returns
-        -------
-        chain : List[Link]
-            A list of links that can transform from this frame to to_frame.
-
-        Notes
-        -----
-        DFS (depth-first search) does not guarantee the shortest chain to be returned.
+        Appends all children that have not been visited previously to
+        the search queue.
 
         """
-        if to_frame is self or self.name == to_frame:
-            return []
 
-        if visited is None:
-            visited = [self]
-        else:
-            visited.append(self)
+        frames = queue_item.frames
+        sub_chain = queue_item.links
+
+        if len(sub_chain) == max_depth:
+            return
 
         for child, link in self._children:
             if child in visited:
                 continue
 
-            try:
-                new_links = child._get_transform_chain(to_frame, visited=visited)
-            except RuntimeError:
-                continue
+            new_frames = (*frames, child)
+            new_chain = (*sub_chain, link)
+            priority = metric(new_frames, new_chain)
+            new_item = QueueItem(priority, new_frames, new_chain)
+            queue.put(new_item)
+
+    def transform_chain(
+        self,
+        to_frame: Union["Frame", str],
+        *,
+        ignore_frames: List["Frame"] = None,
+        metric: Callable[[Tuple["Frame"], Tuple[Link]], float] = DepthFirst,
+        max_depth: int = None,
+    ) -> List[Link]:
+        """Get links transforming a vector into to_frame.
+
+        This function searches the graph for a chain of transformations from
+        this frame into ``to_frame`` and returns a list of links of links
+        involved in this transformation. The list transforms vectors in
+        increasing order, i.e., chain[0] is applied first all the way through to
+        chain[-1]. The result of chain[-1] will then be in ``to_frame``.
+
+        Parameters
+        ----------
+        to_frame : Frame, str
+            The frame in which to express vectors. If str, the graph is searched
+            for a node matching that name (pathing rules apply) and the first
+            node matching the name is returned.
+        ignore_frames : List[Frame]
+            A list of frames to avoid while searching for a transformation
+            chain.
+        metric : Callable[[Tuple[Frame], Tuple[Link]], float]
+            A function to compute the priority of a sub-chain. Sub-chains are
+            searched in order of priority, with higher priority sub-chains being
+            searched first. The first chain that matches ``to_frame`` is
+            returned. You can use a custom function that takes the visited
+            frames and sub-chain as input and returns a float (signature
+            ``custom_fn(frames, links) -> float``), or you can use a pre-build
+            function. Available functions are
+
+                skbot.transform.metric.DepthFirst
+                    (default) Sub-chains are searched depth-first with no
+                    preference among frames.
+                skbot.transform.metric.BreadthFirst
+                    Sub-chains are searched breadth-first with no preference
+                    among frames.
+        max_depth : int
+            If not None, the maximum depth to search, i.e., the maximum length
+            of the transform chain.
+
+        """
+
+        if max_depth is None:
+            max_depth = float("inf")
+
+        if ignore_frames is None:
+            ignore_frames = list()
+
+        if isinstance(to_frame, str):
+            to_frame = FramePath(to_frame)
+
+        frames = (self,)
+        sub_chain = tuple()
+
+        queue = PriorityQueue()
+        root_el = QueueItem(metric(frames, sub_chain), frames, sub_chain)
+        queue.put(root_el)
+
+        while not queue.empty():
+            item: QueueItem = queue.get()
+            frames = item.frames
+            sub_chain = item.links
+            active_frame = frames[-1]
+
+            if isinstance(to_frame, FramePath):
+                is_match = to_frame.matches(frames)
             else:
+                is_match = active_frame == to_frame
+
+            if is_match:
                 break
+
+            ignore_frames.append(active_frame)
+
+            active_frame._enqueue_children(
+                queue, item, visited=ignore_frames, metric=metric, max_depth=max_depth
+            )
+
         else:
-            raise RuntimeError("Did not find a transformation chain to the target frame.")
+            raise RuntimeError(
+                "Did not find a transformation chain to the target frame."
+            )
 
-        return [link] + new_links
+        return sub_chain
 
-
-    def find_frame(self, path: str, *, ignore_frames: List[Frame] = None) -> Frame:
+    def find_frame(self, path: str, *, ignore_frames: List["Frame"] = None) -> "Frame":
         """Find a frame matching a given path.
 
         .. versionadded:: 0.3.0
