@@ -328,6 +328,9 @@ class Frame:
     ) -> List[Link]:
         """Get a transformation chain into ``to_frame``.
 
+        .. versionadded:: 0.5.0
+            This method was added to Frame.
+
         This function searches the frame graph for a chain of transformations
         from this frame into ``to_frame`` and returns the sequence of links
         involved in this transformation. The first element takes as input the
