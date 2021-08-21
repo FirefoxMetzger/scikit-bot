@@ -150,7 +150,7 @@ from . import messages
 from .subscriber import Subscriber
 from .transformations import FrustumProjection
 from .sdformat.create_frame_graph import create_frame_graph
-from .sdformat.tf_from_sdf import transform_graph_from_sdf
+from .sdformat.transform_factory import to_frame_graph
 from . import sdformat
 from .fuel import get_fuel_model_info, download_fuel_model, get_fuel_model
 

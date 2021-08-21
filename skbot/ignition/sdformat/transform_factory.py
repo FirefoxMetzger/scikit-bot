@@ -6,12 +6,13 @@ from ._transform_factory.scopes import LightScope, ModelScope, Scope, WorldScope
 from ._transform_factory.factory import transform_factory
 
 
-def transform_graph_from_sdf(
+def to_frame_graph(
     sdf: str, *, unwrap: bool = True, axis: int = -1, shape: Tuple[int] = (1,)
 ) -> Union[tf.Frame, List[tf.Frame]]:
     """Create a frame graph from a sdformat string.
 
-    .. versionadded:: 0.5.0
+    .. versionadded:: 0.6.0
+        This function has been added to the library.
 
     Parameters
     ----------
@@ -23,7 +24,7 @@ def transform_graph_from_sdf(
         lights, models, or worlds a list of root frames is returned. If False,
         always return a list of frames.
     axis : int
-        The axis along which data is stored. All other axis are batch dimensions.
+        The axis along which elements are stored. All other axis are batch dimensions.
     shape : tuple
         A tuple describing the shape of elements that this graph should transform.
 
@@ -45,7 +46,7 @@ def transform_graph_from_sdf(
     frame_list:List[tf.Frame] = list()
     for scope in scope_list:
         scope.build_scaffolding()
-        scope.resolve_links()
+        scope.resolve_links(shape=shape, axis=axis)
 
         if isinstance(scope, WorldScope):
             frame_list.append(scope.get("world", scaffolding=False))
