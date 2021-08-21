@@ -13,7 +13,7 @@ class CustomLink(SdfLink):
         super().__init__(parent, child)
         self._link = link
 
-    def to_transform_link(self, scope: "Scope") -> tf.Link:
+    def to_transform_link(self, scope: "Scope", shape:tuple, axis:int) -> tf.Link:
         return self._link
 
 
@@ -24,13 +24,13 @@ class SimplePose(SdfLink):
         super().__init__(parent, child)
         self.pose = np.array(pose.split(), dtype=float)
 
-    def to_transform_link(self, scope: "Scope", *, angle_eps=1e-15) -> tf.Link:
-        if np.any(np.abs(self.pose[3:]) > angle_eps):
-            return tf.CompundLink(
-                [tf.EulerRotation("xyz", self.pose[3:]), tf.Translation(self.pose[:3])]
-            )
-        else:
-            return tf.Translation(self.pose[:3])
+    def to_transform_link(self, scope: "Scope", shape:tuple, axis:int) -> tf.Link:
+        offset = np.broadcast_to(self.pose[:3], shape)
+        angles = np.broadcast_to(self.pose[3:], shape)
+
+        return tf.CompundLink(
+            [tf.EulerRotation("xyz", angles, axis=axis), tf.Translation(offset, axis=axis)]
+        )
 
 
 class DynamicPose(SdfLink):
@@ -52,7 +52,7 @@ class DynamicPose(SdfLink):
         if scaffold_child is None:
             self.scaffold_child = child
 
-    def to_transform_link(self, scope: "Scope", *, angle_eps=1e-15) -> tf.Link:
+    def to_transform_link(self, scope: "Scope", shape:tuple, axis:int) -> tf.Link:
         parent = self.scaffold_parent
         child = self.scaffold_child
         
@@ -72,13 +72,13 @@ class DynamicPose(SdfLink):
         rot_matrix = np.stack(rot_matrix, axis=1)
         rot_matrix -= translation[:, None]
         angles = ScipyRotation.from_matrix(rot_matrix).as_euler("xyz")
+        
+        translation = np.broadcast_to(translation, shape)
+        angles = np.broadcast_to(angles, shape)
 
-        if np.any(np.abs(angles) > angle_eps):
-            return tf.CompundLink(
-                [tf.EulerRotation("xyz", angles), tf.Translation(translation)]
-            )
-        else:
-            return tf.Translation(translation)
+        return tf.CompundLink(
+            [tf.EulerRotation("xyz", angles, axis=axis), tf.Translation(translation, axis=axis)]
+        )
 
 
 class SingleAxisJoint(DynamicPose):
@@ -96,14 +96,15 @@ class SingleAxisJoint(DynamicPose):
 
 
 class RotationJoint(SingleAxisJoint):
-    def to_transform_link(self, scope: "Scope", *, angle_eps=1e-15) -> tf.Link:
+    def to_transform_link(self, scope: "Scope", shape:tuple, axis:int) -> tf.Link:
         expressed_in = scope.get(self.expressed_in, scaffolding=True)
         parent = scope.get(self.parent, scaffolding=True)
 
-        pose_tf = super().to_transform_link(scope, angle_eps=angle_eps)
+        pose_tf = super().to_transform_link(scope, shape, axis)
 
-        axis = expressed_in.transform(self.axis, parent)
-        joint = tf.RotvecRotation(axis)
+        rotvec = expressed_in.transform(self.axis, parent)
+        rotvec = np.broadcast_to(rotvec, shape)
+        joint = tf.RotvecRotation(rotvec, axis=axis)
 
         return tf.CompundLink([joint, pose_tf])
 

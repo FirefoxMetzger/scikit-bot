@@ -40,6 +40,9 @@ class Scope:
         self.scaffold_frames: Dict[str, tf.Frame] = dict()
         self.scaffold_links: List[ScaffoldPose] = list()
 
+        # instantiated downstream
+        self.default_frame:tf.Frame = None
+
         # might be able to remove this
         self.name = name
 
@@ -103,7 +106,7 @@ class Scope:
         for scope in self.nested_scopes.values():
             scope.build_scaffolding()
 
-    def resolve_links(self):
+    def resolve_links(self, *, shape=tuple(), axis=-1):
         for el in self.links:
             if isinstance(el.parent, str):
                 parent = self.get(el.parent, scaffolding=False)
@@ -116,7 +119,7 @@ class Scope:
                 child = el.child
 
             try:
-                tf_link = el.to_transform_link(self)
+                tf_link = el.to_transform_link(self, shape, axis)
             except RuntimeError:
                 raise sdformat.ParseError(f"Unable to express pose of '{child.name}' in frame '{parent.name}'.")
             tf_link(parent, child)
