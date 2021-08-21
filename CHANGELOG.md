@@ -2,6 +2,13 @@
 
 <!--next-version-placeholder-->
 
+## v0.5.0 (2021-08-21)
+### Feature
+* Tf.Frame.transformation_chain ([#60](https://github.com/FirefoxMetzger/scikit-bot/issues/60)) ([`eae0582`](https://github.com/FirefoxMetzger/scikit-bot/commit/eae058218b1d18eb4c97bd4676f98ee47162b7cb))
+
+### Documentation
+* Sphinx-gallery and first example ([#59](https://github.com/FirefoxMetzger/scikit-bot/issues/59)) ([`7c65632`](https://github.com/FirefoxMetzger/scikit-bot/commit/7c6563204aa1db35833edae49416e596b7a499fe))
+
 ## v0.4.10 (2021-08-19)
 ### Fix
 * Type hint for get_version + refactor ([#58](https://github.com/FirefoxMetzger/scikit-bot/issues/58)) ([`6f74aa1`](https://github.com/FirefoxMetzger/scikit-bot/commit/6f74aa161fbad8aec4030905a45b013308d15978))
