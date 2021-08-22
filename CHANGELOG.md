@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.5.2 (2021-08-22)
+### Fix
+* Translation sets wrong parent/child dims ([#63](https://github.com/FirefoxMetzger/scikit-bot/issues/63)) ([`ed61ecb`](https://github.com/FirefoxMetzger/scikit-bot/commit/ed61ecbf002d72d2d92fdbf43537058b2de102fb))
+
 ## v0.5.1 (2021-08-22)
 ### Fix
 * Refactor euler link ([#61](https://github.com/FirefoxMetzger/scikit-bot/issues/61)) ([`f5388a3`](https://github.com/FirefoxMetzger/scikit-bot/commit/f5388a3c5d65742a55be9d2331b296faf5946f15))
