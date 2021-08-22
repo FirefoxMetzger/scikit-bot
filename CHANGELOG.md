@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.5.1 (2021-08-22)
+### Fix
+* Refactor euler link ([#61](https://github.com/FirefoxMetzger/scikit-bot/issues/61)) ([`f5388a3`](https://github.com/FirefoxMetzger/scikit-bot/commit/f5388a3c5d65742a55be9d2331b296faf5946f15))
+
 ## v0.5.0 (2021-08-21)
 ### Feature
 * Tf.Frame.transformation_chain ([#60](https://github.com/FirefoxMetzger/scikit-bot/issues/60)) ([`eae0582`](https://github.com/FirefoxMetzger/scikit-bot/commit/eae058218b1d18eb4c97bd4676f98ee47162b7cb))
