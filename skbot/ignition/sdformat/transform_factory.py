@@ -7,7 +7,7 @@ from ._transform_factory.factory import transform_factory
 
 
 def to_frame_graph(
-    sdf: str, *, unwrap: bool = True, axis: int = -1, shape: Tuple[int] = (1,)
+    sdf: str, *, unwrap: bool = True, axis: int = -1, shape: Tuple[int] = tuple()
 ) -> Union[tf.Frame, List[tf.Frame]]:
     """Create a frame graph from a sdformat string.
 

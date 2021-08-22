@@ -19,14 +19,10 @@ class ScaffoldPose(SdfLink):
         super().__init__(parent, child)
         self.pose = np.array(pose.split(), dtype=float)
 
-    def to_transform_link(self, scope: "Scope", *, angle_eps=1e-15) -> tf.Link:
-        if np.any(np.abs(self.pose[3:]) > angle_eps):
-            return tf.CompundLink(
-                [tf.EulerRotation("xyz", self.pose[3:]), tf.Translation(self.pose[:3])]
-            )
-        else:
-            return tf.Translation(self.pose[:3])
-
+    def to_transform_link(self, scope: "Scope") -> tf.Link:
+        return tf.CompundLink(
+            [tf.EulerRotation("xyz", self.pose[3:]), tf.Translation(self.pose[:3])]
+        )
 
 class Scope:
     """A scope within SDFormat"""

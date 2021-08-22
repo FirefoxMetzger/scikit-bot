@@ -73,8 +73,8 @@ class DynamicPose(SdfLink):
         rot_matrix -= translation[:, None]
         angles = ScipyRotation.from_matrix(rot_matrix).as_euler("xyz")
         
-        translation = np.broadcast_to(translation, shape)
-        angles = np.broadcast_to(angles, shape)
+        translation = np.broadcast_to(translation, (*shape, 3))
+        angles = np.broadcast_to(angles, (*shape, 3))
 
         return tf.CompundLink(
             [tf.EulerRotation("xyz", angles, axis=axis), tf.Translation(translation, axis=axis)]
