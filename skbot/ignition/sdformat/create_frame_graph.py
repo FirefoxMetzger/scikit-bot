@@ -98,7 +98,10 @@ def create_frame_graph(sdf: str) -> Tuple[Dict[str, rtf.Frame], Dict[str, rtf.Li
 
     .. deprecated:: 0.4.0
         This function will be removed in skbot v1.0. Use
-        :func:`skbot.ignition.transform_graph_from_sdf` instead.
+        :func:``skbot.ignition.to_frame_graph`` instead. To find frames in the
+        frame graph returned by ``to_frame_graph`` use
+        :func:``skbot.transform.Frame.find_frame``. Links/Joints can be obtained
+        from :func:``skbot.transform.Frame.transform_chain``.
 
     Parameters
     ----------
@@ -125,7 +128,10 @@ def create_frame_graph(sdf: str) -> Tuple[Dict[str, rtf.Frame], Dict[str, rtf.Li
     """
 
     warnings.warn(
-        "create_frame_graph is deprecated and will be removed in skbot v1.0. Use transform_graph_from_sdf instead."
+        """create_frame_graph is deprecated and will be removed in skbot v1.0 in
+        favor of to_frame_graph. Check the docs for detailed migration
+        instructions.
+        """
     )
 
     root = ElementTree.fromstring(sdf)
