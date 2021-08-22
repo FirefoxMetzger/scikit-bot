@@ -5,7 +5,7 @@ from scipy.spatial.transform import Rotation as scipy_rotation
 
 from .base import Link
 from .projections import PerspectiveProjection
-from .affine import Translation, Rotation
+from .affine import AffineCompound, Translation, Rotation
 from ._utils import angle_between, vector_project
 
 
@@ -74,7 +74,7 @@ class RotvecRotation(Rotation):
         self.angle = angle
 
 
-class EulerRotation(RotvecRotation):
+class EulerRotation(AffineCompound):
     """Rotation based on Euler angles in 3D.
 
     Parameters
@@ -97,12 +97,35 @@ class EulerRotation(RotvecRotation):
     def __init__(
         self, sequence: str, angles: ArrayLike, *, degrees: bool = False, axis: int = -1
     ) -> None:
-        rot = scipy_rotation.from_euler(sequence, angles, degrees)
+        angles = np.asarray(angles)
+        if angles.ndim == 0:
+            angles = angles[None, ...]
 
-        rotvec = rot.as_rotvec()
-        angle = rot.magnitude()
+        angles = np.moveaxis(angles, axis, 0)
+        rotations = list()
+        for idx, char in enumerate(sequence):
+            angle: np.ndarray = angles[idx, ...]
+            if char in ["x", "X"]:
+                rotvec = np.array((1, 0, 0), dtype=np.float_)
+            elif char in ["y", "Y"]:
+                rotvec = np.array((0, 1, 0), dtype=np.float_)
+            elif char in ["z", "Z"]:
+                rotvec = np.array((0, 0, 1), dtype=np.float_)
+            else:
+                raise ValueError("Unknown axis '{char}' in rotation sequence.")
 
-        super().__init__(rotvec, angle=angle, axis=axis)
+            rotvec = np.broadcast_to(rotvec, (*angle.shape, 3))
+            rotvec = np.moveaxis(rotvec, -1, axis)
+            rot = RotvecRotation(rotvec, angle=angle, degrees=degrees, axis=axis)
+            rotations.append(rot)
+
+        if sequence.islower():
+            super().__init__(rotations)
+        elif sequence.isupper():
+            rotations = [x for x in reversed(rotations)]
+            super().__init__(rotations)
+        else:
+            raise ValueError("Can not mix intrinsic and extrinsic rotations.")
 
 
 class QuaternionRotation(RotvecRotation):
@@ -118,6 +141,13 @@ class QuaternionRotation(RotvecRotation):
         ``"xyzw"`` (default), i.e., scalar-last, or "wxyz", i.e., scalar-first.
     axis : int
         The axis along which to to compute. Default: -1.
+
+    Notes
+    -----
+    The current implementation uses scipy's rotation class. As such you are
+    limited to a single batch dimension. If this is to little, please open an
+    issue.
+
     """
 
     def __init__(

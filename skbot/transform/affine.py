@@ -1,5 +1,5 @@
 from numpy.typing import ArrayLike
-from typing import Callable
+from typing import List
 import numpy as np
 
 from .base import Frame, Link, InvertLink
@@ -50,11 +50,11 @@ class AffineLink(Link):
 
     def _update_transformation_matrix(self, shape: ArrayLike) -> None:
         shape = np.asarray(shape)
-        reoreded_shape = np.moveaxis(shape, self._axis, -1)
+        reordered_shape = np.moveaxis(shape, self._axis, -1)
 
         mapped_basis = list()
         for basis in np.eye(self.parent_dim):
-            batch_vector = np.zeros(reoreded_shape)
+            batch_vector = np.zeros(reordered_shape)
             batch_vector[..., :] = basis
             batch_vector = np.moveaxis(batch_vector, -1, self._axis)
             mapped = self.transform(basis)
@@ -66,7 +66,7 @@ class AffineLink(Link):
         offset_remove = np.expand_dims(offset, -2)
 
         self._tf_matrix = np.zeros(
-            (*reoreded_shape[:-1], self.child_dim + 1, self.parent_dim + 1)
+            (*reordered_shape[:-1], self.child_dim + 1, self.parent_dim + 1)
         )
         self._tf_matrix[..., :-1, :-1] = mapped_basis - offset_remove
         self._tf_matrix[..., :-1, -1] = offset
@@ -109,6 +109,43 @@ class Inverse(InvertLink):
     def affine_matrix(self) -> np.ndarray:
         """The transformation matrix mapping the parent to the child frame."""
         return self._forward_link._inverse_tf_matrix
+
+
+class AffineCompound(AffineLink):
+    def __init__(self, wrapped_links: List[AffineLink]) -> None:
+        super().__init__(wrapped_links[0].parent_dim, wrapped_links[-1].child_dim)
+        self._links = wrapped_links
+
+    def transform(self, x: ArrayLike) -> np.ndarray:
+        for link in self._links:
+            x = link.transform(x)
+
+        return x
+
+    def __inverse_transform__(self, x: ArrayLike) -> np.ndarray:
+        for link in reversed(self._links):
+            x = link.__inverse_transform__(x)
+
+        return x
+
+    @property
+    def affine_matrix(self) -> np.ndarray:
+        """The transformation matrix mapping the parent to the child frame."""
+
+        matrix = self._links[0].affine_matrix
+        for link in self._links[1:]:
+            matrix = link.affine_matrix @ matrix
+
+        return matrix
+
+    def invert(self) -> Frame:
+        """Return a new Link that is the inverse of this link."""
+
+        links = list()
+        for link in reversed(self._links):
+            links.append(Inverse(link))
+
+        return AffineCompound(links)
 
 
 class Rotation(AffineLink):
