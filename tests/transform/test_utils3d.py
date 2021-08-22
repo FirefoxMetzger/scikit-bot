@@ -76,7 +76,7 @@ def test_vectorized_RotvecRotation(rotvec, angle, degrees, axis):
         ("xyz", (0, 0, 45), True),
         ("xyz", (0, 0, 90), True),
         ("XZY", (45, 180, 90), True),
-        ("XYZ", (np.pi/4, np.pi, np.pi/2), False),
+        ("XYZ", (np.pi / 4, np.pi, np.pi / 2), False),
     ],
 )
 def test_EulerRotation(sequence, angles, degrees):
@@ -96,16 +96,20 @@ def test_EulerRotation(sequence, angles, degrees):
 @pytest.mark.parametrize(
     "sequence, angles, degrees",
     [
-        ("xyz", ((0, 0, np.pi / 4),(0, 0, 0)), False),
+        ("xyz", ((0, 0, np.pi / 4), (0, 0, 0)), False),
         ("xyz", ((0, 0, 45),), True),
-        ("xyz", ((0, 0, 90),(0, 90, 0), (0, 0, 90)), True),
-        ("XZY", ((45, 180, 90),(20, 63, 176)), True),
-        ("XYZ", ((np.pi/4, np.pi, np.pi/2),(np.pi/6, 3/2*np.pi, 3*np.pi)), False),
+        ("xyz", ((0, 0, 90), (0, 90, 0), (0, 0, 90)), True),
+        ("XZY", ((45, 180, 90), (20, 63, 176)), True),
+        (
+            "XYZ",
+            ((np.pi / 4, np.pi, np.pi / 2), (np.pi / 6, 3 / 2 * np.pi, 3 * np.pi)),
+            False,
+        ),
     ],
 )
 def test_EulerRotation_vectorized(sequence, angles, degrees):
     angles = np.asarray(angles)
-    
+
     in_vectors = np.eye(3)
 
     rot = tf.EulerRotation(sequence, angles[None, ...], degrees=degrees)
@@ -124,15 +128,12 @@ def test_EulerRotation_vectorized(sequence, angles, degrees):
 
 @pytest.mark.parametrize(
     "sequence",
-    [
-        "XyZ",
-        "abc",
-        "xyw"
-    ],
+    ["XyZ", "abc", "xyw"],
 )
 def test_EulerRotation_invalid_sequence(sequence):
     with pytest.raises(ValueError):
         tf.EulerRotation(sequence, (0, 0, 0))
+
 
 @pytest.mark.parametrize(
     "sequence, quaternion",

@@ -104,7 +104,7 @@ class EulerRotation(AffineCompound):
         angles = np.moveaxis(angles, axis, 0)
         rotations = list()
         for idx, char in enumerate(sequence):
-            angle:np.ndarray = angles[idx, ...]
+            angle: np.ndarray = angles[idx, ...]
             if char in ["x", "X"]:
                 rotvec = np.array((1, 0, 0), dtype=np.float_)
             elif char in ["y", "Y"]:
@@ -113,7 +113,7 @@ class EulerRotation(AffineCompound):
                 rotvec = np.array((0, 0, 1), dtype=np.float_)
             else:
                 raise ValueError("Unknown axis '{char}' in rotation sequence.")
-            
+
             rotvec = np.broadcast_to(rotvec, (*angle.shape, 3))
             rotvec = np.moveaxis(rotvec, -1, axis)
             rot = RotvecRotation(rotvec, angle=angle, degrees=degrees, axis=axis)
