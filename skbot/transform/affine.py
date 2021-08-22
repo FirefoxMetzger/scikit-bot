@@ -233,7 +233,7 @@ class Translation(AffineLink):
     ) -> None:
         direction = np.asarray(direction)
 
-        frame_dim = len(direction)
+        frame_dim = direction.shape[axis]
 
         super().__init__(frame_dim, frame_dim, axis=axis)
 
