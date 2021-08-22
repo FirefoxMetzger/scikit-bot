@@ -3,7 +3,7 @@ import numpy as np
 from numpy.typing import ArrayLike
 from scipy.spatial.transform import Rotation as scipy_rotation
 
-from .base import CompundLink, Link
+from .base import Link
 from .projections import PerspectiveProjection
 from .affine import AffineCompound, Translation, Rotation
 from ._utils import angle_between, vector_project
@@ -103,7 +103,8 @@ class EulerRotation(AffineCompound):
 
         angles = np.moveaxis(angles, axis, 0)
         rotations = list()
-        for char, angle in zip(sequence, angles):
+        for idx, char in enumerate(sequence):
+            angle:np.ndarray = angles[idx, ...]
             if char in ["x", "X"]:
                 rotvec = np.array((1, 0, 0), dtype=np.float_)
             elif char in ["y", "Y"]:
@@ -115,7 +116,6 @@ class EulerRotation(AffineCompound):
             
             rotvec = np.broadcast_to(rotvec, (*angle.shape, 3))
             rotvec = np.moveaxis(rotvec, -1, axis)
-            # angle = np.expand_dims(angle, -1)
             rot = RotvecRotation(rotvec, angle=angle, degrees=degrees, axis=axis)
             rotations.append(rot)
 

@@ -122,6 +122,17 @@ def test_EulerRotation_vectorized(sequence, angles, degrees):
     assert np.allclose(result, expected)
 
 
+@pytest.mark.parametrize(
+    "sequence",
+    [
+        "XyZ",
+        "abc",
+        "xyw"
+    ],
+)
+def test_EulerRotation_invalid_sequence(sequence):
+    with pytest.raises(ValueError):
+        tf.EulerRotation(sequence, (0, 0, 0))
 
 @pytest.mark.parametrize(
     "sequence, quaternion",
