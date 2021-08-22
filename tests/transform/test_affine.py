@@ -96,3 +96,12 @@ def test_affine_matrix():
     )
 
     assert np.allclose(affine_matrix, expected_tf)
+
+
+def test_translation_dims():
+    # this is a regression test (no GH issue filed)
+    direction = np.array([[1, 2, 3]], dtype=np.float_)
+    link = tf.Translation(direction)
+
+    assert link.parent_dim == 3
+    assert link.child_dim == 3
