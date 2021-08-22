@@ -57,3 +57,10 @@ def test_panda():
     sdf_string = model_file.read_text()
 
     root_frame = ign.to_frame_graph(sdf_string)
+
+
+def test_nd_panda():
+    model_file = Path(__file__).parent / "sdf" / "robots" / "panda" / "model.sdf"
+    sdf_string = model_file.read_text()
+
+    root_frame = ign.to_frame_graph(sdf_string, shape=(1, 3))
