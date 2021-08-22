@@ -2,8 +2,8 @@
 
 [![CI](https://github.com/FirefoxMetzger/ropy/actions/workflows/ci.yml/badge.svg)](https://github.com/FirefoxMetzger/ropy/actions/workflows/ci.yml)
 [![CD](https://github.com/FirefoxMetzger/ropy/actions/workflows/cd.yml/badge.svg)](https://github.com/FirefoxMetzger/ropy/actions/workflows/cd.yml)
-[![codecov](https://codecov.io/gh/FirefoxMetzger/ropy/branch/main/graph/badge.svg?token=VNND9WET47)](https://codecov.io/gh/FirefoxMetzger/ropy)
-[![Documentation Status](https://readthedocs.org/projects/robotics-python/badge/?version=latest)](https://robotics-python.readthedocs.io/en/latest/?badge=latest)
+[![codecov](https://codecov.io/gh/FirefoxMetzger/scikit-bot/branch/main/graph/badge.svg?token=VNND9WET47)](https://codecov.io/gh/FirefoxMetzger/scikit-bot)
+[![Documentation Status](https://readthedocs.org/projects/robotics-python/badge/?version=latest)](https://scikit-bot.org/en/latest/?badge=latest)
 
 scikit-bot is a robotics library that aims to address the large heterogeneity of
 code in the robotics community by providing a selection of commonly used
