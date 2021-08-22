@@ -148,11 +148,14 @@ class FactoryBase:
         scope.add_scaffold(joint.name, joint.pose.value, joint.pose.relative_to)
         scope.declare_link(DynamicPose(joint.child, joint.name))
 
+        joint_parent = tf.Frame(3)
+        scope.declare_link(DynamicPose(joint_parent, joint.parent, scaffold_parent=joint.name))
+
         if joint.type == "revolute":
             scope.declare_link(
                 RotationJoint(
                     joint.name,
-                    joint.parent,
+                    joint_parent,
                     joint.axis.xyz.value,
                     joint.axis.xyz.expressed_in,
                 )
@@ -167,7 +170,7 @@ class FactoryBase:
             scope.declare_link(
                 PrismaticJoint(
                     joint.name,
-                    joint.parent,
+                    joint_parent,
                     joint.axis.xyz.value,
                     joint.axis.xyz.expressed_in,
                 )
@@ -179,7 +182,7 @@ class FactoryBase:
         elif joint.type == "universal":
             raise NotImplementedError("Universal joints have not been added yet.")
         elif joint.type == "fixed":
-            scope.declare_link(DynamicPose(joint.name, joint.parent))
+            scope.declare_link(DynamicPose(joint.name, joint_parent, scaffold_child=joint.name))
         else:
             raise sdformat.ParseError(f"Unknown Joint type: {joint.type}")
 

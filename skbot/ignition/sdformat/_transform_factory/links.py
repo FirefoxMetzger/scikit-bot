@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Union, Tuple
 import numpy as np
 from scipy.spatial.transform import Rotation as ScipyRotation
 
@@ -81,7 +81,7 @@ class DynamicPose(SdfLink):
         )
 
 
-class SingleAxisJoint(DynamicPose):
+class SingleAxisJoint(SdfLink):
     def __init__(
         self,
         parent: Union[str, tf.Frame],
@@ -94,32 +94,24 @@ class SingleAxisJoint(DynamicPose):
         self.expressed_in = parent
         self.expressed_in: Union[str, tf.Frame] = expressed_in
 
-
-class RotationJoint(SingleAxisJoint):
-    def to_transform_link(self, scope: "Scope", shape:tuple, axis:int) -> tf.Link:
+    def _convert_axis(self, scope:"Scope", shape:Tuple[int]) -> np.ndarray:
         expressed_in = scope.get(self.expressed_in, scaffolding=True)
         parent = scope.get(self.parent, scaffolding=True)
-
-        pose_tf = super().to_transform_link(scope, shape, axis)
 
         rotvec = expressed_in.transform(self.axis, parent)
         rotvec /= np.linalg.norm(rotvec)
         rotvec = np.broadcast_to(rotvec, shape)
-        joint = tf.RotvecRotation(rotvec, axis=axis)
 
-        return tf.CompundLink([joint, pose_tf])
+        return rotvec
+
+
+class RotationJoint(SingleAxisJoint):
+    def to_transform_link(self, scope: "Scope", shape:tuple, axis:int) -> tf.Link:
+        rotvec = self._convert_axis(scope, shape)
+        return tf.RotvecRotation(rotvec, axis=axis)
 
 
 class PrismaticJoint(SingleAxisJoint):
     def to_transform_link(self, scope: "Scope", shape:tuple, axis:int) -> tf.Link:
-        expressed_in = scope.get(self.expressed_in, scaffolding=True)
-        parent = scope.get(self.parent, scaffolding=True)
-
-        pose_tf = super().to_transform_link(scope, shape, axis)
-
-        rotvec = expressed_in.transform(self.axis, parent)
-        rotvec /= np.linalg.norm(rotvec)
-        rotvec = np.broadcast_to(rotvec, shape)
-        joint = tf.Translation(rotvec, axis=axis)
-
-        return tf.CompundLink([joint, pose_tf])
+        direction = self._convert_axis(scope, shape)
+        return tf.Translation(direction, axis=axis)
