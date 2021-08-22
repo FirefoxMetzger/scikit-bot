@@ -73,8 +73,8 @@ class DynamicPose(SdfLink):
         rot_matrix -= translation[:, None]
         angles = ScipyRotation.from_matrix(rot_matrix).as_euler("xyz")
         
-        translation = np.broadcast_to(translation, (*shape, 3))
-        angles = np.broadcast_to(angles, (*shape, 3))
+        translation = np.broadcast_to(translation, shape)
+        angles = np.broadcast_to(angles, shape)
 
         return tf.CompundLink(
             [tf.EulerRotation("xyz", angles, axis=axis), tf.Translation(translation, axis=axis)]
@@ -103,6 +103,7 @@ class RotationJoint(SingleAxisJoint):
         pose_tf = super().to_transform_link(scope, shape, axis)
 
         rotvec = expressed_in.transform(self.axis, parent)
+        rotvec /= np.linalg.norm(rotvec)
         rotvec = np.broadcast_to(rotvec, shape)
         joint = tf.RotvecRotation(rotvec, axis=axis)
 
@@ -110,14 +111,15 @@ class RotationJoint(SingleAxisJoint):
 
 
 class PrismaticJoint(SingleAxisJoint):
-    def to_transform_link(self, scope: "Scope", *, angle_eps=1e-15) -> tf.Link:
+    def to_transform_link(self, scope: "Scope", shape:tuple, axis:int) -> tf.Link:
         expressed_in = scope.get(self.expressed_in, scaffolding=True)
         parent = scope.get(self.parent, scaffolding=True)
 
-        pose_tf = super().to_transform_link(scope, angle_eps=angle_eps)
+        pose_tf = super().to_transform_link(scope, shape, axis)
 
-        axis = expressed_in.transform(self.axis, parent)
-        axis /= np.linalg.norm(axis)
-        joint = tf.Translation(axis)
+        rotvec = expressed_in.transform(self.axis, parent)
+        rotvec /= np.linalg.norm(rotvec)
+        rotvec = np.broadcast_to(rotvec, shape)
+        joint = tf.Translation(rotvec, axis=axis)
 
         return tf.CompundLink([joint, pose_tf])

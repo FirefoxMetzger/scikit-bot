@@ -1,4 +1,3 @@
-from skbot.ignition.messages import Light
 from typing import Union, List, Tuple
 
 from ... import transform as tf
@@ -7,7 +6,7 @@ from ._transform_factory.factory import transform_factory
 
 
 def to_frame_graph(
-    sdf: str, *, unwrap: bool = True, axis: int = -1, shape: Tuple[int] = tuple()
+    sdf: str, *, unwrap: bool = True, axis: int = -1, shape: Tuple[int] = (3,)
 ) -> Union[tf.Frame, List[tf.Frame]]:
     """Create a frame graph from a sdformat string.
 
@@ -26,7 +25,8 @@ def to_frame_graph(
     axis : int
         The axis along which elements are stored. All other axis are batch dimensions.
     shape : tuple
-        A tuple describing the shape of elements that this graph should transform.
+        A tuple describing the shape of elements that this graph should transform. Defaults
+        to (3,), which is the shape of a single 3D vector in euclidian space.
 
     Returns
     -------

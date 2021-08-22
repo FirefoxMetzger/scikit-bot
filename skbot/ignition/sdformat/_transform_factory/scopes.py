@@ -1,4 +1,4 @@
-from typing import Dict, List, Union
+from typing import Dict, List, Union, Tuple
 import numpy as np
 
 from .... import transform as tf
@@ -45,7 +45,7 @@ class Scope:
         self.parent = parent
         self.placement_frame: str = None
 
-    def declare_frame(self, name: str):
+    def declare_frame(self, name: str) -> None:
         if name in self.frames.keys():
             raise sdformat.ParseError(f"Frame '{name}' already declared.")
         
@@ -87,7 +87,7 @@ class Scope:
 
         return frame
 
-    def build_scaffolding(self):
+    def build_scaffolding(self) -> None:
         for el in self.scaffold_links:
             tf_link = el.to_transform_link(self)
 
@@ -102,7 +102,7 @@ class Scope:
         for scope in self.nested_scopes.values():
             scope.build_scaffolding()
 
-    def resolve_links(self, *, shape=tuple(), axis=-1):
+    def resolve_links(self, *, shape:Tuple[int], axis:int) -> None:
         for el in self.links:
             if isinstance(el.parent, str):
                 parent = self.get(el.parent, scaffolding=False)
@@ -121,7 +121,7 @@ class Scope:
             tf_link(parent, child)
 
         for scope in self.nested_scopes.values():
-            scope.resolve_links()
+            scope.resolve_links(shape=shape, axis=axis)
 
     def add_subscope(self, nested_scope: "Scope") -> None:
         if nested_scope.name in self.nested_scopes.keys():
