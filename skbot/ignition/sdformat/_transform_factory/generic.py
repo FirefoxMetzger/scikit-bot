@@ -34,12 +34,16 @@ class NamedPoseBearing(PoseBearing):
 
 class GenericSensor(PoseBearing):
     def __init__(
-        self, *, name: str, type: str, pose: GenericPose = None, camera: "Camera" = None
+        self, *, name: str, type: str, pose: GenericPose = None, camera: "Camera" = None, frames: List["GenericFrame"] = None
     ) -> None:
         super().__init__(pose=pose)
         self.type = type
         self.camera = camera
         self.name = name
+        self.frames = frames
+
+        if frames is None:
+            self.frames = list()
 
     class Camera(PoseBearing):
         def __init__(
@@ -49,11 +53,16 @@ class GenericSensor(PoseBearing):
             pose: GenericPose = None,
             horizontal_fov: float = 1.047,
             image: "Image" = None,
+            frames: "GenericFrame" = None
         ) -> None:
             super().__init__(pose=pose)
             self.horizontal_fov = horizontal_fov
             self.image = image
             self.name = name
+            self.frames = frames
+
+            if self.frames is None:
+                self.frames = list()
 
             if self.image is None:
                 self.image = GenericSensor.Camera.Image()
@@ -78,6 +87,7 @@ class GenericJoint(PoseBearing):
         axis: "Axis" = None,
         pose: GenericPose = None,
         sensor: List[GenericSensor] = None,
+        frames: List["GenericFrame"] = None
     ) -> None:
         super().__init__(pose=pose)
         self.name = name
@@ -86,12 +96,16 @@ class GenericJoint(PoseBearing):
         self.child = child
         self.axis = axis
         self.sensor = sensor
+        self.frames = frames
 
         if axis is None:
             self.axis = GenericJoint.Axis()
 
         if self.axis.xyz.expressed_in is None:
             self.axis.xyz.expressed_in = self.child
+
+        if frames is None:
+            self.frames = list()
 
     class Axis:
         def __init__(self) -> None:
@@ -110,13 +124,14 @@ class GenericLink(PoseBearing):
         name: str,
         pose: GenericPose = None,
         must_be_base_link: bool = False,
-        inertial: PoseBearing = None,
+        inertial: "GenericLink.Inertial" = None,
         collisions: List[NamedPoseBearing],
         visuals: List[NamedPoseBearing],
         projector: NamedPoseBearing = None,
         audio_source_poses: List[GenericPose],
         sensors: List[GenericSensor],
         lights: List["GenericLight"],
+        frames: List["GenericFrame"] = None
     ) -> None:
         super().__init__(pose=pose)
         self.must_be_base_link = must_be_base_link
@@ -128,10 +143,29 @@ class GenericLink(PoseBearing):
         self.sensors = sensors
         self.lights = lights
         self.audio_sources = [PoseBearing(pose=p) for p in audio_source_poses]
+        self.frames = frames
+
+        if frames is None:
+            self.frames = list()
+
+    class Inertial(PoseBearing):
+        def __init__(self, *, pose: GenericPose = None, frames:List["GenericFrame"]=None) -> None:
+            super().__init__(pose=pose)
+            self.frames = None
+
+            if self.frames is None:
+                self.frames = list()
+
 
 
 class GenericLight(NamedPoseBearing):
-    pass
+    def __init__(self, *, name: str, pose: GenericPose=None, frames:List["GenericFrame"]=None) -> None:
+        super().__init__(name=name, pose=pose)
+
+        self.frames = frames
+
+        if frames is None:
+            self.frames = list()
 
 
 class GenericInclude(NamedPoseBearing):

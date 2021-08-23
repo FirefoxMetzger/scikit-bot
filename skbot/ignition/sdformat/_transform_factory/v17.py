@@ -4,7 +4,6 @@ from .scopes import Scope
 from .factory import FactoryBase
 from .. import sdformat
 from ..bindings import v17
-from .... import transform as tf
 from .generic import (
     GenericFrame,
     GenericInclude,
@@ -28,7 +27,7 @@ class Converter(FactoryBase):
     """Functions to convert v1.7 SDF objects into generic SDF objects."""
 
     def __call__(self, sdf: str) -> Union[Scope, List[Scope]]:
-        """Convert v1.7 SDF into a Graph
+        """Convert v1.7 SDF into a Scope
 
         Parameters
         ----------
@@ -136,7 +135,7 @@ class Converter(FactoryBase):
         }
 
         if link.inertial is not None:
-            el = PoseBearing(pose=GenericPose(relative_to=link.name))
+            el = GenericLink.Inertial(pose=GenericPose(relative_to=link.name))
             if link.inertial.pose is not None:
                 el.pose.value = link.inertial.pose.value
                 if link.inertial.pose.relative_to is not None:

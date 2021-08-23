@@ -8,6 +8,7 @@ from .scopes import LightScope, ModelScope, Scope, WorldScope
 from ...fuel import get_fuel_model
 from .... import transform as tf
 from .generic import (
+    GenericFrame,
     GenericInclude,
     GenericJoint,
     GenericLight,
@@ -26,7 +27,7 @@ _converter_roots = {
     "1.2": None,
     "1.3": None,
     "1.4": None,
-    "1.5": None,
+    "1.5": "..v15",
     "1.6": None,
     "1.7": "..v17",
     "1.8": "..v18",
@@ -72,6 +73,11 @@ class FactoryBase:
             )
         return transform_factory(sdf, root_uri=root_uri)[0]
 
+    def _convert_frame(self, scope:"Scope", frame:GenericFrame):
+        scope.declare_frame(frame.name)
+        scope.add_scaffold(frame.name, frame.pose.value, frame.pose.relative_to)
+        scope.declare_link(DynamicPose(frame.attached_to, frame.name))
+
     def convert_sensor(
         self, sensor: GenericSensor, scope: Scope, attached_to: NamedPoseBearing
     ) -> tf.Frame:
@@ -109,6 +115,10 @@ class FactoryBase:
                     ),
                 )
             )
+
+            for frame in sensor.camera.frames:
+                self._convert_frame(scope, frame)
+
         elif sensor.type == "contact":
             raise NotImplementedError()
         elif sensor.type == "depth_camera":
@@ -148,9 +158,12 @@ class FactoryBase:
         else:
             raise sdformat.ParseError(f"Unkown sensor type: {sensor.type}")
 
+        for frame in sensor.frames:
+            self._convert_frame(scope, frame)
+
         return sensor_scaffold
 
-    def convert_joint(self, joint: GenericJoint, scope: Scope) -> Scope:
+    def convert_joint(self, joint: GenericJoint, scope: ModelScope):
         scope.declare_frame(joint.name)
         scope.add_scaffold(joint.name, joint.pose.value, joint.pose.relative_to)
         scope.declare_link(DynamicPose(joint.child, joint.name))
@@ -200,11 +213,17 @@ class FactoryBase:
         for sensor in joint.sensor:
             self.convert_sensor(sensor, scope, attached_to=joint)
 
+        for frame in joint.frames:
+            self._convert_frame(scope, frame)
+
         return scope
 
     def convert_light(self, light: GenericLight, *, scope: Scope = None) -> Scope:
         if scope is None:
             scope = LightScope(light.name)
+
+        for frame in light.frames:
+            self._convert_frame(frame)
 
         scope.declare_frame(light.name)
         scope.add_scaffold(light.name, light.pose.value, light.pose.relative_to)
@@ -273,6 +292,9 @@ class FactoryBase:
         for light in link.lights:
             self.convert_light(light, scope=scope)
             scope.declare_link(DynamicPose(link.name, light.name))
+
+        for frame in link.frames:
+            self._convert_frame(frame)
 
         return scope
 

@@ -27,7 +27,7 @@ class Converter(FactoryBase):
     """Functions to convert v1.8 SDF objects into generic SDF objects."""
 
     def __call__(self, sdf: str) -> Union[Scope, List[Scope]]:
-        """Convert v1.8 SDF into a Graph
+        """Convert v1.8 SDF into a Scope
 
         Parameters
         ----------
@@ -131,7 +131,7 @@ class Converter(FactoryBase):
         }
 
         if link.inertial is not None:
-            link_args["inertial"] = PoseBearing(
+            link_args["inertial"] = GenericLink.Inertial(
                 pose=GenericPose(value=link.inertial.pose, relative_to=link.name)
             )
 
