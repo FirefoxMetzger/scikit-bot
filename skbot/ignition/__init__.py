@@ -36,15 +36,14 @@ Functions
 .. autosummary::
     :toctree:
 
-    skbot.ignition.Subscriber
-    skbot.ignition.get_fuel_model_info
-    skbot.ignition.get_fuel_model
+    skbot.ignition.create_frame_graph
     skbot.ignition.download_fuel_model
     skbot.ignition.FrustumProjection
-    skbot.ignition.create_frame_graph
-    skbot.ignition.transform_graph_from_sdf
+    skbot.ignition.get_fuel_model
+    skbot.ignition.get_fuel_model_info
+    skbot.ignition.Subscriber
 
-.. rubric:: SDFormat Bindings
+.. rubric:: SDFormat Specific
 
 .. note::
     Scikit-bot will automatically select the correct version when using
@@ -55,9 +54,10 @@ Functions
 .. autosummary::
     :toctree:
 
+    skbot.ignition.sdformat.dumps
     skbot.ignition.sdformat.get_version
     skbot.ignition.sdformat.loads
-    skbot.ignition.sdformat.dumps
+    skbot.ignition.sdformat.to_frame_graph
 
 
 SDFormat XML
@@ -150,7 +150,6 @@ from . import messages
 from .subscriber import Subscriber
 from .transformations import FrustumProjection
 from .sdformat.create_frame_graph import create_frame_graph
-from .sdformat.transform_factory import to_frame_graph
 from . import sdformat
 from .fuel import get_fuel_model_info, download_fuel_model, get_fuel_model
 
