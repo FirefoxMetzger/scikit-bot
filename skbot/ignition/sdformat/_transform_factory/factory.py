@@ -34,13 +34,14 @@ _converter_roots = {
 
 
 class FactoryBase:
-    """ Frame Graph Factory
+    """Frame Graph Factory
 
     This class constructs a frame graph from a tree of generic SDF objects (see generic.py). It
-    is subclassed by the version-specific factories (vXX.py) which implement conversion from 
+    is subclassed by the version-specific factories (vXX.py) which implement conversion from
     version-specific SDF objects to generic objects.
-    
+
     """
+
     def __init__(self, *, root_uri: str = None):
         self.root_uri: str = root_uri
 
@@ -155,7 +156,9 @@ class FactoryBase:
         scope.declare_link(DynamicPose(joint.child, joint.name))
 
         joint_parent = tf.Frame(3, name=joint.name + "_parent")
-        scope.declare_link(DynamicPose(joint_parent, joint.parent, scaffold_parent=joint.name))
+        scope.declare_link(
+            DynamicPose(joint_parent, joint.parent, scaffold_parent=joint.name)
+        )
 
         if joint.type == "revolute":
             scope.declare_link(
@@ -188,7 +191,9 @@ class FactoryBase:
         elif joint.type == "universal":
             raise NotImplementedError("Universal joints have not been added yet.")
         elif joint.type == "fixed":
-            scope.declare_link(DynamicPose(joint.name, joint_parent, scaffold_child=joint.name))
+            scope.declare_link(
+                DynamicPose(joint.name, joint_parent, scaffold_child=joint.name)
+            )
         else:
             raise sdformat.ParseError(f"Unknown Joint type: {joint.type}")
 
@@ -248,7 +253,9 @@ class FactoryBase:
             frame = tf.Frame(3, name=link.projector.name)
             scaffold_frame = tf.Frame(3, name=link.projector.name)
             scope.add_scaffold(
-                scaffold_frame, link.projector.pose.value, link.projector.pose.relative_to
+                scaffold_frame,
+                link.projector.pose.value,
+                link.projector.pose.relative_to,
             )
             scope.declare_link(
                 DynamicPose(link.name, frame, scaffold_child=scaffold_frame)

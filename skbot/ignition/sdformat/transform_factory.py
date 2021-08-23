@@ -46,7 +46,7 @@ def to_frame_graph(
 
     Notes
     -----
-    Frames inside the graph are named after the frames defined by the SDF. You can 
+    Frames inside the graph are named after the frames defined by the SDF. You can
     retrieve them by searching for them using :func:`skbot.transform.Frame.find_frame`.
 
     Joins are implicit within the frame graph. The joint frame that is attached
@@ -61,8 +61,8 @@ def to_frame_graph(
         link = child_frame.transform_chain(child_frame)[0]
     """
 
-    scope_list:List[Scope] = transform_factory(sdf)
-    frame_list:List[tf.Frame] = list()
+    scope_list: List[Scope] = transform_factory(sdf)
+    frame_list: List[tf.Frame] = list()
     for scope in scope_list:
         scope.build_scaffolding()
         scope.resolve_links(shape=shape, axis=axis)
@@ -76,7 +76,6 @@ def to_frame_graph(
             scope: LightScope
             frame = scope.get(scope.name, scaffolding=False)
             frame_list.append(frame)
-
 
     if unwrap and len(frame_list) == 1:
         return frame_list[0]

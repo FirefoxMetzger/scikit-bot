@@ -136,7 +136,12 @@ class GenericLight(NamedPoseBearing):
 
 class GenericInclude(NamedPoseBearing):
     def __init__(
-        self, *, name: str, pose: GenericPose = None, placement_frame: str = None, uri: str
+        self,
+        *,
+        name: str,
+        pose: GenericPose = None,
+        placement_frame: str = None,
+        uri: str,
     ) -> None:
         super().__init__(name=name, pose=pose)
         self.placement_frame = placement_frame
@@ -210,4 +215,3 @@ class GenericWorld:
         self.lights = lights
         self.frames = frames
         self.models = models
-

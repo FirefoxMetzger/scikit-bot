@@ -197,7 +197,7 @@ def invalid_sdf_string(request):
         "v18/camera.sdf",
         "v18/world_with_state.sdf",
         "v18/audio_source.sdf",
-        "v18/projector.sdf"
+        "v18/projector.sdf",
     ]
 )
 def v18_sdf(request):

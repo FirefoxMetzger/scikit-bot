@@ -25,6 +25,7 @@ FrameElement = Union[v18.ModelModel.Frame, v18.World.Frame]
 
 class Converter(FactoryBase):
     """Functions to convert v1.8 SDF objects into generic SDF objects."""
+
     def __call__(self, sdf: str) -> Union[Scope, List[Scope]]:
         """Convert v1.8 SDF into a Graph
 
@@ -98,11 +99,7 @@ class Converter(FactoryBase):
         return GenericJoint(**joint_args)
 
     def _to_generic_sensor(self, sensor: v18.Sensor) -> GenericSensor:
-        sensor_args = {
-            "name": sensor.name,
-            "type": sensor.type,
-            "pose": sensor.pose
-        }
+        sensor_args = {"name": sensor.name, "type": sensor.type, "pose": sensor.pose}
 
         if sensor.camera is not None:
             if sensor.camera.noise is not None:
@@ -114,8 +111,7 @@ class Converter(FactoryBase):
 
         if sensor.camera is not None:
             sensor_args["camera"] = GenericSensor.Camera(
-                name=sensor.camera.name,
-                pose = sensor.camera.pose
+                name=sensor.camera.name, pose=sensor.camera.pose
             )
 
         return GenericSensor(**sensor_args)
@@ -136,9 +132,7 @@ class Converter(FactoryBase):
 
         if link.inertial is not None:
             link_args["inertial"] = PoseBearing(
-                pose = GenericPose(
-                    value=link.inertial.pose, relative_to=link.name
-                )
+                pose=GenericPose(value=link.inertial.pose, relative_to=link.name)
             )
 
         link_args["collisions"] = [
@@ -181,14 +175,12 @@ class Converter(FactoryBase):
             include=[self._to_generic_include(i) for i in model.include],
             models=[self._to_generic_model(m) for m in model.model],
             joints=[self._to_generic_joint(j) for j in model.joint],
-            frames=[self._to_generic_frame(f) for f in model.frame]
+            frames=[self._to_generic_frame(f) for f in model.frame],
         )
 
     def _to_generic_frame(self, frame: FrameElement) -> GenericFrame:
         return GenericFrame(
-            attached_to=frame.attached_to,
-            name=frame.name,
-            pose=frame.pose
+            attached_to=frame.attached_to, name=frame.name, pose=frame.pose
         )
 
     def _to_generic_include(self, include: IncludeElement) -> GenericInclude:
@@ -201,9 +193,9 @@ class Converter(FactoryBase):
 
     def _to_generic_world(self, world: v18.World) -> GenericWorld:
         return GenericWorld(
-            name = world.name,
-            includes= [self._to_generic_include(i) for i in world.include],
+            name=world.name,
+            includes=[self._to_generic_include(i) for i in world.include],
             models=[self._to_generic_model(m) for m in world.model],
             frames=[self._to_generic_frame(f) for f in world.frame],
-            lights=[self._to_generic_light(l) for l in world.light]
+            lights=[self._to_generic_light(l) for l in world.light],
         )

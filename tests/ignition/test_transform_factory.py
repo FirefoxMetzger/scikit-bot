@@ -10,7 +10,7 @@ def test_v18_parsing(v18_sdf):
         frame = ign.sdformat.to_frame_graph(v18_sdf)
     except NotImplementedError:
         pytest.skip("Elements not implemented yet.")
-    
+
     if isinstance(frame, list):
         assert len(frame) > 1
         for el in frame:
@@ -39,13 +39,14 @@ def test_v17_parsing(v17_sdf):
         frame = ign.sdformat.to_frame_graph(v17_sdf)
     except NotImplementedError:
         pytest.skip("Elements not implemented yet.")
-    
+
     if isinstance(frame, list):
         assert len(frame) > 1
         for el in frame:
             assert isinstance(el, tf.Frame)
     else:
         assert isinstance(frame, tf.Frame)
+
 
 def test_v17_refuted(v17_sdf_refuted):
     with pytest.raises(ign.sdformat.sdformat.ParseError):
@@ -57,6 +58,7 @@ def test_panda():
     sdf_string = model_file.read_text()
 
     root_frame = ign.sdformat.to_frame_graph(sdf_string)
+
 
 def test_nd_panda():
     model_file = Path(__file__).parent / "sdf" / "robots" / "panda" / "model.sdf"
