@@ -1,5 +1,15 @@
-from skbot.ignition.messages import ImageGeom, Pose
-from skbot.ignition.sdformat.bindings.v17 import light
+""" Generic Bindings for SDFormat
+
+The classes below are a poor man's version of the data bindings in
+sdformat.bindings. They only implement a subset of the full SDFormat spec
+relevant to frame graphs, but are independent of any specific version.
+
+The idea is that a converter for a specific SDF version takes SDF objects of that
+version and converts them into the generic representation below. The generic
+objects are then used to construct the actual frame graph.
+"""
+
+
 from typing import List
 
 

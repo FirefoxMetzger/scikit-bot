@@ -6,6 +6,7 @@ from .. import sdformat
 
 
 class SdfLink:
+    """Base class for link factory. """
     def __init__(self, parent: Union[str, tf.Frame], child: Union[str, tf.Frame]) -> None:
         self.parent: Union[str, tf.Frame] = parent
         self.child: Union[str, tf.Frame] = child
@@ -15,6 +16,7 @@ class SdfLink:
 
 
 class ScaffoldPose(SdfLink):
+    """Pose instance for constructing the pose scaffold."""
     def __init__(self, parent: str, child: Union[str, tf.Frame], pose: str) -> None:
         super().__init__(parent, child)
         self.pose = np.array(pose.split(), dtype=float)
@@ -25,7 +27,23 @@ class ScaffoldPose(SdfLink):
         )
 
 class Scope:
-    """A scope within SDFormat"""
+    """A scope within SDFormat.
+    
+    This class does most of the heavy lifting of sdformat.to_frame_graph. It
+    collects frames that are (explicitly or implicitly) declared within a SDF
+    scope and holds a scope's sub-scopes (if any). 
+    
+    SDF positions objects using a <pose> element, which can be relative to
+    another element or relative to the scope's implicit root frame. This class
+    first collects all such definitions and uses them to construct a static
+    graph referred to as scaffolding (self.build_scaffolding).
+
+    Once the (static) position of all objects can be computed using the
+    scaffolding this class then constructs a dynamic pose graph that reflects
+    the actual dynamic links between frames (self.resolve_links). The root
+    scope's dynamic frame graph is then returned by to_frame_graph.
+    
+    """
 
     def __init__(self, name, *, parent: "Scope" = None) -> None:
         self.nested_scopes: Dict[str, "Scope"] = dict()
@@ -46,6 +64,12 @@ class Scope:
         self.placement_frame: str = None
 
     def declare_frame(self, name: str) -> None:
+        """Add a frame to the scaffolding and final frame graph.
+        
+        The declared frame can be found by dynamic links using the given name.
+
+        """
+
         if name in self.frames.keys():
             raise sdformat.ParseError(f"Frame '{name}' already declared.")
         
@@ -56,6 +80,8 @@ class Scope:
         self.scaffold_frames[name] = tf.Frame(3, name=name)
 
     def add_scaffold(self, frame_name: str, pose: str, relative_to: str = None) -> None:
+        """Add a pose to the scaffolding frame graph."""
+
         parent = self.default_frame.name
         if relative_to is not None and not relative_to == "":
             parent = relative_to
@@ -63,10 +89,11 @@ class Scope:
         self.scaffold_links.append(ScaffoldPose(parent, frame_name, pose))
 
     def declare_link(self, link: SdfLink) -> None:
+        """Add a link to the final/dynamic frame graph."""
         self.links.append(link)
 
     def get(self, name: str, scaffolding: bool) -> tf.Frame:
-        """Find the frame from a (namespaced) SDFormat name"""
+        """Find the frame from a (namespaced) SDFormat name."""
 
         if "::" in name:
             scope, subscope_name = name.split("::", 1)
@@ -88,6 +115,10 @@ class Scope:
         return frame
 
     def build_scaffolding(self) -> None:
+        """ Construct the static frame graph.
+        
+        Connect declared scaffolding frames with declared scaffolding links.
+        """
         for el in self.scaffold_links:
             tf_link = el.to_transform_link(self)
 
@@ -103,6 +134,13 @@ class Scope:
             scope.build_scaffolding()
 
     def resolve_links(self, *, shape:Tuple[int], axis:int) -> None:
+        """Construct the dynamic frame graph.
+        
+        The success of this function depends on build_scaffolding. Links in the
+        dynamic frame graph may have to be computed using the scaffolding and hence
+        it needs to have been build prior to the execution of this function.
+
+        """
         for el in self.links:
             if isinstance(el.parent, str):
                 parent = self.get(el.parent, scaffolding=False)
@@ -124,6 +162,8 @@ class Scope:
             scope.resolve_links(shape=shape, axis=axis)
 
     def add_subscope(self, nested_scope: "Scope") -> None:
+        """Add a scope nested within this scope."""
+
         if nested_scope.name in self.nested_scopes.keys():
             raise sdformat.ParseError(f"Nested Scope '{nested_scope.name}' already defined.")
 
@@ -132,6 +172,7 @@ class Scope:
 
 
 class ModelScope(Scope):
+    """Specialization for scope declared by <model> elements."""
     def __init__(
         self,
         name,
@@ -152,7 +193,7 @@ class ModelScope(Scope):
         self.pose = None
 
     def get(self, name: str, scaffolding: bool) -> tf.Frame:
-        """Find the frame from a (namespaced) SDFormat name"""
+        """Find the frame from a (namespaced) SDFormat name."""
 
         if name == "world":
             return self.parent.get(name, scaffolding)
@@ -161,6 +202,7 @@ class ModelScope(Scope):
 
 
 class WorldScope(Scope):
+    """Specialization for scopes declared by <world> elements."""
     def __init__(self, name) -> None:
         super().__init__(name, parent=None)
 
@@ -181,6 +223,7 @@ class WorldScope(Scope):
 
 
 class LightScope(Scope):
+    """Specialization for scopes declared by <light> elements."""
     def __init__(self, name) -> None:
         super().__init__(name, parent=None)
         

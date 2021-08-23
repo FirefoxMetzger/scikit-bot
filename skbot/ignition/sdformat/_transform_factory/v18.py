@@ -1,4 +1,4 @@
-from typing import Generic, List, Union
+from typing import List, Union
 
 from .scopes import Scope
 from .generic import (
@@ -17,7 +17,6 @@ from .generic import (
 from .factory import FactoryBase
 from .. import sdformat
 from ..bindings import v18
-from .... import transform as tf
 
 
 IncludeElement = Union[v18.ModelModel.Include, v18.World.Include]
@@ -25,6 +24,7 @@ FrameElement = Union[v18.ModelModel.Frame, v18.World.Frame]
 
 
 class Converter(FactoryBase):
+    """Functions to convert v1.8 SDF objects into generic SDF objects."""
     def __call__(self, sdf: str) -> Union[Scope, List[Scope]]:
         """Convert v1.8 SDF into a Graph
 

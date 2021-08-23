@@ -1,4 +1,3 @@
-from skbot.ignition.messages import Model
 from typing import Callable, Dict, Union, List, Any
 import importlib
 from urllib.parse import urlparse
@@ -35,6 +34,13 @@ _converter_roots = {
 
 
 class FactoryBase:
+    """ Frame Graph Factory
+
+    This class constructs a frame graph from a tree of generic SDF objects (see generic.py). It
+    is subclassed by the version-specific factories (vXX.py) which implement conversion from 
+    version-specific SDF objects to generic objects.
+    
+    """
     def __init__(self, *, root_uri: str = None):
         self.root_uri: str = root_uri
 
@@ -148,7 +154,7 @@ class FactoryBase:
         scope.add_scaffold(joint.name, joint.pose.value, joint.pose.relative_to)
         scope.declare_link(DynamicPose(joint.child, joint.name))
 
-        joint_parent = tf.Frame(3)
+        joint_parent = tf.Frame(3, name=joint.name + "_parent")
         scope.declare_link(DynamicPose(joint_parent, joint.parent, scaffold_parent=joint.name))
 
         if joint.type == "revolute":

@@ -25,13 +25,14 @@ FrameElement = Union[v17.ModelModel.Frame, v17.World.Frame]
 
 
 class Converter(FactoryBase):
+    """Functions to convert v1.7 SDF objects into generic SDF objects."""
     def __call__(self, sdf: str) -> Union[Scope, List[Scope]]:
-        """Convert v1.8 SDF into a Graph
+        """Convert v1.7 SDF into a Graph
 
         Parameters
         ----------
         sdf : str
-            A string containing v1.8 SDFormat XML.
+            A string containing v1.7 SDFormat XML.
 
         Returns
         -------

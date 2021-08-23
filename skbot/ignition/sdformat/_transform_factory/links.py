@@ -1,3 +1,13 @@
+""" Link building classes for Frame Graph
+
+The classes below are the various instances used by the Scope.resolve_links
+factory. After the pose scaffolding has been built (Scope.build_scaffold) the
+classes below can be used to retrieve the links that will connect the frames of
+the final frame graph.
+
+"""
+
+
 from typing import Union, Tuple
 import numpy as np
 from scipy.spatial.transform import Rotation as ScipyRotation
@@ -18,6 +28,7 @@ class CustomLink(SdfLink):
 
 
 class SimplePose(SdfLink):
+    """A fixed pose that doesn't need the scaffold"""
     def __init__(
         self, parent: Union[str, tf.Frame], child: Union[str, tf.Frame], pose: str
     ) -> None:
@@ -34,6 +45,7 @@ class SimplePose(SdfLink):
 
 
 class DynamicPose(SdfLink):
+    """A pose that needs to be worked out after scaffolding has been built."""
     def __init__(
         self,
         parent: Union[str, tf.Frame],
@@ -82,6 +94,7 @@ class DynamicPose(SdfLink):
 
 
 class SingleAxisJoint(SdfLink):
+    """Base class for joints using an axis"""
     def __init__(
         self,
         parent: Union[str, tf.Frame],

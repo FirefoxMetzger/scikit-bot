@@ -6,7 +6,7 @@ from ._transform_factory.factory import transform_factory
 
 
 def to_frame_graph(
-    sdf: str, *, unwrap: bool = True, axis: int = -1, shape: Tuple[int] = (3,)
+    sdf: str, *, unwrap: bool = True, shape: Tuple[int] = (3,), axis: int = -1
 ) -> Union[tf.Frame, List[tf.Frame]]:
     """Create a frame graph from a sdformat string.
 
@@ -22,24 +22,43 @@ def to_frame_graph(
         world element return that element's frame. If the sdf contains multiple
         lights, models, or worlds a list of root frames is returned. If False,
         always return a list of frames.
-    axis : int
-        The axis along which elements are stored. All other axis are batch dimensions.
     shape : tuple
-        A tuple describing the shape of elements that this graph should transform. Defaults
-        to (3,), which is the shape of a single 3D vector in euclidian space.
+        A tuple describing the shape of elements that the resulting graph should
+        transform. This can be used to add batch dimensions to the graph, for
+        example to perform vectorized computation on multiple instances of the
+        same world in different states, or for batched coordinate
+        transformation. Defaults to (3,), which is the shape of a single 3D
+        vector in euclidian space.
+    axis : int
+        The axis along which elements are stored. The axis must have length 3
+        (since SDFormat describes 3 dimensional worlds), and all other axis are
+        considered batch dimensions. Defaults to -1.
 
     Returns
     -------
-    frame : Union[Frame, List[Frame]]
+    frame_graph : Union[Frame, List[Frame]]
         A :class:`skbot.transform.Frame` or list of Frames depending on the value of
-        ``unwrap`` and the number of elements in the SDF.
-    links : Dict[str, Frames]
-        A dict of (named) links in the graph.
+        ``unwrap`` and the number of elements in the SDF's root element.
 
     See Also
     --------
     :mod:`skbot.transform`
 
+    Notes
+    -----
+    Frames inside the graph are named after the frames defined by the SDF. You can 
+    retrieve them by searching for them using :func:`skbot.transform.Frame.find_frame`.
+
+    Joins are implicit within the frame graph. The joint frame that is attached
+    to the child frame is named after the joint (<joint_name>), and the
+    (implicit) joint frame attached to the parent is named
+    (<joint_name>_parent). The link between the two frames can be retrieved via
+    :func:`skbot.transform.Frame.transform_chain`. For example if there is a
+    joint named "robot_joint0" its link can be retrieved using::
+
+        child_frame = frame_graph.find_frame(".../robot_joint0")
+        parent_frame = frame_graph.find_frame(".../robot_joint0_parent")
+        link = child_frame.transform_chain(child_frame)[0]
     """
 
     scope_list:List[Scope] = transform_factory(sdf)
