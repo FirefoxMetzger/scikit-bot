@@ -96,7 +96,7 @@ def _fetch_include_uri(
 def create_frame_graph(sdf: str) -> Tuple[Dict[str, rtf.Frame], Dict[str, rtf.Link]]:
     """Create a frame graph from a sdformat string.
 
-    .. deprecated:: 0.4.0
+    .. deprecated:: 0.6.0
         This function will be removed in skbot v1.0. Use
         :func:``skbot.ignition.to_frame_graph`` instead. To find frames in the
         frame graph returned by ``to_frame_graph`` use
@@ -135,7 +135,6 @@ def create_frame_graph(sdf: str) -> Tuple[Dict[str, rtf.Frame], Dict[str, rtf.Li
     )
 
     root = ElementTree.fromstring(sdf)
-    tree = ElementTree.ElementTree(root)
 
     @dataclass
     class SdfQueueItem:
