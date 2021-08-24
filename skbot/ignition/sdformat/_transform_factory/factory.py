@@ -400,6 +400,12 @@ class FactoryBase:
         for include in world.includes:
             self.resolve_include(include, world_scope)
 
+            # double-check if this is correct
+            world_scope.add_scaffold(include.name, "0 0 0 0 0 0")
+            world_scope.declare_link(
+                SimplePose("world", include.name, "0 0 0 0 0 0")
+            )
+
         # TODO: GUI
         # TODO: scene
 
