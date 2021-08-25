@@ -435,76 +435,14 @@ class FactoryBase:
             world_scope.add_scaffold(model.name, "0 0 0 0 0 0")
             world_scope.declare_link(SimplePose("world", model.name, "0 0 0 0 0 0"))
 
+            link_name = model.name + "::" + model.canonical_link
+            world_scope.declare_link(DynamicPose(model.name, link_name))
+
         # TODO: actor
         # TODO: road
         # TODO: spherical coords
         # TODO: state
         # TODO: population
-
-        # # convert population
-        # for population in world.population:
-        #     tf_frame = tf.Frame(3, name=population.name)
-        #     offset = _pose_to_numpy(population.pose.value)
-        #     tf_link = tf.Translation(offset)
-
-        #     if population.pose.relative_to is not None:
-        #         parent = population.pose.relative_to
-        #         unresolved_poses.append((parent, tf_frame, tf_link))
-        #     else:
-        #         tf_link(tf_frame, world_frame)
-
-        #     num_defined = 0
-        #     if population.box is not None:
-        #         num_defined += 1
-        #     if population.cylinder is not None:
-        #         num_defined += 1
-        #     num_defined += len(population.model)
-
-        #     if len(population.model) > 1:
-        #         raise NotImplementedError("Multiple models defined for population..")
-        #     elif num_defined == 0:
-        #         raise sdformat.ParseError("No models defined for population.")
-
-        #     if population.box:
-        #         model_gen = lambda: tf.Frame(3)
-        #     elif population.cylinder:
-        #         model_gen = lambda: tf.Frame(3)
-        #     else:
-        #         model_gen = lambda: _convert_model(population.model[0])
-
-        #     step = np.array(population.distribution.step.split(" "), dtype=float)
-        #     rows = np.arange(population.distribution.rows)[:, -1, -1]
-        #     cols = np.array(population.distribution.cols)[-1, :, -1]
-
-        #     dist_kind = population.distribution.type
-        #     if dist_kind == "random":
-        #         for _ in range(population.model_count):
-        #             tf_frame = model_gen()
-        #             # TODO: randomize me
-        #             tf_link = tf.Translation((0, 0, 0))
-        #             tf_link(tf_frame, world_frame)
-        #     elif dist_kind == "uniform":
-        #         pass
-        #     elif dist_kind == "grid":
-        #         row_step, col_step, _ = [
-        #             float(x) for x in population.distribution.step.split(" ")
-        #         ]
-        #         for row in range(population.distribution.rows):
-        #             row_pos = row_step * row
-        #             for col in range(population.distribution.cols):
-        #                 col_pos = col_step * col
-        #                 tf_frame = model_gen()
-        #                 tf_frame.name = tf_frame.name + f"_clone_{col*population.distribution.rows + row}"
-        #                 tf_link = tf.Translation((row_pos, col_pos, 0))
-        #     elif dist_kind == "linear-x":
-        #         raise NotImplementedError("Linear placement not implemented yet.")
-        #     elif dist_kind == "linear-y":
-        #         raise NotImplementedError("Linear placement not implemented yet.")
-        #     elif dist_kind == "linear-z":
-        #         raise NotImplementedError("Linear placement not implemented yet.")
-
-        #     for model_idx in range(population.model_count):
-        #         pass
 
         return world_scope
 
