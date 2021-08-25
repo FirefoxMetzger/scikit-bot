@@ -42,8 +42,8 @@ class SimplePose(SdfLink):
 
         return tf.CompundLink(
             [
-                tf.EulerRotation("xyz", angles, axis=axis),
-                tf.Translation(offset, axis=axis),
+                tf.Translation(-offset, axis=axis),
+                tf.EulerRotation("xyz", -angles, axis=axis),
             ]
         )
 
@@ -95,8 +95,8 @@ class DynamicPose(SdfLink):
 
         return tf.CompundLink(
             [
-                tf.EulerRotation("xyz", angles, axis=axis),
-                tf.Translation(translation, axis=axis),
+                tf.Translation(-translation, axis=axis),
+                tf.EulerRotation("xyz", -angles, axis=axis),
             ]
         )
 

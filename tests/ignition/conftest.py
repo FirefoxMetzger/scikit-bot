@@ -198,6 +198,7 @@ def invalid_sdf_string(request):
         "v18/world_with_state.sdf",
         "v18/audio_source.sdf",
         "v18/projector.sdf",
+        "v17/pose_testing.sdf"
     ]
 )
 def v18_sdf(request):
@@ -265,6 +266,7 @@ def v18_sdf_refuted(request):
         "sdformat/world_with_state.sdf",
         "v17/light_only.sdf",
         "v17/crooked_double_pendulum.sdf",
+        "v17/environment.sdf"
     ]
 )
 def v17_sdf(request):
