@@ -130,10 +130,14 @@ class SingleAxisJoint(SdfLink):
 class RotationJoint(SingleAxisJoint):
     def to_transform_link(self, scope: "Scope", shape: tuple, axis: int) -> tf.Link:
         rotvec = self._convert_axis(scope, shape)
-        return tf.RotvecRotation(rotvec, axis=axis)
+        angle_shape = [*shape]
+        angle_shape.pop(axis)
+        return tf.RotvecRotation(rotvec, angle=np.zeros(angle_shape), axis=axis)
 
 
 class PrismaticJoint(SingleAxisJoint):
     def to_transform_link(self, scope: "Scope", shape: tuple, axis: int) -> tf.Link:
         direction = self._convert_axis(scope, shape)
-        return tf.Translation(direction, axis=axis)
+        amount_shape = [*shape]
+        amount_shape.pop(axis)
+        return tf.Translation(direction, amount=np.ones(amount_shape), axis=axis)

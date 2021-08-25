@@ -58,7 +58,10 @@ class Converter(FactoryBase):
         return graph_list
 
     def _to_generic_pose(self, pose: PoseElement) -> GenericPose:
-        return GenericPose(value=pose.value, relative_to=pose.frame)
+        if pose is None:
+            return GenericPose()
+        else:
+            return GenericPose(value=pose.value, relative_to=pose.frame)
 
     def _to_generic_frame(self, frame: FrameElement, attached_to=None) -> GenericFrame:
         return GenericFrame(
@@ -152,7 +155,10 @@ class Converter(FactoryBase):
             "inertial": None,
             "projector": None,
             "sensors": [self._to_generic_sensor(sensor) for sensor in link.sensor],
-            "lights": [self._to_generic_light(light) for light in link.light],
+            
+            # lights may not be part of SDF 1.5; tracking issue:
+            # 
+            # "lights": [self._to_generic_light(light) for light in link.light],
         }
 
         if link.inertial is not None:
@@ -213,6 +219,25 @@ class Converter(FactoryBase):
             joints=[self._to_generic_joint(j) for j in model.joint]
         )
 
+    def _to_generic_population(self, population:v15.World.Population) -> GenericWorld.GenericPopulation:
+        distribution = GenericWorld.GenericPopulation.GenericDistribution()
+        if population.distribution is not None:
+            distribution.type = population.distribution.type
+            distribution.step = population.distribution.step
+            distribution.cols = population.distribution.cols
+            distribution.rows = population.distribution.rows
+
+        return GenericWorld.GenericPopulation(
+            name = population.name,
+            pose = self._to_generic_pose(population.pose),
+            model_count=population.model_count,
+            distribution=distribution,
+            box=population.box,
+            cylinder=population.cylinder,
+            model=self._to_generic_model(population.model),
+            frames=[self._to_generic_frame(x) for x in population.frame]
+        )
+
     def _to_generic_world(self, world: v15.World) -> GenericWorld:
         return GenericWorld(
             name=world.name,
@@ -220,4 +245,5 @@ class Converter(FactoryBase):
             models=[self._to_generic_model(m) for m in world.model],
             frames=list(),
             lights=[self._to_generic_light(l) for l in world.light],
+            population=[self._to_generic_population(p) for p in world.population],
         )

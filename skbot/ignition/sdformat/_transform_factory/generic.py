@@ -10,7 +10,7 @@ objects are then used to construct the actual frame graph.
 """
 
 
-from typing import List
+from typing import List, Tuple
 
 
 class GenericPose:
@@ -34,7 +34,13 @@ class NamedPoseBearing(PoseBearing):
 
 class GenericSensor(PoseBearing):
     def __init__(
-        self, *, name: str, type: str, pose: GenericPose = None, camera: "Camera" = None, frames: List["GenericFrame"] = None
+        self,
+        *,
+        name: str,
+        type: str,
+        pose: GenericPose = None,
+        camera: "Camera" = None,
+        frames: List["GenericFrame"] = None,
     ) -> None:
         super().__init__(pose=pose)
         self.type = type
@@ -53,7 +59,7 @@ class GenericSensor(PoseBearing):
             pose: GenericPose = None,
             horizontal_fov: float = 1.047,
             image: "Image" = None,
-            frames: "GenericFrame" = None
+            frames: "GenericFrame" = None,
         ) -> None:
             super().__init__(pose=pose)
             self.horizontal_fov = horizontal_fov
@@ -87,7 +93,7 @@ class GenericJoint(PoseBearing):
         axis: "Axis" = None,
         pose: GenericPose = None,
         sensor: List[GenericSensor] = None,
-        frames: List["GenericFrame"] = None
+        frames: List["GenericFrame"] = None,
     ) -> None:
         super().__init__(pose=pose)
         self.name = name
@@ -130,8 +136,8 @@ class GenericLink(PoseBearing):
         projector: NamedPoseBearing = None,
         audio_source_poses: List[GenericPose],
         sensors: List[GenericSensor],
-        lights: List["GenericLight"],
-        frames: List["GenericFrame"] = None
+        lights: List["GenericLight"] = None,
+        frames: List["GenericFrame"] = None,
     ) -> None:
         super().__init__(pose=pose)
         self.must_be_base_link = must_be_base_link
@@ -148,8 +154,13 @@ class GenericLink(PoseBearing):
         if frames is None:
             self.frames = list()
 
+        if lights is None:
+            self.lights = list()
+
     class Inertial(PoseBearing):
-        def __init__(self, *, pose: GenericPose = None, frames:List["GenericFrame"]=None) -> None:
+        def __init__(
+            self, *, pose: GenericPose = None, frames: List["GenericFrame"] = None
+        ) -> None:
             super().__init__(pose=pose)
             self.frames = None
 
@@ -157,9 +168,14 @@ class GenericLink(PoseBearing):
                 self.frames = list()
 
 
-
 class GenericLight(NamedPoseBearing):
-    def __init__(self, *, name: str, pose: GenericPose=None, frames:List["GenericFrame"]=None) -> None:
+    def __init__(
+        self,
+        *,
+        name: str,
+        pose: GenericPose = None,
+        frames: List["GenericFrame"] = None,
+    ) -> None:
         super().__init__(name=name, pose=pose)
 
         self.frames = frames
@@ -243,9 +259,62 @@ class GenericWorld:
         lights: List[GenericLight],
         frames: List[GenericFrame],
         models: List[GenericModel],
+        population: List["GenericPopulation"]
     ) -> None:
         self.name = name
         self.includes = includes
         self.lights = lights
         self.frames = frames
         self.models = models
+        self.population = population
+
+
+    class GenericPopulation(NamedPoseBearing):
+        def __init__(
+            self,
+            *,
+            name: str,
+            pose: GenericPose = None,
+            model_count: int = 1,
+            distribution: "GenericDistribution" = None,
+            box: "GenericBox" = None,
+            cylinder: "GenericCylinder"=None,
+            model: GenericModel,
+        ) -> None:
+            super().__init__(name, pose=pose)
+            self.model_count = model_count
+            self.distribution = distribution
+            self.box = box
+            self.cylinder = cylinder
+            self.model = model
+
+            if distribution is None:
+                self.distribution = GenericWorld.GenericPopulation.GenericDistribution()
+
+        class GenericDistribution:
+            def __init__(
+                self,
+                *,
+                kind: str = "random",
+                rows: int = 1,
+                cols: int = 1,
+                step: Tuple[float] = (0.5, 0.5, 0),
+                frame: List["GenericFrame"] = None
+            ):
+                self.type = kind
+                self.rows = rows
+                self.cols = cols
+                self.step = step
+                self.frame = frame
+
+                if self.frame is None:
+                    self.frame = list()
+
+        class GenericBox:
+            def __init__(self, *, size: Tuple[float] = (1, 1, 1)) -> None:
+                self.size = size
+
+        class GenericCylinder:
+            def __init__(self, *, radius: float = 1, length: float = 1) -> None:
+                self.radius = radius
+                self.length = length

@@ -191,6 +191,25 @@ class Converter(FactoryBase):
             uri=include.uri,
         )
 
+    def _to_generic_population(self, population:v18.World.Population) -> GenericWorld.GenericPopulation:
+        distribution = GenericWorld.GenericPopulation.GenericDistribution()
+        if population.distribution is not None:
+            distribution.type = population.distribution.type
+            distribution.step = population.distribution.step
+            distribution.cols = population.distribution.cols
+            distribution.rows = population.distribution.rows
+
+        return GenericWorld.GenericPopulation(
+            name = population.name,
+            pose = population.pose,
+            model_count=population.model_count,
+            distribution=distribution,
+            box=population.box,
+            cylinder=population.cylinder,
+            model=self._to_generic_model(population.model)
+        )
+
+
     def _to_generic_world(self, world: v18.World) -> GenericWorld:
         return GenericWorld(
             name=world.name,
@@ -198,4 +217,5 @@ class Converter(FactoryBase):
             models=[self._to_generic_model(m) for m in world.model],
             frames=[self._to_generic_frame(f) for f in world.frame],
             lights=[self._to_generic_light(l) for l in world.light],
+            population=[self._to_generic_population(p) for p in world.population],
         )
