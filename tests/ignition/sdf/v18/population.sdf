@@ -1,0 +1,13 @@
+<?xml version="1.0" ?>
+<sdf version="1.8">
+    <world name="world">
+        <population name="population">
+            <model name="model">
+                <link name="A">
+                    <pose>1 2 3 0 0 0</pose>
+                    <must_be_base_link>true</must_be_base_link>
+                </link>
+            </model>
+        </population>
+    </world>
+</sdf>
