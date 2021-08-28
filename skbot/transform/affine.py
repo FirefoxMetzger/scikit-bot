@@ -213,13 +213,19 @@ class Rotation(AffineLink):
 class Translation(AffineLink):
     """Translation in N-D.
 
+    .. versionadded:: 0.6.0
+        Added batch computation.
+
 
     Parameters
     ----------
     direction : ArrayLike
-        The vector describing the translation.
-    amount : float
+        A vector describing the translation. May be batched.
+    amount : ArrayLike
         A scalar indicating by how much to scale ``direction``. Default is 1.
+    axis : int
+        The axis along which computation takes place. All other axes are considered
+        batch dimensions.
 
     Notes
     -----
@@ -229,7 +235,7 @@ class Translation(AffineLink):
     """
 
     def __init__(
-        self, direction: ArrayLike, *, amount: float = 1, axis: int = -1
+        self, direction: ArrayLike, *, amount: ArrayLike = 1, axis: int = -1
     ) -> None:
         direction = np.asarray(direction)
 
@@ -237,8 +243,9 @@ class Translation(AffineLink):
 
         super().__init__(frame_dim, frame_dim, axis=axis)
 
-        self._amount = amount
-        self._direction = np.asarray(direction)
+        self._axis = axis
+        self._amount = np.asarray(amount)
+        self._direction = np.moveaxis(direction, axis, -1)
 
         self._update_transformation_matrix(self._direction.shape)
         self._update_inverse_transformation_matrix(self._direction.shape)
@@ -262,13 +269,19 @@ class Translation(AffineLink):
 
     @amount.setter
     def amount(self, amount: float) -> None:
-        self._amount = amount
+        self._amount = np.asarray(amount)
 
         self._update_transformation_matrix(self._direction.shape)
         self._update_inverse_transformation_matrix(self._direction.shape)
 
     def transform(self, x: ArrayLike) -> np.ndarray:
-        return translate(x, self._amount * self._direction)
+        x = np.asarray(x)
+        x = np.moveaxis(x, self._axis, -1)
+        result = translate(x, self._amount[..., None] * self._direction)
+        return np.moveaxis(result, -1, self._axis)
 
     def __inverse_transform__(self, x: ArrayLike) -> np.ndarray:
-        return translate(x, -self._amount * self._direction)
+        x = np.asarray(x)
+        x = np.moveaxis(x, self._axis, -1)
+        result = translate(x, -self._amount[..., None] * self._direction)
+        return np.moveaxis(result, -1, self._axis)
