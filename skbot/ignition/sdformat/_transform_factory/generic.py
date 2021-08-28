@@ -259,7 +259,7 @@ class GenericWorld:
         lights: List[GenericLight],
         frames: List[GenericFrame],
         models: List[GenericModel],
-        population: List["GenericPopulation"]
+        population: List["GenericPopulation"],
     ) -> None:
         self.name = name
         self.includes = includes
@@ -267,7 +267,6 @@ class GenericWorld:
         self.frames = frames
         self.models = models
         self.population = population
-
 
     class GenericPopulation(NamedPoseBearing):
         def __init__(
@@ -278,7 +277,7 @@ class GenericWorld:
             model_count: int = 1,
             distribution: "GenericDistribution" = None,
             box: "GenericBox" = None,
-            cylinder: "GenericCylinder"=None,
+            cylinder: "GenericCylinder" = None,
             model: GenericModel,
         ) -> None:
             super().__init__(name, pose=pose)
@@ -299,7 +298,7 @@ class GenericWorld:
                 rows: int = 1,
                 cols: int = 1,
                 step: Tuple[float] = (0.5, 0.5, 0),
-                frame: List["GenericFrame"] = None
+                frame: List["GenericFrame"] = None,
             ):
                 self.type = kind
                 self.rows = rows

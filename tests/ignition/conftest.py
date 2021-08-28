@@ -198,7 +198,7 @@ def invalid_sdf_string(request):
         "v18/world_with_state.sdf",
         "v18/audio_source.sdf",
         "v18/projector.sdf",
-        "v18/pose_testing.sdf"
+        "v18/pose_testing.sdf",
     ]
 )
 def v18_sdf(request):
@@ -266,7 +266,7 @@ def v18_sdf_refuted(request):
         "sdformat/world_with_state.sdf",
         "v17/light_only.sdf",
         "v17/crooked_double_pendulum.sdf",
-        "v17/environment.sdf"
+        "v17/environment.sdf",
     ]
 )
 def v17_sdf(request):
@@ -351,6 +351,7 @@ def v16_sdf(request):
 def v15_sdf(request):
     filename = request.param
     return (sdf_folder / filename).read_text()
+
 
 @pytest.fixture(
     params=[

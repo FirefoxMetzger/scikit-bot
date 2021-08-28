@@ -24,11 +24,12 @@ FrameElement = Union[
     v15.ModelModel.Frame, v15.Sensor.Frame, v15.Joint.Frame, v15.Link.Frame
 ]
 PoseElement = Union[
-v15.ModelModel.Frame.Pose,
-v15.Sensor.Frame.Pose,
-v15.Joint.Frame.Pose,
-v15.Link.Frame.Pose,
-v15.Joint.Pose]
+    v15.ModelModel.Frame.Pose,
+    v15.Sensor.Frame.Pose,
+    v15.Joint.Frame.Pose,
+    v15.Link.Frame.Pose,
+    v15.Joint.Pose,
+]
 
 
 class Converter(FactoryBase):
@@ -118,7 +119,9 @@ class Converter(FactoryBase):
             "child": joint.child,
             "pose": None,
             "sensor": sensors,
-            "frames": [self._to_generic_frame(x, attached_to=joint.name) for x in joint.frame]
+            "frames": [
+                self._to_generic_frame(x, attached_to=joint.name) for x in joint.frame
+            ],
         }
 
         if joint.pose is not None:
@@ -142,9 +145,11 @@ class Converter(FactoryBase):
 
     def _to_generic_light(self, light: v15.Light) -> GenericLight:
         return GenericLight(
-            name=light.name, 
-            frames=[self._to_generic_frame(x, attached_to=light.name) for x in light.frame],
-            pose=self._to_generic_pose(light.pose)
+            name=light.name,
+            frames=[
+                self._to_generic_frame(x, attached_to=light.name) for x in light.frame
+            ],
+            pose=self._to_generic_pose(light.pose),
         )
 
     def _to_generic_link(self, link: v15.Link) -> GenericLink:
@@ -155,9 +160,8 @@ class Converter(FactoryBase):
             "inertial": None,
             "projector": None,
             "sensors": [self._to_generic_sensor(sensor) for sensor in link.sensor],
-            
             # lights may not be part of SDF 1.5; tracking issue:
-            # 
+            #
             # "lights": [self._to_generic_light(light) for light in link.light],
         }
 
@@ -187,11 +191,13 @@ class Converter(FactoryBase):
 
         if link.projector is not None:
             link_args["projector"] = NamedPoseBearing(
-                name=link.projector.name, pose=self._to_generic_pose(link.projector.pose)
+                name=link.projector.name,
+                pose=self._to_generic_pose(link.projector.pose),
             )
 
         link_args["audio_source_poses"] = [
-            self._to_generic_pose(a.pose) if a.pose is not None else GenericPose() for a in link.audio_source
+            self._to_generic_pose(a.pose) if a.pose is not None else GenericPose()
+            for a in link.audio_source
         ]
 
         return GenericLink(**link_args)
@@ -213,13 +219,17 @@ class Converter(FactoryBase):
             name=model.name,
             include=[self._to_generic_include(i) for i in model.include],
             models=[self._to_generic_model(m) for m in model.model],
-            frames=[self._to_generic_frame(f, attached_to="__model__") for f in model.frame],
+            frames=[
+                self._to_generic_frame(f, attached_to="__model__") for f in model.frame
+            ],
             pose=self._to_generic_pose(model.pose),
             links=[self._to_generic_link(l) for l in model.link],
-            joints=[self._to_generic_joint(j) for j in model.joint]
+            joints=[self._to_generic_joint(j) for j in model.joint],
         )
 
-    def _to_generic_population(self, population:v15.World.Population) -> GenericWorld.GenericPopulation:
+    def _to_generic_population(
+        self, population: v15.World.Population
+    ) -> GenericWorld.GenericPopulation:
         distribution = GenericWorld.GenericPopulation.GenericDistribution()
         if population.distribution is not None:
             distribution.type = population.distribution.type
@@ -228,14 +238,14 @@ class Converter(FactoryBase):
             distribution.rows = population.distribution.rows
 
         return GenericWorld.GenericPopulation(
-            name = population.name,
-            pose = self._to_generic_pose(population.pose),
+            name=population.name,
+            pose=self._to_generic_pose(population.pose),
             model_count=population.model_count,
             distribution=distribution,
             box=population.box,
             cylinder=population.cylinder,
             model=self._to_generic_model(population.model),
-            frames=[self._to_generic_frame(x) for x in population.frame]
+            frames=[self._to_generic_frame(x) for x in population.frame],
         )
 
     def _to_generic_world(self, world: v15.World) -> GenericWorld:

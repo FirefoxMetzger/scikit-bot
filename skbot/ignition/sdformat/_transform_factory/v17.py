@@ -199,7 +199,9 @@ class Converter(FactoryBase):
             uri=include.uri,
         )
 
-    def _to_generic_population(self, population:v17.World.Population) -> GenericWorld.GenericPopulation:
+    def _to_generic_population(
+        self, population: v17.World.Population
+    ) -> GenericWorld.GenericPopulation:
         distribution = GenericWorld.GenericPopulation.GenericDistribution()
         if population.distribution is not None:
             distribution.type = population.distribution.type
@@ -208,15 +210,14 @@ class Converter(FactoryBase):
             distribution.rows = population.distribution.rows
 
         return GenericWorld.GenericPopulation(
-            name = population.name,
-            pose = population.pose,
+            name=population.name,
+            pose=population.pose,
             model_count=population.model_count,
             distribution=distribution,
             box=population.box,
             cylinder=population.cylinder,
-            model=self._to_generic_model(population.model)
+            model=self._to_generic_model(population.model),
         )
-
 
     def _to_generic_world(self, world: v17.World) -> GenericWorld:
         return GenericWorld(

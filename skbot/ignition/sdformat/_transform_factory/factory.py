@@ -73,7 +73,7 @@ class FactoryBase:
             )
         return transform_factory(sdf, root_uri=root_uri)[0]
 
-    def _convert_frame(self, scope:"Scope", frame:GenericFrame):
+    def _convert_frame(self, scope: "Scope", frame: GenericFrame):
         scope.declare_frame(frame.name)
         scope.add_scaffold(frame.name, frame.pose.value, frame.pose.relative_to)
         scope.declare_link(DynamicPose(frame.attached_to, frame.name))
@@ -402,9 +402,7 @@ class FactoryBase:
 
             # double-check if this is correct
             world_scope.add_scaffold(include.name, "0 0 0 0 0 0")
-            world_scope.declare_link(
-                SimplePose("world", include.name, "0 0 0 0 0 0")
-            )
+            world_scope.declare_link(SimplePose("world", include.name, "0 0 0 0 0 0"))
 
         # TODO: GUI
         # TODO: scene

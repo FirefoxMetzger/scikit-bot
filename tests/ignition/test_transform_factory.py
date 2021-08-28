@@ -107,7 +107,7 @@ def test_poses():
     assert np.allclose(origin_b, (0, 0, 0))
     assert np.allclose(origin_c, (0, 0, 0))
     assert np.allclose(origin_d, (1, 2, 3))
-    
+
     # test vector x
     vector_a = frame_a.transform((1, 0, 0), world)
     vector_b = frame_b.transform((1, 0, 0), world)
