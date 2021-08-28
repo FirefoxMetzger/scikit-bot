@@ -120,7 +120,6 @@ def sdf_string(request):
         "sdformat/box_bad_test.sdf",
         "sdformat/model_frame_attached_to_nested_model.sdf",
         "sdformat/model_invalid_canonical_link.sdf",
-        "sdformat/panda_world.sdf",
         "sdformat/includes_1.5.sdf",
         "sdformat/model_duplicate_links.sdf",
         "sdformat/joint_parent_world.sdf",
@@ -256,7 +255,6 @@ def v18_sdf_refuted(request):
         "sdformat/model_multi_nested_model.sdf",
         "sdformat/model_nested_model_relative_to.sdf",
         "sdformat/nested_canonical_link.sdf",
-        "sdformat/panda_world.sdf",
         "sdformat/root_duplicate_models.sdf",
         "sdformat/scene_with_sky.sdf",
         "sdformat/sensors.sdf",
@@ -266,7 +264,6 @@ def v18_sdf_refuted(request):
         "sdformat/world_with_state.sdf",
         "v17/light_only.sdf",
         "v17/crooked_double_pendulum.sdf",
-        "v17/environment.sdf",
     ]
 )
 def v17_sdf(request):
