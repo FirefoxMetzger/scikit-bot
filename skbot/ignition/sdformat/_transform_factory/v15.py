@@ -160,13 +160,17 @@ class Converter(FactoryBase):
             "inertial": None,
             "projector": None,
             "sensors": [self._to_generic_sensor(sensor) for sensor in link.sensor],
+            "frames": [self._to_generic_frame(f) for f in link.frame]
             # lights may not be part of SDF 1.5; tracking issue:
             #
             # "lights": [self._to_generic_light(light) for light in link.light],
         }
 
         if link.inertial is not None:
-            el = GenericLink.Inertial(pose=GenericPose(relative_to=link.name))
+            el = GenericLink.Inertial(
+                pose=GenericPose(relative_to=link.name),
+                frames=[self._to_generic_frame(f) for f in link.inertial.frame],
+            )
             if link.inertial.pose is not None:
                 el.pose.value = link.inertial.pose.value
                 if link.inertial.pose.frame is not None:
@@ -237,16 +241,28 @@ class Converter(FactoryBase):
             distribution.cols = population.distribution.cols
             distribution.rows = population.distribution.rows
 
-        return GenericWorld.GenericPopulation(
+        generic_population = GenericWorld.GenericPopulation(
             name=population.name,
             pose=self._to_generic_pose(population.pose),
             model_count=population.model_count,
             distribution=distribution,
-            box=population.box,
-            cylinder=population.cylinder,
             model=self._to_generic_model(population.model),
             frames=[self._to_generic_frame(x) for x in population.frame],
         )
+
+        if population.box is not None:
+            generic_population.box = GenericWorld.GenericPopulation.GenericBox(
+                size=population.box.size
+            )
+
+        if population.cylinder is not None:
+            generic_population.cylinder = (
+                GenericWorld.GenericPopulation.GenericCylinder(
+                    radius=population.cylinder.radius, length=population.cylinder.length
+                )
+            )
+
+        return generic_population
 
     def _to_generic_world(self, world: v15.World) -> GenericWorld:
         return GenericWorld(

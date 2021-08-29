@@ -162,7 +162,7 @@ class GenericLink(PoseBearing):
             self, *, pose: GenericPose = None, frames: List["GenericFrame"] = None
         ) -> None:
             super().__init__(pose=pose)
-            self.frames = None
+            self.frames = frames
 
             if self.frames is None:
                 self.frames = list()
@@ -275,7 +275,7 @@ class GenericWorld:
             name: str,
             pose: GenericPose = None,
             model_count: int = 1,
-            distribution: "GenericDistribution" = None,
+            distribution: "GenericDistribution",
             box: "GenericBox" = None,
             cylinder: "GenericCylinder" = None,
             model: GenericModel,
@@ -289,9 +289,6 @@ class GenericWorld:
             self.model = model
             self.frames = frames
 
-            if distribution is None:
-                self.distribution = GenericWorld.GenericPopulation.GenericDistribution()
-
             if frames is None:
                 self.frames = list()
 
@@ -303,16 +300,11 @@ class GenericWorld:
                 rows: int = 1,
                 cols: int = 1,
                 step: Tuple[float] = (0.5, 0.5, 0),
-                frame: List["GenericFrame"] = None,
             ):
                 self.type = kind
                 self.rows = rows
                 self.cols = cols
                 self.step = step
-                self.frame = frame
-
-                if self.frame is None:
-                    self.frame = list()
 
         class GenericBox:
             def __init__(self, *, size: Tuple[float] = (1, 1, 1)) -> None:

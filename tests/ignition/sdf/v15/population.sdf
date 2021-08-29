@@ -8,6 +8,7 @@
                     <must_be_base_link>true</must_be_base_link>
                 </link>
             </model>
+            <box></box>
         </population>
         <population name="population2">
             <pose>3 3 3 0 0 0</pose>
@@ -22,6 +23,7 @@
                 <rows>2</rows>
                 <cols>7</cols>
             </distribution>
+            <cylinder></cylinder>
         </population>
     </world>
 </sdf>
