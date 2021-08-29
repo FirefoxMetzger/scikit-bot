@@ -1,0 +1,10 @@
+<?xml version="1.0" ?>
+<sdf version="1.8">
+  <model name="parent_model">
+    <include>
+      <uri>https://fuel.ignitionrobotics.org/1.0/AndrejOrsula/models/fidget_spinner</uri>
+      <pose>0 0 0 0 -0 1.5708</pose>
+      <placement_frame>rotor</placement_frame>
+    </include>
+  </model>
+</sdf>

@@ -1,0 +1,9 @@
+<?xml version="1.0" ?>
+<sdf version="1.8">
+  <world name="world">
+    <include>
+      <uri>https://fuel.ignitionrobotics.org/1.0/Gambit/models/Pitcher Base</uri>
+      <pose>0 0 0 0 -0 1.5708</pose>
+    </include>
+  </world>
+</sdf>

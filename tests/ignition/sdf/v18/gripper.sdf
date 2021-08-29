@@ -1,0 +1,24 @@
+<?xml version="1.0" ?>
+<sdf version="1.8">
+    <model name="camera_model">
+        <link name="A">
+            <pose>1 2 3 0 0 0</pose>
+            <must_be_base_link>true</must_be_base_link>
+        </link>
+        <link name="B">
+            <pose>0 0 0 0 0 1.57079632679</pose>
+            <must_be_base_link>true</must_be_base_link>
+        </link>
+        <link name="C">
+            <pose>0 0 0 1.57079632679 0 1.57079632679</pose>
+            <must_be_base_link>true</must_be_base_link>
+        </link>
+        <link name="D">
+            <pose>1 2 3 1.57079632679 0 1.57079632679</pose>
+        </link>
+        <gripper name="gripper">
+            <gripper_link></gripper_link>
+            <palm_link>D</palm_link>
+        </gripper>
+    </model>
+</sdf>

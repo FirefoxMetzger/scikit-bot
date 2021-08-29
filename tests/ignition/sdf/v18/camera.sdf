@@ -1,0 +1,20 @@
+<?xml version="1.0" ?>
+<sdf version="1.8">
+  <model name="camera_model">
+    <link name="random_link" />
+    <link name="camera_link">
+        <pose>1 2 3 0 0 0</pose>
+        <sensor name="camera_sensor" type="camera">
+            <camera></camera>
+        </sensor>
+    </link>
+    <joint name="a_joint" type="fixed">
+        <pose>1 0 1 0 0 0</pose>
+        <parent>random_link</parent>
+        <child>camera_link</child>
+        <sensor name="camera_sensor" type="camera">
+            <camera></camera>
+        </sensor>
+    </joint>
+  </model>
+</sdf>

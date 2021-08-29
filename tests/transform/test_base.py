@@ -84,3 +84,16 @@ def test_compound_frame(vec_child, vec_parent):
 
     out = pose.__inverse_transform__(vec_parent)
     assert np.allclose(out, vec_child)
+
+
+def test_named_transform_chain():
+    link = tf.Translation((1, 0))
+
+    a = tf.Frame(2, name="foo")
+    x = link(a)
+    y = link(x)
+    z = link(y)
+
+    elements = z.transform_chain("foo")
+
+    assert len(elements) == 3

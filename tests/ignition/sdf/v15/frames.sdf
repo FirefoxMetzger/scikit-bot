@@ -1,0 +1,18 @@
+<?xml version="1.0" ?>
+<sdf version='1.5'>
+  <model name="model_frame_attached_to">
+    <link name="L"/>
+    <frame name="F00"/>                  <!-- VALID: Indirectly attached_to canonical link L via the model frame. -->
+    <frame name="F0" attached_to=""/>    <!-- VALID: Indirectly attached_to canonical link L via the model frame. -->
+    <frame name="F1" attached_to="L"/>   <!-- VALID: Directly attached_to link L. -->
+    <frame name="F2" attached_to="F1"/>  <!-- VALID: Indirectly attached_to link L via frame F1. -->
+    <link name="L2">
+      <frame name="FA"/>
+    </link>
+    <joint name="joint" type="fixed">
+      <parent>L</parent>
+      <child>L2</child>
+      <frame name="FB"/>
+    </joint>
+  </model>
+</sdf>

@@ -63,18 +63,6 @@ def test_idempotence(valid_sdf_string):
 
 
 def test_force_version():
-    sdf_file = Path(__file__).parent / "sdf" / "empty.sdf"
+    sdf_file = Path(__file__).parent / "sdf" / "sdformat" / "empty.sdf"
 
     ign.sdformat.loads(sdf_file.read_text(), version="1.8")
-
-
-def test_light(light_sdf):
-    frames, _ = ign.create_frame_graph(light_sdf)
-
-    # check if all frames were created
-    assert all(key in frames.keys() for key in ["/sdf", "/sdf/point_light"])
-
-    # check if the origin is where it belongs
-    result = frames["/sdf/point_light"].transform((0, 0, 0), "/sdf")
-    expected = (0, 2, 2)
-    assert np.allclose(result, expected)

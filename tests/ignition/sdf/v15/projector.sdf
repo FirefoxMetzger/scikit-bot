@@ -1,0 +1,9 @@
+<?xml version="1.0" ?>
+<sdf version="1.5">
+  <model name="model">
+    <link name="link">
+        <pose>1 2 3 0 0 0</pose>
+        <projector name="my_projector"></projector>
+    </link>
+  </model>
+</sdf>

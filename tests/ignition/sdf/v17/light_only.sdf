@@ -1,0 +1,12 @@
+<?xml version="1.0" ?>
+<sdf version="1.7">
+  <light name="directional_light" type="directional">
+      <pose>0 10 20 0 0 0</pose>
+      <attenuation>
+        <range>-123.5</range>
+        <linear>-1.0</linear>
+        <constant>2.0</constant>
+        <quadratic>-100.2</quadratic>
+      </attenuation>
+    </light>
+</sdf>

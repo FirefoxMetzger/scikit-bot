@@ -1,0 +1,11 @@
+<?xml version="1.0" ?>
+<sdf version="1.8">
+  <model name="camera_model">
+    <link name="camera_link">
+        <pose>1 2 3 0 0 0</pose>
+        <audio_source>
+          <uri>/dev/radio0</uri>
+        </audio_source>
+    </link>
+  </model>
+</sdf>

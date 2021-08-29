@@ -1,0 +1,10 @@
+<?xml version="1.0" ?>
+<sdf version="1.8">
+  <model name="parent_model">
+    <frame name="awesome_frame"><pose>1 2 3 0 0 0</pose></frame>
+    <include>
+      <uri>https://fuel.ignitionrobotics.org/1.0/Gambit/models/Pitcher Base</uri>
+      <pose relative_to="awesome_frame">0 0 0 0 -0 1.5708</pose>
+    </include>
+  </model>
+</sdf>

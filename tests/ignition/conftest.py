@@ -32,111 +32,109 @@ def sdf_string(request):
 
 @pytest.fixture(
     params=[
-        "link_duplicate_cousin_visuals.sdf",
-        "world_sibling_same_names.sdf",
-        "root_multiple_models.sdf",
-        "joint_sensors.sdf",
-        "scene_with_sky.sdf",
-        "material_script_no_uri.sdf",
-        "double_pendulum.sdf",
-        "bad_syntax_pose.sdf",
-        "joint_invalid_resolved_parent_same_as_child.sdf",
-        "model_link_relative_to.sdf",
-        "light.sdf",
-        "model_invalid_frame_relative_to_cycle.sdf",
-        "model_relative_to_nested_reference.sdf",
-        "model_nested_static_model.sdf",
-        "inertial_complete.sdf",
-        "model_multi_nested_model.sdf",
-        # "world_with_state.sdf",  # disabled. See: https://github.com/ignitionrobotics/sdformat/issues/653
-        "material_normal_map_missing.sdf",
-        "model_without_links.sdf",
-        "model_frame_relative_to.sdf",
-        "joint_parent_frame.sdf",
-        "includes_missing_uri.sdf",
-        "includes_missing_model.sdf",
-        "joint_invalid_parent_same_as_child.sdf",
-        "world_frame_relative_to.sdf",
-        "whitespace.sdf",
-        "flattened_test_nested_model_with_frames.sdf",
-        "empty_road_sph_coords.sdf",
-        "world_nested_frame.sdf",
-        "joint_complete.sdf",
-        "world_frame_attached_to.sdf",
-        "world_frame_invalid_attached_to_scope.sdf",
-        "bad_syntax_double.sdf",
-        "material_valid.sdf",
-        "joint_invalid_self_parent.sdf",
-        "world_nested_model.sdf",
-        "model_frame_attached_to.sdf",
-        "placement_frame.sdf",
-        "empty.sdf",
-        "joint_axis_xyz_normalization.sdf",
-        "joint_child_world.sdf",
-        "includes_model_without_sdf.sdf",
-        "world_invalid_root_reference.sdf",
-        "model_invalid_joint_relative_to.sdf",
-        "world_frame_invalid_attached_to.sdf",
-        "link_duplicate_sibling_visuals.sdf",
-        "inertial_invalid.sdf",
-        "model_nested_model_relative_to.sdf",
-        "material.sdf",
-        "includes_without_top_level.sdf",
-        "include_with_interface_api_reposture.sdf",
-        "joint_axis_infinite_limits.sdf",
-        "nested_model_cross_references.sdf",
-        "model_frame_relative_to_joint.sdf",
-        "link_duplicate_sibling_collisions.sdf",
-        "bad_syntax_vector.sdf",
-        "world_duplicate.sdf",
-        "model_invalid_reserved_names.sdf",
-        "model_invalid_link_relative_to.sdf",
-        "box_plane_low_friction_test.sdf",
-        "model_joint_axis_expressed_in.sdf",
-        "nested_explicit_canonical_link.sdf",
-        "model_frame_attached_to_joint.sdf",
-        "nested_canonical_link.sdf",
-        "root_duplicate_models.sdf",
-        "material_invalid.sdf",
-        "link_duplicate_cousin_collisions.sdf",
-        "joint_invalid_parent.sdf",
-        "model_frame_invalid_attached_to.sdf",
-        "joint_invalid_self_child.sdf",
-        "model_invalid_root_reference.sdf",
-        "joint_invalid_child.sdf",
-        "joint_nested_parent_child.sdf",
-        "world_relative_to_nested_reference.sdf",
-        # "sensors.sdf",  # disabled. See: https://github.com/ignitionrobotics/sdformat/issues/653
-        "joint_child_frame.sdf",
-        "ignore_sdf_in_plugin.sdf",
-        "model_nested_frame_attached_to.sdf",
-        "model_with_placement_frame_attribute.sdf",
-        "model_canonical_link.sdf",
-        "include_with_interface_api_frame_semantics.sdf",
-        "model_invalid_frame_relative_to.sdf",
-        "world_noname.sdf",
-        "model_duplicate_joints.sdf",
-        "shapes_world.sdf",
-        "world_model_frame_same_name.sdf",
-        "box_bad_test.sdf",
-        "model_frame_attached_to_nested_model.sdf",
-        "model_invalid_canonical_link.sdf",
-        "panda_world.sdf",
-        "includes_1.5.sdf",
-        "model_duplicate_links.sdf",
-        "joint_parent_world.sdf",
-        "world_frame_invalid_relative_to.sdf",
-        "model_invalid_placement_frame.sdf",
-        "model_frame_invalid_attached_to_cycle.sdf",
-        "model_joint_relative_to.sdf",
-        "nested_without_links_invalid.sdf",
-        "world_nested_frame_attached_to.sdf",
-        "model_link_joint_same_name.sdf",
-        "nested_model.sdf",
-        "empty_axis.sdf",
-        "placement_frame_missing_pose.sdf",
-        "nested_multiple_elements_error_world.sdf",
-        "audio_14.sdf",
+        "sdformat/link_duplicate_cousin_visuals.sdf",
+        "sdformat/world_sibling_same_names.sdf",
+        "sdformat/root_multiple_models.sdf",
+        "sdformat/joint_sensors.sdf",
+        "sdformat/scene_with_sky.sdf",
+        "sdformat/material_script_no_uri.sdf",
+        "sdformat/double_pendulum.sdf",
+        "sdformat/bad_syntax_pose.sdf",
+        "sdformat/joint_invalid_resolved_parent_same_as_child.sdf",
+        "sdformat/model_link_relative_to.sdf",
+        "sdformat/light.sdf",
+        "sdformat/model_invalid_frame_relative_to_cycle.sdf",
+        "sdformat/model_relative_to_nested_reference.sdf",
+        "sdformat/model_nested_static_model.sdf",
+        "sdformat/inertial_complete.sdf",
+        "sdformat/model_multi_nested_model.sdf",
+        # "sdformat/world_with_state.sdf",  # disabled. See: https://github.com/ignitionrobotics/sdformat/issues/653
+        "sdformat/material_normal_map_missing.sdf",
+        "sdformat/model_without_links.sdf",
+        "sdformat/model_frame_relative_to.sdf",
+        "sdformat/joint_parent_frame.sdf",
+        "sdformat/includes_missing_uri.sdf",
+        "sdformat/includes_missing_model.sdf",
+        "sdformat/joint_invalid_parent_same_as_child.sdf",
+        "sdformat/world_frame_relative_to.sdf",
+        "sdformat/whitespace.sdf",
+        "sdformat/flattened_test_nested_model_with_frames.sdf",
+        "sdformat/empty_road_sph_coords.sdf",
+        "sdformat/world_nested_frame.sdf",
+        "sdformat/joint_complete.sdf",
+        "sdformat/world_frame_attached_to.sdf",
+        "sdformat/world_frame_invalid_attached_to_scope.sdf",
+        "sdformat/bad_syntax_double.sdf",
+        "sdformat/material_valid.sdf",
+        "sdformat/joint_invalid_self_parent.sdf",
+        "sdformat/world_nested_model.sdf",
+        "sdformat/model_frame_attached_to.sdf",
+        "sdformat/empty.sdf",
+        "sdformat/joint_axis_xyz_normalization.sdf",
+        "sdformat/joint_child_world.sdf",
+        "sdformat/includes_model_without_sdf.sdf",
+        "sdformat/world_invalid_root_reference.sdf",
+        "sdformat/model_invalid_joint_relative_to.sdf",
+        "sdformat/world_frame_invalid_attached_to.sdf",
+        "sdformat/link_duplicate_sibling_visuals.sdf",
+        "sdformat/inertial_invalid.sdf",
+        "sdformat/model_nested_model_relative_to.sdf",
+        "sdformat/material.sdf",
+        "sdformat/includes_without_top_level.sdf",
+        "sdformat/include_with_interface_api_reposture.sdf",
+        "sdformat/joint_axis_infinite_limits.sdf",
+        "sdformat/nested_model_cross_references.sdf",
+        "sdformat/model_frame_relative_to_joint.sdf",
+        "sdformat/link_duplicate_sibling_collisions.sdf",
+        "sdformat/bad_syntax_vector.sdf",
+        "sdformat/world_duplicate.sdf",
+        "sdformat/model_invalid_reserved_names.sdf",
+        "sdformat/model_invalid_link_relative_to.sdf",
+        "sdformat/box_plane_low_friction_test.sdf",
+        "sdformat/model_joint_axis_expressed_in.sdf",
+        "sdformat/nested_explicit_canonical_link.sdf",
+        "sdformat/model_frame_attached_to_joint.sdf",
+        "sdformat/nested_canonical_link.sdf",
+        "sdformat/root_duplicate_models.sdf",
+        "sdformat/material_invalid.sdf",
+        "sdformat/link_duplicate_cousin_collisions.sdf",
+        "sdformat/joint_invalid_parent.sdf",
+        "sdformat/model_frame_invalid_attached_to.sdf",
+        "sdformat/joint_invalid_self_child.sdf",
+        "sdformat/model_invalid_root_reference.sdf",
+        "sdformat/joint_invalid_child.sdf",
+        "sdformat/joint_nested_parent_child.sdf",
+        "sdformat/world_relative_to_nested_reference.sdf",
+        # "sdformat/sensors.sdf",  # disabled. See: https://github.com/ignitionrobotics/sdformat/issues/653
+        "sdformat/joint_child_frame.sdf",
+        "sdformat/ignore_sdf_in_plugin.sdf",
+        "sdformat/model_nested_frame_attached_to.sdf",
+        "sdformat/model_with_placement_frame_attribute.sdf",
+        "sdformat/model_canonical_link.sdf",
+        "sdformat/include_with_interface_api_frame_semantics.sdf",
+        "sdformat/model_invalid_frame_relative_to.sdf",
+        "sdformat/world_noname.sdf",
+        "sdformat/model_duplicate_joints.sdf",
+        "sdformat/shapes_world.sdf",
+        "sdformat/world_model_frame_same_name.sdf",
+        "sdformat/box_bad_test.sdf",
+        "sdformat/model_frame_attached_to_nested_model.sdf",
+        "sdformat/model_invalid_canonical_link.sdf",
+        "sdformat/includes_1.5.sdf",
+        "sdformat/model_duplicate_links.sdf",
+        "sdformat/joint_parent_world.sdf",
+        "sdformat/world_frame_invalid_relative_to.sdf",
+        "sdformat/model_invalid_placement_frame.sdf",
+        "sdformat/model_frame_invalid_attached_to_cycle.sdf",
+        "sdformat/model_joint_relative_to.sdf",
+        "sdformat/nested_without_links_invalid.sdf",
+        "sdformat/world_nested_frame_attached_to.sdf",
+        "sdformat/model_link_joint_same_name.sdf",
+        "sdformat/nested_model.sdf",
+        "sdformat/empty_axis.sdf",
+        "sdformat/placement_frame_missing_pose.sdf",
+        "sdformat/nested_multiple_elements_error_world.sdf",
+        "sdformat/audio_14.sdf",
     ]
 )
 def valid_sdf_string(request):
@@ -146,24 +144,260 @@ def valid_sdf_string(request):
 
 @pytest.fixture(
     params=[
-        "material_pbr.sdf",
-        "empty_invalid.sdf",
-        "ignore_sdf_in_namespaced_elements.sdf",
-        "model_include_with_interface_api.sdf",
-        "stricter_semantics_desc.sdf",
-        "custom_and_unknown_elements.sdf",
-        "unrecognized_elements.sdf",
-        "unrecognized_elements_with_namespace.sdf",
-        "world_include_with_interface_api.sdf",
-        "world_valid_root_reference.sdf",
-        "world_complete.sdf",
-        "shapes.sdf",
-        "includes.sdf",
-        "invalid_version.sdf",
-        "empty_noversion.sdf",
+        "sdformat/material_pbr.sdf",
+        "sdformat/empty_invalid.sdf",
+        "sdformat/ignore_sdf_in_namespaced_elements.sdf",
+        "sdformat/model_include_with_interface_api.sdf",
+        "sdformat/stricter_semantics_desc.sdf",
+        "sdformat/custom_and_unknown_elements.sdf",
+        "sdformat/unrecognized_elements.sdf",
+        "sdformat/unrecognized_elements_with_namespace.sdf",
+        "sdformat/world_include_with_interface_api.sdf",
+        "sdformat/world_complete.sdf",
+        "sdformat/shapes.sdf",
+        "sdformat/includes.sdf",
+        "sdformat/invalid_version.sdf",
+        "sdformat/empty_noversion.sdf",
     ]
 )
 def invalid_sdf_string(request):
+    filename = request.param
+    return (sdf_folder / filename).read_text()
+
+
+@pytest.fixture(
+    params=[
+        "sdformat/joint_child_frame.sdf",
+        "sdformat/joint_invalid_resolved_parent_same_as_child.sdf",
+        "sdformat/joint_invalid_self_child.sdf",
+        "sdformat/joint_invalid_self_parent.sdf",
+        "sdformat/joint_nested_parent_child.sdf",
+        "sdformat/joint_parent_frame.sdf",
+        "sdformat/material_invalid.sdf",
+        "sdformat/material_valid.sdf",
+        "sdformat/model_invalid_placement_frame.sdf",
+        "sdformat/model_nested_frame_attached_to.sdf",
+        "sdformat/model_relative_to_nested_reference.sdf",
+        "sdformat/model_with_placement_frame_attribute.sdf",
+        "sdformat/nested_explicit_canonical_link.sdf",
+        "sdformat/nested_model_cross_references.sdf",
+        "sdformat/shapes_world.sdf",
+        "sdformat/world_nested_frame_attached_to.sdf",
+        "sdformat/world_nested_frame.sdf",
+        "sdformat/world_relative_to_nested_reference.sdf",
+        "v18/audio_source.sdf",
+        "v18/camera.sdf",
+        "v18/complete_world.sdf",
+        "v18/crooked_double_pendulum.sdf",
+        "v18/fuel_include_no_pose.sdf",
+        "v18/fuel_include_placement_frame.sdf",
+        "v18/fuel_include_relative_to.sdf",
+        "v18/fuel_include_rename.sdf",
+        "v18/fuel_include.sdf",
+        "v18/gripper.sdf",
+        "v18/light_only.sdf",
+        "v18/population.sdf",
+        "v18/pose_testing.sdf",
+        "v18/projector.sdf",
+        "v18/world_with_state.sdf",
+        "v18/fuel_include_world.sdf",
+    ]
+)
+def v18_sdf(request):
+    filename = request.param
+    return (sdf_folder / filename).read_text()
+
+
+@pytest.fixture(
+    params=[
+        "sdformat/include_with_interface_api_frame_semantics.sdf",
+        "sdformat/include_with_interface_api_reposture.sdf",
+        "sdformat/includes_missing_model.sdf",
+        "sdformat/includes_missing_uri.sdf",
+        "sdformat/includes_model_without_sdf.sdf",
+        "sdformat/includes_without_top_level.sdf",
+        "sdformat/includes.sdf",
+        "sdformat/model_include_with_interface_api.sdf",
+        "sdformat/model_invalid_root_reference.sdf",
+        "sdformat/model_nested_static_model.sdf",
+        "sdformat/nested_multiple_elements_error_world.sdf",
+        "sdformat/placement_frame_missing_pose.sdf",
+        "sdformat/unrecognized_elements_with_namespace.sdf",
+        "sdformat/world_frame_invalid_attached_to_scope.sdf",
+        "sdformat/world_include_with_interface_api.sdf",
+        "sdformat/world_invalid_root_reference.sdf",
+        "v18/fuel_include_unknown_server.sdf",
+        "v18/invalid_joint_type.sdf",
+        "v18/invalid_same_scope_twice.sdf",
+        "v18/invalid_sensor_type.sdf",
+    ]
+)
+def v18_sdf_refuted(request):
+    # refuted means that the XML validates, but doesn't verify
+    filename = request.param
+    return (sdf_folder / filename).read_text()
+
+
+@pytest.fixture(
+    params=[
+        "sdformat/empty_road_sph_coords.sdf",
+        "sdformat/flattened_test_nested_model_with_frames.sdf",
+        "sdformat/ignore_sdf_in_plugin.sdf",
+        "sdformat/joint_sensors.sdf",
+        "sdformat/material.sdf",
+        "sdformat/model_canonical_link.sdf",
+        "sdformat/model_frame_attached_to_joint.sdf",
+        "sdformat/model_frame_attached_to_nested_model.sdf",
+        "sdformat/model_frame_attached_to.sdf",
+        "sdformat/model_frame_invalid_attached_to_cycle.sdf",
+        "sdformat/model_frame_relative_to_joint.sdf",
+        "sdformat/model_frame_relative_to.sdf",
+        "sdformat/model_joint_axis_expressed_in.sdf",
+        "sdformat/model_joint_relative_to.sdf",
+        "sdformat/model_link_relative_to.sdf",
+        "sdformat/model_multi_nested_model.sdf",
+        "sdformat/model_nested_model_relative_to.sdf",
+        "sdformat/nested_canonical_link.sdf",
+        "sdformat/root_duplicate_models.sdf",
+        "sdformat/scene_with_sky.sdf",
+        "sdformat/sensors.sdf",
+        # "sdformat/world_complete.sdf",  # potentially broken file. Tracking Issue: https://github.com/ignitionrobotics/sdformat/issues/670
+        "sdformat/world_frame_attached_to.sdf",
+        "sdformat/world_frame_relative_to.sdf",
+        "sdformat/world_with_state.sdf",
+        "v17/light_only.sdf",
+        "v17/crooked_double_pendulum.sdf",
+        "v17/population.sdf",
+        "v17/fuel_include.sdf",
+    ]
+)
+def v17_sdf(request):
+    filename = request.param
+    return (sdf_folder / filename).read_text()
+
+
+@pytest.fixture(
+    params=[
+        "sdformat/custom_and_unknown_elements.sdf",
+        "sdformat/ignore_sdf_in_namespaced_elements.sdf",
+        "sdformat/model_frame_invalid_attached_to.sdf",
+        "sdformat/model_invalid_canonical_link.sdf",
+        "sdformat/model_invalid_frame_relative_to_cycle.sdf",
+        "sdformat/model_invalid_frame_relative_to.sdf",
+        "sdformat/model_invalid_joint_relative_to.sdf",
+        "sdformat/model_invalid_link_relative_to.sdf",
+        "sdformat/model_invalid_reserved_names.sdf",
+        "sdformat/model_without_links.sdf",
+        "sdformat/nested_without_links_invalid.sdf",
+        "sdformat/root_multiple_models.sdf",
+        "sdformat/world_frame_invalid_attached_to.sdf",
+        "sdformat/world_frame_invalid_relative_to.sdf",
+        "sdformat/world_model_frame_same_name.sdf",
+    ]
+)
+def v17_sdf_refuted(request):
+    filename = request.param
+    return (sdf_folder / filename).read_text()
+
+
+@pytest.fixture(
+    params=[
+        "sdformat/link_duplicate_cousin_visuals.sdf",
+        "sdformat/world_sibling_same_names.sdf",
+        "sdformat/material_script_no_uri.sdf",
+        "sdformat/material_pbr.sdf",
+        "sdformat/double_pendulum.sdf",
+        "sdformat/bad_syntax_pose.sdf",
+        "sdformat/inertial_complete.sdf",
+        "sdformat/material_normal_map_missing.sdf",
+        "sdformat/joint_invalid_parent_same_as_child.sdf",
+        "sdformat/whitespace.sdf",
+        "sdformat/joint_complete.sdf",
+        "sdformat/bad_syntax_double.sdf",
+        "sdformat/world_nested_model.sdf",
+        "sdformat/empty.sdf",
+        "sdformat/joint_axis_xyz_normalization.sdf",
+        "sdformat/joint_child_world.sdf",
+        "sdformat/link_duplicate_sibling_visuals.sdf",
+        "sdformat/inertial_invalid.sdf",
+        "sdformat/joint_axis_infinite_limits.sdf",
+        "sdformat/link_duplicate_sibling_collisions.sdf",
+        "sdformat/bad_syntax_vector.sdf",
+        "sdformat/world_duplicate.sdf",
+        "sdformat/link_duplicate_cousin_collisions.sdf",
+        "sdformat/joint_invalid_parent.sdf",
+        "sdformat/joint_invalid_child.sdf",
+        "sdformat/unrecognized_elements.sdf",
+        "sdformat/world_noname.sdf",
+        "sdformat/model_duplicate_joints.sdf",
+        "sdformat/box_bad_test.sdf",
+        "sdformat/model_duplicate_links.sdf",
+        "sdformat/joint_parent_world.sdf",
+        "sdformat/shapes.sdf",
+        "sdformat/model_link_joint_same_name.sdf",
+        "sdformat/nested_model.sdf",
+        "sdformat/empty_axis.sdf",
+    ]
+)
+def v16_sdf(request):
+    filename = request.param
+    return (sdf_folder / filename).read_text()
+
+
+@pytest.fixture(
+    params=[
+        "sdformat/light.sdf",
+        "sdformat/box_plane_low_friction_test.sdf",
+        "v15/camera.sdf",
+        "v15/pose_testing.sdf",
+        "v15/population.sdf",
+        "v15/projector.sdf",
+        "v15/joint_attached_to_parent.sdf",
+        "v15/force_torque.sdf",
+        "v15/frames.sdf",
+        "v15/light_only.sdf",
+        "robots/double_pendulum/model.sdf",
+    ]
+)
+def v15_sdf(request):
+    filename = request.param
+    return (sdf_folder / filename).read_text()
+
+
+@pytest.fixture(
+    params=[
+        "sdformat/includes_1.5.sdf",
+    ]
+)
+def v15_sdf_refuted(request):
+    filename = request.param
+    return (sdf_folder / filename).read_text()
+
+
+@pytest.fixture(
+    params=[
+        "sdformat/audio_14.sdf",
+    ]
+)
+def v14_sdf(request):
+    filename = request.param
+    return (sdf_folder / filename).read_text()
+
+
+@pytest.fixture(params=[])
+def v13_sdf(request):
+    filename = request.param
+    return (sdf_folder / filename).read_text()
+
+
+@pytest.fixture(params=[])
+def v12_sdf(request):
+    filename = request.param
+    return (sdf_folder / filename).read_text()
+
+
+@pytest.fixture(params=[])
+def v10_sdf(request):
     filename = request.param
     return (sdf_folder / filename).read_text()
 

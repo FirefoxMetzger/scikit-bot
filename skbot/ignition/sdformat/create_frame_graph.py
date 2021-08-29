@@ -6,6 +6,7 @@ from typing import List, Dict
 import requests
 from urllib.parse import urlparse
 from pathlib import Path
+import warnings
 
 from ... import transform as rtf
 
@@ -95,6 +96,13 @@ def _fetch_include_uri(
 def create_frame_graph(sdf: str) -> Tuple[Dict[str, rtf.Frame], Dict[str, rtf.Link]]:
     """Create a frame graph from a sdformat string.
 
+    .. deprecated:: 0.6.0
+        This function will be removed in skbot v1.0. Use
+        :func:``skbot.ignition.to_frame_graph`` instead. To find frames in the
+        frame graph returned by ``to_frame_graph`` use
+        :func:``skbot.transform.Frame.find_frame``. Links/Joints can be obtained
+        from :func:``skbot.transform.Frame.transform_chain``.
+
     Parameters
     ----------
     sdformat: TextIO
@@ -119,8 +127,14 @@ def create_frame_graph(sdf: str) -> Tuple[Dict[str, rtf.Frame], Dict[str, rtf.Li
 
     """
 
+    warnings.warn(
+        """create_frame_graph is deprecated and will be removed in skbot v1.0 in
+        favor of to_frame_graph. Check the docs for detailed migration
+        instructions.
+        """
+    )
+
     root = ElementTree.fromstring(sdf)
-    tree = ElementTree.ElementTree(root)
 
     @dataclass
     class SdfQueueItem:
