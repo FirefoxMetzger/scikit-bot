@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.6.0 (2021-08-29)
+### Feature
+* SDFormat to (vectorized) frame graph ([#64](https://github.com/FirefoxMetzger/scikit-bot/issues/64)) ([`7f1d596`](https://github.com/FirefoxMetzger/scikit-bot/commit/7f1d596b3889a6a893e2e40a4a0cddae0a45354c))
+
 ## v0.5.2 (2021-08-22)
 ### Fix
 * Translation sets wrong parent/child dims ([#63](https://github.com/FirefoxMetzger/scikit-bot/issues/63)) ([`ed61ecb`](https://github.com/FirefoxMetzger/scikit-bot/commit/ed61ecbf002d72d2d92fdbf43537058b2de102fb))
