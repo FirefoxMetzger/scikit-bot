@@ -279,16 +279,21 @@ class GenericWorld:
             box: "GenericBox" = None,
             cylinder: "GenericCylinder" = None,
             model: GenericModel,
+            frames: List[GenericFrame] = None
         ) -> None:
-            super().__init__(name, pose=pose)
+            super().__init__(name=name, pose=pose)
             self.model_count = model_count
             self.distribution = distribution
             self.box = box
             self.cylinder = cylinder
             self.model = model
+            self.frames = frames
 
             if distribution is None:
                 self.distribution = GenericWorld.GenericPopulation.GenericDistribution()
+
+            if frames is None:
+                self.frames = list()
 
         class GenericDistribution:
             def __init__(

@@ -89,21 +89,22 @@ class Converter(FactoryBase):
             if sensor.camera.lens is not None:
                 raise NotImplementedError()
 
-        if sensor.camera is not None:
             sensor_args["camera"] = GenericSensor.Camera(
                 name=sensor.camera.name,
                 pose=self._to_generic_pose(sensor.camera.pose),
                 horizontal_fov=sensor.camera.horizontal_fov,
-                image=GenericSensor.Camera.Image(
-                    width=sensor.camera.image.width,
-                    height=sensor.camera.image.height,
-                    format=sensor.camera.image.format,
-                ),
                 frames=[
                     self._to_generic_frame(x, attached_to=sensor.camera.name)
                     for x in sensor.camera.frame
                 ],
             )
+
+            if sensor.camera.image is not None:
+                sensor_args["camera"].image = GenericSensor.Camera.Image(
+                    width=sensor.camera.image.width,
+                    height=sensor.camera.image.height,
+                    format=sensor.camera.image.format,
+                )
 
         return GenericSensor(**sensor_args)
 

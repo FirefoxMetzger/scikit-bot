@@ -264,6 +264,7 @@ def v18_sdf_refuted(request):
         "sdformat/world_with_state.sdf",
         "v17/light_only.sdf",
         "v17/crooked_double_pendulum.sdf",
+        "v17/population.sdf",
     ]
 )
 def v17_sdf(request):
@@ -343,6 +344,10 @@ def v16_sdf(request):
     params=[
         "sdformat/light.sdf",
         "sdformat/box_plane_low_friction_test.sdf",
+        "v15/camera.sdf",
+        "v15/pose_testing.sdf",
+        "v15/population.sdf",
+        "v15/projector.sdf",
     ]
 )
 def v15_sdf(request):
