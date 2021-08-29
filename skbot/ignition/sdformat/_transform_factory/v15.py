@@ -77,7 +77,7 @@ class Converter(FactoryBase):
             "type": sensor.type,
             "pose": self._to_generic_pose(sensor.pose),
             "frames": [
-                self._to_generic_frame(x, attached_to=sensor.name) for x in sensor.frame
+                self._to_generic_frame(x, attached_to=None) for x in sensor.frame
             ],
         }
 
@@ -94,7 +94,7 @@ class Converter(FactoryBase):
                 pose=self._to_generic_pose(sensor.camera.pose),
                 horizontal_fov=sensor.camera.horizontal_fov,
                 frames=[
-                    self._to_generic_frame(x, attached_to=sensor.camera.name)
+                    self._to_generic_frame(x, attached_to=None)
                     for x in sensor.camera.frame
                 ],
             )
@@ -160,7 +160,7 @@ class Converter(FactoryBase):
             "inertial": None,
             "projector": None,
             "sensors": [self._to_generic_sensor(sensor) for sensor in link.sensor],
-            "frames": [self._to_generic_frame(f) for f in link.frame]
+            "frames": [self._to_generic_frame(f, attached_to=link.name) for f in link.frame]
             # lights may not be part of SDF 1.5; tracking issue:
             #
             # "lights": [self._to_generic_light(light) for light in link.light],

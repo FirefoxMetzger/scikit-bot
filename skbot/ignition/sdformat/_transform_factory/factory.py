@@ -76,7 +76,11 @@ class FactoryBase:
     def _convert_frame(self, scope: "Scope", frame: GenericFrame):
         scope.declare_frame(frame.name)
         scope.add_scaffold(frame.name, frame.pose.value, frame.pose.relative_to)
-        scope.declare_link(DynamicPose(frame.attached_to, frame.name))
+
+        if frame.attached_to is None:
+            scope.declare_link(DynamicPose(scope.default_frame, frame.name))
+        else:
+            scope.declare_link(DynamicPose(frame.attached_to, frame.name))
 
     def convert_sensor(
         self, sensor: GenericSensor, scope: Scope, attached_to: NamedPoseBearing
@@ -223,7 +227,7 @@ class FactoryBase:
             scope = LightScope(light.name)
 
         for frame in light.frames:
-            self._convert_frame(frame)
+            self._convert_frame(scope, frame)
 
         scope.declare_frame(light.name)
         scope.add_scaffold(light.name, light.pose.value, light.pose.relative_to)
@@ -294,7 +298,7 @@ class FactoryBase:
             scope.declare_link(DynamicPose(link.name, light.name))
 
         for frame in link.frames:
-            self._convert_frame(frame)
+            self._convert_frame(scope, frame)
 
         return scope
 

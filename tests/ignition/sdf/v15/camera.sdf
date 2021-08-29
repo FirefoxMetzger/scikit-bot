@@ -22,8 +22,11 @@
       <pose>1 0 1 0 0 0</pose>
       <parent>random_link</parent>
       <child>camera_link</child>
-      <sensor name="camera_sensor" type="camera">
-        <camera></camera>
+      <sensor name="camera_sensor2" type="camera">
+        <frame name="frameA" />
+        <camera>
+          <frame name="frameB" />
+        </camera>
       </sensor>
     </joint>
   </model>

@@ -200,6 +200,7 @@ def invalid_sdf_string(request):
         "v18/pose_testing.sdf",
         "v18/projector.sdf",
         "v18/world_with_state.sdf",
+        "v18/fuel_include_world.sdf"
     ]
 )
 def v18_sdf(request):
@@ -354,7 +355,8 @@ def v16_sdf(request):
         "v15/joint_attached_to_parent.sdf",
         "v15/force_torque.sdf",
         "v15/frames.sdf",
-        "robots/double_pendulum/model.sdf"
+        "v15/light_only.sdf",
+        "robots/double_pendulum/model.sdf",
     ]
 )
 def v15_sdf(request):
