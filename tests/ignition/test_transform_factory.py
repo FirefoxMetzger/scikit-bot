@@ -118,3 +118,10 @@ def test_poses():
     assert np.allclose(vector_b, (0, 1, 0))
     assert np.allclose(vector_c, (0, 0, 1))
     assert np.allclose(vector_d, (1, 2, 4))
+
+
+def test_double_pendulum():
+    model_file = Path(__file__).parent / "sdf" / "robots" / "double_pendulum" / "model.sdf"
+    sdf_string = model_file.read_text()
+
+    root_frame = ign.sdformat.to_frame_graph(sdf_string)

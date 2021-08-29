@@ -348,6 +348,10 @@ def v16_sdf(request):
         "v15/pose_testing.sdf",
         "v15/population.sdf",
         "v15/projector.sdf",
+        "v15/joint_attached_to_parent.sdf",
+        "v15/force_torque.sdf",
+        "v15/frames.sdf",
+        "robots/double_pendulum/model.sdf"
     ]
 )
 def v15_sdf(request):

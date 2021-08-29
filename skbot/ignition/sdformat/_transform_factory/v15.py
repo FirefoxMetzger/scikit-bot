@@ -133,12 +133,11 @@ class Converter(FactoryBase):
         if joint.axis is not None:
             axis = GenericJoint.Axis()
 
-            if joint.axis.xyz is not None:
-                axis.xyz.value = joint.axis.xyz
-                if not joint.axis.use_parent_model_frame:
-                    axis.xyz.expressed_in = joint.child
-                else:
-                    axis.xyz.expressed_in = joint.parent
+            axis.xyz.value = joint.axis.xyz
+            if not joint.axis.use_parent_model_frame:
+                axis.xyz.expressed_in = joint.child
+            else:
+                axis.xyz.expressed_in = joint.parent
 
             joint_args["axis"] = axis
 
@@ -172,7 +171,7 @@ class Converter(FactoryBase):
                 el.pose.value = link.inertial.pose.value
                 if link.inertial.pose.frame is not None:
                     raise NotImplementedError(
-                        "Unsure how to resolve intertal/pose/@relative_to."
+                        "Unsure how to resolve /inertial/pose/@frame."
                     )
             link_args["inertial"] = el
 
