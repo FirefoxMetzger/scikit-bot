@@ -200,7 +200,7 @@ def invalid_sdf_string(request):
         "v18/pose_testing.sdf",
         "v18/projector.sdf",
         "v18/world_with_state.sdf",
-        "v18/fuel_include_world.sdf"
+        "v18/fuel_include_world.sdf",
     ]
 )
 def v18_sdf(request):
@@ -268,7 +268,7 @@ def v18_sdf_refuted(request):
         "v17/light_only.sdf",
         "v17/crooked_double_pendulum.sdf",
         "v17/population.sdf",
-        "v17/fuel_include.sdf"
+        "v17/fuel_include.sdf",
     ]
 )
 def v17_sdf(request):

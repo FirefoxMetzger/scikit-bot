@@ -121,7 +121,9 @@ def test_poses():
 
 
 def test_double_pendulum():
-    model_file = Path(__file__).parent / "sdf" / "robots" / "double_pendulum" / "model.sdf"
+    model_file = (
+        Path(__file__).parent / "sdf" / "robots" / "double_pendulum" / "model.sdf"
+    )
     sdf_string = model_file.read_text()
 
     root_frame = ign.sdformat.to_frame_graph(sdf_string)

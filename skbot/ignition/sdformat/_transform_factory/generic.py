@@ -279,7 +279,7 @@ class GenericWorld:
             box: "GenericBox" = None,
             cylinder: "GenericCylinder" = None,
             model: GenericModel,
-            frames: List[GenericFrame] = None
+            frames: List[GenericFrame] = None,
         ) -> None:
             super().__init__(name=name, pose=pose)
             self.model_count = model_count
