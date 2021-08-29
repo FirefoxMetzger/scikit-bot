@@ -9,5 +9,19 @@
                 </link>
             </model>
         </population>
+        <population name="population2">
+            <pose>3 3 3 0 0 0</pose>
+            <model name="model">
+                <link name="A">
+                    <pose>1 2 3 0 0 0</pose>
+                    <must_be_base_link>true</must_be_base_link>
+                </link>
+            </model>
+            <distribution>
+                <type>grid</type>
+                <rows>2</rows>
+                <cols>7</cols>
+            </distribution>
+        </population>
     </world>
 </sdf>

@@ -185,19 +185,21 @@ def invalid_sdf_string(request):
         "sdformat/world_nested_frame_attached_to.sdf",
         "sdformat/world_nested_frame.sdf",
         "sdformat/world_relative_to_nested_reference.sdf",
+        "v18/audio_source.sdf",
+        "v18/camera.sdf",
         "v18/complete_world.sdf",
+        "v18/crooked_double_pendulum.sdf",
+        "v18/fuel_include_no_pose.sdf",
         "v18/fuel_include_placement_frame.sdf",
+        "v18/fuel_include_relative_to.sdf",
         "v18/fuel_include_rename.sdf",
         "v18/fuel_include.sdf",
+        "v18/gripper.sdf",
         "v18/light_only.sdf",
-        "v18/fuel_include_no_pose.sdf",
-        "v18/fuel_include_relative_to.sdf",
-        "v18/crooked_double_pendulum.sdf",
-        "v18/camera.sdf",
-        "v18/world_with_state.sdf",
-        "v18/audio_source.sdf",
-        "v18/projector.sdf",
+        "v18/population.sdf",
         "v18/pose_testing.sdf",
+        "v18/projector.sdf",
+        "v18/world_with_state.sdf",
     ]
 )
 def v18_sdf(request):
@@ -207,25 +209,25 @@ def v18_sdf(request):
 
 @pytest.fixture(
     params=[
-        "sdformat/includes.sdf",
         "sdformat/include_with_interface_api_frame_semantics.sdf",
         "sdformat/include_with_interface_api_reposture.sdf",
         "sdformat/includes_missing_model.sdf",
         "sdformat/includes_missing_uri.sdf",
         "sdformat/includes_model_without_sdf.sdf",
         "sdformat/includes_without_top_level.sdf",
+        "sdformat/includes.sdf",
         "sdformat/model_include_with_interface_api.sdf",
-        "sdformat/world_frame_invalid_attached_to_scope.sdf",
-        "sdformat/world_invalid_root_reference.sdf",
-        "v18/fuel_include_unknown_server.sdf",
-        "sdformat/unrecognized_elements_with_namespace.sdf",
         "sdformat/model_invalid_root_reference.sdf",
+        "sdformat/model_nested_static_model.sdf",
         "sdformat/nested_multiple_elements_error_world.sdf",
         "sdformat/placement_frame_missing_pose.sdf",
+        "sdformat/unrecognized_elements_with_namespace.sdf",
+        "sdformat/world_frame_invalid_attached_to_scope.sdf",
         "sdformat/world_include_with_interface_api.sdf",
-        "sdformat/model_nested_static_model.sdf",
-        "v18/invalid_same_scope_twice.sdf",
+        "sdformat/world_invalid_root_reference.sdf",
+        "v18/fuel_include_unknown_server.sdf",
         "v18/invalid_joint_type.sdf",
+        "v18/invalid_same_scope_twice.sdf",
         "v18/invalid_sensor_type.sdf",
     ]
 )
@@ -265,6 +267,7 @@ def v18_sdf_refuted(request):
         "v17/light_only.sdf",
         "v17/crooked_double_pendulum.sdf",
         "v17/population.sdf",
+        "v17/fuel_include.sdf"
     ]
 )
 def v17_sdf(request):
