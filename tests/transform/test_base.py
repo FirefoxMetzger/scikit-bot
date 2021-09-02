@@ -101,7 +101,7 @@ def test_named_transform_chain():
 
 def test_inverse_attributes():
     link = tf.Translation((1, 0), amount=0.5)
-    inv_link = tf.Inverse(link)
+    inv_link = tf.InvertLink(link)
 
     hasattr(inv_link, "amount")
     assert inv_link.amount == 0.5
