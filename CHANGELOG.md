@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.6.1 (2021-09-02)
+### Fix
+* Remove pwd dependency ([#67](https://github.com/FirefoxMetzger/scikit-bot/issues/67)) ([`e645260`](https://github.com/FirefoxMetzger/scikit-bot/commit/e64526092be78393d15adf3fdd550d22a4b22e16))
+
 ## v0.6.0 (2021-08-29)
 ### Feature
 * SDFormat to (vectorized) frame graph ([#64](https://github.com/FirefoxMetzger/scikit-bot/issues/64)) ([`7f1d596`](https://github.com/FirefoxMetzger/scikit-bot/commit/7f1d596b3889a6a893e2e40a4a0cddae0a45354c))
