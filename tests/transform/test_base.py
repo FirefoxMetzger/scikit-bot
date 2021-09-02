@@ -97,3 +97,11 @@ def test_named_transform_chain():
     elements = z.transform_chain("foo")
 
     assert len(elements) == 3
+
+
+def test_inverse_attributes():
+    link = tf.Translation((1, 0), amount=0.5)
+    inv_link = tf.Inverse(link)
+
+    hasattr(inv_link, "amount")
+    assert inv_link.amount == 0.5
