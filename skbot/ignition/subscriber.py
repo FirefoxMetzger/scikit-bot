@@ -2,7 +2,7 @@ import zmq
 import subprocess
 import socket
 import os
-import pwd
+import getpass
 
 from . import messages
 
@@ -52,7 +52,7 @@ class Subscriber:
 
         # this could be streamlined by speaking the ign-transport discovery protcol
         host_name = socket.gethostname()
-        user_name = pwd.getpwuid(os.getuid())[0]
+        user_name = getpass.getuser()
         self.socket.subscribe(f"@/{host_name}:{user_name}@{topic}")
 
         if parser is None:
