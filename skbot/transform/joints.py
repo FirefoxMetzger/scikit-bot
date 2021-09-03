@@ -47,13 +47,13 @@ class PrismaticJoint(Translation):
         self,
         direction: ArrayLike,
         *,
-        upper_limit: ArrayLike,
+        upper_limit: ArrayLike = 1,
         lower_limit: ArrayLike = 0,
-        amount: ArrayLike = None,
+        amount: ArrayLike = 1,
         axis: int = -1,
     ) -> None:
-        self.upper_limit = upper_limit
-        self.lower_limit = lower_limit
+        self.upper_limit = np.asarray(upper_limit)
+        self.lower_limit = np.asarray(lower_limit)
         super().__init__(direction, amount=amount, axis=axis)
 
     @property
