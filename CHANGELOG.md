@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.7.0 (2021-09-03)
+### Feature
+* IK via CCD (cyclic coordinate descent) ([#69](https://github.com/FirefoxMetzger/scikit-bot/issues/69)) ([`556ee21`](https://github.com/FirefoxMetzger/scikit-bot/commit/556ee211e0c46b1beef3c5c6b1772c871f6d1a8a))
+
 ## v0.6.1 (2021-09-02)
 ### Fix
 * Remove pwd dependency ([#67](https://github.com/FirefoxMetzger/scikit-bot/issues/67)) ([`e645260`](https://github.com/FirefoxMetzger/scikit-bot/commit/e64526092be78393d15adf3fdd550d22a4b22e16))
