@@ -18,17 +18,23 @@ def ccd(
     *,
     metric: Callable[[np.ndarray, np.ndarray], float] = None,
     tol: float = 1e-3,
-    maxiter: int = 500
+    maxiter: int = 500,
+    line_search_maxiter: int = 500
 ) -> List[np.ndarray]:
-    """IK via Cyclic Coordinate Descent.
+    """Cyclic Coordinate Descent.
 
-    This function adjusts the parameters of the links in cycle_links such that a
-    point that has pointA as its representation in frameA has pointB as
-    representation in frameB. Parameters are fitted in a cyclical fashion, i.e.,
-    by repeatedly iterating over cycle_links. Each time the respective link's
-    parameter is updated to minimize the distance between pointB and pointA's
-    representation in frameB. Distance is measured in frameB using euclidian
-    distance or a custom metric if provided.
+    .. note::
+        This function will modify the passed-in frame graph as a side effect.
+
+    .. versionadded:: 0.7.0
+
+    This function adjusts the parameters of the links in ``cycle_links`` such that a
+    point that has ``pointA`` as its representation in ``frameA`` has ``pointB``
+    as representation in ``frameB``. Parameters are fitted in a cyclical
+    fashion, i.e., by repeatedly iterating over ``cycle_links``. Each time the
+    respective link's parameter is updated to minimize the distance between
+    ``pointB`` and ``pointA``'s representation in ``frameB``. Distance is
+    measured in frameB using euclidian distance or a custom metric if provided.
 
     Parameters
     ----------
@@ -51,6 +57,20 @@ def ccd(
         Absolute tolerance for termination.
     maxiter : int
         The maximum number of cycles to perform.
+    line_search_maxiter : int
+        The maximum number of iterations to use when optimizing a single joint.
+
+    Returns
+    -------
+    joint_values : List[float]
+        The final parameters of each joint.
+
+    Notes
+    -----
+    Joint limits (min/max) are enforced as hard constraints.
+
+    The current implementation is a naive python implementation and not very
+    optimized. PRs improving performance are welcome :)
 
     """
 
@@ -60,12 +80,18 @@ def ccd(
     if metric is None:
         metric = lambda x, y: np.linalg.norm(x - y)
 
+    transform_chain = frameA.transform_chain(frameB)
 
     def optimizely(x, current_joint):
         current_joint.param = x
-        return metric(frameA.transform(pointA, frameB), pointB)
 
-    for iter_idx in range(maxiter*len(cycle_links)):
+        current_point = pointA
+        for link in transform_chain:
+            current_point = link.transform(current_point)
+
+        return metric(current_point, pointB)
+
+    for _ in range(maxiter*len(cycle_links)):
         distance = metric(frameA.transform(pointA, frameB), pointB)
         
         if distance <= tol:
@@ -77,6 +103,9 @@ def ccd(
             lambda x: optimizely(x, current_joint),
             bounds=(current_joint.lower_limit, current_joint.upper_limit),
             method="bounded",
+            options= {
+                "maxiter": line_search_maxiter
+            }
         )
 
         if not result.success:

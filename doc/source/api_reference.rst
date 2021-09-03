@@ -8,10 +8,11 @@ Scikt-bot is structured into a set of independent modules which you can import v
 .. autosummary::
     :toctree: _autosummary
 
-    skbot.transform
-    skbot.trajectory
     skbot.ignition
+    skbot.inverse_kinematics
     skbot.ros
+    skbot.trajectory
+    skbot.transform
 
 Some modules have additional dependencies on top of the scipy stack. To
 use these modules you will have to install scikit-bot with the respective extra

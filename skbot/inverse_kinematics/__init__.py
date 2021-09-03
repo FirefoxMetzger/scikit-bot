@@ -1,10 +1,10 @@
 """
-Collection of Inverse Kinematics Algorithms
+Inverse Kinematics (IK) Algorithms.
 
 The algorithms in this module assume that the environment is expressed as a
 frame graph (see :mod:`skbot.transform`). Once this is done, the problem of
 inverse kinematics can be neatly expressed as finding parameters for a set of
-:class:`Link <skbot.transform.Link>`s such that a point (or set of points,
+:class:`Links <skbot.transform.Link>` such that a point (or set of points,
 depending on the algorithm) that has a certain representation in one frame has a
 certain representation in another frame.
 
@@ -25,7 +25,7 @@ panda's tool frame.
 Functions
 ---------
 
-.. autosummary:
+.. autosummary::
     :toctree:
 
     skbot.inverse_kinematics.ccd
