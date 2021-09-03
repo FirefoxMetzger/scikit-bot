@@ -1,3 +1,4 @@
+from skbot.transform import joints
 from typing import Callable, Dict, Union, List, Any
 import importlib
 from urllib.parse import urlparse
@@ -184,6 +185,8 @@ class FactoryBase:
                     joint_parent,
                     joint.axis.xyz.value,
                     joint.axis.xyz.expressed_in,
+                    joint.axis.limit.lower,
+                    joint.axis.limit.upper
                 )
             )
         elif joint.type == "hinge":
@@ -199,6 +202,8 @@ class FactoryBase:
                     joint_parent,
                     joint.axis.xyz.value,
                     joint.axis.xyz.expressed_in,
+                    joint.axis.limit.lower,
+                    joint.axis.limit.upper
                 )
             )
         elif joint.type == "ball":

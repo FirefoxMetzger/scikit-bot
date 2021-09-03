@@ -187,6 +187,10 @@
             <child>upper_link</child>
             <axis>
                 <xyz>1.0 0 0</xyz>
+                <limit>
+                    <lower>0</lower>
+                    <upper>3.14159265359</upper>
+                </limit>
             </axis>
         </joint>
         <!-- pin joint for lower link, at origin of child link -->
@@ -195,6 +199,10 @@
             <child>lower_link</child>
             <axis>
                 <xyz>1.0 0 0</xyz>
+                <limit>
+                    <lower>0</lower>
+                    <upper>3.14159265359</upper>
+                </limit>
             </axis>
         </joint>
     </model>

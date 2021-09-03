@@ -1,12 +1,9 @@
 from pathlib import Path
-from skbot.ignition.sdformat.bindings.v13 import sdf
-from skbot.ignition import fuel
 import pytest
 import hashlib
 from urllib.parse import quote
 from zipfile import ZipFile
 from io import BytesIO
-import cachetools
 
 import skbot.ignition as ign
 
