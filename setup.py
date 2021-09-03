@@ -24,7 +24,7 @@ extras_require = {
         "lxml == 4.6.3",
     ],
     "linting": ["flake8 == 3.9.2", "black == 21.8b0"],
-    "testing": ["pytest == 6.2.4", "coverage[toml] == 5.5"],
+    "testing": ["pytest == 6.2.5", "coverage[toml] == 5.5"],
     "dev": [
         "lxml-stubs == 0.2.0",
         "python-semantic-release == 7.19.1",
