@@ -19,7 +19,7 @@ def ccd(
     metric: Callable[[np.ndarray, np.ndarray], float] = None,
     tol: float = 1e-3,
     maxiter: int = 500,
-    line_search_maxiter: int = 500
+    line_search_maxiter: int = 500,
 ) -> List[np.ndarray]:
     """Cyclic Coordinate Descent.
 
@@ -91,21 +91,19 @@ def ccd(
 
         return metric(current_point, pointB)
 
-    for _ in range(maxiter*len(cycle_links)):
+    for _ in range(maxiter * len(cycle_links)):
         distance = metric(frameA.transform(pointA, frameB), pointB)
-        
+
         if distance <= tol:
             break
 
         current_joint = next(joints)
 
-        result:OptimizeResult = minimize_scalar(
+        result: OptimizeResult = minimize_scalar(
             lambda x: optimizely(x, current_joint),
             bounds=(current_joint.lower_limit, current_joint.upper_limit),
             method="bounded",
-            options= {
-                "maxiter": line_search_maxiter
-            }
+            options={"maxiter": line_search_maxiter},
         )
 
         if not result.success:
@@ -119,5 +117,3 @@ def ccd(
         joint_values[idx] = cycle_links[idx].param
 
     return joint_values
-
-

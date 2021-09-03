@@ -186,7 +186,7 @@ class FactoryBase:
                     joint.axis.xyz.value,
                     joint.axis.xyz.expressed_in,
                     joint.axis.limit.lower,
-                    joint.axis.limit.upper
+                    joint.axis.limit.upper,
                 )
             )
         elif joint.type == "hinge":
@@ -203,7 +203,7 @@ class FactoryBase:
                     joint.axis.xyz.value,
                     joint.axis.xyz.expressed_in,
                     joint.axis.limit.lower,
-                    joint.axis.limit.upper
+                    joint.axis.limit.upper,
                 )
             )
         elif joint.type == "ball":

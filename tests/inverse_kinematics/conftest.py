@@ -9,6 +9,7 @@ from pathlib import Path
 joint_types = Union[tf.RotationalJoint, tf.PrismaticJoint]
 sdf_folder = Path(__file__).parents[1] / "ignition" / "sdf"
 
+
 @pytest.fixture()
 def panda():
     sdf_string = (sdf_folder / "robots" / "panda" / "model.sdf").read_text()
@@ -20,7 +21,6 @@ def panda():
     for link in tool_frame.transform_chain(base_frame):
         if isinstance(link, (tf.RotationalJoint, tf.PrismaticJoint)):
             joints.append(link)
-
 
     return base_frame, joints
 
@@ -36,6 +36,5 @@ def double_pendulum():
     for link in tool_frame.transform_chain(base_frame):
         if isinstance(link, (tf.RotationalJoint, tf.PrismaticJoint)):
             joints.append(link)
-
 
     return base_frame, joints

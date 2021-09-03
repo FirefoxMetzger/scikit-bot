@@ -34,6 +34,4 @@ Functions
 
 from .cyclic_coordinate_descent import ccd
 
-__all__ = [
-    "ccd"
-]
+__all__ = ["ccd"]

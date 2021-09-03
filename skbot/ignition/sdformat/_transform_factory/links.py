@@ -137,10 +137,10 @@ class RotationJoint(SingleAxisJoint):
         angle_shape = [*shape]
         angle_shape.pop(axis)
         angle = np.zeros(angle_shape)
-        
+
         # TODO: remove clip in favor of SDF state
         angle = np.clip(angle, self.lower_limit, self.upper_limit)
-        
+
         return tf.RotationalJoint(
             rotvec,
             angle=angle,
@@ -155,8 +155,8 @@ class PrismaticJoint(SingleAxisJoint):
         direction = self._convert_axis(scope, shape)
         amount_shape = [*shape]
         amount_shape.pop(axis)
-        amount=np.ones(amount_shape)
-        
+        amount = np.ones(amount_shape)
+
         # TODO: remove clip in favor of SDF state
         amount = np.clip(amount, self.lower_limit, self.upper_limit)
 
