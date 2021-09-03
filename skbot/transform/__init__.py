@@ -67,6 +67,8 @@ Affine Transformations
     EulerRotation
     QuaternionRotation
     RotvecRotation
+    RotationalJoint
+    PrismaticJoint
 
 
 Projections
@@ -106,6 +108,7 @@ from .utils3d import (
     QuaternionRotation,
     RotvecRotation,
 )
+from .joints import RotationalJoint, PrismaticJoint
 
 from . import metrics
 
@@ -119,6 +122,8 @@ __all__ = [
     "InvertLink",
     "CompundLink",
     # Affine Links
+    "RotationalJoint",
+    "PrismaticJoint",
     "Translation",
     "Rotation",
     "EulerRotation",

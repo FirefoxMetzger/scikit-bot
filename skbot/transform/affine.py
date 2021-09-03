@@ -175,6 +175,9 @@ class Rotation(AffineLink):
         u = np.asarray(u)
         v = np.asarray(v)
 
+        u = np.moveaxis(u, axis, -1)
+        v = np.moveaxis(v, axis, -1)
+
         frame_dim = u.shape[axis]
 
         super().__init__(frame_dim, frame_dim)
@@ -201,7 +204,7 @@ class Rotation(AffineLink):
         return self._angle
 
     @angle.setter
-    def angle(self, angle: float) -> None:
+    def angle(self, angle: ArrayLike) -> None:
         self._angle = angle
 
         self._v = np.cos(angle / 2) * self._u - np.sin(angle / 2) * self._u_ortho
@@ -268,7 +271,7 @@ class Translation(AffineLink):
         return self._amount
 
     @amount.setter
-    def amount(self, amount: float) -> None:
+    def amount(self, amount: ArrayLike) -> None:
         self._amount = np.asarray(amount)
 
         self._update_transformation_matrix(self._direction.shape)

@@ -160,6 +160,9 @@ class InvertLink(Link):
     def transform(self, x: ArrayLike) -> np.ndarray:
         return self._forward_link.__inverse_transform__(x)
 
+    def __getattr__(self, attr):
+        return getattr(self._forward_link, attr)
+
 
 class Frame:
     """Representation of a coordinate system.

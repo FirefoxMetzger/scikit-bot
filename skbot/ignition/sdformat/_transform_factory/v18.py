@@ -94,6 +94,14 @@ class Converter(FactoryBase):
                 axis.xyz.value = joint.axis.xyz.value
                 axis.xyz.expressed_in = joint.axis.xyz.expressed_in
 
+            if joint.axis.limit is not None:
+                axis.limit.lower = joint.axis.limit.lower
+                axis.limit.upper = joint.axis.limit.upper
+                axis.limit.effort = joint.axis.limit.effort
+                axis.limit.velocity = joint.axis.limit.velocity
+                axis.limit.stiffness = joint.axis.limit.stiffness
+                axis.limit.dissipation = joint.axis.limit.dissipation
+
             joint_args["axis"] = axis
 
         return GenericJoint(**joint_args)

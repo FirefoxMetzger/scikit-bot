@@ -110,11 +110,15 @@ class SingleAxisJoint(SdfLink):
         child: Union[str, tf.Frame],
         axis: str,
         expressed_in: str,
+        lower_limit: float,
+        upper_limit: float,
     ) -> None:
         super().__init__(parent, child)
         self.axis = np.array(axis.split(" "), dtype=float)
         self.expressed_in = parent
         self.expressed_in: Union[str, tf.Frame] = expressed_in
+        self.lower_limit = lower_limit
+        self.upper_limit = upper_limit
 
     def _convert_axis(self, scope: "Scope", shape: Tuple[int]) -> np.ndarray:
         expressed_in = scope.get(self.expressed_in, scaffolding=True)
@@ -132,7 +136,18 @@ class RotationJoint(SingleAxisJoint):
         rotvec = self._convert_axis(scope, shape)
         angle_shape = [*shape]
         angle_shape.pop(axis)
-        return tf.RotvecRotation(rotvec, angle=np.zeros(angle_shape), axis=axis)
+        angle = np.zeros(angle_shape)
+
+        # TODO: remove clip in favor of SDF state
+        angle = np.clip(angle, self.lower_limit, self.upper_limit)
+
+        return tf.RotationalJoint(
+            rotvec,
+            angle=angle,
+            axis=axis,
+            lower_limit=self.lower_limit,
+            upper_limit=self.upper_limit,
+        )
 
 
 class PrismaticJoint(SingleAxisJoint):
@@ -140,4 +155,15 @@ class PrismaticJoint(SingleAxisJoint):
         direction = self._convert_axis(scope, shape)
         amount_shape = [*shape]
         amount_shape.pop(axis)
-        return tf.Translation(direction, amount=np.ones(amount_shape), axis=axis)
+        amount = np.ones(amount_shape)
+
+        # TODO: remove clip in favor of SDF state
+        amount = np.clip(amount, self.lower_limit, self.upper_limit)
+
+        return tf.PrismaticJoint(
+            direction,
+            amount=np.ones(amount_shape),
+            axis=axis,
+            lower_limit=self.lower_limit,
+            upper_limit=self.upper_limit,
+        )

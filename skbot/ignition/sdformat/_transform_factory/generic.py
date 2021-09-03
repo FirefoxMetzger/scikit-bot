@@ -116,11 +116,30 @@ class GenericJoint(PoseBearing):
     class Axis:
         def __init__(self) -> None:
             self.xyz = GenericJoint.Axis.Xyz()
+            self.limit = GenericJoint.Axis.Limit()
 
         class Xyz:
             def __init__(self, *, value: str = "0 0 1", expressed_in=None) -> None:
                 self.value = value
                 self.expressed_in = expressed_in
+
+        class Limit:
+            def __init__(
+                self,
+                *,
+                lower: float = -1e17,
+                upper: float = 1e17,
+                effort: float = -1,
+                velocity: float = -1,
+                stiffness: float = 1e9,
+                dissipation: float = 1,
+            ) -> None:
+                self.lower = lower
+                self.upper = upper
+                self.effort = effort
+                self.velocity = velocity
+                self.stiffness = stiffness
+                self.dissipation = dissipation
 
 
 class GenericLink(PoseBearing):
