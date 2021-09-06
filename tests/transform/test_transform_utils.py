@@ -13,11 +13,7 @@ import pytest
         ((0, 2), (1, 0), np.pi / 2),
         ((1, 1), (0, 1), np.pi / 4),
         (
-            (
-                1,
-                0,
-                0,
-            ),
+            (1, 0, 0),
             (0, 1, 0),
             np.pi / 2,
         ),
@@ -37,7 +33,7 @@ def test_angle_between_vectorized():
     assert np.allclose(result, np.pi / 2)
 
 
-def test_angle_betwee_axis():
+def test_angle_between_axis():
     vec_a = np.eye(3).T
     vec_b = vec_a[[1, 2, 0]].T
     result = angle_between(vec_a, vec_b, axis=0)
