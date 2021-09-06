@@ -64,9 +64,13 @@ build-backend = "setuptools.build_meta"
         "./skbot/ignition/sdformat/generic_sdf/transceiver.py",
         "./skbot/ignition/sdformat/generic_sdf/urdf.py",
         "./skbot/ignition/sdformat/generic_sdf/visual.py",
+        "./skbot/_numba_overloads.py"
     ]
 
     exclude_lines = [
         "pragma: no cover",
-        "raise NotImplementedError"
+        "raise NotImplementedError",
+        "@register_jitable",
+        "@numba.jit",
+        "@numba.generated_jit"
     ]
