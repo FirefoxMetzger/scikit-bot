@@ -86,7 +86,7 @@ def numba_reduce(reduce_op, x, axis, keepdims=False) -> np.ndarray:
     # elif isinstance(keepdims, numba.types.boolean):
     #     should_keep = False
     else:
-        raise NotImplementedError(f"Unsupported type for `keepdims`: {type(keepdims)}")
+        return None
 
     if should_keep:
         return impl_keepdims
@@ -144,7 +144,7 @@ def scalar_project(
     return sign * magnitude
 
 
-@numba.jit(nopython=True, cache=True)
+@numba.generated_jit(nopython=True, cache=True)
 def angle_between(
     vec_a: ArrayLike, vec_b: ArrayLike, axis: int = -1, eps=1e-10
 ) -> np.ndarray:
@@ -156,31 +156,39 @@ def angle_between(
     https://scicomp.stackexchange.com/a/27694
     """
 
-    vec_a = np.expand_dims(np.asfarray(vec_a), 0)
-    vec_b = np.expand_dims(np.asfarray(vec_b), 0)
+    def impl(vec_a, vec_b, axis, eps):
+        if axis >= 0:
+            axis += 1
 
-    if axis >= 0:
-        axis += 1
+        len_c = reduce(np.linalg.norm, vec_a - vec_b, axis=axis)
+        len_a = reduce(np.linalg.norm, vec_a, axis=axis)
+        len_b = reduce(np.linalg.norm, vec_b, axis=axis)
 
-    len_c = reduce(np.linalg.norm, vec_a - vec_b, axis=axis)
-    len_a = reduce(np.linalg.norm, vec_a, axis=axis)
-    len_b = reduce(np.linalg.norm, vec_b, axis=axis)
+        mask = len_a >= len_b
+        tmp = np.where(mask, len_a, len_b)
+        np.putmask(len_b, ~mask, len_a)
+        len_a = tmp
 
-    mask = len_a >= len_b
-    tmp = np.where(mask, len_a, len_b)
-    np.putmask(len_b, ~mask, len_a)
-    len_a = tmp
+        mask = len_c > len_b
+        mu = np.where(mask, len_b - (len_a - len_c), len_c - (len_a - len_b))
 
-    mask = len_c > len_b
-    mu = np.where(mask, len_b - (len_a - len_c), len_c - (len_a - len_b))
+        numerator = ((len_a - len_b) + len_c) * mu
+        denominator = (len_a + (len_b + len_c)) * ((len_a - len_c) + len_b)
 
-    numerator = ((len_a - len_b) + len_c) * mu
-    denominator = (len_a + (len_b + len_c)) * ((len_a - len_c) + len_b)
+        mask = denominator > eps
+        angle = numerator / denominator
+        angle = np.sqrt(angle)
+        angle = np.arctan(angle)
+        angle *= 2
+        np.putmask(angle, ~mask, np.pi)
+        return angle[0]
 
-    mask = denominator > eps
-    angle = np.divide(numerator, denominator)  # , where=mask)
-    angle = np.sqrt(angle)
-    angle = np.arctan(angle)
-    angle *= 2
-    np.putmask(angle, ~mask, np.pi)
-    return angle[0]
+    def converter(vec_a: ArrayLike, vec_b: ArrayLike, axis: int = -1, eps=1e-10):
+        vec_a_work = np.expand_dims(np.asfarray(vec_a), 0)
+        vec_b_work = np.expand_dims(np.asfarray(vec_b), 0)
+        impl(vec_a_work, vec_b_work, axis, eps)
+
+    if isinstance(vec_a, int):
+        print("")
+
+    return converter
