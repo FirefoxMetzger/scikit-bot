@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.7.1 (2021-09-07)
+### Fix
+* Bump python-semantic-release from 7.19.1 to 7.19.2 ([#71](https://github.com/FirefoxMetzger/scikit-bot/issues/71)) ([`2d56884`](https://github.com/FirefoxMetzger/scikit-bot/commit/2d568848f9a5f796baf7ade0c2673a1d6bc881db))
+
 ## v0.7.0 (2021-09-03)
 ### Feature
 * IK via CCD (cyclic coordinate descent) ([#69](https://github.com/FirefoxMetzger/scikit-bot/issues/69)) ([`556ee21`](https://github.com/FirefoxMetzger/scikit-bot/commit/556ee211e0c46b1beef3c5c6b1772c871f6d1a8a))
