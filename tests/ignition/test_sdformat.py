@@ -48,6 +48,13 @@ def test_custom_constructor(valid_sdf_string):
         )
 
 
+def test_sax_handlers():
+    sdf_file = Path(__file__).parent / "sdf" / "sdformat" / "empty.sdf"
+
+    ign.sdformat.loads(sdf_file.read_text(), handler="XmlSaxHandler")
+    ign.sdformat.loads(sdf_file.read_text(), handler="LxmlSaxHandler")
+
+
 def test_idempotence(valid_sdf_string):
     # serializing twice should be idempotent
     # the first serialization should normalize the XML
