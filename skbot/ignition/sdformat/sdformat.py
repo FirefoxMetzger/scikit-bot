@@ -158,10 +158,6 @@ def loads(
 
     try:
         root_el = sdf_parser.from_string(sdf, bindings.Sdf)
-    except ElementTree.ParseError as e:
-        # TODO: remove this exception with the next version
-        # bump of xsdata
-        raise ParseError("Invalid SDFormat XML.") from e
     except XSDataParserError as e:
         raise ParseError("Invalid SDFormat XML.") from e
 

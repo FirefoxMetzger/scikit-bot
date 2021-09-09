@@ -118,9 +118,19 @@ class Converter(FactoryBase):
                 raise NotImplementedError()
 
         if sensor.camera is not None:
+            image = GenericSensor.Camera.Image()
+            if sensor.camera.image is not None:
+                image.width=sensor.camera.image.width
+                image.height=sensor.camera.image.height
+                image.format=sensor.camera.image.format
+
             sensor_args["camera"] = GenericSensor.Camera(
-                name=sensor.camera.name, pose=sensor.camera.pose
+                name=sensor.camera.name,
+                pose=sensor.camera.pose,
+                horizontal_fov=sensor.camera.horizontal_fov,
+                image=image,
             )
+            
 
         return GenericSensor(**sensor_args)
 
