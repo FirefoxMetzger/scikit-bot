@@ -132,6 +132,7 @@ def sdf_string(request):
         "sdformat/placement_frame_missing_pose.sdf",
         "sdformat/nested_multiple_elements_error_world.sdf",
         "sdformat/audio_14.sdf",
+        "sdformat/includes.sdf",
     ]
 )
 def valid_sdf_string(request):
@@ -152,7 +153,6 @@ def valid_sdf_string(request):
         "sdformat/world_include_with_interface_api.sdf",
         "sdformat/world_complete.sdf",
         "sdformat/shapes.sdf",
-        "sdformat/includes.sdf",
         "sdformat/invalid_version.sdf",
         "sdformat/empty_noversion.sdf",
     ]
