@@ -133,6 +133,7 @@ def sdf_string(request):
         "sdformat/nested_multiple_elements_error_world.sdf",
         "sdformat/audio_14.sdf",
         "sdformat/includes.sdf",
+        "sdformat/world_complete.sdf",
     ]
 )
 def valid_sdf_string(request):
@@ -151,7 +152,6 @@ def valid_sdf_string(request):
         "sdformat/unrecognized_elements.sdf",
         "sdformat/unrecognized_elements_with_namespace.sdf",
         "sdformat/world_include_with_interface_api.sdf",
-        "sdformat/world_complete.sdf",
         "sdformat/shapes.sdf",
         "sdformat/invalid_version.sdf",
         "sdformat/empty_noversion.sdf",
@@ -198,6 +198,7 @@ def invalid_sdf_string(request):
         "v18/projector.sdf",
         "v18/world_with_state.sdf",
         "v18/fuel_include_world.sdf",
+        "sdformat/world_complete.sdf",
     ]
 )
 def v18_sdf(request):
@@ -258,7 +259,6 @@ def v18_sdf_refuted(request):
         "sdformat/root_duplicate_models.sdf",
         "sdformat/scene_with_sky.sdf",
         "sdformat/sensors.sdf",
-        "sdformat/world_complete.sdf",
         "sdformat/world_frame_attached_to.sdf",
         "sdformat/world_frame_relative_to.sdf",
         "sdformat/world_with_state.sdf",
