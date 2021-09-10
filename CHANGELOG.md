@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.7.2 (2021-09-10)
+### Fix
+* Fix camera parameters in v18 + bump xsdata ([#72](https://github.com/FirefoxMetzger/scikit-bot/issues/72)) ([`dbcdb79`](https://github.com/FirefoxMetzger/scikit-bot/commit/dbcdb7926be7188b7b3a71e1f8f1c679287f40f2))
+
 ## v0.7.1 (2021-09-07)
 ### Fix
 * Bump python-semantic-release from 7.19.1 to 7.19.2 ([#71](https://github.com/FirefoxMetzger/scikit-bot/issues/71)) ([`2d56884`](https://github.com/FirefoxMetzger/scikit-bot/commit/2d568848f9a5f796baf7ade0c2673a1d6bc881db))
