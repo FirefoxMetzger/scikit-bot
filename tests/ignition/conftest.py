@@ -45,7 +45,7 @@ def sdf_string(request):
         "sdformat/model_nested_static_model.sdf",
         "sdformat/inertial_complete.sdf",
         "sdformat/model_multi_nested_model.sdf",
-        # "sdformat/world_with_state.sdf",  # disabled. See: https://github.com/ignitionrobotics/sdformat/issues/653
+        "sdformat/world_with_state.sdf",
         "sdformat/material_normal_map_missing.sdf",
         "sdformat/model_without_links.sdf",
         "sdformat/model_frame_relative_to.sdf",
@@ -102,7 +102,7 @@ def sdf_string(request):
         "sdformat/joint_invalid_child.sdf",
         "sdformat/joint_nested_parent_child.sdf",
         "sdformat/world_relative_to_nested_reference.sdf",
-        # "sdformat/sensors.sdf",  # disabled. See: https://github.com/ignitionrobotics/sdformat/issues/653
+        "sdformat/sensors.sdf",
         "sdformat/joint_child_frame.sdf",
         "sdformat/ignore_sdf_in_plugin.sdf",
         "sdformat/model_nested_frame_attached_to.sdf",
@@ -258,7 +258,7 @@ def v18_sdf_refuted(request):
         "sdformat/root_duplicate_models.sdf",
         "sdformat/scene_with_sky.sdf",
         "sdformat/sensors.sdf",
-        # "sdformat/world_complete.sdf",  # potentially broken file. Tracking Issue: https://github.com/ignitionrobotics/sdformat/issues/670
+        "sdformat/world_complete.sdf",
         "sdformat/world_frame_attached_to.sdf",
         "sdformat/world_frame_relative_to.sdf",
         "sdformat/world_with_state.sdf",
