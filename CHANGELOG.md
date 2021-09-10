@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.7.3 (2021-09-10)
+### Fix
+* Update SDFormat bindings ([#73](https://github.com/FirefoxMetzger/scikit-bot/issues/73)) ([`64a6b82`](https://github.com/FirefoxMetzger/scikit-bot/commit/64a6b82d467ad76cf554e6176fc5afbd39e1274a))
+
 ## v0.7.2 (2021-09-10)
 ### Fix
 * Fix camera parameters in v18 + bump xsdata ([#72](https://github.com/FirefoxMetzger/scikit-bot/issues/72)) ([`dbcdb79`](https://github.com/FirefoxMetzger/scikit-bot/commit/dbcdb7926be7188b7b3a71e1f8f1c679287f40f2))
