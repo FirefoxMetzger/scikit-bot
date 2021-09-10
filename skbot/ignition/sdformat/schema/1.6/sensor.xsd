@@ -1479,6 +1479,11 @@
                 </xs:all>
               </xs:complexType>
             </xs:element>
+            <xs:element name="enable_orientation" minOccurs="1" maxOccurs="1" default="true" type="xs:boolean">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">Some IMU sensors rely on external filters to produce orientation estimates. True to generate and output orientation data, false to disable orientation data generation.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
           </xs:all>
         </xs:complexType>
       </xs:element>

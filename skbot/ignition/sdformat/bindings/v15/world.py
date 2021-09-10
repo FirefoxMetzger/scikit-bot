@@ -186,6 +186,8 @@ class World:
         static: Override the static value of the included model.
         pose: A position(x,y,z) and orientation(roll, pitch yaw) with
             respect to the specified frame.
+        plugin: A plugin is a dynamically loaded chunk of code. It can
+            exist as a child of world, model, and sensor.
         """
 
         uri: str = field(
@@ -219,6 +221,13 @@ class World:
                 "required": True,
             },
         )
+        plugin: List["World.Include.Plugin"] = field(
+            default_factory=list,
+            metadata={
+                "type": "Element",
+                "namespace": "",
+            },
+        )
 
         @dataclass
         class Pose:
@@ -240,6 +249,46 @@ class World:
                 default=None,
                 metadata={
                     "type": "Attribute",
+                },
+            )
+
+        @dataclass
+        class Plugin:
+            """A plugin is a dynamically loaded chunk of code.
+
+            It can exist as a child of world, model, and sensor.
+
+            Parameters
+            ----------
+            any_element: This is a special element that should not be
+                specified in an SDFormat file. It automatically copies
+                child elements into the SDFormat element so that a
+                plugin can access the data.
+            name: A unique name for the plugin, scoped to its parent.
+            filename: Name of the shared library to load. If the
+                filename is not a full path name, the file will be
+                searched for in the configuration paths.
+            """
+
+            any_element: List[object] = field(
+                default_factory=list,
+                metadata={
+                    "type": "Wildcard",
+                    "namespace": "##any",
+                },
+            )
+            name: Optional[str] = field(
+                default=None,
+                metadata={
+                    "type": "Attribute",
+                    "required": True,
+                },
+            )
+            filename: Optional[str] = field(
+                default=None,
+                metadata={
+                    "type": "Attribute",
+                    "required": True,
                 },
             )
 

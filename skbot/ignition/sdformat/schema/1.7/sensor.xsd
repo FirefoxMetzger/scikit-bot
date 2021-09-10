@@ -25,6 +25,11 @@
           <xs:documentation xml:lang="en">Name of the topic on which data is published. This is necessary for visualization</xs:documentation>
         </xs:annotation>
       </xs:element>
+      <xs:element name="enable_metrics" minOccurs="1" maxOccurs="1" default="false" type="xs:boolean">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">If true, the sensor will publish performance metrics</xs:documentation>
+        </xs:annotation>
+      </xs:element>
       <xs:element name="pose" minOccurs="1" maxOccurs="1" default="0 0 0 0 0 0">
         <xs:annotation>
           <xs:documentation xml:lang="en">A position(x,y,z) and orientation(roll, pitch yaw) with respect to the frame named in the relative_to attribute.</xs:documentation>
@@ -1413,6 +1418,11 @@
                 </xs:all>
               </xs:complexType>
             </xs:element>
+            <xs:element name="enable_orientation" minOccurs="1" maxOccurs="1" default="true" type="xs:boolean">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">Some IMU sensors rely on external filters to produce orientation estimates. True to generate and output orientation data, false to disable orientation data generation.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
           </xs:all>
         </xs:complexType>
       </xs:element>
@@ -1768,6 +1778,298 @@
           </xs:all>
         </xs:complexType>
       </xs:element>
+      <xs:element name="navsat" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">These elements are specific to the NAVSAT sensor.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:annotation>
+            <xs:documentation xml:lang="en">These elements are specific to the NAVSAT sensor.</xs:documentation>
+          </xs:annotation>
+          <xs:all>
+            <xs:element name="position_sensing" minOccurs="0" maxOccurs="1">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">Parameters related to NAVSAT position measurement.</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:annotation>
+                  <xs:documentation xml:lang="en">Parameters related to NAVSAT position measurement.</xs:documentation>
+                </xs:annotation>
+                <xs:all>
+                  <xs:element name="horizontal" minOccurs="0" maxOccurs="1">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">Noise parameters for horizontal position measurement, in units of meters.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                      <xs:annotation>
+                        <xs:documentation xml:lang="en">Noise parameters for horizontal position measurement, in units of meters.</xs:documentation>
+                      </xs:annotation>
+                      <xs:all>
+                        <xs:element name="noise" minOccurs="1" maxOccurs="1">
+                          <xs:annotation>
+                            <xs:documentation xml:lang="en">The properties of a sensor noise model.</xs:documentation>
+                          </xs:annotation>
+                          <xs:complexType>
+                            <xs:annotation>
+                              <xs:documentation xml:lang="en">The properties of a sensor noise model.</xs:documentation>
+                            </xs:annotation>
+                            <xs:all>
+                              <xs:element name="mean" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian*", the mean of the Gaussian distribution from which       noise values are drawn.</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element name="stddev" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian*", the standard deviation of the Gaussian distribution from which noise values are drawn.</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element name="bias_mean" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian*", the mean of the Gaussian distribution from which bias values are drawn.</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element name="bias_stddev" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian*", the standard deviation of the Gaussian distribution from which bias values are drawn.</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element name="dynamic_bias_stddev" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian*", the standard deviation of the noise used to drive a process to model slow variations in a sensor bias.</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element name="dynamic_bias_correlation_time" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian*", the correlation time in seconds of the noise used to drive a process to model slow variations in a sensor bias. A typical value, when used, would be on the order of 3600 seconds (1 hour).</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element name="precision" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian_quantized", the precision of output signals. A value       of zero implies infinite precision / no quantization.</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                            </xs:all>
+                            <xs:attribute name="type" type="xs:string" use="required">
+                              <xs:annotation>
+                                <xs:documentation xml:lang="en">The type of noise. Currently supported types are:       "none" (no noise).       "gaussian" (draw noise values independently for each measurement from a Gaussian distribution).       "gaussian_quantized" ("gaussian" plus quantization of outputs (ie. rounding))</xs:documentation>
+                              </xs:annotation>
+                            </xs:attribute>
+                          </xs:complexType>
+                        </xs:element>
+                      </xs:all>
+                    </xs:complexType>
+                  </xs:element>
+                  <xs:element name="vertical" minOccurs="0" maxOccurs="1">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">Noise parameters for vertical position measurement, in units of meters.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                      <xs:annotation>
+                        <xs:documentation xml:lang="en">Noise parameters for vertical position measurement, in units of meters.</xs:documentation>
+                      </xs:annotation>
+                      <xs:all>
+                        <xs:element name="noise" minOccurs="1" maxOccurs="1">
+                          <xs:annotation>
+                            <xs:documentation xml:lang="en">The properties of a sensor noise model.</xs:documentation>
+                          </xs:annotation>
+                          <xs:complexType>
+                            <xs:annotation>
+                              <xs:documentation xml:lang="en">The properties of a sensor noise model.</xs:documentation>
+                            </xs:annotation>
+                            <xs:all>
+                              <xs:element name="mean" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian*", the mean of the Gaussian distribution from which       noise values are drawn.</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element name="stddev" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian*", the standard deviation of the Gaussian distribution from which noise values are drawn.</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element name="bias_mean" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian*", the mean of the Gaussian distribution from which bias values are drawn.</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element name="bias_stddev" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian*", the standard deviation of the Gaussian distribution from which bias values are drawn.</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element name="dynamic_bias_stddev" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian*", the standard deviation of the noise used to drive a process to model slow variations in a sensor bias.</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element name="dynamic_bias_correlation_time" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian*", the correlation time in seconds of the noise used to drive a process to model slow variations in a sensor bias. A typical value, when used, would be on the order of 3600 seconds (1 hour).</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element name="precision" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian_quantized", the precision of output signals. A value       of zero implies infinite precision / no quantization.</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                            </xs:all>
+                            <xs:attribute name="type" type="xs:string" use="required">
+                              <xs:annotation>
+                                <xs:documentation xml:lang="en">The type of noise. Currently supported types are:       "none" (no noise).       "gaussian" (draw noise values independently for each measurement from a Gaussian distribution).       "gaussian_quantized" ("gaussian" plus quantization of outputs (ie. rounding))</xs:documentation>
+                              </xs:annotation>
+                            </xs:attribute>
+                          </xs:complexType>
+                        </xs:element>
+                      </xs:all>
+                    </xs:complexType>
+                  </xs:element>
+                </xs:all>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="velocity_sensing" minOccurs="0" maxOccurs="1">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">Parameters related to NAVSAT position measurement.</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:annotation>
+                  <xs:documentation xml:lang="en">Parameters related to NAVSAT position measurement.</xs:documentation>
+                </xs:annotation>
+                <xs:all>
+                  <xs:element name="horizontal" minOccurs="0" maxOccurs="1">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">Noise parameters for horizontal velocity measurement, in units of meters/second.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                      <xs:annotation>
+                        <xs:documentation xml:lang="en">Noise parameters for horizontal velocity measurement, in units of meters/second.</xs:documentation>
+                      </xs:annotation>
+                      <xs:all>
+                        <xs:element name="noise" minOccurs="1" maxOccurs="1">
+                          <xs:annotation>
+                            <xs:documentation xml:lang="en">The properties of a sensor noise model.</xs:documentation>
+                          </xs:annotation>
+                          <xs:complexType>
+                            <xs:annotation>
+                              <xs:documentation xml:lang="en">The properties of a sensor noise model.</xs:documentation>
+                            </xs:annotation>
+                            <xs:all>
+                              <xs:element name="mean" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian*", the mean of the Gaussian distribution from which       noise values are drawn.</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element name="stddev" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian*", the standard deviation of the Gaussian distribution from which noise values are drawn.</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element name="bias_mean" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian*", the mean of the Gaussian distribution from which bias values are drawn.</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element name="bias_stddev" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian*", the standard deviation of the Gaussian distribution from which bias values are drawn.</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element name="dynamic_bias_stddev" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian*", the standard deviation of the noise used to drive a process to model slow variations in a sensor bias.</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element name="dynamic_bias_correlation_time" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian*", the correlation time in seconds of the noise used to drive a process to model slow variations in a sensor bias. A typical value, when used, would be on the order of 3600 seconds (1 hour).</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element name="precision" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian_quantized", the precision of output signals. A value       of zero implies infinite precision / no quantization.</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                            </xs:all>
+                            <xs:attribute name="type" type="xs:string" use="required">
+                              <xs:annotation>
+                                <xs:documentation xml:lang="en">The type of noise. Currently supported types are:       "none" (no noise).       "gaussian" (draw noise values independently for each measurement from a Gaussian distribution).       "gaussian_quantized" ("gaussian" plus quantization of outputs (ie. rounding))</xs:documentation>
+                              </xs:annotation>
+                            </xs:attribute>
+                          </xs:complexType>
+                        </xs:element>
+                      </xs:all>
+                    </xs:complexType>
+                  </xs:element>
+                  <xs:element name="vertical" minOccurs="0" maxOccurs="1">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">Noise parameters for vertical velocity measurement, in units of meters/second.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                      <xs:annotation>
+                        <xs:documentation xml:lang="en">Noise parameters for vertical velocity measurement, in units of meters/second.</xs:documentation>
+                      </xs:annotation>
+                      <xs:all>
+                        <xs:element name="noise" minOccurs="1" maxOccurs="1">
+                          <xs:annotation>
+                            <xs:documentation xml:lang="en">The properties of a sensor noise model.</xs:documentation>
+                          </xs:annotation>
+                          <xs:complexType>
+                            <xs:annotation>
+                              <xs:documentation xml:lang="en">The properties of a sensor noise model.</xs:documentation>
+                            </xs:annotation>
+                            <xs:all>
+                              <xs:element name="mean" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian*", the mean of the Gaussian distribution from which       noise values are drawn.</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element name="stddev" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian*", the standard deviation of the Gaussian distribution from which noise values are drawn.</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element name="bias_mean" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian*", the mean of the Gaussian distribution from which bias values are drawn.</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element name="bias_stddev" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian*", the standard deviation of the Gaussian distribution from which bias values are drawn.</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element name="dynamic_bias_stddev" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian*", the standard deviation of the noise used to drive a process to model slow variations in a sensor bias.</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element name="dynamic_bias_correlation_time" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian*", the correlation time in seconds of the noise used to drive a process to model slow variations in a sensor bias. A typical value, when used, would be on the order of 3600 seconds (1 hour).</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element name="precision" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian_quantized", the precision of output signals. A value       of zero implies infinite precision / no quantization.</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                            </xs:all>
+                            <xs:attribute name="type" type="xs:string" use="required">
+                              <xs:annotation>
+                                <xs:documentation xml:lang="en">The type of noise. Currently supported types are:       "none" (no noise).       "gaussian" (draw noise values independently for each measurement from a Gaussian distribution).       "gaussian_quantized" ("gaussian" plus quantization of outputs (ie. rounding))</xs:documentation>
+                              </xs:annotation>
+                            </xs:attribute>
+                          </xs:complexType>
+                        </xs:element>
+                      </xs:all>
+                    </xs:complexType>
+                  </xs:element>
+                </xs:all>
+              </xs:complexType>
+            </xs:element>
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
       <xs:element name="ray" minOccurs="0" maxOccurs="1">
         <xs:annotation>
           <xs:documentation xml:lang="en">These elements are specific to the ray (laser) sensor.</xs:documentation>
@@ -1973,7 +2275,7 @@
     </xs:attribute>
     <xs:attribute name="type" type="xs:string" use="required">
       <xs:annotation>
-        <xs:documentation xml:lang="en">The type name of the sensor. By default, SDFormat supports types                   air_pressure,                   altimeter,                   camera,                   contact,                   depth_camera, depth,                   force_torque,                   gps,                   gpu_lidar,                   gpu_ray,                   imu,                   lidar,                   logical_camera,                   magnetometer,                   multicamera,                   ray,                   rfid,                   rfidtag,                   rgbd_camera, rgbd,                   sonar,                   thermal_camera, thermal,                   wireless_receiver, and                   wireless_transmitter.       The "ray" and "gpu_ray" types are equivalent to "lidar" and "gpu_lidar", respectively. It is preferred to use "lidar" and "gpu_lidar" since "ray" and "gpu_ray" will be deprecated. The "ray" and "gpu_ray" types are maintained for legacy support.</xs:documentation>
+        <xs:documentation xml:lang="en">The type name of the sensor. By default, SDFormat supports types                   air_pressure,                   altimeter,                   camera,                   contact,                   depth_camera, depth,                   force_torque,                   gps,                   gpu_lidar,                   gpu_ray,                   imu,                   lidar,                   logical_camera,                   magnetometer,                   multicamera,                   navsat,                   ray,                   rfid,                   rfidtag,                   rgbd_camera, rgbd,                   sonar,                   thermal_camera, thermal,                   wireless_receiver, and                   wireless_transmitter.       The "ray", "gpu_ray", and "gps" types are equivalent to "lidar", "gpu_lidar", and "navsat", respectively. It is preferred to use "lidar", "gpu_lidar", and "navsat" since "ray", "gpu_ray", and "gps" will be deprecated. The "ray", "gpu_ray", and "gps" types are maintained for legacy support.</xs:documentation>
       </xs:annotation>
     </xs:attribute>
   </xs:complexType>

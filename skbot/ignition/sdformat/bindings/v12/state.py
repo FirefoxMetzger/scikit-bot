@@ -23,6 +23,8 @@ class State:
             "type": "Element",
             "namespace": "",
             "required": True,
+            "white_space": "collapse",
+            "pattern": r"\d+ \d+",
         },
     )
     model: List["State.Model"] = field(

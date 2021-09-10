@@ -28,6 +28,8 @@ class State:
         default="0 0",
         metadata={
             "type": "Attribute",
+            "white_space": "collapse",
+            "pattern": r"\d+ \d+",
         },
     )
 

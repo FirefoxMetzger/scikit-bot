@@ -673,6 +673,13 @@ class Link:
             runtime.      The default topic is
             /model/{model_name}/particle_emitter/{emitter_name}
             Note that the emitter id and name may not be changed.
+        particle_scatter_ratio: This is used to determine the ratio of
+            particles that will be detected     by sensors. Increasing
+            the ratio means there is a higher chance of     particles
+            reflecting and interfering with depth sensing, making the
+            emitter appear more dense. Decreasing the ratio decreases
+            the chance     of particles reflecting and interfering with
+            depth sensing, making it     appear less dense.
         pose: A position(x,y,z) and orientation(roll, pitch yaw) with
             respect to the frame named in the relative_to attribute.
         material: The material of the visual element.
@@ -785,6 +792,14 @@ class Link:
             metadata={
                 "type": "Element",
                 "namespace": "",
+            },
+        )
+        particle_scatter_ratio: float = field(
+            default=0.65,
+            metadata={
+                "type": "Element",
+                "namespace": "",
+                "required": True,
             },
         )
         pose: Optional["Link.ParticleEmitter.Pose"] = field(

@@ -28,6 +28,8 @@ class State:
             "type": "Element",
             "namespace": "",
             "required": True,
+            "white_space": "collapse",
+            "pattern": r"\d+ \d+",
         },
     )
     wall_time: str = field(
@@ -36,6 +38,8 @@ class State:
             "type": "Element",
             "namespace": "",
             "required": True,
+            "white_space": "collapse",
+            "pattern": r"\d+ \d+",
         },
     )
     real_time: str = field(
@@ -44,6 +48,8 @@ class State:
             "type": "Element",
             "namespace": "",
             "required": True,
+            "white_space": "collapse",
+            "pattern": r"\d+ \d+",
         },
     )
     insertions: Optional["State.Insertions"] = field(
