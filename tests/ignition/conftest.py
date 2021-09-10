@@ -45,7 +45,7 @@ def sdf_string(request):
         "sdformat/model_nested_static_model.sdf",
         "sdformat/inertial_complete.sdf",
         "sdformat/model_multi_nested_model.sdf",
-        # "sdformat/world_with_state.sdf",  # disabled. See: https://github.com/ignitionrobotics/sdformat/issues/653
+        "sdformat/world_with_state.sdf",
         "sdformat/material_normal_map_missing.sdf",
         "sdformat/model_without_links.sdf",
         "sdformat/model_frame_relative_to.sdf",
@@ -102,7 +102,7 @@ def sdf_string(request):
         "sdformat/joint_invalid_child.sdf",
         "sdformat/joint_nested_parent_child.sdf",
         "sdformat/world_relative_to_nested_reference.sdf",
-        # "sdformat/sensors.sdf",  # disabled. See: https://github.com/ignitionrobotics/sdformat/issues/653
+        "sdformat/sensors.sdf",
         "sdformat/joint_child_frame.sdf",
         "sdformat/ignore_sdf_in_plugin.sdf",
         "sdformat/model_nested_frame_attached_to.sdf",
@@ -132,6 +132,8 @@ def sdf_string(request):
         "sdformat/placement_frame_missing_pose.sdf",
         "sdformat/nested_multiple_elements_error_world.sdf",
         "sdformat/audio_14.sdf",
+        "sdformat/includes.sdf",
+        "sdformat/world_complete.sdf",
     ]
 )
 def valid_sdf_string(request):
@@ -150,9 +152,7 @@ def valid_sdf_string(request):
         "sdformat/unrecognized_elements.sdf",
         "sdformat/unrecognized_elements_with_namespace.sdf",
         "sdformat/world_include_with_interface_api.sdf",
-        "sdformat/world_complete.sdf",
         "sdformat/shapes.sdf",
-        "sdformat/includes.sdf",
         "sdformat/invalid_version.sdf",
         "sdformat/empty_noversion.sdf",
     ]
@@ -198,6 +198,7 @@ def invalid_sdf_string(request):
         "v18/projector.sdf",
         "v18/world_with_state.sdf",
         "v18/fuel_include_world.sdf",
+        "sdformat/world_complete.sdf",
     ]
 )
 def v18_sdf(request):
@@ -258,7 +259,6 @@ def v18_sdf_refuted(request):
         "sdformat/root_duplicate_models.sdf",
         "sdformat/scene_with_sky.sdf",
         "sdformat/sensors.sdf",
-        # "sdformat/world_complete.sdf",  # potentially broken file. Tracking Issue: https://github.com/ignitionrobotics/sdformat/issues/670
         "sdformat/world_frame_attached_to.sdf",
         "sdformat/world_frame_relative_to.sdf",
         "sdformat/world_with_state.sdf",

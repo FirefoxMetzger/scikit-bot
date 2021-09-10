@@ -2082,6 +2082,10 @@ class Sensor:
         linear_acceleration: These elements are specific to body-frame
             linear acceleration,     which is expressed in meters per
             second squared
+        enable_orientation: Some IMU sensors rely on external filters to
+            produce orientation estimates. True to generate and output
+            orientation data, false to disable orientation data
+            generation.
         """
 
         orientation_reference_frame: Optional[
@@ -2113,6 +2117,14 @@ class Sensor:
             metadata={
                 "type": "Element",
                 "namespace": "",
+            },
+        )
+        enable_orientation: bool = field(
+            default=True,
+            metadata={
+                "type": "Element",
+                "namespace": "",
+                "required": True,
             },
         )
 

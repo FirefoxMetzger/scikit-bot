@@ -18,6 +18,7 @@ class Sensor:
     visualize: If true, the sensor is visualized in the GUI
     topic: Name of the topic on which data is published. This is
         necessary for visualization
+    enable_metrics: If true, the sensor will publish performance metrics
     pose: A position(x,y,z) and orientation(roll, pitch yaw) with
         respect to the frame named in the relative_to attribute.
     plugin: A plugin is a dynamically loaded chunk of code. It can exist
@@ -35,6 +36,7 @@ class Sensor:
         sensors. A logical camera reports objects that fall within a
         frustum. Computation should be performed on the CPU.
     magnetometer: These elements are specific to a Magnetometer sensor.
+    navsat: These elements are specific to the NAVSAT sensor.
     ray: These elements are specific to the ray (laser) sensor.
     rfidtag:
     rfid:
@@ -49,14 +51,15 @@ class Sensor:
         gps,                   gpu_lidar,                   gpu_ray,
         imu,                   lidar,                   logical_camera,
         magnetometer,                   multicamera,
-        ray,                   rfid,                   rfidtag,
-        rgbd_camera, rgbd,                   sonar,
-        thermal_camera, thermal,                   wireless_receiver,
-        and                   wireless_transmitter.       The "ray" and
-        "gpu_ray" types are equivalent to "lidar" and "gpu_lidar",
-        respectively. It is preferred to use "lidar" and "gpu_lidar"
-        since "ray" and "gpu_ray" will be deprecated. The "ray" and
-        "gpu_ray" types are maintained for legacy support.
+        navsat,                   ray,                   rfid,
+        rfidtag,                   rgbd_camera, rgbd,
+        sonar,                   thermal_camera, thermal,
+        wireless_receiver, and                   wireless_transmitter.
+        The "ray", "gpu_ray", and "gps" types are equivalent to "lidar",
+        "gpu_lidar", and "navsat", respectively. It is preferred to use
+        "lidar", "gpu_lidar", and "navsat" since "ray", "gpu_ray", and
+        "gps" will be deprecated. The "ray", "gpu_ray", and "gps" types
+        are maintained for legacy support.
     """
 
     class Meta:
@@ -88,6 +91,14 @@ class Sensor:
     )
     topic: str = field(
         default="__default__",
+        metadata={
+            "type": "Element",
+            "namespace": "",
+            "required": True,
+        },
+    )
+    enable_metrics: bool = field(
+        default=False,
         metadata={
             "type": "Element",
             "namespace": "",
@@ -173,6 +184,13 @@ class Sensor:
         },
     )
     magnetometer: Optional["Sensor.Magnetometer"] = field(
+        default=None,
+        metadata={
+            "type": "Element",
+            "namespace": "",
+        },
+    )
+    navsat: Optional["Sensor.Navsat"] = field(
         default=None,
         metadata={
             "type": "Element",
@@ -1971,6 +1989,10 @@ class Sensor:
         linear_acceleration: These elements are specific to body-frame
             linear acceleration,     which is expressed in meters per
             second squared
+        enable_orientation: Some IMU sensors rely on external filters to
+            produce orientation estimates. True to generate and output
+            orientation data, false to disable orientation data
+            generation.
         """
 
         orientation_reference_frame: Optional[
@@ -1994,6 +2016,14 @@ class Sensor:
             metadata={
                 "type": "Element",
                 "namespace": "",
+            },
+        )
+        enable_orientation: bool = field(
+            default=True,
+            metadata={
+                "type": "Element",
+                "namespace": "",
+                "required": True,
             },
         )
 
@@ -3654,6 +3684,590 @@ class Sensor:
                         "required": True,
                     },
                 )
+
+    @dataclass
+    class Navsat:
+        """
+        These elements are specific to the NAVSAT sensor.
+
+        Parameters
+        ----------
+        position_sensing: Parameters related to NAVSAT position
+            measurement.
+        velocity_sensing: Parameters related to NAVSAT position
+            measurement.
+        """
+
+        position_sensing: Optional["Sensor.Navsat.PositionSensing"] = field(
+            default=None,
+            metadata={
+                "type": "Element",
+                "namespace": "",
+            },
+        )
+        velocity_sensing: Optional["Sensor.Navsat.VelocitySensing"] = field(
+            default=None,
+            metadata={
+                "type": "Element",
+                "namespace": "",
+            },
+        )
+
+        @dataclass
+        class PositionSensing:
+            """
+            Parameters related to NAVSAT position measurement.
+
+            Parameters
+            ----------
+            horizontal: Noise parameters for horizontal position
+                measurement, in units of meters.
+            vertical: Noise parameters for vertical position
+                measurement, in units of meters.
+            """
+
+            horizontal: Optional["Sensor.Navsat.PositionSensing.Horizontal"] = field(
+                default=None,
+                metadata={
+                    "type": "Element",
+                    "namespace": "",
+                },
+            )
+            vertical: Optional["Sensor.Navsat.PositionSensing.Vertical"] = field(
+                default=None,
+                metadata={
+                    "type": "Element",
+                    "namespace": "",
+                },
+            )
+
+            @dataclass
+            class Horizontal:
+                """
+                Noise parameters for horizontal position measurement, in units
+                of meters.
+
+                Parameters
+                ----------
+                noise: The properties of a sensor noise model.
+                """
+
+                noise: Optional[
+                    "Sensor.Navsat.PositionSensing.Horizontal.Noise"
+                ] = field(
+                    default=None,
+                    metadata={
+                        "type": "Element",
+                        "namespace": "",
+                        "required": True,
+                    },
+                )
+
+                @dataclass
+                class Noise:
+                    """
+                    The properties of a sensor noise model.
+
+                    Parameters
+                    ----------
+                    mean: For type "gaussian*", the mean of the Gaussian
+                        distribution from which       noise values are
+                        drawn.
+                    stddev: For type "gaussian*", the standard deviation
+                        of the Gaussian distribution from which noise
+                        values are drawn.
+                    bias_mean: For type "gaussian*", the mean of the
+                        Gaussian distribution from which bias values are
+                        drawn.
+                    bias_stddev: For type "gaussian*", the standard
+                        deviation of the Gaussian distribution from
+                        which bias values are drawn.
+                    dynamic_bias_stddev: For type "gaussian*", the
+                        standard deviation of the noise used to drive a
+                        process to model slow variations in a sensor
+                        bias.
+                    dynamic_bias_correlation_time: For type "gaussian*",
+                        the correlation time in seconds of the noise
+                        used to drive a process to model slow variations
+                        in a sensor bias. A typical value, when used,
+                        would be on the order of 3600 seconds (1 hour).
+                    precision: For type "gaussian_quantized", the
+                        precision of output signals. A value       of
+                        zero implies infinite precision / no
+                        quantization.
+                    type: The type of noise. Currently supported types
+                        are:       "none" (no noise).       "gaussian"
+                        (draw noise values independently for each
+                        measurement from a Gaussian distribution).
+                        "gaussian_quantized" ("gaussian" plus
+                        quantization of outputs (ie. rounding))
+                    """
+
+                    mean: float = field(
+                        default=0.0,
+                        metadata={
+                            "type": "Element",
+                            "namespace": "",
+                            "required": True,
+                        },
+                    )
+                    stddev: float = field(
+                        default=0.0,
+                        metadata={
+                            "type": "Element",
+                            "namespace": "",
+                            "required": True,
+                        },
+                    )
+                    bias_mean: float = field(
+                        default=0.0,
+                        metadata={
+                            "type": "Element",
+                            "namespace": "",
+                            "required": True,
+                        },
+                    )
+                    bias_stddev: float = field(
+                        default=0.0,
+                        metadata={
+                            "type": "Element",
+                            "namespace": "",
+                            "required": True,
+                        },
+                    )
+                    dynamic_bias_stddev: float = field(
+                        default=0.0,
+                        metadata={
+                            "type": "Element",
+                            "namespace": "",
+                            "required": True,
+                        },
+                    )
+                    dynamic_bias_correlation_time: float = field(
+                        default=0.0,
+                        metadata={
+                            "type": "Element",
+                            "namespace": "",
+                            "required": True,
+                        },
+                    )
+                    precision: float = field(
+                        default=0.0,
+                        metadata={
+                            "type": "Element",
+                            "namespace": "",
+                            "required": True,
+                        },
+                    )
+                    type: Optional[str] = field(
+                        default=None,
+                        metadata={
+                            "type": "Attribute",
+                            "required": True,
+                        },
+                    )
+
+            @dataclass
+            class Vertical:
+                """
+                Noise parameters for vertical position measurement, in units of
+                meters.
+
+                Parameters
+                ----------
+                noise: The properties of a sensor noise model.
+                """
+
+                noise: Optional["Sensor.Navsat.PositionSensing.Vertical.Noise"] = field(
+                    default=None,
+                    metadata={
+                        "type": "Element",
+                        "namespace": "",
+                        "required": True,
+                    },
+                )
+
+                @dataclass
+                class Noise:
+                    """
+                    The properties of a sensor noise model.
+
+                    Parameters
+                    ----------
+                    mean: For type "gaussian*", the mean of the Gaussian
+                        distribution from which       noise values are
+                        drawn.
+                    stddev: For type "gaussian*", the standard deviation
+                        of the Gaussian distribution from which noise
+                        values are drawn.
+                    bias_mean: For type "gaussian*", the mean of the
+                        Gaussian distribution from which bias values are
+                        drawn.
+                    bias_stddev: For type "gaussian*", the standard
+                        deviation of the Gaussian distribution from
+                        which bias values are drawn.
+                    dynamic_bias_stddev: For type "gaussian*", the
+                        standard deviation of the noise used to drive a
+                        process to model slow variations in a sensor
+                        bias.
+                    dynamic_bias_correlation_time: For type "gaussian*",
+                        the correlation time in seconds of the noise
+                        used to drive a process to model slow variations
+                        in a sensor bias. A typical value, when used,
+                        would be on the order of 3600 seconds (1 hour).
+                    precision: For type "gaussian_quantized", the
+                        precision of output signals. A value       of
+                        zero implies infinite precision / no
+                        quantization.
+                    type: The type of noise. Currently supported types
+                        are:       "none" (no noise).       "gaussian"
+                        (draw noise values independently for each
+                        measurement from a Gaussian distribution).
+                        "gaussian_quantized" ("gaussian" plus
+                        quantization of outputs (ie. rounding))
+                    """
+
+                    mean: float = field(
+                        default=0.0,
+                        metadata={
+                            "type": "Element",
+                            "namespace": "",
+                            "required": True,
+                        },
+                    )
+                    stddev: float = field(
+                        default=0.0,
+                        metadata={
+                            "type": "Element",
+                            "namespace": "",
+                            "required": True,
+                        },
+                    )
+                    bias_mean: float = field(
+                        default=0.0,
+                        metadata={
+                            "type": "Element",
+                            "namespace": "",
+                            "required": True,
+                        },
+                    )
+                    bias_stddev: float = field(
+                        default=0.0,
+                        metadata={
+                            "type": "Element",
+                            "namespace": "",
+                            "required": True,
+                        },
+                    )
+                    dynamic_bias_stddev: float = field(
+                        default=0.0,
+                        metadata={
+                            "type": "Element",
+                            "namespace": "",
+                            "required": True,
+                        },
+                    )
+                    dynamic_bias_correlation_time: float = field(
+                        default=0.0,
+                        metadata={
+                            "type": "Element",
+                            "namespace": "",
+                            "required": True,
+                        },
+                    )
+                    precision: float = field(
+                        default=0.0,
+                        metadata={
+                            "type": "Element",
+                            "namespace": "",
+                            "required": True,
+                        },
+                    )
+                    type: Optional[str] = field(
+                        default=None,
+                        metadata={
+                            "type": "Attribute",
+                            "required": True,
+                        },
+                    )
+
+        @dataclass
+        class VelocitySensing:
+            """
+            Parameters related to NAVSAT position measurement.
+
+            Parameters
+            ----------
+            horizontal: Noise parameters for horizontal velocity
+                measurement, in units of meters/second.
+            vertical: Noise parameters for vertical velocity
+                measurement, in units of meters/second.
+            """
+
+            horizontal: Optional["Sensor.Navsat.VelocitySensing.Horizontal"] = field(
+                default=None,
+                metadata={
+                    "type": "Element",
+                    "namespace": "",
+                },
+            )
+            vertical: Optional["Sensor.Navsat.VelocitySensing.Vertical"] = field(
+                default=None,
+                metadata={
+                    "type": "Element",
+                    "namespace": "",
+                },
+            )
+
+            @dataclass
+            class Horizontal:
+                """
+                Noise parameters for horizontal velocity measurement, in units
+                of meters/second.
+
+                Parameters
+                ----------
+                noise: The properties of a sensor noise model.
+                """
+
+                noise: Optional[
+                    "Sensor.Navsat.VelocitySensing.Horizontal.Noise"
+                ] = field(
+                    default=None,
+                    metadata={
+                        "type": "Element",
+                        "namespace": "",
+                        "required": True,
+                    },
+                )
+
+                @dataclass
+                class Noise:
+                    """
+                    The properties of a sensor noise model.
+
+                    Parameters
+                    ----------
+                    mean: For type "gaussian*", the mean of the Gaussian
+                        distribution from which       noise values are
+                        drawn.
+                    stddev: For type "gaussian*", the standard deviation
+                        of the Gaussian distribution from which noise
+                        values are drawn.
+                    bias_mean: For type "gaussian*", the mean of the
+                        Gaussian distribution from which bias values are
+                        drawn.
+                    bias_stddev: For type "gaussian*", the standard
+                        deviation of the Gaussian distribution from
+                        which bias values are drawn.
+                    dynamic_bias_stddev: For type "gaussian*", the
+                        standard deviation of the noise used to drive a
+                        process to model slow variations in a sensor
+                        bias.
+                    dynamic_bias_correlation_time: For type "gaussian*",
+                        the correlation time in seconds of the noise
+                        used to drive a process to model slow variations
+                        in a sensor bias. A typical value, when used,
+                        would be on the order of 3600 seconds (1 hour).
+                    precision: For type "gaussian_quantized", the
+                        precision of output signals. A value       of
+                        zero implies infinite precision / no
+                        quantization.
+                    type: The type of noise. Currently supported types
+                        are:       "none" (no noise).       "gaussian"
+                        (draw noise values independently for each
+                        measurement from a Gaussian distribution).
+                        "gaussian_quantized" ("gaussian" plus
+                        quantization of outputs (ie. rounding))
+                    """
+
+                    mean: float = field(
+                        default=0.0,
+                        metadata={
+                            "type": "Element",
+                            "namespace": "",
+                            "required": True,
+                        },
+                    )
+                    stddev: float = field(
+                        default=0.0,
+                        metadata={
+                            "type": "Element",
+                            "namespace": "",
+                            "required": True,
+                        },
+                    )
+                    bias_mean: float = field(
+                        default=0.0,
+                        metadata={
+                            "type": "Element",
+                            "namespace": "",
+                            "required": True,
+                        },
+                    )
+                    bias_stddev: float = field(
+                        default=0.0,
+                        metadata={
+                            "type": "Element",
+                            "namespace": "",
+                            "required": True,
+                        },
+                    )
+                    dynamic_bias_stddev: float = field(
+                        default=0.0,
+                        metadata={
+                            "type": "Element",
+                            "namespace": "",
+                            "required": True,
+                        },
+                    )
+                    dynamic_bias_correlation_time: float = field(
+                        default=0.0,
+                        metadata={
+                            "type": "Element",
+                            "namespace": "",
+                            "required": True,
+                        },
+                    )
+                    precision: float = field(
+                        default=0.0,
+                        metadata={
+                            "type": "Element",
+                            "namespace": "",
+                            "required": True,
+                        },
+                    )
+                    type: Optional[str] = field(
+                        default=None,
+                        metadata={
+                            "type": "Attribute",
+                            "required": True,
+                        },
+                    )
+
+            @dataclass
+            class Vertical:
+                """
+                Noise parameters for vertical velocity measurement, in units of
+                meters/second.
+
+                Parameters
+                ----------
+                noise: The properties of a sensor noise model.
+                """
+
+                noise: Optional["Sensor.Navsat.VelocitySensing.Vertical.Noise"] = field(
+                    default=None,
+                    metadata={
+                        "type": "Element",
+                        "namespace": "",
+                        "required": True,
+                    },
+                )
+
+                @dataclass
+                class Noise:
+                    """
+                    The properties of a sensor noise model.
+
+                    Parameters
+                    ----------
+                    mean: For type "gaussian*", the mean of the Gaussian
+                        distribution from which       noise values are
+                        drawn.
+                    stddev: For type "gaussian*", the standard deviation
+                        of the Gaussian distribution from which noise
+                        values are drawn.
+                    bias_mean: For type "gaussian*", the mean of the
+                        Gaussian distribution from which bias values are
+                        drawn.
+                    bias_stddev: For type "gaussian*", the standard
+                        deviation of the Gaussian distribution from
+                        which bias values are drawn.
+                    dynamic_bias_stddev: For type "gaussian*", the
+                        standard deviation of the noise used to drive a
+                        process to model slow variations in a sensor
+                        bias.
+                    dynamic_bias_correlation_time: For type "gaussian*",
+                        the correlation time in seconds of the noise
+                        used to drive a process to model slow variations
+                        in a sensor bias. A typical value, when used,
+                        would be on the order of 3600 seconds (1 hour).
+                    precision: For type "gaussian_quantized", the
+                        precision of output signals. A value       of
+                        zero implies infinite precision / no
+                        quantization.
+                    type: The type of noise. Currently supported types
+                        are:       "none" (no noise).       "gaussian"
+                        (draw noise values independently for each
+                        measurement from a Gaussian distribution).
+                        "gaussian_quantized" ("gaussian" plus
+                        quantization of outputs (ie. rounding))
+                    """
+
+                    mean: float = field(
+                        default=0.0,
+                        metadata={
+                            "type": "Element",
+                            "namespace": "",
+                            "required": True,
+                        },
+                    )
+                    stddev: float = field(
+                        default=0.0,
+                        metadata={
+                            "type": "Element",
+                            "namespace": "",
+                            "required": True,
+                        },
+                    )
+                    bias_mean: float = field(
+                        default=0.0,
+                        metadata={
+                            "type": "Element",
+                            "namespace": "",
+                            "required": True,
+                        },
+                    )
+                    bias_stddev: float = field(
+                        default=0.0,
+                        metadata={
+                            "type": "Element",
+                            "namespace": "",
+                            "required": True,
+                        },
+                    )
+                    dynamic_bias_stddev: float = field(
+                        default=0.0,
+                        metadata={
+                            "type": "Element",
+                            "namespace": "",
+                            "required": True,
+                        },
+                    )
+                    dynamic_bias_correlation_time: float = field(
+                        default=0.0,
+                        metadata={
+                            "type": "Element",
+                            "namespace": "",
+                            "required": True,
+                        },
+                    )
+                    precision: float = field(
+                        default=0.0,
+                        metadata={
+                            "type": "Element",
+                            "namespace": "",
+                            "required": True,
+                        },
+                    )
+                    type: Optional[str] = field(
+                        default=None,
+                        metadata={
+                            "type": "Attribute",
+                            "required": True,
+                        },
+                    )
 
     @dataclass
     class Ray:

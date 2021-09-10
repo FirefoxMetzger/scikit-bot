@@ -30,7 +30,9 @@
   </xs:simpleType>
 
   <xs:simpleType name="time">
-    <xs:restriction base="xs:double">
+    <xs:restriction base="xs:string">
+      <xs:whiteSpace value="collapse"/>
+      <xs:pattern value="\d+ \d+"/>
     </xs:restriction>
   </xs:simpleType>
 

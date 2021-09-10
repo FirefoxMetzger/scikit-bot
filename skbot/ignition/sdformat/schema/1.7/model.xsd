@@ -62,6 +62,33 @@
                 </xs:simpleContent>
               </xs:complexType>
             </xs:element>
+            <xs:element name="plugin" minOccurs="0" maxOccurs="unbounded">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">A plugin is a dynamically loaded chunk of code. It can exist as a child of world, model, and sensor.</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:annotation>
+                  <xs:documentation xml:lang="en">A plugin is a dynamically loaded chunk of code. It can exist as a child of world, model, and sensor.</xs:documentation>
+                </xs:annotation>
+                <xs:all>
+                  <xs:any processContents="skip" minOccurs="0" maxOccurs="unbounded">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">This is a special element that should not be specified in an SDFormat file. It automatically copies child elements into the SDFormat element so that a plugin can access the data.</xs:documentation>
+                    </xs:annotation>
+                  </xs:any>
+                </xs:all>
+                <xs:attribute name="name" type="xs:string" use="required">
+                  <xs:annotation>
+                    <xs:documentation xml:lang="en">A unique name for the plugin, scoped to its parent.</xs:documentation>
+                  </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="filename" type="xs:string" use="required">
+                  <xs:annotation>
+                    <xs:documentation xml:lang="en">Name of the shared library to load. If the filename is not a full path name, the file will be searched for in the configuration paths.</xs:documentation>
+                  </xs:annotation>
+                </xs:attribute>
+              </xs:complexType>
+            </xs:element>
           </xs:all>
         </xs:complexType>
       </xs:element>

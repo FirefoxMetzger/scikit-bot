@@ -373,6 +373,11 @@
                 <xs:documentation xml:lang="en">Topic used to update particle emitter properties at runtime.      The default topic is      /model/{model_name}/particle_emitter/{emitter_name}      Note that the emitter id and name may not be changed.</xs:documentation>
               </xs:annotation>
             </xs:element>
+            <xs:element name="particle_scatter_ratio" minOccurs="1" maxOccurs="1" default="0.65" type="xs:float">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">This is used to determine the ratio of particles that will be detected     by sensors. Increasing the ratio means there is a higher chance of     particles reflecting and interfering with depth sensing, making the     emitter appear more dense. Decreasing the ratio decreases the chance     of particles reflecting and interfering with depth sensing, making it     appear less dense.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
             <xs:element name="pose" minOccurs="1" maxOccurs="1" default="0 0 0 0 0 0">
               <xs:annotation>
                 <xs:documentation xml:lang="en">A position(x,y,z) and orientation(roll, pitch yaw) with respect to the frame named in the relative_to attribute.</xs:documentation>
