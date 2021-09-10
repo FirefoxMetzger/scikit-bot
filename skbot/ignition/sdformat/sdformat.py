@@ -10,6 +10,7 @@ from xsdata.exceptions import ParserError as XSDataParserError
 import io
 from typing import Dict, Callable, Type, TypeVar
 import importlib
+import warnings
 
 
 T = TypeVar("T")
@@ -102,12 +103,8 @@ def loads(
 
             "XmlEventHandler"
                 A xml.etree event-based handler.
-            "XmlSaxHandler"
-                A xml.sax SAX-based handler.
             "LxmlEventHandler"
                 A lxml.etree event-based handler.
-            "LxmlSaxHandler"
-                A lxml.etree SAX-based handler.
 
     Returns
     -------
@@ -138,12 +135,22 @@ def loads(
     if version is None:
         version = get_version(sdf)
 
+    if handler in ["XmlSaxHandler", "LxmlSaxHandler"]:
+        warnings.warn(
+            "SAX handlers have been depreciated in xsData >= 21.9;"
+            " falling back to EventHandler. If you need the SAX handler, please open an issue."
+            " To make this warning dissapear change `handler` to the corresponding EventHandler."
+        )
+
+    if handler == "XmlSaxHandler":
+        handler = "XmlEventHandler"
+    elif handler == "LxmlSaxHandler":
+        handler = "LxmlEventHandler"
+
     handler_class = {
         None: handlers.default_handler(),
         "XmlEventHandler": handlers.XmlEventHandler,
-        "XmlSaxHandler": handlers.XmlSaxHandler,
         "LxmlEventHandler": handlers.LxmlEventHandler,
-        "LxmlSaxHandler": handlers.LxmlSaxHandler,
     }[handler]
 
     binding_location = _parser_roots[version]
@@ -158,10 +165,6 @@ def loads(
 
     try:
         root_el = sdf_parser.from_string(sdf, bindings.Sdf)
-    except ElementTree.ParseError as e:
-        # TODO: remove this exception with the next version
-        # bump of xsdata
-        raise ParseError("Invalid SDFormat XML.") from e
     except XSDataParserError as e:
         raise ParseError("Invalid SDFormat XML.") from e
 

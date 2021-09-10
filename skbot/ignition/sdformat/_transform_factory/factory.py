@@ -20,6 +20,7 @@ from .generic import (
     NamedPoseBearing,
 )
 from .links import DynamicPose, CustomLink, RotationJoint, PrismaticJoint, SimplePose
+from ...transformations import FrustumProjection
 
 
 # available SDF elements by version
@@ -114,7 +115,7 @@ class FactoryBase:
                 CustomLink(
                     camera_frame,
                     tf.Frame(2, name="pixel-space"),
-                    tf.FrustumProjection(
+                    FrustumProjection(
                         sensor.camera.horizontal_fov,
                         (sensor.camera.image.height, sensor.camera.image.width),
                     ),
