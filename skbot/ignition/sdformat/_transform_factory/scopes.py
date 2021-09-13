@@ -27,7 +27,7 @@ class ScaffoldPose(SdfLink):
 
     def to_transform_link(self, scope: "Scope") -> tf.Link:
         return tf.CompundLink(
-            [tf.EulerRotation("xyz", self.pose[3:]), tf.Translation(self.pose[:3])]
+            [tf.EulerRotation("XYZ", self.pose[3:]), tf.Translation(self.pose[:3])]
         )
 
 

@@ -6,8 +6,7 @@
             <self_collide>false</self_collide>
             <allow_auto_disable>true</allow_auto_disable>
             <enable_wind>false</enable_wind>
-            <!-- <pose>0.5 0 0 -0 0 3.14159265358979</pose> -->
-            <pose>-0.15 0 0 -0 0 0</pose>
+            <pose>0.5 0.1 -0.1 -0 0 3.14159265358979</pose>
             <link name="link">
                 <gravity>true</gravity>
                 <enable_wind>false</enable_wind>

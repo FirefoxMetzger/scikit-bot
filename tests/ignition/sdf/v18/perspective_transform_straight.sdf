@@ -51,7 +51,6 @@
             <self_collide>false</self_collide>
             <allow_auto_disable>true</allow_auto_disable>
             <enable_wind>false</enable_wind>
-            <!-- <pose>-0.23797532 -0.03652641 0 0 0 0</pose> -->
             <pose>0 0 0 0 0 0</pose>
             <link name="box_link">
                 <gravity>true</gravity>

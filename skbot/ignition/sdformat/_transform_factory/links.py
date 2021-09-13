@@ -43,7 +43,7 @@ class SimplePose(SdfLink):
         return tf.CompundLink(
             [
                 tf.Translation(-offset, axis=axis),
-                tf.EulerRotation("xyz", -angles, axis=axis),
+                tf.EulerRotation("XYZ", -angles, axis=axis),
             ]
         )
 
@@ -88,7 +88,7 @@ class DynamicPose(SdfLink):
             rot_matrix.append(basis)
         rot_matrix = np.stack(rot_matrix, axis=1)
         rot_matrix -= translation[:, None]
-        angles = ScipyRotation.from_matrix(rot_matrix).as_euler("xyz")
+        angles = ScipyRotation.from_matrix(rot_matrix).as_euler("XYZ")
 
         translation = np.broadcast_to(translation, shape)
         angles = np.broadcast_to(angles, shape)
@@ -96,7 +96,7 @@ class DynamicPose(SdfLink):
         return tf.CompundLink(
             [
                 tf.Translation(-translation, axis=axis),
-                tf.EulerRotation("xyz", -angles, axis=axis),
+                tf.EulerRotation("XYZ", -angles, axis=axis),
             ]
         )
 

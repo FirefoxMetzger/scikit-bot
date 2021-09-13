@@ -130,7 +130,9 @@ def test_double_pendulum():
 
 
 def test_perspective_transform_straight():
-    model_file = Path(__file__).parent / "sdf" / "v18" / "perspective_transform_straight.sdf"
+    model_file = (
+        Path(__file__).parent / "sdf" / "v18" / "perspective_transform_straight.sdf"
+    )
     sdf_string = model_file.read_text()
 
     root_frame = ign.sdformat.to_frame_graph(sdf_string)
@@ -157,6 +159,41 @@ def test_perspective_transform_straight():
             [840.82234424, 159.17765576],
             [159.17765576, 840.82234424],
             [840.82234424, 840.82234424],
+        ]
+    )
+    assert np.allclose(corner_px, expected_corners)
+
+
+def test_perspective_transform_offset():
+    model_file = (
+        Path(__file__).parent / "sdf" / "v18" / "perspective_transform_offset.sdf"
+    )
+    sdf_string = model_file.read_text()
+
+    root_frame = ign.sdformat.to_frame_graph(sdf_string)
+    px_space = root_frame.find_frame(".../pixel-space")
+    box = root_frame.find_frame(".../box_visual")
+    center = np.array([0, 0, 0])
+    corners = np.array(
+        [
+            [-0.025, 0.025, 0.025],
+            [-0.025, 0.025, -0.025],
+            [-0.025, -0.025, 0.025],
+            [-0.025, -0.025, -0.025],
+        ]
+    )
+
+    center_px = box.transform(center, px_space)
+    expected_center = np.array([159.17765576, 159.17765576])
+    assert np.allclose(center_px, expected_center)
+
+    corner_px = box.transform(corners, px_space)
+    expected_corners = np.array(
+        [
+            [94.259114, 256.5554684],
+            [256.5554684, 256.5554684],
+            [94.259114, 94.259114],
+            [256.5554684, 94.259114],
         ]
     )
     assert np.allclose(corner_px, expected_corners)

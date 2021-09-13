@@ -225,7 +225,7 @@ def create_frame_graph(sdf: str) -> Tuple[Dict[str, rtf.Frame], Dict[str, rtf.Li
         parent_frame = xpaths[parent]
         child_frame = xpaths[child]
         if np.any(pose[3:]) != 0:
-            rotated = rtf.EulerRotation("xyz", pose[3:])(child_frame)
+            rotated = rtf.EulerRotation("XYZ", pose[3:])(child_frame)
             rtf.Translation(pose[:3])(rotated, parent_frame)
         else:
             rtf.Translation(pose[:3])(child_frame, parent_frame)
