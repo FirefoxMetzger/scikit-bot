@@ -138,14 +138,14 @@ def test_perspective_transform():
     box = root_frame.find_frame(".../box_visual")
     vertices = np.array(
         [
-            [0.05, 0.05, 0.05],#0
-            [0.05, -0.05, 0.05],
-            [0.05, 0.05, -0.05],
-            [0.05, -0.05, -0.05],
-            [-0.05, 0.05, 0.05],
-            [-0.05, 0.05, -0.05],#5
-            [-0.05, -0.05, 0.05],
-            [-0.05, -0.05, -0.05],
+            [0.025, 0.025, 0.025],#0
+            [0.025, -0.025, 0.025],
+            [0.025, 0.025, -0.025],
+            [0.025, -0.025, -0.025],
+            [-0.025, 0.025, 0.025],
+            [-0.025, 0.025, -0.025],#5
+            [-0.025, -0.025, 0.025],
+            [-0.025, -0.025, -0.025],
         ]
     )
 
@@ -170,7 +170,10 @@ def test_perspective_transform():
     from matplotlib.patches import Circle
     import matplotlib.pyplot as plt
 
+    import imageio as iio
+    img = iio.imread("test_image.png")
     _, ax = plt.subplots(1)
+    ax.imshow(img)
     corner_px = box.transform(vertices, px_space)
     distance = list()
     for idx_a, idx_b in edges:
@@ -183,9 +186,9 @@ def test_perspective_transform():
 
     # centered_corner_px = cam_space.transform(vertices+np.array([0.5, 0, 0]), px_space)
     # ax.scatter(centered_corner_px[:, 1], centered_corner_px[:, 0], 10)
-    ax.set_xlim([0, 1920])
-    ax.set_ylim([0, 1080])
-    ax.invert_yaxis()
+    # ax.set_xlim([0, 1920])
+    # ax.set_ylim([0, 1080])
+    # ax.invert_yaxis()
     plt.show()
 
 
@@ -199,14 +202,14 @@ def test_four_goals():
     box = root_frame.find_frame(".../box_copy_0/.../box_visual")
     vertices = np.array(
         [
-            [0.05, 0.05, 0.05],#0
-            [0.05, -0.05, 0.05],
-            [0.05, 0.05, -0.05],
-            [0.05, -0.05, -0.05],
-            [-0.05, 0.05, 0.05],
-            [-0.05, 0.05, -0.05],#5
-            [-0.05, -0.05, 0.05],
-            [-0.05, -0.05, -0.05],
+            [0.025, 0.025, 0.025],#0
+            [0.025, -0.025, 0.025],
+            [0.025, 0.025, -0.025],
+            [0.025, -0.025, -0.025],
+            [-0.025, 0.025, 0.025],
+            [-0.025, 0.025, -0.025],#5
+            [-0.025, -0.025, 0.025],
+            [-0.025, -0.025, -0.025],
         ]
     )
 
