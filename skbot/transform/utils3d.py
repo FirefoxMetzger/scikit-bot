@@ -213,7 +213,7 @@ class FrustumProjection(Link):
 
         aspect_ratio = image_shape[1] / image_shape[0]
 
-        f_x = 1/(2*tan(hfov / 2))
+        f_x = 1/(tan(hfov / 2))
         f_y = aspect_ratio * f_x
         amounts = np.array([[0, 0, f_y], [0, 0, f_x]])
         directions = np.array([[0, 2/image_shape[0], 0], [2/image_shape[1], 0, 0]])
