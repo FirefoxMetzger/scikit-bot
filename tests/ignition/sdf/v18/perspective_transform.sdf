@@ -1,13 +1,13 @@
-<?xml version="1.0" ?>
+<?xml version="1.0"?>
 <sdf version="1.8">
-    <world>
+    <world name="test_world">
         <model name="camera">
             <static>true</static>
             <self_collide>false</self_collide>
             <allow_auto_disable>true</allow_auto_disable>
             <enable_wind>false</enable_wind>
-            <pose>0.5 0 0 -0 0 3.14159265358979</pose>
-            <!-- <pose>2 1.2741348787924662 2.2651286734088285 0 -0 3.14159265358979</pose> -->
+            <!-- <pose>0.5 0 0 -0 0 3.14159265358979</pose> -->
+            <pose>-0.15 0 0 -0 0 0</pose>
             <link name="link">
                 <gravity>true</gravity>
                 <enable_wind>false</enable_wind>
@@ -31,12 +31,10 @@
                     <visualize>true</visualize>
                     <topic>main_camera</topic>
                     <camera name="__default__">
-                        <horizontal_fov>1.13446</horizontal_fov>
+                        <horizontal_fov>0.57079632679</horizontal_fov>
                         <image>
-                            <width>1920</width>
-                            <height>1080</height>
-                            <!-- <width>1000</width>
-                            <height>1000</height> -->
+                            <width>1000</width>
+                            <height>1000</height>
                             <format>R8G8B8</format>
                         </image>
                         <clip>
@@ -49,11 +47,12 @@
             </link>
         </model>
         <model name="box">
-            <static>false</static>
+            <static>true</static>
             <self_collide>false</self_collide>
             <allow_auto_disable>true</allow_auto_disable>
             <enable_wind>false</enable_wind>
-            <pose>-0.23797532 -0.03652641 1.04 0 0 0</pose>
+            <!-- <pose>-0.23797532 -0.03652641 0 0 0 0</pose> -->
+            <pose>0 0 0 0 0 0</pose>
             <link name="box_link">
                 <gravity>true</gravity>
                 <enable_wind>false</enable_wind>
@@ -122,5 +121,11 @@
                 </visual>
             </link>
         </model>
+        <plugin name="ignition::gazebo::systems::Physics" filename="ignition-gazebo-physics-system" />
+        <plugin name="ignition::gazebo::systems::Sensors" filename="ignition-gazebo-sensors-system">
+            <render_engine>ogre</render_engine>
+        </plugin>
+        <plugin name="ignition::gazebo::systems::UserCommands" filename="ignition-gazebo-user-commands-system" />
+        <plugin name="ignition::gazebo::systems::SceneBroadcaster" filename="ignition-gazebo-scene-broadcaster-system" />
     </world>
 </sdf>
