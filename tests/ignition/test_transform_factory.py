@@ -128,7 +128,41 @@ def test_double_pendulum():
 
     root_frame = ign.sdformat.to_frame_graph(sdf_string)
 
-def test_perspective_transform():
+
+def test_perspective_transform_straight():
+    model_file = Path(__file__).parent / "sdf" / "v18" / "perspective_transform_straight.sdf"
+    sdf_string = model_file.read_text()
+
+    root_frame = ign.sdformat.to_frame_graph(sdf_string)
+    px_space = root_frame.find_frame(".../pixel-space")
+    box = root_frame.find_frame(".../box_visual")
+    center = np.array([0, 0, 0])
+    corners = np.array(
+        [
+            [-0.025, 0.025, 0.025],
+            [-0.025, 0.025, -0.025],
+            [-0.025, -0.025, 0.025],
+            [-0.025, -0.025, -0.025],
+        ]
+    )
+
+    center_px = box.transform(center, px_space)
+    expected_center = np.array([500, 500])
+    assert np.allclose(center_px, expected_center)
+
+    corner_px = box.transform(corners, px_space)
+    expected_corners = np.array(
+        [
+            [159.17765576, 159.17765576],
+            [840.82234424, 159.17765576],
+            [159.17765576, 840.82234424],
+            [840.82234424, 840.82234424],
+        ]
+    )
+    assert np.allclose(corner_px, expected_corners)
+
+
+def test_perspective_transform_translated():
     model_file = Path(__file__).parent / "sdf" / "v18" / "perspective_transform.sdf"
     sdf_string = model_file.read_text()
 
@@ -138,12 +172,12 @@ def test_perspective_transform():
     box = root_frame.find_frame(".../box_visual")
     vertices = np.array(
         [
-            [0.025, 0.025, 0.025],#0
+            [0.025, 0.025, 0.025],  # 0
             [0.025, -0.025, 0.025],
             [0.025, 0.025, -0.025],
             [0.025, -0.025, -0.025],
             [-0.025, 0.025, 0.025],
-            [-0.025, 0.025, -0.025],#5
+            [-0.025, 0.025, -0.025],  # 5
             [-0.025, -0.025, 0.025],
             [-0.025, -0.025, -0.025],
         ]
@@ -161,16 +195,16 @@ def test_perspective_transform():
         (4, 5),
         (4, 6),
         (5, 7),
-        (6, 7)
+        (6, 7),
     ]
 
-    center = np.array([0,0,0])
-
+    center = np.array([0, 0, 0])
 
     from matplotlib.patches import Circle
     import matplotlib.pyplot as plt
 
     import imageio as iio
+
     img = iio.imread("test_image.png")
     _, ax = plt.subplots(1)
     ax.imshow(img)
@@ -181,7 +215,7 @@ def test_perspective_transform():
         y = np.linspace(corner_px[idx_a, 0], corner_px[idx_b, 0], 100)
         ax.plot(x, y, "blue")
         distance.append(np.linalg.norm(y - x))
-    
+
     ax.add_patch(Circle(box.transform(center, px_space)[::-1], radius=3, color="red"))
 
     # centered_corner_px = cam_space.transform(vertices+np.array([0.5, 0, 0]), px_space)
@@ -202,12 +236,12 @@ def test_four_goals():
     box = root_frame.find_frame(".../box_copy_0/.../box_visual")
     vertices = np.array(
         [
-            [0.025, 0.025, 0.025],#0
+            [0.025, 0.025, 0.025],  # 0
             [0.025, -0.025, 0.025],
             [0.025, 0.025, -0.025],
             [0.025, -0.025, -0.025],
             [-0.025, 0.025, 0.025],
-            [-0.025, 0.025, -0.025],#5
+            [-0.025, 0.025, -0.025],  # 5
             [-0.025, -0.025, 0.025],
             [-0.025, -0.025, -0.025],
         ]
@@ -225,11 +259,10 @@ def test_four_goals():
         (4, 5),
         (4, 6),
         (5, 7),
-        (6, 7)
+        (6, 7),
     ]
 
-    center = np.array([0,0,0])
-
+    center = np.array([0, 0, 0])
 
     from matplotlib.patches import Circle
     import matplotlib.pyplot as plt
@@ -245,7 +278,7 @@ def test_four_goals():
         y = np.linspace(corner_px[idx_a, 0], corner_px[idx_b, 0], 100)
         ax.plot(x, y, "blue")
         distance.append(np.linalg.norm(y - x))
-    
+
     # ax.scatter(corner_px[:, 1], corner_px[:, 0], 10)
     ax.add_patch(Circle(box.transform(center, px_space)[::-1], radius=3, color="red"))
 
