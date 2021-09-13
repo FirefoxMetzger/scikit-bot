@@ -199,6 +199,48 @@ def test_perspective_transform_offset():
     assert np.allclose(corner_px, expected_corners)
 
 
+def test_perspective_transform_rotations():
+    model_file = Path(__file__).parent / "sdf" / "v18" / "perspective_transform.sdf"
+    sdf_string = model_file.read_text()
+
+    root_frame = ign.sdformat.to_frame_graph(sdf_string)
+    px_space = root_frame.find_frame(".../pixel-space")
+    box = root_frame.find_frame(".../box_visual")
+    center = np.array([0, 0, 0])
+    corners = np.array(
+        [
+            [0.025, 0.025, 0.025],
+            [0.025, -0.025, 0.025],
+            [0.025, 0.025, -0.025],
+            [0.025, -0.025, -0.025],
+            [-0.025, 0.025, 0.025],
+            [-0.025, 0.025, -0.025],
+            [-0.025, -0.025, 0.025],
+            [-0.025, -0.025, -0.025],
+        ]
+    )
+
+    center_px = box.transform(center, px_space)
+    expected_center = np.array([696.11915148, 500.0])
+    assert np.allclose(center_px, expected_center)
+
+    corner_px = box.transform(corners, px_space)
+    expected_corners = np.array(
+        [
+            [667.51733424, 483.00101919],
+            [843.08517093, 337.00889243],
+            [745.4267735, 707.52604657],
+            [903.5973054, 555.82971401],
+            [483.00856364, 442.65467015],
+            [564.65438813, 645.79960364],
+            [652.15261944, 314.95354669],
+            [718.30507077, 513.1858061],
+        ]
+    )
+    print(corner_px)
+    assert np.allclose(corner_px, expected_corners)
+
+
 def test_perspective_transform_translated():
     model_file = Path(__file__).parent / "sdf" / "v18" / "perspective_transform.sdf"
     sdf_string = model_file.read_text()

@@ -1,13 +1,31 @@
 <?xml version="1.0"?>
 <sdf version="1.8">
     <world name="test_world">
+        <light name="sun" type="directional">
+            <cast_shadows>true</cast_shadows>
+            <intensity>1.0</intensity>
+            <diffuse>0.8 0.8 0.8 1</diffuse>
+            <specular>0.2 0.2 0.2 1</specular>
+            <attenuation>
+                <range>1000.0</range>
+                <linear>0.01</linear>
+                <constant>0.9</constant>
+                <quadratic>0.001</quadratic>
+            </attenuation>
+            <direction>-0.5 0.1 -0.9</direction>
+            <spot>
+                <inner_angle>0.0</inner_angle>
+                <outer_angle>0.0</outer_angle>
+                <falloff>0.0</falloff>
+            </spot>
+            <pose>0 0 10 0 -0 0</pose>
+        </light>
         <model name="camera">
             <static>true</static>
             <self_collide>false</self_collide>
             <allow_auto_disable>true</allow_auto_disable>
             <enable_wind>false</enable_wind>
-            <!-- <pose>0.5 0 0 -0 0 3.14159265358979</pose> -->
-            <pose>-0.15 0 0 -0 0 0</pose>
+            <pose>0.3 0.0 0.15 -0 0.34906585039 3.14159265358979</pose>
             <link name="link">
                 <gravity>true</gravity>
                 <enable_wind>false</enable_wind>
@@ -51,7 +69,7 @@
             <self_collide>false</self_collide>
             <allow_auto_disable>true</allow_auto_disable>
             <enable_wind>false</enable_wind>
-            <pose>0 0 0 0 0 0</pose>
+            <pose>0 0 0 1.0471975512 0.34906585039 0.17453292519</pose>
             <link name="box_link">
                 <gravity>true</gravity>
                 <enable_wind>false</enable_wind>
