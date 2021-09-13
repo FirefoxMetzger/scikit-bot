@@ -4,7 +4,7 @@ from numpy.typing import ArrayLike
 
 from ..transform.projections import PerspectiveProjection
 from ..transform.affine import Translation
-from ..transform.utils3d import FrustumProjection
+from ..transform.utils3d import FrustumProjection, EulerRotation
 from ..transform.base import Link
 
 
@@ -39,15 +39,10 @@ class FrustumProjection(FrustumProjection):
     """
 
     def __init__(self, hfov: float, image_shape: ArrayLike) -> None:
-        Link.__init__(self, 3, 2)
+        super().__init__(hfov, image_shape)
 
-        image_shape = np.asarray(image_shape)
+        self.initial_rotation = EulerRotation("yz", (-90, 90), degrees=True)
 
-        aspect_ratio = image_shape[1] / image_shape[0]
-        amounts = np.array(
-            [[1 / (tan(hfov / 2)), 0, 0], [aspect_ratio * 1 / (tan(hfov / 2)), 0, 0]]
-        )
-        directions = np.array([[0, 2 / image_shape[0], 0], [0, 0, 2 / image_shape[1]]])
-
-        self.proj = PerspectiveProjection(directions, amounts, axis=-1)
-        self.tf = Translation(image_shape / 2)
+    def transform(self, x: ArrayLike) -> np.ndarray:
+        x = self.initial_rotation.transform(x)
+        return super().transform(x)

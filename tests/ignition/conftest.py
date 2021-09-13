@@ -199,6 +199,7 @@ def invalid_sdf_string(request):
         "v18/world_with_state.sdf",
         "v18/fuel_include_world.sdf",
         "sdformat/world_complete.sdf",
+        "v18/perspective_transform.sdf",
     ]
 )
 def v18_sdf(request):
