@@ -116,8 +116,8 @@ def test_poses():
 
     assert np.allclose(vector_a, (2, 2, 3))
     assert np.allclose(vector_b, (0, 1, 0))
-    assert np.allclose(vector_c, (0, 0, 1))
-    assert np.allclose(vector_d, (1, 2, 4))
+    assert np.allclose(vector_c, (0, 1, 0))
+    assert np.allclose(vector_d, (1, 3, 3))
 
 
 def test_double_pendulum():
@@ -239,70 +239,6 @@ def test_perspective_transform_rotations():
     )
     print(corner_px)
     assert np.allclose(corner_px, expected_corners)
-
-
-def test_perspective_transform_translated():
-    model_file = Path(__file__).parent / "sdf" / "v18" / "perspective_transform.sdf"
-    sdf_string = model_file.read_text()
-
-    root_frame = ign.sdformat.to_frame_graph(sdf_string)
-    px_space = root_frame.find_frame(".../pixel-space")
-    cam_space = root_frame.find_frame(".../camera-space")
-    box = root_frame.find_frame(".../box_visual")
-    vertices = np.array(
-        [
-            [0.025, 0.025, 0.025],  # 0
-            [0.025, -0.025, 0.025],
-            [0.025, 0.025, -0.025],
-            [0.025, -0.025, -0.025],
-            [-0.025, 0.025, 0.025],
-            [-0.025, 0.025, -0.025],  # 5
-            [-0.025, -0.025, 0.025],
-            [-0.025, -0.025, -0.025],
-        ]
-    )
-
-    edges = [
-        (0, 1),
-        (0, 2),
-        (0, 4),
-        (1, 3),
-        (1, 6),
-        (2, 3),
-        (2, 5),
-        (3, 7),
-        (4, 5),
-        (4, 6),
-        (5, 7),
-        (6, 7),
-    ]
-
-    center = np.array([0, 0, 0])
-
-    from matplotlib.patches import Circle
-    import matplotlib.pyplot as plt
-
-    import imageio as iio
-
-    img = iio.imread("test_image.png")
-    _, ax = plt.subplots(1)
-    ax.imshow(img)
-    corner_px = box.transform(vertices, px_space)
-    distance = list()
-    for idx_a, idx_b in edges:
-        x = np.linspace(corner_px[idx_a, 1], corner_px[idx_b, 1], 100)
-        y = np.linspace(corner_px[idx_a, 0], corner_px[idx_b, 0], 100)
-        ax.plot(x, y, "blue")
-        distance.append(np.linalg.norm(y - x))
-
-    ax.add_patch(Circle(box.transform(center, px_space)[::-1], radius=3, color="red"))
-
-    # centered_corner_px = cam_space.transform(vertices+np.array([0.5, 0, 0]), px_space)
-    # ax.scatter(centered_corner_px[:, 1], centered_corner_px[:, 0], 10)
-    # ax.set_xlim([0, 1920])
-    # ax.set_ylim([0, 1080])
-    # ax.invert_yaxis()
-    plt.show()
 
 
 def test_four_goals():

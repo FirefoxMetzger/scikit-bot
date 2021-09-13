@@ -176,11 +176,8 @@ def test_QuaternionRotation_invalid_sequence():
         ((0, 0, 1), np.pi / 2, (240, 320), (120, 160)),
 
         ((0, 0, 1), np.pi / 3, (500, 500), (250, 250)),
-        ((-1, -1, 1/(2*np.tan(np.pi/6))), np.pi / 3, (500, 500), (0, 0)),
-        ((1, 1, 1/(2*np.tan(np.pi/6))), np.pi / 3, (500, 500), (500, 500)),
-
-        ((0, 0, 1), 2*np.arctan(1/2), (2, 2), (1, 1)),
-        ((1, 1, 1), 2*np.arctan(1/2), (2, 2), (2, 2)),
+        ((-1, -1, 1/(np.tan(np.pi/6))), np.pi / 3, (500, 500), (0, 0)),
+        ((1, 1, 1/(np.tan(np.pi/6))), np.pi / 3, (500, 500), (500, 500)),
     ],
 )
 def test_perspective_transform(point_in, fov, im_shape, point_out):
