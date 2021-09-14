@@ -2,8 +2,6 @@ from math import tan
 import numpy as np
 from numpy.typing import ArrayLike
 
-from ..transform.projections import PerspectiveProjection
-from ..transform.affine import Translation
 from ..transform.utils3d import FrustumProjection, EulerRotation
 from ..transform.base import Link
 
