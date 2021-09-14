@@ -241,6 +241,20 @@ def test_perspective_transform_rotations():
     assert np.allclose(corner_px, expected_corners)
 
 
+def test_link_offset():
+    model_file = Path(__file__).parent / "sdf" / "v18" / "link_offset.sdf"
+    sdf_string = model_file.read_text()
+
+    root_frame = ign.sdformat.to_frame_graph(sdf_string)
+    cam_link = root_frame.find_frame(".../camera/link")
+    
+    actual = cam_link.transform((0,0,0), root_frame)
+    expected = (0.8003185305832974, 0.19999974634550793, 1.35)
+
+    assert np.allclose(actual, expected)
+
+
+
 def test_four_goals():
     model_file = Path(__file__).parent / "sdf" / "v18" / "four_goals.sdf"
     sdf_string = model_file.read_text()

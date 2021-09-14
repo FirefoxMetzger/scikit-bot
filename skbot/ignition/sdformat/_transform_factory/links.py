@@ -42,8 +42,8 @@ class SimplePose(SdfLink):
 
         return tf.CompundLink(
             [
-                tf.Translation(-offset, axis=axis),
-                tf.EulerRotation("XYZ", -angles, axis=axis),
+                tf.Translation(offset, axis=axis),
+                tf.EulerRotation("XYZ", angles, axis=axis),
             ]
         )
 
@@ -92,6 +92,9 @@ class DynamicPose(SdfLink):
 
         translation = np.broadcast_to(translation, shape)
         angles = np.broadcast_to(angles, shape)
+
+        if self.scaffold_child == "camera::link":
+            print(f"Translation: {translation}")
 
         return tf.CompundLink(
             [

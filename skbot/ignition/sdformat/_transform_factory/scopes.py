@@ -26,8 +26,14 @@ class ScaffoldPose(SdfLink):
         self.pose = np.array(pose.split(), dtype=float)
 
     def to_transform_link(self, scope: "Scope") -> tf.Link:
+        offset = self.pose[:3]
+        angles = self.pose[3:]
+
         return tf.CompundLink(
-            [tf.EulerRotation("XYZ", self.pose[3:]), tf.Translation(self.pose[:3])]
+            [
+                tf.EulerRotation("XYZ", angles),
+                tf.Translation(offset), 
+            ]
         )
 
 
