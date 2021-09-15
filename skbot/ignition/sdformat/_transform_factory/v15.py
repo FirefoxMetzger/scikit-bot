@@ -4,19 +4,7 @@ from .scopes import Scope
 from .factory import FactoryBase
 from .. import sdformat
 from ..bindings import v15
-from .generic import (
-    GenericFrame,
-    GenericInclude,
-    GenericLight,
-    GenericModel,
-    GenericPose,
-    GenericSensor,
-    GenericJoint,
-    GenericWorld,
-    NamedPoseBearing,
-    GenericLink,
-    PoseBearing,
-)
+from . import generic
 
 
 IncludeElement = Union[v15.ModelModel.Include, v15.World.Include]
@@ -58,20 +46,20 @@ class Converter(FactoryBase):
 
         return graph_list
 
-    def _to_generic_pose(self, pose: PoseElement) -> GenericPose:
+    def _to_generic_pose(self, pose: PoseElement) -> generic.Pose:
         if pose is None:
-            return GenericPose()
+            return generic.Pose()
         else:
-            return GenericPose(value=pose.value, relative_to=pose.frame)
+            return generic.Pose(value=pose.value, relative_to=pose.frame)
 
-    def _to_generic_frame(self, frame: FrameElement, attached_to=None) -> GenericFrame:
-        return GenericFrame(
+    def _to_generic_frame(self, frame: FrameElement, attached_to=None) -> generic.Frame:
+        return generic.Frame(
             attached_to=attached_to,
             name=frame.name,
             pose=self._to_generic_pose(frame.pose),
         )
 
-    def _to_generic_sensor(self, sensor: v15.Sensor) -> GenericSensor:
+    def _to_generic_sensor(self, sensor: v15.Sensor) -> generic.Sensor:
         sensor_args = {
             "name": sensor.name,
             "type": sensor.type,
@@ -89,7 +77,7 @@ class Converter(FactoryBase):
             if sensor.camera.lens is not None:
                 raise NotImplementedError()
 
-            sensor_args["camera"] = GenericSensor.Camera(
+            sensor_args["camera"] = generic.Sensor.Camera(
                 name=sensor.camera.name,
                 pose=self._to_generic_pose(sensor.camera.pose),
                 horizontal_fov=sensor.camera.horizontal_fov,
@@ -100,15 +88,15 @@ class Converter(FactoryBase):
             )
 
             if sensor.camera.image is not None:
-                sensor_args["camera"].image = GenericSensor.Camera.Image(
+                sensor_args["camera"].image = generic.Sensor.Camera.Image(
                     width=sensor.camera.image.width,
                     height=sensor.camera.image.height,
                     format=sensor.camera.image.format,
                 )
 
-        return GenericSensor(**sensor_args)
+        return generic.Sensor(**sensor_args)
 
-    def _to_generic_joint(self, joint: v15.Joint) -> GenericJoint:
+    def _to_generic_joint(self, joint: v15.Joint) -> generic.Joint:
         sensors = list()
         for sensor in joint.sensor:
             sensors.append(self._to_generic_sensor(sensor))
@@ -126,12 +114,12 @@ class Converter(FactoryBase):
         }
 
         if joint.pose is not None:
-            joint_args["pose"] = GenericPose(
+            joint_args["pose"] = generic.Pose(
                 value=joint.pose.value, relative_to=joint.pose.frame
             )
 
         if joint.axis is not None:
-            axis = GenericJoint.Axis()
+            axis = generic.Joint.Axis()
 
             axis.xyz.value = joint.axis.xyz
             if not joint.axis.use_parent_model_frame:
@@ -149,10 +137,10 @@ class Converter(FactoryBase):
 
             joint_args["axis"] = axis
 
-        return GenericJoint(**joint_args)
+        return generic.Joint(**joint_args)
 
-    def _to_generic_light(self, light: v15.Light) -> GenericLight:
-        return GenericLight(
+    def _to_generic_light(self, light: v15.Light) -> generic.Light:
+        return generic.Light(
             name=light.name,
             frames=[
                 self._to_generic_frame(x, attached_to=light.name) for x in light.frame
@@ -160,7 +148,7 @@ class Converter(FactoryBase):
             pose=self._to_generic_pose(light.pose),
         )
 
-    def _to_generic_link(self, link: v15.Link) -> GenericLink:
+    def _to_generic_link(self, link: v15.Link) -> generic.Link:
         link_args = {
             "name": link.name,
             "must_be_base_link": link.must_be_base_link,
@@ -177,8 +165,8 @@ class Converter(FactoryBase):
         }
 
         if link.inertial is not None:
-            el = GenericLink.Inertial(
-                pose=GenericPose(relative_to=link.name),
+            el = generic.Link.Inertial(
+                pose=generic.Pose(relative_to=link.name),
                 frames=[self._to_generic_frame(f) for f in link.inertial.frame],
             )
             if link.inertial.pose is not None:
@@ -190,46 +178,46 @@ class Converter(FactoryBase):
             link_args["inertial"] = el
 
         link_args["collisions"] = [
-            NamedPoseBearing(name=c.name, pose=self._to_generic_pose(c.pose))
+            generic.NamedPoseBearing(name=c.name, pose=self._to_generic_pose(c.pose))
             if c.pose is not None
-            else NamedPoseBearing(name=c.name)
+            else generic.NamedPoseBearing(name=c.name)
             for c in link.collision
         ]
 
         link_args["visuals"] = [
-            NamedPoseBearing(name=v.name, pose=self._to_generic_pose(v.pose))
+            generic.NamedPoseBearing(name=v.name, pose=self._to_generic_pose(v.pose))
             if v.pose is not None
-            else NamedPoseBearing(name=v.name)
+            else generic.NamedPoseBearing(name=v.name)
             for v in link.visual
         ]
 
         if link.projector is not None:
-            link_args["projector"] = NamedPoseBearing(
+            link_args["projector"] = generic.NamedPoseBearing(
                 name=link.projector.name,
                 pose=self._to_generic_pose(link.projector.pose),
             )
 
         link_args["audio_source_poses"] = [
-            self._to_generic_pose(a.pose) if a.pose is not None else GenericPose()
+            self._to_generic_pose(a.pose) if a.pose is not None else generic.Pose()
             for a in link.audio_source
         ]
 
-        return GenericLink(**link_args)
+        return generic.Link(**link_args)
 
-    def _to_generic_include(self, include: IncludeElement) -> GenericInclude:
-        return GenericInclude(
+    def _to_generic_include(self, include: IncludeElement) -> generic.Include:
+        return generic.Include(
             name=include.name,
             pose=self._to_generic_pose(include.pose),
             uri=include.uri,
         )
 
-    def _to_generic_model(self, model: v15.ModelModel) -> GenericModel:
+    def _to_generic_model(self, model: v15.ModelModel) -> generic.Model:
         if len(model.gripper) > 0:
             raise NotImplementedError(
                 "Gripper not implemented yet (lacking upstream docs)."
             )
 
-        return GenericModel(
+        return generic.Model(
             name=model.name,
             include=[self._to_generic_include(i) for i in model.include],
             models=[self._to_generic_model(m) for m in model.model],
@@ -243,15 +231,15 @@ class Converter(FactoryBase):
 
     def _to_generic_population(
         self, population: v15.World.Population
-    ) -> GenericWorld.GenericPopulation:
-        distribution = GenericWorld.GenericPopulation.GenericDistribution()
+    ) -> generic.World.Population:
+        distribution = generic.World.Population.Distribution()
         if population.distribution is not None:
             distribution.type = population.distribution.type
             distribution.step = population.distribution.step
             distribution.cols = population.distribution.cols
             distribution.rows = population.distribution.rows
 
-        generic_population = GenericWorld.GenericPopulation(
+        generic_population = generic.World.Population(
             name=population.name,
             pose=self._to_generic_pose(population.pose),
             model_count=population.model_count,
@@ -261,21 +249,21 @@ class Converter(FactoryBase):
         )
 
         if population.box is not None:
-            generic_population.box = GenericWorld.GenericPopulation.GenericBox(
+            generic_population.box = generic.World.Population.Box(
                 size=population.box.size
             )
 
         if population.cylinder is not None:
             generic_population.cylinder = (
-                GenericWorld.GenericPopulation.GenericCylinder(
+                generic.World.Population.Cylinder(
                     radius=population.cylinder.radius, length=population.cylinder.length
                 )
             )
 
         return generic_population
 
-    def _to_generic_world(self, world: v15.World) -> GenericWorld:
-        return GenericWorld(
+    def _to_generic_world(self, world: v15.World) -> generic.World:
+        return generic.World(
             name=world.name,
             includes=[self._to_generic_include(i) for i in world.include],
             models=[self._to_generic_model(m) for m in world.model],

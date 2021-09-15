@@ -1,4 +1,4 @@
-""" Generic Bindings for SDFormat
+""" Generic (oppinionated) Bindings for SDFormat
 
 The classes below are a poor man's version of the data bindings in
 sdformat.bindings. They only implement a subset of the full SDFormat spec
@@ -11,67 +11,74 @@ objects are then used to construct the actual frame graph.
 
 
 from typing import List, Tuple
+import numpy as np
 
 
-class GenericPose:
+class Pose:
     def __init__(self, *, value: str = "0 0 0 0 0 0", relative_to: str = None) -> None:
         self.value = value
         self.relative_to = relative_to
 
 
 class PoseBearing:
-    def __init__(self, *, pose: GenericPose = None) -> None:
+    def __init__(self, *, pose: Pose = None) -> None:
         self.pose = pose
         if self.pose is None:
-            self.pose = GenericPose()
+            self.pose = Pose()
 
 
 class NamedPoseBearing(PoseBearing):
-    def __init__(self, *, name: str, pose: GenericPose = None) -> None:
+    def __init__(self, *, name: str, pose: Pose = None) -> None:
         super().__init__(pose=pose)
         self.name = name
 
 
-class GenericSensor(PoseBearing):
+class Frame(NamedPoseBearing):
+    def __init__(
+        self, *, name: str, pose: Pose=None, attached_to: str = None
+    ) -> None:
+        super().__init__(name=name, pose=pose)
+        self.attached_to = attached_to
+
+
+class Sensor(NamedPoseBearing):
     def __init__(
         self,
         *,
         name: str,
         type: str,
-        pose: GenericPose = None,
+        pose: Pose = None,
         camera: "Camera" = None,
-        frames: List["GenericFrame"] = None,
+        frames: List["Frame"] = None,
     ) -> None:
-        super().__init__(pose=pose)
+        super().__init__(name=name, pose=pose)
         self.type = type
         self.camera = camera
-        self.name = name
         self.frames = frames
 
         if frames is None:
             self.frames = list()
 
-    class Camera(PoseBearing):
+    class Camera(NamedPoseBearing):
         def __init__(
             self,
             *,
             name: str,
-            pose: GenericPose = None,
+            pose: Pose = None,
             horizontal_fov: float = 1.047,
             image: "Image" = None,
-            frames: "GenericFrame" = None,
+            frames: "Frame" = None,
         ) -> None:
-            super().__init__(pose=pose)
+            super().__init__(name=name, pose=pose)
             self.horizontal_fov = horizontal_fov
             self.image = image
-            self.name = name
             self.frames = frames
 
             if self.frames is None:
                 self.frames = list()
 
             if self.image is None:
-                self.image = GenericSensor.Camera.Image()
+                self.image = Sensor.Camera.Image()
 
         class Image:
             def __init__(
@@ -82,7 +89,7 @@ class GenericSensor(PoseBearing):
                 self.format = format
 
 
-class GenericJoint(PoseBearing):
+class Joint(NamedPoseBearing):
     def __init__(
         self,
         *,
@@ -91,12 +98,11 @@ class GenericJoint(PoseBearing):
         parent: str,
         child: str,
         axis: "Axis" = None,
-        pose: GenericPose = None,
-        sensor: List[GenericSensor] = None,
-        frames: List["GenericFrame"] = None,
+        pose: Pose = None,
+        sensor: List[Sensor] = None,
+        frames: List["Frame"] = None,
     ) -> None:
-        super().__init__(pose=pose)
-        self.name = name
+        super().__init__(name=name, pose=pose)
         self.type = kind
         self.parent = parent
         self.child = child
@@ -105,7 +111,7 @@ class GenericJoint(PoseBearing):
         self.frames = frames
 
         if axis is None:
-            self.axis = GenericJoint.Axis()
+            self.axis = Joint.Axis()
 
         if self.axis.xyz.expressed_in is None:
             self.axis.xyz.expressed_in = self.child
@@ -115,8 +121,8 @@ class GenericJoint(PoseBearing):
 
     class Axis:
         def __init__(self) -> None:
-            self.xyz = GenericJoint.Axis.Xyz()
-            self.limit = GenericJoint.Axis.Limit()
+            self.xyz = Joint.Axis.Xyz()
+            self.limit = Joint.Axis.Limit()
 
         class Xyz:
             def __init__(self, *, value: str = "0 0 1", expressed_in=None) -> None:
@@ -142,25 +148,24 @@ class GenericJoint(PoseBearing):
                 self.dissipation = dissipation
 
 
-class GenericLink(PoseBearing):
+class Link(NamedPoseBearing):
     def __init__(
         self,
         *,
         name: str,
-        pose: GenericPose = None,
+        pose: Pose = None,
         must_be_base_link: bool = False,
-        inertial: "GenericLink.Inertial" = None,
+        inertial: "Link.Inertial" = None,
         collisions: List[NamedPoseBearing],
         visuals: List[NamedPoseBearing],
         projector: NamedPoseBearing = None,
-        audio_source_poses: List[GenericPose],
-        sensors: List[GenericSensor],
-        lights: List["GenericLight"] = None,
-        frames: List["GenericFrame"] = None,
+        audio_source_poses: List[Pose],
+        sensors: List[Sensor],
+        lights: List["Light"] = None,
+        frames: List["Frame"] = None,
     ) -> None:
-        super().__init__(pose=pose)
+        super().__init__(name=name, pose=pose)
         self.must_be_base_link = must_be_base_link
-        self.name = name
         self.inertial = inertial
         self.projector = projector
         self.collision = collisions
@@ -178,7 +183,7 @@ class GenericLink(PoseBearing):
 
     class Inertial(PoseBearing):
         def __init__(
-            self, *, pose: GenericPose = None, frames: List["GenericFrame"] = None
+            self, *, pose: Pose = None, frames: List["Frame"] = None
         ) -> None:
             super().__init__(pose=pose)
             self.frames = frames
@@ -187,13 +192,13 @@ class GenericLink(PoseBearing):
                 self.frames = list()
 
 
-class GenericLight(NamedPoseBearing):
+class Light(NamedPoseBearing):
     def __init__(
         self,
         *,
         name: str,
-        pose: GenericPose = None,
-        frames: List["GenericFrame"] = None,
+        pose: Pose = None,
+        frames: List["Frame"] = None,
     ) -> None:
         super().__init__(name=name, pose=pose)
 
@@ -203,12 +208,12 @@ class GenericLight(NamedPoseBearing):
             self.frames = list()
 
 
-class GenericInclude(NamedPoseBearing):
+class Include(NamedPoseBearing):
     def __init__(
         self,
         *,
         name: str,
-        pose: GenericPose = None,
+        pose: Pose = None,
         placement_frame: str = None,
         uri: str,
     ) -> None:
@@ -220,27 +225,19 @@ class GenericInclude(NamedPoseBearing):
             self.pose = None
 
 
-class GenericFrame(NamedPoseBearing):
-    def __init__(
-        self, *, name: str, pose: GenericPose, attached_to: str = None
-    ) -> None:
-        super().__init__(name=name, pose=pose)
-        self.attached_to = attached_to
-
-
-class GenericModel(NamedPoseBearing):
+class Model(NamedPoseBearing):
     def __init__(
         self,
         *,
         name: str,
-        pose: GenericPose = None,
+        pose: Pose = None,
         placement_frame: str = None,
         canonical_link: str = None,
-        links: List[GenericLink],
-        include: List[GenericInclude],
-        models: List["GenericModel"],
-        frames: List[GenericFrame],
-        joints: List[GenericJoint],
+        links: List[Link],
+        include: List[Include],
+        models: List["Model"],
+        frames: List[Frame],
+        joints: List[Joint],
     ) -> None:
         super().__init__(name=name, pose=pose)
         self.placement_frame = placement_frame
@@ -269,16 +266,16 @@ class GenericModel(NamedPoseBearing):
                 frame.attached_to = self.placement_frame
 
 
-class GenericWorld:
+class World:
     def __init__(
         self,
         *,
         name: str,
-        includes: List[GenericInclude],
-        lights: List[GenericLight],
-        frames: List[GenericFrame],
-        models: List[GenericModel],
-        population: List["GenericPopulation"],
+        includes: List[Include],
+        lights: List[Light],
+        frames: List[Frame],
+        models: List[Model],
+        population: List["Population"],
     ) -> None:
         self.name = name
         self.includes = includes
@@ -287,18 +284,18 @@ class GenericWorld:
         self.models = models
         self.population = population
 
-    class GenericPopulation(NamedPoseBearing):
+    class Population(NamedPoseBearing):
         def __init__(
             self,
             *,
             name: str,
-            pose: GenericPose = None,
+            pose: Pose = None,
             model_count: int = 1,
-            distribution: "GenericDistribution",
-            box: "GenericBox" = None,
-            cylinder: "GenericCylinder" = None,
-            model: GenericModel,
-            frames: List[GenericFrame] = None,
+            distribution: "Distribution",
+            box: "Box" = None,
+            cylinder: "Cylinder" = None,
+            model: Model,
+            frames: List[Frame] = None,
         ) -> None:
             super().__init__(name=name, pose=pose)
             self.model_count = model_count
@@ -311,7 +308,7 @@ class GenericWorld:
             if frames is None:
                 self.frames = list()
 
-        class GenericDistribution:
+        class Distribution:
             def __init__(
                 self,
                 *,
@@ -325,11 +322,11 @@ class GenericWorld:
                 self.cols = cols
                 self.step = step
 
-        class GenericBox:
+        class Box:
             def __init__(self, *, size: Tuple[float] = (1, 1, 1)) -> None:
                 self.size = size
 
-        class GenericCylinder:
+        class Cylinder:
             def __init__(self, *, radius: float = 1, length: float = 1) -> None:
                 self.radius = radius
                 self.length = length

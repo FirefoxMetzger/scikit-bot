@@ -8,17 +8,7 @@ from .. import sdformat
 from .scopes import LightScope, ModelScope, Scope, WorldScope
 from ...fuel import get_fuel_model
 from .... import transform as tf
-from .generic import (
-    GenericFrame,
-    GenericInclude,
-    GenericJoint,
-    GenericLight,
-    GenericLink,
-    GenericModel,
-    GenericSensor,
-    GenericWorld,
-    NamedPoseBearing,
-)
+from . import generic
 from .links import DynamicPose, CustomLink, RotationJoint, PrismaticJoint, SimplePose
 from ...transformations import FrustumProjection
 
@@ -75,7 +65,7 @@ class FactoryBase:
             )
         return transform_factory(sdf, root_uri=root_uri)[0]
 
-    def _convert_frame(self, scope: "Scope", frame: GenericFrame):
+    def _convert_frame(self, scope: "Scope", frame: generic.Frame):
         scope.declare_frame(frame.name)
         scope.add_scaffold(frame.name, frame.pose.value, frame.pose.relative_to)
 
@@ -85,7 +75,7 @@ class FactoryBase:
             scope.declare_link(DynamicPose(frame.attached_to, frame.name))
 
     def convert_sensor(
-        self, sensor: GenericSensor, scope: Scope, attached_to: NamedPoseBearing
+        self, sensor: generic.Sensor, scope: Scope, attached_to: generic.NamedPoseBearing
     ) -> tf.Frame:
         sensor_frame = tf.Frame(3, name=sensor.name)
         sensor_scaffold = tf.Frame(3, name=sensor.name)
@@ -169,7 +159,7 @@ class FactoryBase:
 
         return sensor_scaffold
 
-    def convert_joint(self, joint: GenericJoint, scope: ModelScope):
+    def convert_joint(self, joint: generic.Joint, scope: ModelScope):
         scope.declare_frame(joint.name)
         scope.add_scaffold(joint.name, joint.pose.value, joint.pose.relative_to)
         scope.declare_link(DynamicPose(joint.child, joint.name))
@@ -228,7 +218,7 @@ class FactoryBase:
 
         return scope
 
-    def convert_light(self, light: GenericLight, *, scope: Scope = None) -> Scope:
+    def convert_light(self, light: generic.Light, *, scope: Scope = None) -> Scope:
         if scope is None:
             scope = LightScope(light.name)
 
@@ -240,7 +230,7 @@ class FactoryBase:
 
         return scope
 
-    def convert_link(self, link: GenericLink, scope: Scope) -> Scope:
+    def convert_link(self, link: generic.Link, scope: Scope) -> Scope:
         if link.must_be_base_link:
             link.pose.relative_to = "world"
             scope.declare_link(DynamicPose("world", link.name))
@@ -309,7 +299,7 @@ class FactoryBase:
         return scope
 
     def convert_model(
-        self, model: GenericModel, *, parent_scope: Scope = None
+        self, model: generic.Model, *, parent_scope: Scope = None
     ) -> Scope:
         scope = ModelScope(
             model.name,
@@ -368,7 +358,7 @@ class FactoryBase:
 
         return scope
 
-    def resolve_include(self, include: GenericInclude, scope: Scope) -> None:
+    def resolve_include(self, include: generic.Include, scope: Scope) -> None:
         subscope = self._resolve_include(include.uri)
 
         if include.name is None:
@@ -405,7 +395,7 @@ class FactoryBase:
         child = subscope.name + "::" + subscope.canonical_link
         scope.declare_link(DynamicPose(name, child))
 
-    def convert_world(self, world: GenericWorld) -> Scope:
+    def convert_world(self, world: generic.World) -> Scope:
         world_scope = WorldScope(world.name)
         for include in world.includes:
             self.resolve_include(include, world_scope)
@@ -440,11 +430,12 @@ class FactoryBase:
             self.convert_model(model, parent_scope=world_scope)
 
             # double-check if this is correct
+            # world_scope.declare_link(DynamicPose("world", f"{model.name}::{model.canonical_link}"))
             world_scope.add_scaffold(model.name, "0 0 0 0 0 0")
-            world_scope.declare_link(SimplePose("world", model.name, "0 0 0 0 0 0"))
+            # world_scope.declare_link(SimplePose("world", model.name, "0 0 0 0 0 0"))
 
             link_name = model.name + "::" + model.canonical_link
-            world_scope.declare_link(DynamicPose(model.name, link_name))
+            world_scope.declare_link(DynamicPose("world", link_name))
 
         # TODO: actor
         # TODO: road

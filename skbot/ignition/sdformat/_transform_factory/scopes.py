@@ -3,6 +3,7 @@ import numpy as np
 
 from .... import transform as tf
 from .. import sdformat
+from . import generic
 
 
 class SdfLink:
@@ -23,7 +24,7 @@ class ScaffoldPose(SdfLink):
 
     def __init__(self, parent: str, child: Union[str, tf.Frame], pose: str) -> None:
         super().__init__(parent, child)
-        self.pose = np.array(pose.split(), dtype=float)
+        self.pose = np.fromstring(pose, dtype=float, count=6, sep=" ")
 
     def to_transform_link(self, scope: "Scope") -> tf.Link:
         offset = self.pose[:3]

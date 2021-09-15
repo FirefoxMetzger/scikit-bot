@@ -34,7 +34,7 @@ class SimplePose(SdfLink):
         self, parent: Union[str, tf.Frame], child: Union[str, tf.Frame], pose: str
     ) -> None:
         super().__init__(parent, child)
-        self.pose = np.array(pose.split(), dtype=float)
+        self.pose = np.fromstring(pose, dtype=float, count=6, sep=" ")
 
     def to_transform_link(self, scope: "Scope", shape: tuple, axis: int) -> tf.Link:
         offset = np.broadcast_to(self.pose[:3], shape)
