@@ -2,6 +2,11 @@
 
 <!--next-version-placeholder-->
 
+## v0.7.4 (2021-09-15)
+### Fix
+* Bump sphinx from 4.1.2 to 4.2.0 ([#74](https://github.com/FirefoxMetzger/scikit-bot/issues/74)) ([`fd6e68d`](https://github.com/FirefoxMetzger/scikit-bot/commit/fd6e68dff4e01e629c7edbc4691cf0fa1b07d409))
+* Bump black from 21.8b0 to 21.9b0 ([#75](https://github.com/FirefoxMetzger/scikit-bot/issues/75)) ([`c58f238`](https://github.com/FirefoxMetzger/scikit-bot/commit/c58f238ff423cab2463df89f86959e80de74f7ba))
+
 ## v0.7.3 (2021-09-10)
 ### Fix
 * Update SDFormat bindings ([#73](https://github.com/FirefoxMetzger/scikit-bot/issues/73)) ([`64a6b82`](https://github.com/FirefoxMetzger/scikit-bot/commit/64a6b82d467ad76cf554e6176fc5afbd39e1274a))
