@@ -12,12 +12,17 @@ objects are then used to construct the actual frame graph.
 
 from typing import List, Tuple
 import numpy as np
+from itertools import chain
+from ..sdformat import ParseError
 
 
 class Pose:
     def __init__(self, *, value: str = "0 0 0 0 0 0", relative_to: str = None) -> None:
         self.value = value
         self.relative_to = relative_to
+
+        if self.relative_to == "":
+            self.relative_to = None
 
 
 class PoseBearing:
@@ -39,6 +44,9 @@ class Frame(NamedPoseBearing):
     ) -> None:
         super().__init__(name=name, pose=pose)
         self.attached_to = attached_to
+
+        if self.attached_to == "":
+            self.attached_to = None
 
 
 class Sensor(NamedPoseBearing):
@@ -254,16 +262,37 @@ class Model(NamedPoseBearing):
             elif len(include) > 0:
                 self.canonical_link = include[0].name
             elif len(models) > 0:
-                self.canonical_link = models[0].name
+                self.canonical_link = f"{models[0].name}::{models[0].canonical_link}"
+            else:
+                raise ParseError(f"Can not determine canonical link of `{name}`.")
 
         if self.placement_frame is None:
             self.placement_frame = "__model__"
 
+        implicit_frames = [el.name for el in chain(models, include)]
+        all_frames = [el.name for el in chain(links, include, models, frames, joints)]
+        unique_frames = set(all_frames)
+
+        if len(all_frames) != len(unique_frames):
+            duplicated = [name for x in unique_frames if all_frames.count(x) > 1]
+            raise ParseError(f"Non-unique frame names encountered for names: {duplicated}")
+            
+
+        el:PoseBearing
+        pose_bearing:List[PoseBearing] = [links, joints, [x for x in include if x.pose is not None], models, frames]
+        for el in chain(*pose_bearing):
+            relative_to = el.pose.relative_to
+            if relative_to is None:
+                el.pose.relative_to = "__model__"
+            elif relative_to in implicit_frames:
+                el.pose.relative_to += "::__model__"
+
         for frame in self.frames:
             if frame.attached_to is None:
-                frame.attached_to = self.placement_frame
-            elif frame.attached_to == "":
-                frame.attached_to = self.placement_frame
+                frame.attached_to = "__model__"
+            elif frame.attached_to in implicit_frames:
+                frame.attached_to = frame.attached_to + "::__model__"
+
 
 
 class World:
@@ -283,6 +312,28 @@ class World:
         self.frames = frames
         self.models = models
         self.population = population
+
+        implicit_frames = [el.name for el in chain(models, includes)]
+        all_frames = [el.name for el in chain(models, frames, population)]
+        unique_frames = set(all_frames)
+
+        if len(all_frames) != len(unique_frames):
+            duplicated = [name for x in unique_frames if all_frames.count(x) > 1]
+            raise ParseError(f"Non-unique frame names encountered for names: {duplicated}")
+
+        el:PoseBearing
+        pose_bearing:List[PoseBearing] = [[x for x in includes if x.pose is not None], lights, frames, models, population]
+        for el in chain(*pose_bearing):
+            if el.pose.relative_to is None:
+                el.pose.relative_to = "world"
+            elif el.pose.relative_to in implicit_frames:
+                el.pose.relative_to = el.pose.relative_to + "::__model__"
+
+        for frame in self.frames:
+            if frame.attached_to is None:
+                frame.attached_to = "world"
+            elif frame.attached_to in implicit_frames:
+                frame.attached_to = frame.attached_to + "::__model__"
 
     class Population(NamedPoseBearing):
         def __init__(

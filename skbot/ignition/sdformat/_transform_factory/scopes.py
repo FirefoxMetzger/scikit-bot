@@ -124,7 +124,10 @@ class Scope:
                 storage = self.scaffold_frames
 
             try:
-                frame = storage[name]
+                if name in self.nested_scopes:
+                    frame = self.nested_scopes[name].get("__model__", scaffolding)
+                else:
+                    frame = storage[name]
             except KeyError:
                 raise sdformat.ParseError(
                     f"No frame named '{name}' in scope '{self.name}'"
@@ -211,6 +214,9 @@ class ModelScope(Scope):
         self.default_frame = tf.Frame(3, name="__model__")
         self.scaffold_frames["__model__"] = self.default_frame
 
+        implicit_frame = tf.Frame(3, name=self.name)
+        self.frames["__model__"] = implicit_frame
+
         self.canonical_link = canonical_link
 
         self.pose = None
@@ -222,6 +228,17 @@ class ModelScope(Scope):
             return self.parent.get(name, scaffolding)
 
         return super().get(name, scaffolding)
+
+    def overwrite_by_include(self, name:str, placement_frame:str, pose:generic.Pose):
+        if name is not None:
+            self.name = name
+            self.frames["__model__"].name = name
+
+        if placement_frame is not None:
+            self.placement_frame = placement_frame
+
+        if pose is not None:
+            self.pose = pose
 
 
 class WorldScope(Scope):

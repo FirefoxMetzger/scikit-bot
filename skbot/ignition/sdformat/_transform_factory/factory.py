@@ -1,4 +1,3 @@
-from skbot.transform import joints
 from typing import Callable, Dict, Union, List, Any
 import importlib
 from urllib.parse import urlparse
@@ -75,7 +74,10 @@ class FactoryBase:
             scope.declare_link(DynamicPose(frame.attached_to, frame.name))
 
     def convert_sensor(
-        self, sensor: generic.Sensor, scope: Scope, attached_to: generic.NamedPoseBearing
+        self,
+        sensor: generic.Sensor,
+        scope: Scope,
+        attached_to: generic.NamedPoseBearing,
     ) -> tf.Frame:
         sensor_frame = tf.Frame(3, name=sensor.name)
         sensor_scaffold = tf.Frame(3, name=sensor.name)
@@ -306,7 +308,9 @@ class FactoryBase:
             placement_frame=model.placement_frame,
             canonical_link=model.canonical_link,
         )
+        scope.declare_link(DynamicPose("__model__", model.canonical_link))
 
+        # can this be removed/refactored?
         scope.pose = model.pose
 
         for link in model.links:
@@ -322,39 +326,27 @@ class FactoryBase:
             )
 
         for nested_model in model.models:
-            self.convert_model(nested_model, parent_scope=scope)
-
-            # double-check if this is correct
-            scope.add_scaffold(nested_model.name, "0 0 0 0 0 0")
+            nested_scope = self.convert_model(nested_model, parent_scope=scope)
+            scope.add_subscope(nested_scope)
             scope.declare_link(
-                SimplePose(scope.default_frame, nested_model.name, "0 0 0 0 0 0")
+                DynamicPose(
+                    "__model__",
+                    f"{nested_model.name}::{nested_model.canonical_link}",
+                )
+            )
+            scope.add_scaffold(
+                nested_scope.name + "::" + nested_scope.placement_frame,
+                nested_model.pose.value,
+                nested_model.pose.relative_to
             )
 
         for frame in model.frames:
             scope.declare_frame(frame.name)
             scope.add_scaffold(frame.name, frame.pose.value, frame.pose.relative_to)
-            if frame.attached_to == "__model__":
-                scope.declare_link(DynamicPose(scope.canonical_link, frame.name))
-            else:
-                scope.declare_link(DynamicPose(frame.attached_to, frame.name))
+            scope.declare_link(DynamicPose(frame.attached_to, frame.name))
 
         for joint in model.joints:
             self.convert_joint(joint, scope)
-
-        if parent_scope is not None:
-            parent_scope.add_subscope(scope)
-            parent_scope.declare_frame(model.name)
-            child = scope.name + "::" + scope.placement_frame
-
-            if model.pose.relative_to is None:
-                model.pose.relative_to = model.name
-
-            parent_scope.add_scaffold(child, model.pose.value, model.pose.relative_to)
-
-        if scope.canonical_link is None:
-            raise sdformat.ParseError(
-                f"Unable to determine canonical link for model '{model.name}'"
-            )
 
         return scope
 
@@ -418,24 +410,25 @@ class FactoryBase:
             world_scope.add_scaffold(
                 frame.name, frame.pose.value, frame.pose.relative_to
             )
-
-            if frame.attached_to is None:
-                frame.attached_to = "world"
-            elif frame.attached_to == "":
-                frame.attached_to = "world"
-
             world_scope.declare_link(DynamicPose(frame.attached_to, frame.name))
 
         for model in world.models:
-            self.convert_model(model, parent_scope=world_scope)
+            nested_scope = self.convert_model(model, parent_scope=world_scope)
+            world_scope.add_subscope(nested_scope)
 
-            # double-check if this is correct
-            # world_scope.declare_link(DynamicPose("world", f"{model.name}::{model.canonical_link}"))
-            world_scope.add_scaffold(model.name, "0 0 0 0 0 0")
-            # world_scope.declare_link(SimplePose("world", model.name, "0 0 0 0 0 0"))
+            world_scope.declare_link(
+                DynamicPose(
+                    "world",
+                    f"{model.name}::{model.canonical_link}",
+                )
+            )
 
-            link_name = model.name + "::" + model.canonical_link
-            world_scope.declare_link(DynamicPose("world", link_name))
+            world_scope.add_scaffold(
+                nested_scope.name + "::" + nested_scope.placement_frame,
+                model.pose.value,
+                model.pose.relative_to
+            )
+
 
         # TODO: actor
         # TODO: road
