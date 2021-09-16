@@ -30,7 +30,7 @@ extras_require = {
         "python-semantic-release == 7.19.2",
     ],
     "build": [
-        "build == 0.6.0.post1",
+        "build == 0.7.0",
         "twine == 3.4.2",
     ],
 }
