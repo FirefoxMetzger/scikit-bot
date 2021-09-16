@@ -32,8 +32,8 @@ class ScaffoldPose(SdfLink):
 
         return tf.CompundLink(
             [
-                tf.EulerRotation("XYZ", angles),
                 tf.Translation(offset), 
+                tf.EulerRotation("XYZ", angles),
             ]
         )
 
@@ -96,11 +96,10 @@ class Scope:
     def add_scaffold(self, frame_name: str, pose: str, relative_to: str = None) -> None:
         """Add a pose to the scaffolding frame graph."""
 
-        parent = self.default_frame.name
-        if relative_to is not None and not relative_to == "":
-            parent = relative_to
+        if relative_to is None:
+            relative_to = self.default_frame.name
 
-        self.scaffold_links.append(ScaffoldPose(parent, frame_name, pose))
+        self.scaffold_links.append(ScaffoldPose(relative_to, frame_name, pose))
 
     def declare_link(self, link: SdfLink) -> None:
         """Add a link to the final/dynamic frame graph."""
@@ -214,7 +213,7 @@ class ModelScope(Scope):
         self.default_frame = tf.Frame(3, name="__model__")
         self.scaffold_frames["__model__"] = self.default_frame
 
-        implicit_frame = tf.Frame(3, name=self.name)
+        implicit_frame = tf.Frame(3, name=self.name+"::__model__")
         self.frames["__model__"] = implicit_frame
 
         self.canonical_link = canonical_link

@@ -308,7 +308,7 @@ class FactoryBase:
             placement_frame=model.placement_frame,
             canonical_link=model.canonical_link,
         )
-        scope.declare_link(DynamicPose("__model__", model.canonical_link))
+        scope.declare_link(DynamicPose(model.canonical_link, "__model__"))
 
         # can this be removed/refactored?
         scope.pose = model.pose

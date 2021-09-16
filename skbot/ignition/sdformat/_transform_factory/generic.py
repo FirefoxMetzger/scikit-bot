@@ -40,7 +40,7 @@ class NamedPoseBearing(PoseBearing):
 
 class Frame(NamedPoseBearing):
     def __init__(
-        self, *, name: str, pose: Pose=None, attached_to: str = None
+        self, *, name: str, pose: Pose = None, attached_to: str = None
     ) -> None:
         super().__init__(name=name, pose=pose)
         self.attached_to = attached_to
@@ -189,10 +189,22 @@ class Link(NamedPoseBearing):
         if lights is None:
             self.lights = list()
 
+        for el in chain(
+            visuals, collisions, self.audio_sources, sensors, self.lights, self.frames
+        ):
+            if el.pose.relative_to is None:
+                el.pose.relative_to = name
+
+        if projector is not None:
+            if projector.pose.relative_to is None:
+                projector.pose.relative_to = name
+
+        # inertial frame is _forced_ to be relative to link
+        if self.inertial is not None:
+            self.inertial.pose.relative_to = name
+
     class Inertial(PoseBearing):
-        def __init__(
-            self, *, pose: Pose = None, frames: List["Frame"] = None
-        ) -> None:
+        def __init__(self, *, pose: Pose = None, frames: List["Frame"] = None) -> None:
             super().__init__(pose=pose)
             self.frames = frames
 
@@ -275,11 +287,18 @@ class Model(NamedPoseBearing):
 
         if len(all_frames) != len(unique_frames):
             duplicated = [name for x in unique_frames if all_frames.count(x) > 1]
-            raise ParseError(f"Non-unique frame names encountered for names: {duplicated}")
-            
+            raise ParseError(
+                f"Non-unique frame names encountered for names: {duplicated}"
+            )
 
-        el:PoseBearing
-        pose_bearing:List[PoseBearing] = [links, joints, [x for x in include if x.pose is not None], models, frames]
+        el: PoseBearing
+        pose_bearing: List[PoseBearing] = [
+            links,
+            joints,
+            [x for x in include if x.pose is not None],
+            models,
+            frames,
+        ]
         for el in chain(*pose_bearing):
             relative_to = el.pose.relative_to
             if relative_to is None:
@@ -292,7 +311,6 @@ class Model(NamedPoseBearing):
                 frame.attached_to = "__model__"
             elif frame.attached_to in implicit_frames:
                 frame.attached_to = frame.attached_to + "::__model__"
-
 
 
 class World:
@@ -319,10 +337,18 @@ class World:
 
         if len(all_frames) != len(unique_frames):
             duplicated = [name for x in unique_frames if all_frames.count(x) > 1]
-            raise ParseError(f"Non-unique frame names encountered for names: {duplicated}")
+            raise ParseError(
+                f"Non-unique frame names encountered for names: {duplicated}"
+            )
 
-        el:PoseBearing
-        pose_bearing:List[PoseBearing] = [[x for x in includes if x.pose is not None], lights, frames, models, population]
+        el: PoseBearing
+        pose_bearing: List[PoseBearing] = [
+            [x for x in includes if x.pose is not None],
+            lights,
+            frames,
+            models,
+            population,
+        ]
         for el in chain(*pose_bearing):
             if el.pose.relative_to is None:
                 el.pose.relative_to = "world"
