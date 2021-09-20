@@ -1,4 +1,4 @@
-'''<element name="sdf" required="1">
+"""<element name="sdf" required="1">
   <description>SDFormat base element that can include one model, actor, light, or worlds. A user of multiple worlds could run parallel instances of simulation, or offer selection of a world at runtime.</description>
 
   <attribute name="version" type="string" default="1.8" required="1">
@@ -10,9 +10,9 @@
   <include filename="actor.sdf" required="0"/>
   <include filename="light.sdf" required="0"/>
 
-</element> <!-- End SDF -->'''
+</element> <!-- End SDF -->"""
 
-from typing import List, Union, Dict, Any
+from typing import List, Union, Dict, Any, Tuple
 import warnings
 
 from .base import ElementBase
@@ -242,8 +242,37 @@ class Sdf(ElementBase):
                 version=version,
             )
 
-    def to_static_graph(self, declared_frames: Dict[str, tf.Frame]) -> tf.Frame:
-        return [x.to_static_graph(declared_frames) for x in self.worlds]
+    def to_static_graph(
+        self,
+        declared_frames: Dict[str, tf.Frame],
+        *,
+        seed: int = None,
+        shape: Tuple[int] = (3,),
+        axis: int = -1,
+    ) -> tf.Frame:
+        return [
+            x.to_static_graph(declared_frames, seed=seed, shape=shape, axis=axis)
+            for x in self.worlds
+        ]
 
-    def to_dynamic_graph(self, declared_frames: Dict[str, tf.Frame]) -> tf.Frame:
-        return [x.to_dynamic_graph(declared_frames) for x in self.worlds]
+    def to_dynamic_graph(
+        self,
+        declared_frames: Dict[str, tf.Frame],
+        *,
+        seed: int = None,
+        shape: Tuple[int] = (3,),
+        axis: int = -1,
+        apply_state: bool = True,
+        _scaffolding: Dict[str, tf.Frame],
+    ) -> tf.Frame:
+        return [
+            x.to_dynamic_graph(
+                declared_frames,
+                seed=seed,
+                shape=shape,
+                axis=axis,
+                apply_state=apply_state,
+                _scaffolding=None,
+            )
+            for x in self.worlds
+        ]
