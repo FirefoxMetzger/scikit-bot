@@ -1,8 +1,8 @@
-from typing import Union, List, Tuple
+from typing import Union, List, Tuple, Dict
 
 from ... import transform as tf
-from ._transform_factory.scopes import LightScope, ModelScope, Scope, WorldScope
-from ._transform_factory.factory import transform_factory
+from .load_as_generic import loads_generic
+from .generic_sdf.world import World
 
 
 def to_frame_graph(
@@ -16,7 +16,7 @@ def to_frame_graph(
     Parameters
     ----------
     sdf: str
-        A string containing SDFormat XML.
+        A SDFormat XML string describing one (or many) worlds.
     unwrap : bool
         If True (default) and the sdf only contains a single light, model, or
         world element return that element's frame. If the sdf contains multiple
@@ -61,23 +61,10 @@ def to_frame_graph(
         link = child_frame.transform_chain(child_frame)[0]
     """
 
-    scope_list: List[Scope] = transform_factory(sdf)
-    frame_list: List[tf.Frame] = list()
-    for scope in scope_list:
-        scope.build_scaffolding()
-        scope.resolve_links(shape=shape, axis=axis)
+    root = loads_generic(sdf)
+    worlds = [world.to_dynamic_graph(dict(), shape=shape, axis=axis) for world in root.worlds]
 
-        if isinstance(scope, WorldScope):
-            frame_list.append(scope.get("world", scaffolding=False))
-        elif isinstance(scope, ModelScope):
-            frame = scope.get(scope.canonical_link, scaffolding=False)
-            frame_list.append(frame)
-        else:
-            scope: LightScope
-            frame = scope.get(scope.name, scaffolding=False)
-            frame_list.append(frame)
-
-    if unwrap and len(frame_list) == 1:
-        return frame_list[0]
+    if unwrap and len(worlds) == 1:
+        return worlds[0]
     else:
-        return frame_list
+        return worlds

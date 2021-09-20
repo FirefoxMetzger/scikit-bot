@@ -37,13 +37,15 @@ class SimplePose(SdfLink):
         self.pose = np.fromstring(pose, dtype=float, count=6, sep=" ")
 
     def to_transform_link(self, scope: "Scope", shape: tuple, axis: int) -> tf.Link:
+        # pose gives child -> parent
         offset = np.broadcast_to(self.pose[:3], shape)
         angles = np.broadcast_to(self.pose[3:], shape)
 
+        # transform world -> child
         return tf.CompundLink(
             [
-                tf.Translation(offset, axis=axis),
-                tf.EulerRotation("XYZ", angles, axis=axis),
+                tf.Translation(-offset, axis=axis),
+                tf.EulerRotation("ZYX", -angles, axis=axis),
             ]
         )
 
@@ -95,8 +97,8 @@ class DynamicPose(SdfLink):
 
         return tf.CompundLink(
             [
-                tf.EulerRotation("XYZ", -angles, axis=axis),
-                tf.Translation(-translation, axis=axis),
+                tf.EulerRotation("ZYX", -angles, axis=axis),
+                tf.Translation(translation, axis=axis),
             ]
         )
 

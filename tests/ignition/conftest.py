@@ -209,6 +209,25 @@ def v18_sdf(request):
 
 @pytest.fixture(
     params=[
+        "sdformat/shapes_world.sdf",
+        "sdformat/world_nested_frame_attached_to.sdf",
+        "sdformat/world_nested_frame.sdf",
+        "sdformat/world_relative_to_nested_reference.sdf",
+        "v18/complete_world.sdf",
+        "v18/population.sdf",
+        "v18/pose_testing.sdf",
+        "v18/fuel_include_world.sdf",
+        "sdformat/world_complete.sdf",
+        "v18/perspective_transform.sdf",
+    ]
+)
+def v18_worlds(request):
+    filename = request.param
+    return (sdf_folder / filename).read_text()
+
+
+@pytest.fixture(
+    params=[
         "sdformat/include_with_interface_api_frame_semantics.sdf",
         "sdformat/include_with_interface_api_reposture.sdf",
         "sdformat/includes_missing_model.sdf",

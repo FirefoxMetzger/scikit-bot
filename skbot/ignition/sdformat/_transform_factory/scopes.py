@@ -32,8 +32,8 @@ class ScaffoldPose(SdfLink):
 
         return tf.CompundLink(
             [
-                tf.Translation(offset), 
-                tf.EulerRotation("XYZ", angles),
+                tf.Translation(-offset), 
+                tf.EulerRotation("ZYX", -angles),
             ]
         )
 

@@ -55,6 +55,11 @@ class Converter(FactoryBase):
 
         return graph_list
 
+    def _to_generic_pose(self, pose) -> generic.Pose:
+        if pose is None:
+            return generic.Pose()
+        return generic.Pose(value=pose.value, relative_to=pose.relative_to)
+
     def _to_generic_joint(self, joint: v17.Joint) -> generic.Joint:
         sensors = list()
         for sensor in joint.sensor:
@@ -70,7 +75,7 @@ class Converter(FactoryBase):
         }
 
         if joint.pose is not None:
-            joint_args["pose"] = joint.pose
+            joint_args["pose"] = self._to_generic_pose(joint.pose)
 
         if joint.axis is not None:
             axis = generic.Joint.Axis()
@@ -92,7 +97,11 @@ class Converter(FactoryBase):
         return generic.Joint(**joint_args)
 
     def _to_generic_sensor(self, sensor: v17.Sensor) -> generic.Sensor:
-        sensor_args = {"name": sensor.name, "type": sensor.type, "pose": sensor.pose}
+        sensor_args = {
+            "name": sensor.name,
+            "type": sensor.type,
+            "pose": self._to_generic_pose(sensor.pose),
+        }
 
         if sensor.camera is not None:
             if sensor.camera.noise is not None:
@@ -105,7 +114,7 @@ class Converter(FactoryBase):
         if sensor.camera is not None:
             sensor_args["camera"] = generic.Sensor.Camera(
                 name=sensor.camera.name,
-                pose=sensor.camera.pose,
+                pose=self._to_generic_pose(sensor.camera.pose),
                 horizontal_fov=sensor.camera.horizontal_fov,
                 image=generic.Sensor.Camera.Image(
                     width=sensor.camera.image.width,
@@ -117,13 +126,13 @@ class Converter(FactoryBase):
         return generic.Sensor(**sensor_args)
 
     def _to_generic_light(self, light: v17.Light) -> generic.Light:
-        return generic.Light(name=light.name, pose=light.pose)
+        return generic.Light(name=light.name, pose=self._to_generic_pose(light.pose))
 
     def _to_generic_link(self, link: v17.Link) -> generic.Link:
         link_args = {
             "name": link.name,
             "must_be_base_link": link.must_be_base_link,
-            "pose": link.pose,
+            "pose": self._to_generic_pose(link.pose),
             "inertial": None,
             "projector": None,
             "sensors": [self._to_generic_sensor(sensor) for sensor in link.sensor],
@@ -131,24 +140,19 @@ class Converter(FactoryBase):
         }
 
         if link.inertial is not None:
-            el = generic.Link.Inertial(pose=generic.Pose(relative_to=link.name))
-            if link.inertial.pose is not None:
-                el.pose.value = link.inertial.pose.value
-                if link.inertial.pose.relative_to is not None:
-                    raise NotImplementedError(
-                        "Unsure how to resolve intertal/pose/@relative_to."
-                    )
-            link_args["inertial"] = el
+            link_args["inertial"] = generic.Link.Inertial(
+                pose=self._to_generic_pose(link.inertial.pose)
+            )
 
         link_args["collisions"] = [
-            generic.NamedPoseBearing(name=c.name, pose=c.pose)
+            generic.NamedPoseBearing(name=c.name, pose=self._to_generic_pose(c.pose))
             if c.pose is not None
             else generic.NamedPoseBearing(name=c.name)
             for c in link.collision
         ]
 
         link_args["visuals"] = [
-            generic.NamedPoseBearing(name=v.name, pose=v.pose)
+            generic.NamedPoseBearing(name=v.name, pose=self._to_generic_pose(v.pose))
             if v.pose is not None
             else generic.NamedPoseBearing(name=v.name)
             for v in link.visual
@@ -156,11 +160,11 @@ class Converter(FactoryBase):
 
         if link.projector is not None:
             link_args["projector"] = generic.NamedPoseBearing(
-                name=link.projector.name, pose=link.projector.pose
+                name=link.projector.name, pose=self._to_generic_pose(link.projector.pose)
             )
 
         link_args["audio_source_poses"] = [
-            a.pose if a.pose is not None else generic.Pose() for a in link.audio_source
+            self._to_generic_pose(a.pose) for a in link.audio_source
         ]
 
         return generic.Link(**link_args)
@@ -173,7 +177,7 @@ class Converter(FactoryBase):
 
         return generic.Model(
             name=model.name,
-            pose=model.pose,
+            pose=self._to_generic_pose(model.pose),
             placement_frame=None,
             canonical_link=model.canonical_link,
             links=[self._to_generic_link(l) for l in model.link],
@@ -185,7 +189,9 @@ class Converter(FactoryBase):
 
     def _to_generic_frame(self, frame: FrameElement) -> generic.Frame:
         return generic.Frame(
-            attached_to=frame.attached_to, name=frame.name, pose=frame.pose
+            attached_to=frame.attached_to,
+            name=frame.name,
+            pose=self._to_generic_pose(frame.pose),
         )
 
     def _to_generic_include(self, include: IncludeElement) -> generic.Include:
@@ -207,7 +213,7 @@ class Converter(FactoryBase):
 
         return generic.World.Population(
             name=population.name,
-            pose=population.pose,
+            pose=self._to_generic_pose(population.pose),
             model_count=population.model_count,
             distribution=distribution,
             box=population.box,

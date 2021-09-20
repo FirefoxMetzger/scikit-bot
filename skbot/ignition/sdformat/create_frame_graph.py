@@ -131,7 +131,8 @@ def create_frame_graph(sdf: str) -> Tuple[Dict[str, rtf.Frame], Dict[str, rtf.Li
         """create_frame_graph is deprecated and will be removed in skbot v1.0 in
         favor of to_frame_graph. Check the docs for detailed migration
         instructions.
-        """
+        """, 
+        DeprecationWarning
     )
 
     root = ElementTree.fromstring(sdf)
