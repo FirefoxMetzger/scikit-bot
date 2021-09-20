@@ -120,7 +120,7 @@ class ElementBase:
         shape: Tuple[int] = (3,),
         axis: int = -1,
         apply_state: bool = True,
-        _scaffolding:Dict[str, tf.Frame],
+        _scaffolding: Dict[str, tf.Frame],
     ) -> tf.Frame:
         """Convert to transform graph
 
@@ -226,7 +226,13 @@ class ElementBase:
             if not hasattr(specific, name):
                 continue
 
-            if getattr(specific, name) is None:
+            if clazz in [StringElement, BoolElement, FloatElement]:
+                value = getattr(specific, name)
+                if value is not None:
+                    generic_args[name] = value
+                else:
+                    continue
+            elif getattr(specific, name) is None:
                 generic_args[name] = clazz(sdf_version=version)
             else:
                 generic_args[name] = clazz.from_specific(
@@ -246,20 +252,16 @@ class ElementBase:
 class StringElement(ElementBase):
     """Plumbing for smoother conversion"""
 
-    @classmethod
-    def from_specific(cls, specific: Any, *, version: str) -> "ElementBase":
-        return str(specific)
-
 
 class FloatElement(ElementBase):
     """Plumbing for smoother conversion"""
 
-    @classmethod
-    def from_specific(cls, specific: Any, *, version: str) -> "ElementBase":
-        return float(specific)
+
+class BoolElement(ElementBase):
+    """Plumbing for smoother conversion"""
 
 
-class Pose:
+class Pose(ElementBase):
     """Position and orientation of a simulated object
 
     A position (x,y,z) and orientation (roll, pitch yaw) with respect
@@ -296,8 +298,14 @@ class Pose:
     """
 
     def __init__(
-        self, *, value: str = "0 0 0 0 0 0", relative_to: str = None, frame: str = None
+        self,
+        *,
+        value: str = "0 0 0 0 0 0",
+        relative_to: str = None,
+        frame: str = None,
+        sdf_version: str,
     ) -> None:
+        super().__init__(sdf_version=sdf_version)
         self.value = np.fromstring(value, dtype=float, count=6, sep=" ")
         self.relative_to = relative_to
         if frame is not None:
@@ -313,7 +321,16 @@ class Pose:
 
     @classmethod
     def from_specific(cls, specific: Any, *, version: str):
-        return Pose(value=specific.value, relative_to=specific.relative_to)
+        if version in ["1.0", "1.2", "1.3", "1.4"]:
+            return Pose(value=specific, sdf_version=version)
+        elif version in ["1.5", "1.6"]:
+            return Pose(value=specific.value, frame=specific.frame, sdf_version=version)
+        else:
+            return Pose(
+                value=specific.value,
+                relative_to=specific.relative_to,
+                sdf_version=version,
+            )
 
     def to_tf_link(self) -> tf.Link:
         """tf.Link from **child** to **parent** frame"""

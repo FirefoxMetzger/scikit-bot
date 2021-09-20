@@ -159,21 +159,21 @@ class Sdf(ElementBase):
         try:
             return self._actors[0]
         except IndexError:
-            raise AttributeError("`Sdf` does not contain an actor.") from None
+            return None
 
     @property
     def model(self) -> Model:
         try:
             return self._models[0]
         except IndexError:
-            raise AttributeError("`Sdf` does not contain a model.") from None
+            return None
 
     @property
     def light(self) -> Light:
         try:
             return self._lights[0]
         except IndexError:
-            raise AttributeError("`Sdf` does not contain a light.") from None
+            return None
 
     # Depreciated properties
     @property
@@ -263,7 +263,7 @@ class Sdf(ElementBase):
         shape: Tuple[int] = (3,),
         axis: int = -1,
         apply_state: bool = True,
-        _scaffolding: Dict[str, tf.Frame],
+        _scaffolding: Dict[str, tf.Frame] = None,
     ) -> tf.Frame:
         return [
             x.to_dynamic_graph(
@@ -272,7 +272,7 @@ class Sdf(ElementBase):
                 shape=shape,
                 axis=axis,
                 apply_state=apply_state,
-                _scaffolding=None,
+                _scaffolding=_scaffolding,
             )
             for x in self.worlds
         ]

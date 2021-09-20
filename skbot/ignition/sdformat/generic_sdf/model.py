@@ -1,161 +1,312 @@
 from itertools import chain
-from typing import List, Any
+from typing import List, Any, Dict
+import warnings
+from itertools import chain
 
 
-from .base import ElementBase, PoseBearing, Pose
+from .base import BoolElement, ElementBase, PoseBearing, Pose, StringElement
 from .link import Link
 from .include import Include
 from .frame import Frame
 from .joint import Joint
+from .plugin import Plugin
+from .gripper import Gripper
+from .actor import Actor
+from .light import Light
 from ..exceptions import ParseError
+from .... import transform as tf
 
 class Model(ElementBase):
-    pass
-    # def __init__(
-    #     self,
-    #     *,
-    #     name: str,
-    #     pose: Pose = None,
-    #     placement_frame: str = None,
-    #     canonical_link: str = None,
-    #     links: List[Link],
-    #     include: List[Include],
-    #     models: List["Model"],
-    #     frames: List[Frame],
-    #     joints: List[Joint],
-    # ) -> None:
-    #     super().__init__(name=name, pose=pose)
-    #     self.placement_frame = placement_frame
-    #     self.canonical_link = canonical_link
-    #     self.links = links
-    #     self.include = include
-    #     self.models = models
-    #     self.frames = frames
-    #     self.joints = joints
+    """ A physical object in the simulation
 
-    #     if self.canonical_link is None:
-    #         if len(links) > 0:
-    #             self.canonical_link = links[0].name
-    #         elif len(include) > 0:
-    #             self.canonical_link = include[0].name
-    #         elif len(models) > 0:
-    #             self.canonical_link = f"{models[0].name}::{models[0].canonical_link}"
-    #         else:
-    #             raise ParseError(f"Can not determine canonical link of `{name}`.")
+    The model element defines a complete robot or any other physical object.
+    This includes (but is not limited to) its appearance, collision,
+    skeleton/kinematic chain.
 
-    #     if self.placement_frame is None:
-    #         self.placement_frame = "__model__"
+    Parameters
+    ----------
+    name : str
+        A unique name for the model. This name must not match another model in
+        the world.
+    canonical_link : str
+        The name of the model's canonical link, to which the model's implicit
+        coordinate frame is attached. If unset or set to an empty string,
+        the first link element listed as a child of this model is chosen
+        as the canonical link.
 
-    #     implicit_frames = [el.name for el in chain(models, include)]
-    #     all_frames = [el.name for el in chain(links, include, models, frames, joints)]
-    #     unique_frames = set(all_frames)
+        .. versionadded:: SDFormat v1.7
+    placement_frame : str 
+        The frame inside this model whose pose will be set by the pose element
+        of the model. Defaults to  ``__model__`` (the implicit model frame).
 
-    #     if len(all_frames) != len(unique_frames):
-    #         duplicated = [name for x in unique_frames if all_frames.count(x) > 1]
-    #         raise ParseError(
-    #             f"Non-unique frame names encountered for names: {duplicated}"
-    #         )
+        .. versionadded:: SDFormat v1.8
+    static : bool
+        If True (default), the model is immovable. Otherwise the model is
+        simulated in the dynamics engine.
+    self_collide : bool
+        If True, all links in the model will collide with each other
+        (except those connected by a joint). Can be overridden by the link or
+        collision element self_collide property. Two links within a model will
+        collide if link1.self_collide OR link2.self_collide. Links connected by
+        a joint will never collide. The default is ``False``.
 
-    #     el: PoseBearing
-    #     pose_bearing: List[PoseBearing] = [
-    #         links,
-    #         joints,
-    #         [x for x in include if x.pose is not None],
-    #         models,
-    #         frames,
-    #     ]
-    #     for el in chain(*pose_bearing):
-    #         relative_to = el.pose.relative_to
-    #         if relative_to is None:
-    #             el.pose.relative_to = "__model__"
-    #         elif relative_to in implicit_frames:
-    #             el.pose.relative_to += "::__model__"
+        .. versionadded:: SDFormat v1.5
+    allow_auto_disable : bool
+        Allows a model to auto-disable, which is means the physics engine can
+        skip updating the model when the model is at rest. This parameter is
+        only used by models with no joints.
 
-    #     for frame in self.frames:
-    #         if frame.attached_to is None:
-    #             frame.attached_to = "__model__"
-    #         elif frame.attached_to in implicit_frames:
-    #             frame.attached_to = frame.attached_to + "::__model__"
+        .. versionadded:: SDFormat v1.2
+    frames : List[Frame]
+        A list of frames of reference in which poses may be expressed.
+
+        .. versionadded:: SDFormat v1.5
+    pose : Pose
+        A position (x,y,z) and orientation (roll, pitch yaw) with respect to the
+        frame named in the relative_to attribute.
+
+        .. versionadded:: SDFormat v1.2
+    links : List[Link]
+        A list of links. Each link represents a rigid body with inertia,
+        collision, and visual properties.
+
+        .. versionchanged:: SDFormat v1.5
+            A model may now have 0 links.
+    joints : List[Joint]
+        A list of joints. Each joint specifies a kinematic and/or dynamic
+        constraints between two links.
+    plugins : List[Plugin]
+        A list of plugins used to customize the runtime behavior of the
+        simulation.
+    grippers: List[Gripper],
+        A list of grippers.
+    includes : List[Include]
+        A list of references to other SDF files that contain :class:`Model`s to
+        include as nested models.
+
+        .. versionadded:: SDFormat v1.5
+    models : List[Model]
+        A list of models nested within this model.
+
+        .. versionadded:: SDFormat v1.5
+    enable_wind : bool
+        If set to true, all links in the model will be affected by the wind. Can
+        be overriden by the link wind property.
+
+        .. versionadded:: SDFormat v1.6
+    sdf_version : str
+        The SDFormat version to use when constructing this element.
+    origin : Model.Origin
+        The model's origin.
+
+        .. depreciated:: SDFormat v1.2
+            Use ``Model.pose`` instead.
 
 
-"""<!-- Model -->
-<element name="model" required="*">
-  <description>The model element defines a complete robot or any other physical object.</description>
+    Attributes
+    ----------
+    name : str
+        Documented in the Parameters section.
+    canonical_link : str
+        Documented in the Parameters section.
+    placement_frame : str 
+        Documented in the Parameters section.
+    static : bool
+        Documented in the Parameters section.
+    self_collide : bool
+        Documented in the Parameters section.
+    allow_auto_disable : bool
+        Documented in the Parameters section.   
+    frames : List[Frame]
+        Documented in the Parameters section.
+    pose : Pose
+        Documented in the Parameters section.
+    links : List[Link]
+        Documented in the Parameters section.
+    joints : List[Joint]
+        Documented in the Parameters section.
+    plugins : List[Plugin]
+        Documented in the Parameters section.
+    grippers: List[Gripper],
+        Documented in the Parameters section.
+    includes : List[Include]
+        Documented in the Parameters section.
+    models : List[Model]
+        Documented in the Parameters section.
+    enable_wind : bool
+        Documented in the Parameters section.
+    origin : Model.Origin
+        Documented in the Parameters section.
 
-  <attribute name="name" type="string" default="__default__" required="1">
-    <description>
-      The name of the model and its implicit frame. This name must be unique
-      among all elements defining frames within the same scope, i.e., it must
-      not match another //model, //frame, //joint, or //link within the same
-      scope.
-    </description>
-  </attribute>
+        .. depreciated:: SDFormat v1.2
+            Use ``Model.pose`` instead.
 
-  <attribute name="canonical_link" type="string" default="" required="*">
-    <description>
-      The name of the model's canonical link, to which the model's implicit
-      coordinate frame is attached. If unset or set to an empty string,
-      the first link element listed as a child of this model is chosen
-      as the canonical link.
-    </description>
-  </attribute>
-  <attribute name="placement_frame" type="string" default="" required="0">
-    <description>The frame inside this model whose pose will be set by the pose element of the model. i.e, the pose element specifies the pose of this frame instead of the model frame.</description>
-  </attribute>
+    """
+    def __init__(self, *, 
+        name: str,
+        canonical_link: str = None,
+        placement_frame: str = "__model__",
+        static: bool = False,
+        self_collide: bool = False,
+        allow_auto_disable: bool = True,
+        frames: List[Frame] = None,
+        pose: Pose = None,
+        links: List[Link],
+        joints: List[Joint],
+        plugins: List[Plugin],
+        grippers: List[Gripper],
+        includes: List[Include] = None,
+        models: List["Model"] = None,
+        enable_wind: bool = False,
+        sdf_version: str,
+        origin: "Model.Origin" = None,
+        ) -> None:
+        super().__init__(sdf_version=sdf_version)
 
-  <element name="static" type="bool" default="false" required="0">
-    <description>If set to true, the model is immovable. Otherwise the model is simulated in the dynamics engine.</description>
-  </element>
+        self.name = name
+        
+        if canonical_link == "":
+            canonical_link = None
+        if canonical_link is not None:
+            self.canonical_link = canonical_link
+        elif len(links) > 0:
+            # self.canonical_link = links[0].name
+            self.canonical_link = "implement link"
+        else:
+            raise ValueError("`Model` must specify `canonical_link` or have at least one `link`.")
 
-  <element name="self_collide" type="bool" default="false" required="0">
-    <description>If set to true, all links in the model will collide with each other (except those connected by a joint). Can be overridden by the link or collision element self_collide property. Two links within a model will collide if link1.self_collide OR link2.self_collide. Links connected by a joint will never collide.</description>
-  </element>
+        self.placement_frame = placement_frame
+        self.static = static
+        self.self_collide = self_collide
+        self.allow_auto_disable = allow_auto_disable
+        self.frames = [] if frames is None else frames
+        
+        if origin is None:
+            self._origin = Model.Origin(sdf_version=sdf_version)
+        elif sdf_version == "1.0":
+            self._origin = origin
+        else:
+            warnings.warn("`origin` is depreciated. Use `Model.pose` instead.")
+            self._origin = origin
+        
+        if len(links) == 0 and sdf_version in ["1.0", "1.2", "1.3", "1.4"]:
+            raise ValueError("A `Model` must specify at least one `Link`.")
+        else:
+            self.links = links
+        
+        if sdf_version == "1.0":
+            self.pose = self._origin.pose
+        elif pose is None:
+            self.pose = Pose(sdf_version=sdf_version)
+        else:
+            self.pose = pose
 
-  <element name="allow_auto_disable" type="bool" default="true" required="0">
-    <description>Allows a model to auto-disable, which is means the physics engine can skip updating the model when the model is at rest. This parameter is only used by models with no joints.</description>
-  </element>
+        self.joints = joints
+        self.plugins = plugins
+        self.grippers = grippers
+        self.models = [] if models is None else models
+        self.enable_wind = enable_wind
+        
 
-  <include filename="frame.sdf" required="*"/>
-  <include filename="pose.sdf" required="0"/>
-  <include filename="link.sdf" required="*"/>
-  <include filename="joint.sdf" required="*"/>
-  <include filename="plugin.sdf" required="*"/>
-  <include filename="gripper.sdf" required="*"/>
+        for include in includes:
+            fragment = include.resolve()
+            if isinstance(fragment, Model):
+                self.models.append(fragment)
+            else:
+                raise ValueError("`Model.include` can only be used to include models.")
 
-  <element name="include" required="*">
-    <description>
-      Include resources from a URI. This can be used to nest models. Included resources can only contain one 'model', 'light' or 'actor' element. The URI can point to a directory or a file. If the URI is a directory, it must conform to the model database structure (see /tutorials?tut=composition&amp;cat=specification&amp;#defining-models-in-separate-files).
-    </description>
-    <element name="uri" type="string" default="__default__" required="1">
-      <description>URI to a resource, such as a model</description>
-    </element>
+        el: PoseBearing
+        pose_bearing: List[PoseBearing] = [
+            # links,
+            models,
+            # frames,
+        ]
+        for el in chain(*pose_bearing):
+            relative_to = el.pose.relative_to
+            if relative_to is None:
+                el.pose.relative_to = "__model__"
 
-    <include filename="pose.sdf" required="0"/>
-    <include filename="plugin.sdf" required="*"/>
+        # for frame in self.frames:
+        #     if frame.attached_to is None:
+        #         frame.attached_to = "__model__"
+    
+    @property
+    def origin(self):
+        warnings.warn("`Model.origin` is depreciated since SDFormat v1.2. Use `Model.pose` instead.")
+        return self._origin
 
-    <element name="name" type="string" default="" required="0">
-      <description>Override the name of the included model.</description>
-    </element>
+    @classmethod
+    def from_specific(cls, specific: Any, *, version: str) -> "Model":
+        model_args = {
+            "name": specific.name,
+            "sdf_version": version
+        }
+        
+        elements_with_default = {
+            "canonical_link": StringElement,
+            "placement_frame": StringElement,
+            "static": BoolElement,
+            "self_collide": BoolElement,
+            "allow_auto_disable": BoolElement,
+            "origin": Model.Origin,
+            "pose": Pose,
+            "enable_wind": BoolElement,
+        }
+        list_elements = {
+            "frame": ("frames", Frame),
+            "link": ("links", Link),
+            "joint": ("joints", Joint),
+            "plugin": ("plugins", Plugin),
+            "gripper": ("grippers", Gripper),
+            "include": ("includes", Include),
+            "model": ("models", Model),
+        }
 
-    <element name="static" type="bool" default="false" required="0">
-      <description>Override the static value of the included model.</description>
-    </element>
+        standard_args = cls._prepare_standard_args(
+            specific,
+            elements_with_default,
+            list_elements,
+            version=version
+        )
+        model_args.update(standard_args)
 
-    <element name="placement_frame" type="string" default="" required="0">
-      <description>The frame inside the included model whose pose will be set by the specified pose element. If this element is specified, the pose must be specified.</description>
-    </element>
-  </element>
+        # if hasattr(specific, "placement_frame") and :
+        #     model_args["placement_frame"]
 
-  <element name="model" ref="model" required="*">
-    <description>A nested model element</description>
-    <attribute name="name" type="string" default="__default__" required="1">
-      <description>A unique name for the model. This name must not match another nested model in the same level as this model.</description>
-    </attribute>
-  </element>
+        return Model(**model_args)
 
-  <element name="enable_wind" type="bool" default="false" required="0">
-    <description>If set to true, all links in the model will be affected by the wind. Can be overriden by the link wind property.</description>
-  </element>
 
-</element> <!-- End Model -->
-"""
+    def declared_frames(self) -> Dict[str, tf.Frame]:
+        declared_frames = {
+            "__model__": tf.Frame(3, name=self.name)
+        }
+
+        for el in chain(self.frames, self.links, self.joints, self.grippers):
+            declared_frames.update(el.declared_frames())
+
+        for model in self.models:
+            model_frames = model.declared_frames()
+            declared_frames[model.name] = model_frames["__model__"]
+            for name, frame in model_frames.items():
+                declared_frames[f"{model.name}::{name}"] = frame
+
+        return declared_frames
+
+    # def 
+
+
+    class Origin(ElementBase):
+        def __init__(self, *, pose:Pose=None, sdf_version: str) -> None:
+            super().__init__(sdf_version=sdf_version)
+            
+            if pose is None:
+                self.pose = Pose(sdf_version=sdf_version)
+            else:
+                self.pose = pose
+
+        @classmethod
+        def from_specific(cls, specific: Any, *, version: str) -> "Model.Origin":
+            return Model.Origin(
+                pose=Pose.from_specific(specific.pose, version=version),
+                sdf_version=version
+            )

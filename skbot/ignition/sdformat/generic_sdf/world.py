@@ -54,7 +54,7 @@ class World(ElementBase):
     includes : "World.Include"
         .. versionadded:: SDFormat v1.4
 
-        References to other SDF files that contain world fragments
+        References to other SDF files that contain fragments
         (:class:`Model`s, :class:`Light`s, :class:`Actor`s) to include in the
         simulation.
 
@@ -122,7 +122,7 @@ class World(ElementBase):
 
         A group of models that is procedually inserted into the simulation.
     sdf_version : str
-        The SDFormat version to use when construction this element.
+        The SDFormat version to use when constructing this element.
 
     Attributes
     ----------
@@ -180,9 +180,6 @@ class World(ElementBase):
 
     The `populations` kwarg is resolved upon construction and generated models
     are appended to the list of `Worlds.models`.
-
-    Implicit frames defined by `Worlds.models` are appended to the list of
-    `World.frames`.
 
     """
 
@@ -265,16 +262,6 @@ class World(ElementBase):
             else:
                 self.lights.append(fragment)
 
-        for model in self.models:
-            warnings.warn("Model needs to be implemented.")
-            # self.frames.append(
-            #     Frame(
-            #         name=model.name,
-            #         pose=model.pose,
-            #         attached_to=f"{model.name}::{model.canonical_link}",
-            #     )
-            # )
-
         # for frame in self.frames:
         #     if frame.attached_to is None:
         #         frame.attached_to = "world"
@@ -285,7 +272,7 @@ class World(ElementBase):
         pose_bearing: List[PoseBearing] = [
             # lights,
             # frames,
-            # models, # model is not yet implemented
+            models,
         ]
         for el in chain(*pose_bearing):
             if el.pose.relative_to is None:
@@ -396,17 +383,22 @@ class World(ElementBase):
 
             model.to_static_graph(declared_frames, seed=seed, shape=shape, axis=axis)
 
-        el: NamedPoseBearing
-        for el in chain(self.actors, self.lights, self.frames, self._joints):
-            link: tf.Link = el.pose.to_tf_link()
-            parent_name = el.pose.relative_to
-            child_name = el.name
+        # el: NamedPoseBearing
+        # for el in chain(
+        #     self.actors,
+        #     self.lights,
+        #     self.frames,
+        #     self._joints
+        # ):
+        #     link: tf.Link = el.pose.to_tf_link()
+        #     parent_name = el.pose.relative_to
+        #     child_name = el.name
 
-            parent = declared_frames[parent_name]
-            child = declared_frames[child_name]
-            link(child, parent)
+        #     parent = declared_frames[parent_name]
+        #     child = declared_frames[child_name]
+        #     link(child, parent)
 
-            el.to_static_graph(declared_frames, seed=seed, shape=shape, axis=axis)
+        #     el.to_static_graph(declared_frames, seed=seed, shape=shape, axis=axis)
 
         # Elements that might need linking once implemented:
         # atmosphere: "Atmosphere" = None,
@@ -435,53 +427,59 @@ class World(ElementBase):
                 _scaffolding, seed=seed, shape=shape, axis=axis
             )
 
-        # refactor into frames.to_dynamic_graph
-        for frame in self.frames:
-            parent_name = frame.attached_to
-            child_name = frame.name
+        # # refactor into frames.to_dynamic_graph
+        # for frame in self.frames:
+        #     parent_name = frame.attached_to
+        #     child_name = frame.name
 
-            parent = declared_frames[parent_name]
-            child = declared_frames[child_name]
+        #     parent = declared_frames[parent_name]
+        #     child = declared_frames[child_name]
 
-            parent_static = _scaffolding[parent_name]
-            child_static = _scaffolding[child_name]
+        #     parent_static = _scaffolding[parent_name]
+        #     child_static = _scaffolding[child_name]
 
-            link = tf.CompundLink(
-                parent_static.transform_chain(child_static)
-            )
-            link(parent, child)
+        #     link = tf.CompundLink(
+        #         parent_static.transform_chain(child_static)
+        #     )
+        #     link(parent, child)
 
-        # refactor into joints.to_dynamic_graph
-        for joint_child in self._joints:
-            parent_name = joint_child.parent
-            child_name = joint_child.child
-            joint_name = joint_child.name
-            joint_name_parent = joint_child.name + "_parent"
+        # # refactor into joints.to_dynamic_graph
+        # for joint_child in self._joints:
+        #     parent_name = joint_child.parent
+        #     child_name = joint_child.child
+        #     joint_name = joint_child.name
+        #     joint_name_parent = joint_child.name + "_parent"
 
-            parent = declared_frames[parent_name]
-            joint_parent = declared_frames[joint_name_parent]
-            joint_child = declared_frames[joint_name]
-            child = declared_frames[child_name]
+        #     parent = declared_frames[parent_name]
+        #     joint_parent = declared_frames[joint_name_parent]
+        #     joint_child = declared_frames[joint_name]
+        #     child = declared_frames[child_name]
 
-            parent_static = _scaffolding[parent_name]
-            joint_static = _scaffolding[joint_name]
-            child_static = _scaffolding[child_name]
+        #     parent_static = _scaffolding[parent_name]
+        #     joint_static = _scaffolding[joint_name]
+        #     child_static = _scaffolding[child_name]
 
-            link = tf.CompundLink(
-                parent_static.transform_chain(joint_static)
-            )
-            link(parent, joint_parent)
+        #     link = tf.CompundLink(
+        #         parent_static.transform_chain(joint_static)
+        #     )
+        #     link(parent, joint_parent)
 
-            joint_link:tf.Link = joint_child.to_tf_link()
-            joint_link(joint_parent, joint_child)
+        #     joint_link:tf.Link = joint_child.to_tf_link()
+        #     joint_link(joint_parent, joint_child)
 
-            link = tf.CompundLink(
-                joint_static.transform_chain(child_static)
-            )
-            link(joint_child, child)
+        #     link = tf.CompundLink(
+        #         joint_static.transform_chain(child_static)
+        #     )
+        #     link(joint_child, child)
 
         el: NamedPoseBearing
-        for el in chain(self.models, self.actors, self.lights, self.frames):
+        for el in chain(
+            self.models,
+            self.actors,
+            self.lights,
+            self.frames,
+            self._joints
+        ):
             el.to_dynamic_graph(
                 declared_frames,
                 seed=seed,
@@ -491,9 +489,7 @@ class World(ElementBase):
                 _scaffolding=_scaffolding
             )
 
-        return super().to_dynamic_graph(
-            declared_frames, seed=seed, shape=shape, axis=axis, apply_state=apply_state
-        )
+        return declared_frames["world"]
 
         # atmosphere: "Atmosphere" = None,
         # gui: "Gui" = None,
