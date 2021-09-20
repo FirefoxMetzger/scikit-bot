@@ -4,7 +4,7 @@ install_requires = ["numpy == 1.21.2", "scipy == 1.7.1"]
 
 extras_require = {
     "ignition": [
-        "pyzmq == 22.2.1",
+        "pyzmq == 22.3.0",
         "betterproto == 1.2.5",
         "psutil == 5.8.0",
         "requests == 2.26.0",
