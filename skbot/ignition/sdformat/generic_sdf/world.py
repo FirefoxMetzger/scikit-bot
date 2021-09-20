@@ -192,7 +192,7 @@ class World(ElementBase):
         name: str = "",
         audio: "World.Audio" = None,
         wind: "World.Wind" = None,
-        includes: List["World.WorldInclude"],
+        includes: List[Include],
         gravity: str = "0 0 -9.8",
         magnetic_field: str = "5.5645e-6 22.8758e-6 -42.3884e-6",
         atmosphere: "Atmosphere" = None,
@@ -304,7 +304,7 @@ class World(ElementBase):
     def from_specific(cls, specific: Any, *, version: str) -> "World":
         world_args = {
             "includes": [
-                World.WorldInclude.from_specific(x, version=version)
+                Include.from_specific(x, version=version)
                 for x in specific.include
             ],
             "scene": Scene.from_specific(specific.scene, version=version),
@@ -321,7 +321,7 @@ class World(ElementBase):
             "spherical_coordinates": World.SphericalCoordinates,
         }
         list_elements: Dict[str, Tuple[str, ElementBase]] = {
-            "include": ("includes", World.WorldInclude),
+            "include": ("includes", Include),
             "light": ("lights", Light),
             "frame": ("frames", Frame),
             "model": ("models", Model),
@@ -554,9 +554,6 @@ class World(ElementBase):
             return World.Wind(
                 linear_velocity=specific.linear_velocity, sdf_version=version
             )
-
-    class WorldInclude(Include):
-        pass
 
     class Road(ElementBase):
         def __init__(self, *, sdf_version: str) -> None:
