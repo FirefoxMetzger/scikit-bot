@@ -2,6 +2,11 @@
 
 <!--next-version-placeholder-->
 
+## v0.7.5 (2021-09-20)
+### Fix
+* Bump build from 0.6.0.post1 to 0.7.0 ([#76](https://github.com/FirefoxMetzger/scikit-bot/issues/76)) ([`f5ae0ab`](https://github.com/FirefoxMetzger/scikit-bot/commit/f5ae0ab6ae63f769d0ee13d982b7d3aa546e4a4f))
+* Bump pyzmq from 22.2.1 to 22.3.0 ([#77](https://github.com/FirefoxMetzger/scikit-bot/issues/77)) ([`b021381`](https://github.com/FirefoxMetzger/scikit-bot/commit/b0213818616387f44d5598cfeeb0b4cf054c8741))
+
 ## v0.7.4 (2021-09-15)
 ### Fix
 * Bump sphinx from 4.1.2 to 4.2.0 ([#74](https://github.com/FirefoxMetzger/scikit-bot/issues/74)) ([`fd6e68d`](https://github.com/FirefoxMetzger/scikit-bot/commit/fd6e68dff4e01e629c7edbc4691cf0fa1b07d409))
