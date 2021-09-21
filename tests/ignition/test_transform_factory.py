@@ -1,4 +1,3 @@
-from skbot.ignition.sdformat.generic_sdf.base import ElementBase, Pose
 import pytest
 from pathlib import Path
 import numpy as np
@@ -7,7 +6,21 @@ from itertools import chain
 
 import skbot.ignition as ign
 import skbot.transform as tf
+from skbot.ignition.sdformat.generic_sdf.base import ElementBase, Pose
+from skbot.ignition.sdformat.generic_sdf.frame import Frame
 
+
+def assert_recursive(tree, assert_fn):
+    assert_fn(tree)
+
+    for el in dir(tree):
+        item = getattr(tree, el)
+        if not isinstance(item, list):
+            item = [item]
+
+        for el2 in item:
+            if isinstance(el2, ElementBase):
+                assert_recursive(el2, assert_fn)
 
 
 def test_v18_parsing(v18_worlds):
@@ -146,20 +159,6 @@ def test_unwrapping():
 
 
 def test_pose_relative_to_leaking():
-    def assert_recursive(tree, assert_fn):
-        assert_fn(tree)
-
-        for el in dir(tree):
-            item = getattr(tree, el)
-            if not isinstance(item, list):
-                item = [item]
-
-            for el2 in item:
-                if isinstance(el2, ElementBase):
-                    assert_recursive(el2, assert_fn)
-
-
-
     model_file = Path(__file__).parent / "sdf" / "v18" / "world_with_state.sdf"
     sdf_string = model_file.read_text()
 
@@ -167,12 +166,24 @@ def test_pose_relative_to_leaking():
 
     def pose_has_relative_to(element):
         if isinstance(element, Pose):
-            if element.relative_to is None:
-                print("")
             assert element.relative_to is not None
+            assert element.relative_to != ""
     
     assert_recursive(generic_sdf, pose_has_relative_to)
         
+
+def test_frame_attached_to_leaking():
+    model_file = Path(__file__).parent / "sdf" / "v18" / "world_with_state.sdf"
+    sdf_string = model_file.read_text()
+
+    generic_sdf = ign.sdformat.loads_generic(sdf_string)
+
+    def pose_has_relative_to(element):
+        if isinstance(element, Frame):
+            assert element.attached_to is not None
+            assert element.attached_to != ""
+    
+    assert_recursive(generic_sdf, pose_has_relative_to)
 
 
 def test_panda():
