@@ -249,7 +249,7 @@ class Sdf(ElementBase):
         seed: int = None,
         shape: Tuple[int] = (3,),
         axis: int = -1,
-    ) -> tf.Frame:
+    ) -> List[tf.Frame]:
         return [
             x.to_static_graph(declared_frames, seed=seed, shape=shape, axis=axis)
             for x in self.worlds
@@ -264,7 +264,7 @@ class Sdf(ElementBase):
         axis: int = -1,
         apply_state: bool = True,
         _scaffolding: Dict[str, tf.Frame] = None,
-    ) -> tf.Frame:
+    ) -> List[tf.Frame]:
         return [
             x.to_dynamic_graph(
                 declared_frames,

@@ -217,6 +217,9 @@ class Model(ElementBase):
         self.grippers = grippers
         self.models = [] if models is None else models
         self.enable_wind = enable_wind
+        
+        
+        self._origin.pose = self.pose
 
         for include in includes:
             fragment = include.resolve()
@@ -225,10 +228,11 @@ class Model(ElementBase):
             else:
                 raise ValueError("`Model.include` can only be used to include models.")
 
-        self._origin.pose = self.pose
-
-        for el in chain(models, frames,
-          #lights
+        for el in chain(
+            self.models,
+            self.frames,
+            self.links
+            #lights
         ):
             if el.pose.relative_to is None:
                 el.pose.relative_to = "__model__"
@@ -281,7 +285,7 @@ class Model(ElementBase):
     def declared_frames(self) -> Dict[str, tf.Frame]:
         declared_frames = {"__model__": tf.Frame(3, name=self.name)}
 
-        for el in chain(self.frames, self.links, self.joints, self.grippers):
+        for el in chain(self.frames, self.links):
             declared_frames.update(el.declared_frames())
 
         for model in self.models:
@@ -300,10 +304,19 @@ class Model(ElementBase):
         shape: Tuple[int] = ...,
         axis: int = -1,
     ) -> tf.Frame:
-        declared_frames.update(self.declared_frames())
+        scope = self.declared_frames()
+        if "world" in declared_frames:
+            scope["world"] = declared_frames["world"]
 
         for model in self.models:
-            link: tf.Link = model.pose.to_tf_link()
+            model.to_static_graph(scope, seed=seed, shape=shape, axis=axis)
+
+        declared_frames[self.name] = scope["__model__"]
+        for name, frame in scope.items():
+            declared_frames[f"{self.name}::{name}"] = frame
+
+        for model in self.models:
+            link = model.pose.to_tf_link()
             parent_name = model.pose.relative_to
             child_name = f"{model.name}::{model.placement_frame}"
 
@@ -311,21 +324,20 @@ class Model(ElementBase):
             child = declared_frames[child_name]
             link(child, parent)
 
-            model.to_static_graph(declared_frames, seed=seed, shape=shape, axis=axis)
 
-        el: NamedPoseBearing
-        for el in chain(self.frames, self.joints, self.links, self.grippers):
-            link: tf.Link = el.pose.to_tf_link()
+        for el in chain(self.frames, self.links):
+            el.to_static_graph(scope, seed=seed, shape=shape, axis=axis)
+            
+            link = el.pose.to_tf_link()
             parent_name = el.pose.relative_to
             child_name = el.name
 
-            parent = declared_frames[parent_name]
-            child = declared_frames[child_name]
+            parent = scope[parent_name]
+            child = scope[child_name]
             link(child, parent)
 
-            el.to_static_graph(declared_frames, seed=seed, shape=shape, axis=axis)
 
-        return declared_frames["__model__"]
+        return scope["__model__"]
 
     def to_dynamic_graph(
         self,
@@ -355,9 +367,7 @@ class Model(ElementBase):
         for el in chain(
             self.models,
             self.frames,
-            self.joints,
             self.links,
-            self.grippers
         ):
             el.to_dynamic_graph(
                 declared_frames,

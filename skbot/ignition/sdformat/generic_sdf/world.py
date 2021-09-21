@@ -363,8 +363,12 @@ class World(ElementBase):
         shape: Tuple[int] = ...,
         axis: int = -1,
     ) -> tf.Frame:
-        local_frames = self.declared_frames()
-        declared_frames.update(local_frames)
+        scope = self.declared_frames()
+
+        for model in self.models:
+            model.to_static_graph(scope, seed=seed, shape=shape, axis=axis)
+
+        declared_frames.update(scope)
 
         for model in self.models:
             link: tf.Link = model.pose.to_tf_link()
@@ -375,12 +379,8 @@ class World(ElementBase):
             child = declared_frames[child_name]
             link(child, parent)
 
-            model.to_static_graph(declared_frames, seed=seed, shape=shape, axis=axis)
-
-        el: NamedPoseBearing
         for el in chain(
             self.actors,
-            self.lights,
             self.frames,
             self._joints
         ):
@@ -393,12 +393,6 @@ class World(ElementBase):
             link(child, parent)
 
             el.to_static_graph(declared_frames, seed=seed, shape=shape, axis=axis)
-
-        # Elements that might need linking once implemented:
-        # atmosphere: "Atmosphere" = None,
-        # gui: "Gui" = None,
-        # roads: List["World.Road"],
-        # spherical_coordinates: "World.SphericalCoordinates" = None,
 
         return declared_frames["world"]
 
@@ -450,13 +444,9 @@ class World(ElementBase):
         #     )
         #     link(joint_child, child)
 
-        el: NamedPoseBearing
         for el in chain(
             self.models,
-            self.actors,
-            self.lights,
             self.frames,
-            self._joints
         ):
             el.to_dynamic_graph(
                 declared_frames,
@@ -468,13 +458,6 @@ class World(ElementBase):
             )
 
         return declared_frames["world"]
-
-        # atmosphere: "Atmosphere" = None,
-        # gui: "Gui" = None,
-        # scene: Scene,
-        # roads: List["World.Road"],
-        # spherical_coordinates: "World.SphericalCoordinates" = None,
-        # states: List[State],
 
     class Audio(ElementBase):
         """Global audio properties.
