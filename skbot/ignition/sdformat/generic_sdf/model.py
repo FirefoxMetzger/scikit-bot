@@ -182,6 +182,10 @@ class Model(ElementBase):
                 "`Model` must specify `canonical_link` or have at least one `link`."
             )
 
+        if placement_frame == "":
+            placement_frame = None
+        if placement_frame is None:
+            placement_frame = "__model__"
         self.placement_frame = placement_frame
         self.static = static
         self.self_collide = self_collide
@@ -225,16 +229,16 @@ class Model(ElementBase):
         pose_bearing: List[PoseBearing] = [
             # links,
             models,
-            # frames,
+            frames,
         ]
         for el in chain(*pose_bearing):
             relative_to = el.pose.relative_to
             if relative_to is None:
                 el.pose.relative_to = "__model__"
 
-        # for frame in self.frames:
-        #     if frame.attached_to is None:
-        #         frame.attached_to = "__model__"
+        for frame in self.frames:
+            if frame.attached_to is None:
+                frame.attached_to = "__model__"
 
     @property
     def origin(self):

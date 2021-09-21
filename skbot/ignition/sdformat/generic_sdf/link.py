@@ -228,11 +228,11 @@ class Link(ElementBase):
             # self.audio_sources,
             # self.sensors,
             # self.lights,
-            # self._frames,
+            self._frames,
             # self.particle_emitters
         ):
             if el.pose.relative_to is None:
-                el.pose.relative_to = name
+                el.pose.relative_to = self.name
 
         # if projector is not None:
         #     if projector.pose.relative_to is None:
@@ -241,6 +241,10 @@ class Link(ElementBase):
         # inertial frame is _forced_ to be relative to link
         # if self.inertial is not None:
         #     self.inertial.pose.relative_to = name
+
+        for frame in self._frames:
+            if frame.attached_to is None:
+                frame.attached_to = self.name
 
     @property
     def origin(self):
@@ -253,7 +257,8 @@ class Link(ElementBase):
     @property
     def damping(self):
         warnings.warn(
-            "`Link.daming` is depreciated since SDF v1.7. Use `Link.velocity_decay` instead.",
+            "`Link.daming` is depreciated since SDF v1.7."
+            " Use `Link.velocity_decay` instead.",
             DeprecationWarning,
         )
         return self._damping
@@ -261,7 +266,8 @@ class Link(ElementBase):
     @property
     def frames(self):
         warnings.warn(
-            "`Link.frames` is depreciated since SDF v1.7. Use `Link.frames` instead.",
+            "`Link.frames` is depreciated since SDF v1.7."
+            " Use `Model.frames` instead and set `Frame.attached_to` to the name of this link.",
             DeprecationWarning,
         )
         return self._frames
@@ -304,11 +310,8 @@ class Link(ElementBase):
 
         return Link(**link_args, sdf_version=version)
 
-
     def declared_frames(self) -> Dict[str, tf.Frame]:
-        declared_frames = {
-            self.name: tf.Frame(3, name=self.name)
-        }
+        declared_frames = {self.name: tf.Frame(3, name=self.name)}
 
         # frames: List["Frame"] = None,
         # inertial: Inertial = None,

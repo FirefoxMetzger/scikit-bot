@@ -265,13 +265,11 @@ class World(ElementBase):
         for frame in self.frames:
             if frame.attached_to is None:
                 frame.attached_to = "world"
-            elif frame.attached_to == "":
-                frame.attached_to = "world"
 
         el: PoseBearing
         pose_bearing: List[PoseBearing] = [
             # lights,
-            # frames,
+            frames,
             models,
         ]
         for el in chain(*pose_bearing):

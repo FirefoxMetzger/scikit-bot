@@ -55,7 +55,7 @@ class ElementBase:
         declared_frames: Dict[str, tf.Frame],
         *,
         seed: int = None,
-        shape: Tuple[int] = (3,),
+        shape: Tuple,
         axis: int = -1,
     ) -> tf.Frame:
         """Convert to transform graph
@@ -117,7 +117,7 @@ class ElementBase:
         declared_frames: Dict[str, tf.Frame],
         *,
         seed: int = None,
-        shape: Tuple[int] = (3,),
+        shape: Tuple,
         axis: int = -1,
         apply_state: bool = True,
         _scaffolding: Dict[str, tf.Frame],
