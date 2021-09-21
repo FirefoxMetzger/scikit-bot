@@ -350,12 +350,8 @@ class World(ElementBase):
             for name, frame in model_frames.items():
                 declared_frames[f"{el.name}::{name}"] = frame
 
-        for frame in self.frames:
-            declared_frames.update(frame.declared_frames())
-
-
-        for joint in self._joints:
-            declared_frames.update(joint.declared_frames())
+        for el in chain(self.frames, self._joints):
+            declared_frames.update(el.declared_frames())
 
         return declared_frames
 
@@ -424,22 +420,6 @@ class World(ElementBase):
             self.to_static_graph(
                 _scaffolding, seed=seed, shape=shape, axis=axis
             )
-
-        # # refactor into frames.to_dynamic_graph
-        # for frame in self.frames:
-        #     parent_name = frame.attached_to
-        #     child_name = frame.name
-
-        #     parent = declared_frames[parent_name]
-        #     child = declared_frames[child_name]
-
-        #     parent_static = _scaffolding[parent_name]
-        #     child_static = _scaffolding[child_name]
-
-        #     link = tf.CompundLink(
-        #         parent_static.transform_chain(child_static)
-        #     )
-        #     link(parent, child)
 
         # # refactor into joints.to_dynamic_graph
         # for joint_child in self._joints:

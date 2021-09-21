@@ -225,15 +225,12 @@ class Model(ElementBase):
             else:
                 raise ValueError("`Model.include` can only be used to include models.")
 
-        el: PoseBearing
-        pose_bearing: List[PoseBearing] = [
-            # links,
-            models,
-            frames,
-        ]
-        for el in chain(*pose_bearing):
-            relative_to = el.pose.relative_to
-            if relative_to is None:
+        self._origin.pose = self.pose
+
+        for el in chain(models, frames,
+          #lights
+        ):
+            if el.pose.relative_to is None:
                 el.pose.relative_to = "__model__"
 
         for frame in self.frames:

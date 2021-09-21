@@ -1,6 +1,6 @@
 import warnings
 from itertools import chain
-from typing import List, Any, Dict
+from typing import List, Any, Dict, Tuple
 
 
 from .base import BoolElement, ElementBase, Pose, PoseBearing, NamedPoseBearing
@@ -222,6 +222,8 @@ class Link(ElementBase):
         self.lights = [] if lights is None else lights
         self.particle_emitters = [] if particle_emitters is None else particle_emitters
 
+        self._origin.pose = self.pose
+
         for el in chain(
             # self.visuals,
             # self.collisions,
@@ -313,7 +315,9 @@ class Link(ElementBase):
     def declared_frames(self) -> Dict[str, tf.Frame]:
         declared_frames = {self.name: tf.Frame(3, name=self.name)}
 
-        # frames: List["Frame"] = None,
+        for el in chain(self._frames):
+            declared_frames.update(el.declared_frames())
+
         # inertial: Inertial = None,
         # collisions: List[Collision] = None,
         # visuals: List[Visual] = None,
@@ -323,6 +327,35 @@ class Link(ElementBase):
         # lights: List["Light"] = None,
         # particle_emitters: List[ParticleEmitter] = None,
         return declared_frames
+
+    def to_static_graph(
+        self,
+        declared_frames: Dict[str, tf.Frame],
+        *,
+        seed: int = None,
+        shape: Tuple,
+        axis: int = -1,
+    ) -> tf.Frame:
+        parent_name = self.pose.relative_to
+        child_name = self.name
+
+        parent = declared_frames[parent_name]
+        child = declared_frames[child_name]
+
+        link = self.pose.to_tf_link()
+        link(child, parent)
+
+        for el in chain(self._frames):
+            parent_name = el.pose.relative_to
+            child_name = el.name
+
+            parent = declared_frames[parent_name]
+            child = declared_frames[child_name]
+
+            link = self.pose.to_tf_link()
+            link(child, parent) 
+
+        return declared_frames[self.name]
 
     class Damping(ElementBase):
         def __init__(
