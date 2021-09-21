@@ -353,7 +353,30 @@ class Link(ElementBase):
             child = declared_frames[child_name]
 
             link = self.pose.to_tf_link()
-            link(child, parent) 
+            link(child, parent)
+
+        return declared_frames[self.name]
+
+    def to_dynamic_graph(
+        self,
+        declared_frames: Dict[str, tf.Frame],
+        *,
+        seed: int = None,
+        shape: Tuple,
+        axis: int = -1,
+        apply_state: bool = True,
+        _scaffolding: Dict[str, tf.Frame],
+    ) -> tf.Frame:
+
+        for frame in self._frames:
+            frame.to_dynamic_graph(
+                declared_frames,
+                seed=seed,
+                shape=shape,
+                axis=axis,
+                apply_state=apply_state,
+                _scaffolding=_scaffolding,
+            )
 
         return declared_frames[self.name]
 
