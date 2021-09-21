@@ -217,8 +217,7 @@ class Model(ElementBase):
         self.grippers = grippers
         self.models = [] if models is None else models
         self.enable_wind = enable_wind
-        
-        
+
         self._origin.pose = self.pose
 
         for include in includes:
@@ -232,7 +231,7 @@ class Model(ElementBase):
             self.models,
             self.frames,
             self.links
-            #lights
+            # lights
         ):
             if el.pose.relative_to is None:
                 el.pose.relative_to = "__model__"
@@ -301,19 +300,17 @@ class Model(ElementBase):
         declared_frames: Dict[str, tf.Frame],
         *,
         seed: int = None,
-        shape: Tuple[int] = ...,
+        shape: Tuple,
         axis: int = -1,
     ) -> tf.Frame:
-        scope = self.declared_frames()
-        if "world" in declared_frames:
-            scope["world"] = declared_frames["world"]
-
         for model in self.models:
+            scope = {
+                name.split("::", 1)[1]: frame
+                for name, frame in declared_frames.items()
+                if name.startswith(f"{model.name}::")
+            }
+            scope["world"] = declared_frames["world"]
             model.to_static_graph(scope, seed=seed, shape=shape, axis=axis)
-
-        declared_frames[self.name] = scope["__model__"]
-        for name, frame in scope.items():
-            declared_frames[f"{self.name}::{name}"] = frame
 
         for model in self.models:
             link = model.pose.to_tf_link()
@@ -324,20 +321,18 @@ class Model(ElementBase):
             child = declared_frames[child_name]
             link(child, parent)
 
-
         for el in chain(self.frames, self.links):
-            el.to_static_graph(scope, seed=seed, shape=shape, axis=axis)
-            
+            el.to_static_graph(declared_frames, seed=seed, shape=shape, axis=axis)
+
             link = el.pose.to_tf_link()
             parent_name = el.pose.relative_to
             child_name = el.name
 
-            parent = scope[parent_name]
-            child = scope[child_name]
+            parent = declared_frames[parent_name]
+            child = declared_frames[child_name]
             link(child, parent)
 
-
-        return scope["__model__"]
+        return declared_frames["__model__"]
 
     def to_dynamic_graph(
         self,
@@ -349,7 +344,29 @@ class Model(ElementBase):
         apply_state: bool = True,
         _scaffolding: Dict[str, tf.Frame],
     ) -> tf.Frame:
-        declared_frames.update(self.declared_frames())
+        for model in self.models:
+            scaffold_scope = {
+                name.split("::", 1)[1]: frame
+                for name, frame in _scaffolding.items()
+                if name.startswith(f"{model.name}::")
+            }
+            scaffold_scope["world"] = _scaffolding["world"]
+
+            scope = {
+                name.split("::", 1)[1]: frame
+                for name, frame in declared_frames.items()
+                if name.startswith(f"{model.name}::")
+            }
+            scope["world"] = declared_frames["world"]
+            model.to_dynamic_graph(
+                scope,
+                seed=seed,
+                shape=shape,
+                axis=axis,
+                apply_state=apply_state,
+                _scaffolding=scaffold_scope,
+            )
+
 
         if self.static:
             parent = declared_frames["world"]
@@ -359,13 +376,9 @@ class Model(ElementBase):
             parent_static = _scaffolding[self.canonical_link]
         child = declared_frames["__model__"]
         child_static = _scaffolding["__model__"]
-        tf.CompundLink(
-            parent_static.transform_chain(child_static)
-        )(parent, child)
+        tf.CompundLink(parent_static.transform_chain(child_static))(parent, child)
 
-        el: NamedPoseBearing
         for el in chain(
-            self.models,
             self.frames,
             self.links,
         ):
@@ -375,7 +388,7 @@ class Model(ElementBase):
                 shape=shape,
                 axis=axis,
                 apply_state=apply_state,
-                _scaffolding=_scaffolding
+                _scaffolding=_scaffolding,
             )
 
         return declared_frames["__model__"]

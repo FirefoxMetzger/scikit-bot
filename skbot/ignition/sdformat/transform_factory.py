@@ -62,7 +62,11 @@ def to_frame_graph(
     """
 
     root = loads_generic(sdf)
-    worlds = [world.to_dynamic_graph(dict(), shape=shape, axis=axis) for world in root.worlds]
+    worlds = list()
+    for world in root.worlds:
+        world_frames = world.declared_frames()
+        world_graph = world.to_dynamic_graph(world_frames, shape=shape, axis=axis)
+        worlds.append(world_graph)
 
     if unwrap and len(worlds) == 1:
         return worlds[0]

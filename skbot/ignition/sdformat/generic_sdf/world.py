@@ -281,7 +281,7 @@ class World(ElementBase):
         warnings.warn(
             "`World.joints` has been depreciated. Use `Model.joints` with"
             " `Model.joints.parent = 'world'` instead.",
-            DeprecationWarning
+            DeprecationWarning,
         )
         return self._joints
 
@@ -289,8 +289,7 @@ class World(ElementBase):
     def from_specific(cls, specific: Any, *, version: str) -> "World":
         world_args = {
             "includes": [
-                Include.from_specific(x, version=version)
-                for x in specific.include
+                Include.from_specific(x, version=version) for x in specific.include
             ],
             "scene": Scene.from_specific(specific.scene, version=version),
         }
@@ -340,9 +339,7 @@ class World(ElementBase):
 
     def declared_frames(self) -> Dict[str, tf.Frame]:
         world_frame = tf.Frame(3, name=self.name)
-        declared_frames = {
-            "world": world_frame
-        }
+        declared_frames = {"world": world_frame}
 
         for el in self.models:
             model_frames = el.declared_frames()
@@ -363,15 +360,17 @@ class World(ElementBase):
         shape: Tuple[int] = ...,
         axis: int = -1,
     ) -> tf.Frame:
-        scope = self.declared_frames()
-
         for model in self.models:
+            scope = {
+                name.split("::", 1)[1]: frame
+                for name, frame in declared_frames.items()
+                if name.startswith(f"{model.name}::")
+            }
+            scope["world"] = declared_frames["world"]
             model.to_static_graph(scope, seed=seed, shape=shape, axis=axis)
 
-        declared_frames.update(scope)
-
         for model in self.models:
-            link: tf.Link = model.pose.to_tf_link()
+            link = model.pose.to_tf_link()
             parent_name = model.pose.relative_to
             child_name = f"{model.name}::{model.placement_frame}"
 
@@ -379,11 +378,7 @@ class World(ElementBase):
             child = declared_frames[child_name]
             link(child, parent)
 
-        for el in chain(
-            self.actors,
-            self.frames,
-            self._joints
-        ):
+        for el in chain(self.actors, self.frames, self._joints):
             link: tf.Link = el.pose.to_tf_link()
             parent_name = el.pose.relative_to
             child_name = el.name
@@ -404,16 +399,11 @@ class World(ElementBase):
         shape: Tuple[int] = (3,),
         axis: int = -1,
         apply_state: bool = True,
-        _scaffolding: Dict[str, tf.Frame] = None
+        _scaffolding: Dict[str, tf.Frame] = None,
     ) -> tf.Frame:
-        local_frames = self.declared_frames()
-        declared_frames.update(local_frames)
-
         if _scaffolding is None:
             _scaffolding = self.declared_frames()
-            self.to_static_graph(
-                _scaffolding, seed=seed, shape=shape, axis=axis
-            )
+            self.to_static_graph(_scaffolding, seed=seed, shape=shape, axis=axis)
 
         # # refactor into joints.to_dynamic_graph
         # for joint_child in self._joints:
@@ -444,8 +434,30 @@ class World(ElementBase):
         #     )
         #     link(joint_child, child)
 
+        for model in self.models:
+            scaffold_scope = {
+                name.split("::", 1)[1]: frame
+                for name, frame in _scaffolding.items()
+                if name.startswith(f"{model.name}::")
+            }
+            scaffold_scope["world"] = _scaffolding["world"]
+
+            scope = {
+                name.split("::", 1)[1]: frame
+                for name, frame in declared_frames.items()
+                if name.startswith(f"{model.name}::")
+            }
+            scope["world"] = declared_frames["world"]
+            model.to_dynamic_graph(
+                scope,
+                seed=seed,
+                shape=shape,
+                axis=axis,
+                apply_state=apply_state,
+                _scaffolding=scaffold_scope,
+            )
+
         for el in chain(
-            self.models,
             self.frames,
         ):
             el.to_dynamic_graph(
@@ -454,7 +466,7 @@ class World(ElementBase):
                 shape=shape,
                 axis=axis,
                 apply_state=apply_state,
-                _scaffolding=_scaffolding
+                _scaffolding=_scaffolding,
             )
 
         return declared_frames["world"]
