@@ -1,10 +1,17 @@
 from itertools import chain
-from typing import List, Any, Dict
+from typing import List, Any, Dict, Tuple
 import warnings
 from itertools import chain
 
 
-from .base import BoolElement, ElementBase, PoseBearing, Pose, StringElement
+from .base import (
+    BoolElement,
+    ElementBase,
+    NamedPoseBearing,
+    PoseBearing,
+    Pose,
+    StringElement,
+)
 from .link import Link
 from .include import Include
 from .frame import Frame
@@ -15,9 +22,11 @@ from .actor import Actor
 from .light import Light
 from ..exceptions import ParseError
 from .... import transform as tf
+from .origin import Origin
+
 
 class Model(ElementBase):
-    """ A physical object in the simulation
+    """A physical object in the simulation
 
     The model element defines a complete robot or any other physical object.
     This includes (but is not limited to) its appearance, collision,
@@ -35,7 +44,7 @@ class Model(ElementBase):
         as the canonical link.
 
         .. versionadded:: SDFormat v1.7
-    placement_frame : str 
+    placement_frame : str
         The frame inside this model whose pose will be set by the pose element
         of the model. Defaults to  ``__model__`` (the implicit model frame).
 
@@ -62,8 +71,7 @@ class Model(ElementBase):
 
         .. versionadded:: SDFormat v1.5
     pose : Pose
-        A position (x,y,z) and orientation (roll, pitch yaw) with respect to the
-        frame named in the relative_to attribute.
+        The model's initial position (x,y,z) and orientation (roll, pitch, yaw).
 
         .. versionadded:: SDFormat v1.2
     links : List[Link]
@@ -106,43 +114,41 @@ class Model(ElementBase):
     Attributes
     ----------
     name : str
-        Documented in the Parameters section.
+        See ``Parameters`` section.
     canonical_link : str
-        Documented in the Parameters section.
-    placement_frame : str 
-        Documented in the Parameters section.
+        See ``Parameters`` section.
+    placement_frame : str
+        See ``Parameters`` section.
     static : bool
-        Documented in the Parameters section.
+        See ``Parameters`` section.
     self_collide : bool
-        Documented in the Parameters section.
+        See ``Parameters`` section.
     allow_auto_disable : bool
-        Documented in the Parameters section.   
+        See ``Parameters`` section.
     frames : List[Frame]
-        Documented in the Parameters section.
+        See ``Parameters`` section.
     pose : Pose
-        Documented in the Parameters section.
+        See ``Parameters`` section.
     links : List[Link]
-        Documented in the Parameters section.
+        See ``Parameters`` section.
     joints : List[Joint]
-        Documented in the Parameters section.
+        See ``Parameters`` section.
     plugins : List[Plugin]
-        Documented in the Parameters section.
+        See ``Parameters`` section.
     grippers: List[Gripper],
-        Documented in the Parameters section.
+        See ``Parameters`` section.
     includes : List[Include]
-        Documented in the Parameters section.
+        See ``Parameters`` section.
     models : List[Model]
-        Documented in the Parameters section.
+        See ``Parameters`` section.
     enable_wind : bool
-        Documented in the Parameters section.
-    origin : Model.Origin
-        Documented in the Parameters section.
-
-        .. depreciated:: SDFormat v1.2
-            Use ``Model.pose`` instead.
+        See ``Parameters`` section.
 
     """
-    def __init__(self, *, 
+
+    def __init__(
+        self,
+        *,
         name: str,
         canonical_link: str = None,
         placement_frame: str = "__model__",
@@ -159,41 +165,42 @@ class Model(ElementBase):
         models: List["Model"] = None,
         enable_wind: bool = False,
         sdf_version: str,
-        origin: "Model.Origin" = None,
-        ) -> None:
+        origin: Origin = None,
+    ) -> None:
         super().__init__(sdf_version=sdf_version)
 
         self.name = name
-        
+
         if canonical_link == "":
             canonical_link = None
         if canonical_link is not None:
             self.canonical_link = canonical_link
         elif len(links) > 0:
-            # self.canonical_link = links[0].name
-            self.canonical_link = "implement link"
+            self.canonical_link = links[0].name
         else:
-            raise ValueError("`Model` must specify `canonical_link` or have at least one `link`.")
+            raise ValueError(
+                "`Model` must specify `canonical_link` or have at least one `link`."
+            )
 
         self.placement_frame = placement_frame
         self.static = static
         self.self_collide = self_collide
         self.allow_auto_disable = allow_auto_disable
         self.frames = [] if frames is None else frames
-        
+
         if origin is None:
-            self._origin = Model.Origin(sdf_version=sdf_version)
+            self._origin = Origin(sdf_version=sdf_version)
         elif sdf_version == "1.0":
             self._origin = origin
         else:
             warnings.warn("`origin` is depreciated. Use `Model.pose` instead.")
             self._origin = origin
-        
+
         if len(links) == 0 and sdf_version in ["1.0", "1.2", "1.3", "1.4"]:
             raise ValueError("A `Model` must specify at least one `Link`.")
         else:
             self.links = links
-        
+
         if sdf_version == "1.0":
             self.pose = self._origin.pose
         elif pose is None:
@@ -206,7 +213,6 @@ class Model(ElementBase):
         self.grippers = grippers
         self.models = [] if models is None else models
         self.enable_wind = enable_wind
-        
 
         for include in includes:
             fragment = include.resolve()
@@ -229,26 +235,25 @@ class Model(ElementBase):
         # for frame in self.frames:
         #     if frame.attached_to is None:
         #         frame.attached_to = "__model__"
-    
+
     @property
     def origin(self):
-        warnings.warn("`Model.origin` is depreciated since SDFormat v1.2. Use `Model.pose` instead.")
+        warnings.warn(
+            "`Model.origin` is depreciated since SDFormat v1.2. Use `Model.pose` instead."
+        )
         return self._origin
 
     @classmethod
     def from_specific(cls, specific: Any, *, version: str) -> "Model":
-        model_args = {
-            "name": specific.name,
-            "sdf_version": version
-        }
-        
+        model_args = {"name": specific.name, "sdf_version": version}
+
         elements_with_default = {
             "canonical_link": StringElement,
             "placement_frame": StringElement,
             "static": BoolElement,
             "self_collide": BoolElement,
             "allow_auto_disable": BoolElement,
-            "origin": Model.Origin,
+            "origin": Origin,
             "pose": Pose,
             "enable_wind": BoolElement,
         }
@@ -263,10 +268,7 @@ class Model(ElementBase):
         }
 
         standard_args = cls._prepare_standard_args(
-            specific,
-            elements_with_default,
-            list_elements,
-            version=version
+            specific, elements_with_default, list_elements, version=version
         )
         model_args.update(standard_args)
 
@@ -275,11 +277,8 @@ class Model(ElementBase):
 
         return Model(**model_args)
 
-
     def declared_frames(self) -> Dict[str, tf.Frame]:
-        declared_frames = {
-            "__model__": tf.Frame(3, name=self.name)
-        }
+        declared_frames = {"__model__": tf.Frame(3, name=self.name)}
 
         for el in chain(self.frames, self.links, self.joints, self.grippers):
             declared_frames.update(el.declared_frames())
@@ -292,21 +291,80 @@ class Model(ElementBase):
 
         return declared_frames
 
-    # def 
+    def to_static_graph(
+        self,
+        declared_frames: Dict[str, tf.Frame],
+        *,
+        seed: int = None,
+        shape: Tuple[int] = ...,
+        axis: int = -1,
+    ) -> tf.Frame:
+        declared_frames.update(self.declared_frames())
 
+        for model in self.models:
+            link: tf.Link = model.pose.to_tf_link()
+            parent_name = model.pose.relative_to
+            child_name = f"{model.name}::{model.placement_frame}"
 
-    class Origin(ElementBase):
-        def __init__(self, *, pose:Pose=None, sdf_version: str) -> None:
-            super().__init__(sdf_version=sdf_version)
-            
-            if pose is None:
-                self.pose = Pose(sdf_version=sdf_version)
-            else:
-                self.pose = pose
+            parent = declared_frames[parent_name]
+            child = declared_frames[child_name]
+            link(child, parent)
 
-        @classmethod
-        def from_specific(cls, specific: Any, *, version: str) -> "Model.Origin":
-            return Model.Origin(
-                pose=Pose.from_specific(specific.pose, version=version),
-                sdf_version=version
+            model.to_static_graph(declared_frames, seed=seed, shape=shape, axis=axis)
+
+        el: NamedPoseBearing
+        for el in chain(self.frames, self.joints, self.links, self.grippers):
+            link: tf.Link = el.pose.to_tf_link()
+            parent_name = el.pose.relative_to
+            child_name = el.name
+
+            parent = declared_frames[parent_name]
+            child = declared_frames[child_name]
+            link(child, parent)
+
+            el.to_static_graph(declared_frames, seed=seed, shape=shape, axis=axis)
+
+        return declared_frames["__model__"]
+
+    def to_dynamic_graph(
+        self,
+        declared_frames: Dict[str, tf.Frame],
+        *,
+        seed: int = None,
+        shape: Tuple[int] = ...,
+        axis: int = -1,
+        apply_state: bool = True,
+        _scaffolding: Dict[str, tf.Frame],
+    ) -> tf.Frame:
+        declared_frames.update(self.declared_frames())
+
+        if self.static:
+            parent = declared_frames["world"]
+            parent_static = _scaffolding["world"]
+        else:
+            parent = declared_frames[self.canonical_link]
+            parent_static = _scaffolding[self.canonical_link]
+        child = declared_frames["__model__"]
+        child_static = _scaffolding["__model__"]
+        tf.CompundLink(
+            parent_static.transform_chain(child_static)
+        )(parent, child)
+
+        el: NamedPoseBearing
+        for el in chain(
+            self.models,
+            self.frames,
+            self.joints,
+            self.links,
+            self.grippers
+        ):
+            el.to_dynamic_graph(
+                declared_frames,
+                seed=seed,
+                shape=shape,
+                axis=axis,
+                apply_state=apply_state,
+                _scaffolding=_scaffolding
             )
+
+        return declared_frames["__model__"]

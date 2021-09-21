@@ -1,124 +1,336 @@
 import warnings
 from itertools import chain
-from typing import List, Any
+from typing import List, Any, Dict
 
 
-from .base import ElementBase, Pose, PoseBearing, NamedPoseBearing
+from .base import BoolElement, ElementBase, Pose, PoseBearing, NamedPoseBearing
 from .light import Light
 from .frame import Frame
 from .sensor import Sensor
+from .origin import Origin
+from .inertial import Inertial
+from .collision import Collision
+from .visual import Visual
+from .sensor import Sensor
+from .projector import Projector
+from .audio_sink import AudioSink
+from .audio_source import AudioSource
+from .battery import Battery
+from .particle_emitter import ParticleEmitter
+from .... import transform as tf
+
 
 class Link(ElementBase):
-    def __init__(self, *, sdf_version: str) -> None:
-        warnings.warn("`Link` has not been implemented yet.")
+    """A rigid body.
+
+    Parameters
+    ----------
+    name : str
+        The name of the link. It must be unique within its scope (the containing
+        model).
+    gravity : bool
+        If true (default), the link is affected by gravity.
+    enable_wind : bool
+        If true, the link is affected by the wind. Default: ``False``.
+
+        .. versionadded:: SDFormat v1.6
+    self_collide : bool
+        If true, the link can collide with other links in the model. Any other
+        link within a model will collide with this link if either
+        ``self.self_collide == True`` or ``other.self_collide == True``.
+        Further, links connected by a joint will never collide. Default:
+        ``False``.
+    kinematic : bool
+        If True, the link is kinematic only. Default: `` False``
+    pose : Pose
+        The links's initial position (x,y,z) and orientation (roll, pitch, yaw).
+
+        .. versionadded:: SDFormat 1.2
+    must_be_base_link : bool
+        If true, the link will have 6DOF and be a direct child of world.
+
+        .. versionadded:: SDFormat 1.4
+    velocity_decay : Link.VelocityDecay
+        Exponential damping of the link's velocity.
+
+        .. versionadded:: SDFormat 1.2
+    inertial : Inertial
+        The inertial properties of the link.
+    collisions : List[Collision]
+        The list of collision properties of a link. Note that this can be
+        different from the visual properties of a link, for example, simpler
+        collision models are often used to reduce computation time.
+    visuals : List[Visual]
+        A list of visual properties of the link. This element specifies the
+        shape of the object (box, cylinder, etc.) for visualization purposes.
+    sensors : List[Sensor]
+        A list of sensors attached to this link.
+    projectors : List[Projector]
+        A list of projectors attached to this link.
+    audio_sinks : List[AudioSink]
+        A list of audio sinks attached to this link.
+
+        .. versionadded:: SDFormat v1.4
+    audio_sources : List[AudioSource]
+        A list of audio sources attached to this link.
+
+        .. versionadded:: SDFormat v1.4
+    batteries : List[Battery]
+        A list of batteries attached to this link.
+
+        .. versionadded:: SDFormat v1.5
+    lights : List[Light]
+        A list of light sources attached to this link.
+
+        .. versionadded:: SDFormat v1.6
+    particle_emitters : List[ParticleEmitter]
+        A list of particle emitters attached to this link. A particle emitter
+        that can be used to describe fog, smoke, and dust.
+
+        .. versionadded:: SDFormat v1.6
+    sdf_version : str
+        The SDFormat version to use when constructing this element.
+    origin : Origin
+        The link's origin.
+
+        .. depreciated:: SDFormat v1.2
+            Use `Link.pose` instead.
+    damping : Link.Damping
+        Exponential damping of the link's velocity.
+
+        .. depreciated:: SDFormat 1.2
+            Use `Link.velocity_decay` instead.
+    frames : List["Frame"]
+        A list of frames of reference in which poses may be expressed.
+
+        .. depreciated:: SDFormat v1.7
+            Use :attr:`Model.frame` instead.
+        .. versionadded:: SDFormat v1.5
+
+
+    Attributes
+    ----------
+    name : str
+        See ``Parameters`` section.
+    gravity : bool
+        See ``Parameters`` section.
+    enable_wind : bool
+        See ``Parameters`` section.
+    self_collide : bool
+        See ``Parameters`` section.
+    kinematic : bool
+        See ``Parameters`` section.
+    pose : Pose
+        See ``Parameters`` section.
+    must_be_base_link : bool
+        See ``Parameters`` section.
+    velocity_decay : Link.VelocityDecay
+        See ``Parameters`` section.
+    inertial : Inertial
+        See ``Parameters`` section.
+    collisions : List[Collision]
+        See ``Parameters`` section.
+    visuals : List[Visual]
+        See ``Parameters`` section.
+    sensors : List[Sensor]
+        See ``Parameters`` section.
+    projectors : List[Projector]
+        See ``Parameters`` section.
+    audio_sinks : List[AudioSink]
+        See ``Parameters`` section.
+    audio_sources : List[AudioSource]
+        See ``Parameters`` section.
+    batteries : List[Battery]
+        See ``Parameters`` section.
+    lights : List[Light]
+        See ``Parameters`` section.
+    particle_emitters : List[ParticleEmitter]
+        See ``Parameters`` section.
+
+    """
+
+    def __init__(
+        self,
+        *,
+        name: str,
+        gravity: bool = True,
+        enable_wind: bool = False,
+        self_collide: bool = False,
+        kinematic: bool = False,
+        origin: Origin = None,
+        pose: Pose = None,
+        must_be_base_link: bool = False,
+        damping: "Link.Damping" = None,
+        velocity_decay: "Link.VelocityDecay" = None,
+        frames: List["Frame"] = None,
+        inertial: Inertial = None,
+        collisions: List[Collision] = None,
+        visuals: List[Visual] = None,
+        sensors: List[Sensor] = None,
+        projector: Projector = None,
+        audio_sinks: List[AudioSink] = None,
+        audio_sources: List[AudioSource] = None,
+        batteries: List[Battery] = None,
+        lights: List["Light"] = None,
+        particle_emitters: List[ParticleEmitter] = None,
+        sdf_version: str,
+    ) -> None:
         super().__init__(sdf_version=sdf_version)
+        self.name = name
+        self.gravity = gravity
+        self.enable_wind = enable_wind
+        self.self_collide = self_collide
+        self.kinematic = kinematic
+        if origin is None:
+            self._origin = Origin(sdf_version=sdf_version)
+        elif sdf_version == "1.0":
+            self._origin = origin
+        else:
+            warnings.warn("`origin` is depreciated. Use `pose` instead.")
+            self._origin = origin
+        if sdf_version == "1.0":
+            self.pose = self._origin.pose
+        elif pose is None:
+            self.pose = Pose(sdf_version=sdf_version)
+        else:
+            self.pose = pose
+        self.must_be_base_link = must_be_base_link
+        if damping is None:
+            self._damping = Link.Damping(sdf_version=sdf_version)
+        elif sdf_version == "1.0":
+            self._damping = damping
+        else:
+            warnings.warn("`damping` is depreciated. Use `velocity_decay` instead.")
+            self._damping = damping
+        if sdf_version == "1.0":
+            self.velocity_decay = self._damping
+        elif velocity_decay is None:
+            self.velocity_decay = Link.VelocityDecay(sdf_version=sdf_version)
+        else:
+            self.velocity_decay = velocity_decay
+        self._frames = [] if frames is None else frames
+        self.inertial = inertial
+        self.collisions = [] if collisions is None else collisions
+        self.visuals = [] if visuals is None else visuals
+        self.sensors = [] if sensors is None else sensors
+        self.projector = projector
+        # projector is buggy
+        # self.projectors = [] if projectors is None else projectors
+        self.audio_sinks = [] if audio_sinks is None else audio_sinks
+        self.audio_sources = [] if audio_sources is None else audio_sources
+        self.batteries = [] if batteries is None else batteries
+        self.lights = [] if lights is None else lights
+        self.particle_emitters = [] if particle_emitters is None else particle_emitters
+
+        for el in chain(
+            # self.visuals,
+            # self.collisions,
+            # self.audio_sources,
+            # self.sensors,
+            # self.lights,
+            # self._frames,
+            # self.particle_emitters
+        ):
+            if el.pose.relative_to is None:
+                el.pose.relative_to = name
+
+        # if projector is not None:
+        #     if projector.pose.relative_to is None:
+        #         projector.pose.relative_to = name
+
+        # inertial frame is _forced_ to be relative to link
+        # if self.inertial is not None:
+        #     self.inertial.pose.relative_to = name
+
+    @property
+    def origin(self):
+        warnings.warn(
+            "`Link.origin` is depreciated since SDF v1.7. Use `Link.pose` instead.",
+            DeprecationWarning,
+        )
+        return self._origin
+
+    @property
+    def damping(self):
+        warnings.warn(
+            "`Link.daming` is depreciated since SDF v1.7. Use `Link.velocity_decay` instead.",
+            DeprecationWarning,
+        )
+        return self._damping
+
+    @property
+    def frames(self):
+        warnings.warn(
+            "`Link.frames` is depreciated since SDF v1.7. Use `Link.frames` instead.",
+            DeprecationWarning,
+        )
+        return self._frames
+
+    @classmethod
+    def from_specific(cls, specific: Any, *, version: str) -> "Link":
+        link_args = {
+            "name": specific.name,
+            "inertial": specific.inertial,
+        }
+        args_with_default = {
+            "gravity": BoolElement,
+            "enable_wind": BoolElement,
+            "self_collide": BoolElement,
+            "kinematic": BoolElement,
+            "origin": Origin,
+            "pose": Pose,
+            "must_be_base_link": BoolElement,
+            "damping": Link.Damping,
+            "velocity_decay": Link.VelocityDecay,
+            # projector is buggy
+            "projector": Projector,
+        }
+        list_args = {
+            "frame": ("frames", Frame),
+            "collision": ("collisions", Collision),
+            "visual": ("visuals", Visual),
+            "sensor": ("sensors", Sensor),
+            "audio_sink": ("audio_sinks", AudioSink),
+            "audio_source": ("audio_sources", AudioSource),
+            "batterie": ("batteries", Battery),
+            "light": ("lights", Light),
+            "particle_emitter": ("particle_emitters", ParticleEmitter),
+        }
+
+        standard_args = cls._prepare_standard_args(
+            specific, args_with_default, list_args, version=version
+        )
+        link_args.update(standard_args)
+
+        return Link(**link_args, sdf_version=version)
 
 
-# class Link(NamedPoseBearing):
-#     def __init__(
-#         self,
-#         *,
-#         name: str,
-#         pose: Pose = None,
-#         must_be_base_link: bool = False,
-#         inertial: "Link.Inertial" = None,
-#         collisions: List[NamedPoseBearing],
-#         visuals: List[NamedPoseBearing],
-#         projector: NamedPoseBearing = None,
-#         audio_source_poses: List[Pose],
-#         sensors: List[Sensor],
-#         lights: List["Light"] = None,
-#         frames: List["Frame"] = None,
-#     ) -> None:
-#         super().__init__(name=name, pose=pose)
-#         self.must_be_base_link = must_be_base_link
-#         self.inertial = inertial
-#         self.projector = projector
-#         self.collision = collisions
-#         self.visual = visuals
-#         self.sensors = sensors
-#         self.lights = lights
-#         self.audio_sources = [PoseBearing(pose=p) for p in audio_source_poses]
-#         self.frames = frames
+    def declared_frames(self) -> Dict[str, tf.Frame]:
+        declared_frames = {
+            self.name: tf.Frame(3, name=self.name)
+        }
 
-#         if frames is None:
-#             self.frames = list()
+        # frames: List["Frame"] = None,
+        # inertial: Inertial = None,
+        # collisions: List[Collision] = None,
+        # visuals: List[Visual] = None,
+        # sensors: List[Sensor] = None,
+        # projector: Projector = None,
+        # audio_sources: List[AudioSource] = None,
+        # lights: List["Light"] = None,
+        # particle_emitters: List[ParticleEmitter] = None,
+        return declared_frames
 
-#         if lights is None:
-#             self.lights = list()
+    class Damping(ElementBase):
+        def __init__(
+            self, *, linear: float = 0.0, angular: float = 0.0, sdf_version: str
+        ) -> None:
+            warnings.warn("`Link.Damping` has not been implemented yet.")
+            super().__init__(sdf_version=sdf_version)
 
-#         for el in chain(
-#             visuals, collisions, self.audio_sources, sensors, self.lights, self.frames
-#         ):
-#             if el.pose.relative_to is None:
-#                 el.pose.relative_to = name
-
-#         if projector is not None:
-#             if projector.pose.relative_to is None:
-#                 projector.pose.relative_to = name
-
-#         # inertial frame is _forced_ to be relative to link
-#         if self.inertial is not None:
-#             self.inertial.pose.relative_to = name
-
-#     class Inertial(PoseBearing):
-#         def __init__(self, *, pose: Pose = None, frames: List["Frame"] = None) -> None:
-#             super().__init__(pose=pose)
-#             self.frames = frames
-
-#             if self.frames is None:
-#                 self.frames = list()
-
-
-"""<!-- Link -->
-<element name="link" required="*">
-  <description>A physical link with inertia, collision, and visual properties. A link must be a child of a model, and any number of links may exist in a model.</description>
-
-  <attribute name="name" type="string" default="__default__" required="1">
-    <description>A unique name for the link within the scope of the model.</description>
-  </attribute>
-
-  <element name="gravity" type="bool" default="true" required="0">
-    <description>If true, the link is affected by gravity.</description>
-  </element>
-
-  <element name="enable_wind" type="bool" default="false" required="0">
-    <description>If true, the link is affected by the wind.</description>
-  </element>
-
-  <element name="self_collide" type="bool" default="false" required="0">
-    <description>If true, the link can collide with other links in the model. Two links within a model will collide if link1.self_collide OR link2.self_collide. Links connected by a joint will never collide.</description>
-  </element>
-
-  <element name="kinematic" type="bool" default="false" required="0">
-    <description>If true, the link is kinematic only</description>
-  </element>
-
-  <element name="must_be_base_link" type="bool" default="false" required="0">
-    <description>If true, the link will have 6DOF and be a direct child of world.</description>
-  </element>
-
-  <element name="velocity_decay" required="0">
-    <description>Exponential damping of the link's velocity.</description>
-    <element name="linear" type="double" default="0.0" required="0">
-      <description>Linear damping</description>
-    </element>
-    <element name="angular" type="double" default="0.0" required="0">
-      <description>Angular damping</description>
-    </element>
-  </element> <!-- End velocity decay -->
-
-  <include filename="pose.sdf" required="0"/>
-  <include filename="inertial.sdf" required="0"/>
-  <include filename="collision.sdf" required="*"/>
-  <include filename="visual.sdf" required="*"/>
-  <include filename="sensor.sdf" required="*"/>
-  <include filename="projector.sdf" required="*"/>
-  <include filename="audio_sink.sdf" required="*"/>
-  <include filename="audio_source.sdf" required="*"/>
-  <include filename="battery.sdf" required="*"/>
-  <include filename="light.sdf" required="*"/>
-  <include filename="particle_emitter.sdf" required="*"/>
-
-</element> <!-- End Link -->
-"""
+    class VelocityDecay(ElementBase):
+        def __init__(
+            self, *, linear: float = 0.0, angular: float = 0.0, sdf_version: str
+        ) -> None:
+            warnings.warn("`Link.VelocityDecay` has not been implemented yet.")
+            super().__init__(sdf_version=sdf_version)

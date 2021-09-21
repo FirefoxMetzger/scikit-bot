@@ -6,62 +6,60 @@ from .frame import Frame
 
 
 class Sensor(ElementBase):
-  def __init__(self, *, sdf_version: str) -> None:
-    warnings.warn("`Sensor` has not been implemented yet.")
-    super().__init__(sdf_version=sdf_version)
+    def __init__(self, *, sdf_version: str) -> None:
+        warnings.warn("`Sensor` has not been implemented yet.")
+        super().__init__(sdf_version=sdf_version)
 
 
-class Sensor(NamedPoseBearing):
-    def __init__(
-        self,
-        *,
-        name: str,
-        type: str,
-        pose: Pose = None,
-        camera: "Camera" = None,
-        frames: List["Frame"] = None,
-    ) -> None:
-        super().__init__(name=name, pose=pose)
-        self.type = type
-        self.camera = camera
-        self.frames = frames
+# class Sensor(NamedPoseBearing):
+#     def __init__(
+#         self,
+#         *,
+#         name: str,
+#         type: str,
+#         pose: Pose = None,
+#         camera: "Camera" = None,
+#         frames: List["Frame"] = None,
+#     ) -> None:
+#         super().__init__(name=name, pose=pose)
+#         self.type = type
+#         self.camera = camera
+#         self.frames = frames
 
-        if frames is None:
-            self.frames = list()
+#         if frames is None:
+#             self.frames = list()
 
-    class Camera(NamedPoseBearing):
-        def __init__(
-            self,
-            *,
-            name: str,
-            pose: Pose = None,
-            horizontal_fov: float = 1.047,
-            image: "Image" = None,
-            frames: "Frame" = None,
-        ) -> None:
-            super().__init__(name=name, pose=pose)
-            self.horizontal_fov = horizontal_fov
-            self.image = image
-            self.frames = frames
+#     class Camera(NamedPoseBearing):
+#         def __init__(
+#             self,
+#             *,
+#             name: str,
+#             pose: Pose = None,
+#             horizontal_fov: float = 1.047,
+#             image: "Image" = None,
+#             frames: "Frame" = None,
+#         ) -> None:
+#             super().__init__(name=name, pose=pose)
+#             self.horizontal_fov = horizontal_fov
+#             self.image = image
+#             self.frames = frames
 
-            if self.frames is None:
-                self.frames = list()
+#             if self.frames is None:
+#                 self.frames = list()
 
-            if self.image is None:
-                self.image = Sensor.Camera.Image()
+#             if self.image is None:
+#                 self.image = Sensor.Camera.Image()
 
-        class Image:
-            def __init__(
-                self, *, width: int = 320, height: int = 240, format: str = "R8G8B8"
-            ) -> None:
-                self.width = width
-                self.height = height
-                self.format = format
-
-
+#         class Image:
+#             def __init__(
+#                 self, *, width: int = 320, height: int = 240, format: str = "R8G8B8"
+#             ) -> None:
+#                 self.width = width
+#                 self.height = height
+#                 self.format = format
 
 
-'''<!-- Sensor -->
+"""<!-- Sensor -->
 <element name="sensor" required="0">
   <description>The sensor tag describes the type and properties of a sensor.</description>
 
@@ -138,4 +136,4 @@ class Sensor(NamedPoseBearing):
   <include filename="transceiver.sdf" required="0"/>
 
 </element> <!-- End Sensor -->
-'''
+"""

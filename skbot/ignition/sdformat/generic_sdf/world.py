@@ -262,11 +262,11 @@ class World(ElementBase):
             else:
                 self.lights.append(fragment)
 
-        # for frame in self.frames:
-        #     if frame.attached_to is None:
-        #         frame.attached_to = "world"
-        #     elif frame.attached_to == "":
-        #         frame.attached_to = "world"
+        for frame in self.frames:
+            if frame.attached_to is None:
+                frame.attached_to = "world"
+            elif frame.attached_to == "":
+                frame.attached_to = "world"
 
         el: PoseBearing
         pose_bearing: List[PoseBearing] = [
@@ -383,22 +383,22 @@ class World(ElementBase):
 
             model.to_static_graph(declared_frames, seed=seed, shape=shape, axis=axis)
 
-        # el: NamedPoseBearing
-        # for el in chain(
-        #     self.actors,
-        #     self.lights,
-        #     self.frames,
-        #     self._joints
-        # ):
-        #     link: tf.Link = el.pose.to_tf_link()
-        #     parent_name = el.pose.relative_to
-        #     child_name = el.name
+        el: NamedPoseBearing
+        for el in chain(
+            self.actors,
+            self.lights,
+            self.frames,
+            self._joints
+        ):
+            link: tf.Link = el.pose.to_tf_link()
+            parent_name = el.pose.relative_to
+            child_name = el.name
 
-        #     parent = declared_frames[parent_name]
-        #     child = declared_frames[child_name]
-        #     link(child, parent)
+            parent = declared_frames[parent_name]
+            child = declared_frames[child_name]
+            link(child, parent)
 
-        #     el.to_static_graph(declared_frames, seed=seed, shape=shape, axis=axis)
+            el.to_static_graph(declared_frames, seed=seed, shape=shape, axis=axis)
 
         # Elements that might need linking once implemented:
         # atmosphere: "Atmosphere" = None,

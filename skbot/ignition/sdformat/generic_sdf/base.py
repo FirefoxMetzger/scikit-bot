@@ -240,6 +240,14 @@ class ElementBase:
                 )
 
         for their_name in list_args:
+            if not hasattr(specific, their_name):
+                continue
+
+            # catch //list/projector which seems
+            # to be bound wrongly
+            if getattr(specific, their_name) is None:
+                return []
+
             our_name, clazz = list_args[their_name]
             generic_args[our_name] = [
                 clazz.from_specific(x, version=version)
