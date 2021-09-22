@@ -274,6 +274,35 @@ def test_poses():
     assert np.allclose(vector_c, (0, 1, 0))
     assert np.allclose(vector_d, (1, 3, 3))
 
+def test_poses_relative_to():
+    model_file = Path(__file__).parent / "sdf" / "v18" / "pose_relative_to.sdf"
+    sdf_string = model_file.read_text()
+
+    generic_sdf = ign.sdformat.loads_generic(sdf_string)
+    world_sdf = generic_sdf.worlds[0]
+
+    static_frames = world_sdf.declared_frames()
+    static_graph = world_sdf.to_static_graph(static_frames)
+
+    world = ign.sdformat.to_frame_graph(sdf_string)
+    cam_link = world.find_frame(".../camera/link")
+    box_link = world.find_frame(".../box/box_link")
+
+    # origin tests
+    origin_cam = cam_link.transform((0, 0, 0), world)
+    origin_box = box_link.transform((0, 0, 0), world)
+
+    assert np.allclose(origin_cam, (2.0003185305832973, 0.19999974634550793, 1.75))
+    assert np.allclose(origin_box, (0.8305268741307381, -0.237974865830905, 1.0399999999999998))
+
+    # test vector x
+    vector_cam = frame_a.transform((1, 0, 0), world)
+    vector_box = frame_b.transform((1, 0, 0), world)
+
+    assert np.allclose(vector_cam, (1.0400594540571846, 0.2015291077039671, 1.4708939860858379))
+    
+    # I can not get ground truth for this test case :(
+    # assert np.allclose(vector_box, (0, 1, 0))
 
 def test_double_pendulum():
     model_file = (

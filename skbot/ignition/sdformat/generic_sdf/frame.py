@@ -81,7 +81,7 @@ class Frame(ElementBase):
         )
         frame_args.update(standard_args)
 
-        return Frame(**frame_args)
+        return Frame(**frame_args, sdf_version=version)
 
     def declared_frames(self) -> Dict[str, tf.Frame]:
         return {self.name: tf.Frame(3, name=self.name)}

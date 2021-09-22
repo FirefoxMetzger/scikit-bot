@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<sdf version="1.8">
+    <world name="pose_world">
+        <frame name="table2">
+            <pose>0.794 0 0 0 -0 1.5708</pose>
+        </frame>
+        <frame name="tabletop_2">
+            <pose relative_to="table2">0 0 1.015 0 0 0</pose>
+        </frame>
+        <model name="box">
+            <pose relative_to="tabletop_2">-0.2379753249844183 -0.036526411138213755 0.025 0 0 0</pose>
+            <link name="box_link"></link>
+        </model>
+        <model name="camera">
+            <static>true</static>
+            <pose>2 0 1.75 -0 0.282863 3.14</pose>
+            <link name="link">
+                <pose>0 -.2 0 0 0 0</pose>
+                <sensor name="camera" type="camera">
+                    <update_rate>30.0</update_rate>
+                    <topic>main_camera</topic>
+                    <camera name="camy">
+                        <horizontal_fov>1.13446</horizontal_fov>
+                        <image>
+                            <width>1920</width>
+                            <height>1080</height>
+                        </image>
+                    </camera>
+                </sensor>
+            </link>
+        </model>
+    </world>
+</sdf>
