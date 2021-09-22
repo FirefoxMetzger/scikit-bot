@@ -106,6 +106,7 @@ def test_inverse_attributes():
     hasattr(inv_link, "amount")
     assert inv_link.amount == 0.5
 
+
 def test_inverse_inverse():
     link = tf.Translation((1, 0), amount=0.5)
     inv_link = tf.InvertLink(link)
