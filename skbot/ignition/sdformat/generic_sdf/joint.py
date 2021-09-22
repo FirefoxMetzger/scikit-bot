@@ -454,12 +454,16 @@ class Joint(ElementBase):
         ----------
         initial_position : float
             Default joint position for this joint axis.
+
+            .. depreciated:: SDFormat v1.8
+                Use `World.State` instead to set the initial position.
+            .. versionadded:: SDFormat v1.6
         xyz: Union[str, Joint.Axis.Xyz]
             The direction of the Axis.
 
             .. versionchanged:: SDFormat v1.7
                 ``xyz`` is now a class. The direction vector is stored
-                in ``xaz.value``.
+                in ``xyz.value``.
         use_parent_model_frame : bool
             Flag to interpret the axis xyz element in the parent model frame
             instead of joint frame. Provided for Gazebo compatibility (see
@@ -467,11 +471,15 @@ class Joint(ElementBase):
 
             .. depreciated:: SDFormat v1.7
                 Use :attr:`Joint.Axis.Xyz.expressed_in` instead.
+            .. versionadded:: SDFormat v1.5
         dynamics: Joint.Axis.Dynamics
             Dynamic Parameters related to the Axis.
         limit : Joint.Axis.Limit
             Constraints applied to parameters of this joint, e.g., upper/lower
             limits.
+
+            .. versionchanged:: SDFormat v1.6
+                The limit element is now optional.
         sdf_version : str
             The SDFormat version to use when constructing this element.
 
@@ -609,9 +617,13 @@ class Joint(ElementBase):
             spring_reference : float
                 The neutral position of the spring along this axis. The default
                 is ``0``.
+
+                .. versionadded:: SDFormat v1.5
             spring_stiffness : float
                 The stiffness of the spring along this axis. The default is
                 ``0``.
+
+                .. versionadded:: SDFormat v1.5
             sdf_version : str
                 The SDFormat version to use when constructing this element. The
                 default is ``0``.
@@ -676,14 +688,24 @@ class Joint(ElementBase):
                 The maximum effort that may be applied to/by a joint along this
                 axis. This limit is not enforced if its value is negative.
                 Default: ``-1``.
+
+                .. versionchanged:: SDFormat v1.3
+                    The default changed from 0 to -1.
             velocity : float
                 The maximum velocity (angular or directional respectively) that
                 may be applied to/by this joint. This limit is not enforced if
                 its value is negative. Default: ``-1``.
+                
+                .. versionchanged:: SDFormat v1.3
+                    The default changed from 0 to -1.
             stiffness : float
                 Joint stop stiffness. Default: ```1e8``.
+
+                .. versionadded:: SDFormat v1.4
             dissipation : float
                 Joint stop dissipation. Default: ```1.0``.
+
+                .. versionadded:: SDFormat v1.4
             sdf_version : str
                 The SDFormat version to use when constructing this element.
 
