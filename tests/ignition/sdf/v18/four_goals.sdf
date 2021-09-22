@@ -130,7 +130,7 @@
       <self_collide>false</self_collide>
       <allow_auto_disable>true</allow_auto_disable>
       <enable_wind>false</enable_wind>
-      <pose>2 0 1.75 -0 0.282863 3.14159265358979</pose>
+      <pose>2 0 1.75 -0 0.282863 3.14</pose>
       <link name="link">
         <gravity>true</gravity>
         <enable_wind>false</enable_wind>
@@ -154,6 +154,7 @@
           <update_rate>30.0</update_rate>
           <visualize>true</visualize>
           <topic>main_camera</topic>
+          <enable_metrics>false</enable_metrics>
           <camera name="__default__">
             <horizontal_fov>1.13446</horizontal_fov>
             <image>
@@ -199,6 +200,7 @@
           <update_rate>30.0</update_rate>
           <visualize>true</visualize>
           <topic>sideview_camera</topic>
+          <enable_metrics>false</enable_metrics>
           <camera name="__default__">
             <horizontal_fov>1.13446</horizontal_fov>
             <image>
