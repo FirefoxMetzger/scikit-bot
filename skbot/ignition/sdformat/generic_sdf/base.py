@@ -347,7 +347,7 @@ class Pose(ElementBase):
 
         return tf.CompundLink(
             [
-                tf.EulerRotation("XYZ", angles),
+                tf.EulerRotation("xyz", angles),
                 tf.Translation(offset),
             ]
         )
