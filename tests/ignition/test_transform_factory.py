@@ -8,6 +8,7 @@ import skbot.ignition as ign
 import skbot.transform as tf
 from skbot.ignition.sdformat.generic_sdf.base import ElementBase, Pose
 from skbot.ignition.sdformat.generic_sdf.frame import Frame
+from skbot.ignition.sdformat.generic_sdf.joint import Joint
 
 
 def assert_recursive(tree, assert_fn):
@@ -85,12 +86,13 @@ def test_static_matches_dynamic():
     sdf_string = model_file.read_text()
 
     generic_sdf = ign.sdformat.loads_generic(sdf_string)
+    world_sdf = generic_sdf.worlds[0]
 
-    static_frames:Dict[str, tf.Frame] = dict()
-    static_graph = generic_sdf.to_static_graph(static_frames)
+    static_frames = world_sdf.declared_frames()
+    static_graph = world_sdf.to_static_graph(static_frames)
     
-    dynamic_frames:Dict[str, tf.Frame] = dict()
-    dynamic_graph = generic_sdf.to_dynamic_graph(dynamic_frames)
+    dynamic_frames = world_sdf.declared_frames()
+    dynamic_graph = world_sdf.to_dynamic_graph(dynamic_frames)
 
     for key, value in dynamic_frames.items():
         assert key in static_frames
@@ -126,16 +128,15 @@ def test_static_graph():
     sdf_string = model_file.read_text()
 
     generic_sdf = ign.sdformat.loads_generic(sdf_string)
+    world_sdf = generic_sdf.worlds[0]
 
-    static_frames:Dict[str, tf.Frame] = dict()
-    static_graph = generic_sdf.to_static_graph(static_frames)
+    static_frames = world_sdf.declared_frames()
+    world_frame = world_sdf.to_static_graph(static_frames)
 
-    for name in static_frames.keys():
-        if name.endswith("__model__"):
-            implicit_name = name.rsplit("::", 1)[0]
-            implicit_frame = static_frames[implicit_name]
-            explicit_frame = static_frames[name]
-            assert implicit_frame is explicit_frame
+    # each frame should be reachable from the root frame
+    for name, frame in static_frames.items():
+        # will raise exception on mising chain
+        tf_chain = world_frame.transform_chain(frame)
 
 
 def test_dynamic_graph():
@@ -143,9 +144,13 @@ def test_dynamic_graph():
     sdf_string = model_file.read_text()
 
     generic_sdf = ign.sdformat.loads_generic(sdf_string)
+    world_sdf = generic_sdf.worlds[0]
 
-    static_frames:Dict[str, tf.Frame] = dict()
-    static_graph = generic_sdf.to_static_graph(static_frames)
+    static_frames = world_sdf.declared_frames()
+    world_frame = world_sdf.to_static_graph(static_frames)
+
+    all_frames = world_sdf.declared_frames()
+    dynamic_world_frame = world_sdf.to_dynamic_graph(all_frames)
 
 def test_unwrapping():
     model_file = Path(__file__).parent / "sdf" / "v18" / "world_with_state.sdf"
@@ -182,6 +187,20 @@ def test_frame_attached_to_leaking():
         if isinstance(element, Frame):
             assert element.attached_to is not None
             assert element.attached_to != ""
+    
+    assert_recursive(generic_sdf, pose_has_relative_to)
+
+
+def test_joint_axis_expressed_in_leaking():
+    model_file = Path(__file__).parent / "sdf" / "v18" / "world_with_state.sdf"
+    sdf_string = model_file.read_text()
+
+    generic_sdf = ign.sdformat.loads_generic(sdf_string)
+
+    def pose_has_relative_to(element):
+        if isinstance(element, Joint.Axis.Xyz):
+            assert element.expressed_in is not None
+            assert element.expressed_in != ""
     
     assert_recursive(generic_sdf, pose_has_relative_to)
 
