@@ -616,15 +616,12 @@ class Joint(ElementBase):
                     "damping": FloatElement,
                     "friction": FloatElement,
                     "spring_reference": FloatElement,
-                    "spring_stiffness": FloatElement
+                    "spring_stiffness": FloatElement,
                 }
                 standard_args = cls._prepare_standard_args(
-                    specific,
-                    args_with_default,
-                    version=version
+                    specific, args_with_default, version=version
                 )
                 return Joint.Axis.Dynamics(**standard_args)
-
 
         class Limit(ElementBase):
             """Joint limits along an axis.
@@ -710,9 +707,7 @@ class Joint(ElementBase):
                     "dissipation": FloatElement,
                 }
                 standard_args = cls._prepare_standard_args(
-                    specific,
-                    args_with_default,
-                    version=version
+                    specific, args_with_default, version=version
                 )
                 return Joint.Axis.Limit(**standard_args)
 
