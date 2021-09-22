@@ -352,6 +352,20 @@ class Link(ElementBase):
         apply_state: bool = True,
         _scaffolding: Dict[str, tf.Frame],
     ) -> tf.Frame:
+        if self.must_be_base_link:
+            parent_name = "world"
+            child_name = self.name
+
+            parent = declared_frames[parent_name]
+            child = declared_frames[child_name]
+            
+            parent_static = _scaffolding[parent_name]
+            child_static = _scaffolding[child_name]
+
+            link = tf.CompundLink(
+                parent_static.transform_chain(child_static)
+            )
+            link(parent, child)
 
         for frame in self._frames:
             frame.to_dynamic_graph(
