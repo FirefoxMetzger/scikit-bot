@@ -1,8 +1,7 @@
 import warnings
 from typing import List, Union, Dict, Any, Tuple
 from itertools import chain
-
-from numpy import exp
+import numpy as np
 
 from .base import BoolElement, ElementBase, FloatElement, Pose, StringElement, vector3
 from .sensor import Sensor
@@ -194,7 +193,7 @@ class Joint(ElementBase):
         self.gearbox_reference_body = gearbox_reference_body
         self.thread_pitch = thread_pitch
         self.axis = Joint.Axis(sdf_version=sdf_version) if axis is None else axis
-        self.axis2 = Joint.Axis(sdf_version=sdf_version) if axis is None else axis
+        self.axis2 = Joint.Axis(sdf_version=sdf_version) if axis2 is None else axis2
         self.physics = (
             Joint.Physics(sdf_version=sdf_version) if physics is None else physics
         )
@@ -290,13 +289,16 @@ class Joint(ElementBase):
         axis: int = -1,
     ) -> tf.Frame:
         parent_name = self.pose.relative_to
-        child_name = self.name
+        joint_child = self.name + "_child"
+        joint_parent = self.name + "_parent"
 
         parent = declared_frames[parent_name]
-        child = declared_frames[child_name]
+        joint_child = declared_frames[joint_child]
+        joint_parent = declared_frames[joint_parent]
 
         link = self.pose.to_tf_link()
-        link(child, parent)
+        link(joint_child, parent)
+        link(joint_parent, parent)
 
         for el in chain(self._frames):
             el.to_static_graph(declared_frames, seed=seed, shape=shape, axis=axis)
@@ -331,7 +333,7 @@ class Joint(ElementBase):
         link = tf.CompundLink(parent_static.transform_chain(joint_static))
         link(parent, joint_parent)
 
-        joint_link: tf.Link = self.to_tf_link()
+        joint_link: tf.Link = self.to_tf_link(_scaffolding, shape=shape, axis=axis)
         joint_link(joint_child, joint_parent)
 
         link = tf.CompundLink(joint_static.transform_chain(child_static))
@@ -352,14 +354,43 @@ class Joint(ElementBase):
     def to_tf_link(
         self, scaffolding: Dict[str, tf.Frame], *, shape: Tuple = (3,), axis=-1
     ) -> tf.Link:
-        """tf.Link from **child** to **parent** frame"""
+        """tf.Link from **child** to **parent** frame
+
+        Parameters
+        ----------
+        scaffolding : Dict[str, tf.Frame]
+            A static graph that allows the resolution of ``Joint.Axis.Xyz.expressed_in``
+            (``Joint.Axis.Xyz.Value`` needs to be converted to the the implicit frame of
+            ``Joint.child`` as per the spec.)
+        shape : tuple
+            A tuple describing the shape of elements that the resulting graph should
+            transform. This can be used to add batch dimensions to the graph, for
+            example to perform vectorized computation on multiple instances of the
+            same world in different states, or for batched coordinate
+            transformation. Defaults to (3,), which is the shape of a single 3D
+            vector in euclidian space.
+        axis : int
+            The axis along which elements are stored. The axis must have length 3
+            (since SDFormat describes 3 dimensional worlds), and all other axis are
+            considered batch dimensions. Defaults to -1.
+
+        Returns
+        -------
+        joint_link : tf.Link
+            A parameterized link that represents transformation from the joint's
+            child into the joint's parent using the constraint defined by this
+            joint.
+
+        """
         expressed_frame = scaffolding[self.axis.xyz.expressed_in]
         child_frame = scaffolding[self.child]
-        joint_axis = expressed_frame.transform(self.axis.xyz.value, child_frame)
+        joint_axis1 = expressed_frame.transform(self.axis.xyz.value, child_frame)
 
         if self.type == "revolute":
+            angle = np.clip(0, self.axis.limit.lower, self.axis.limit.upper)
             link = tf.RotationalJoint(
-                rotvec=joint_axis,
+                joint_axis1,
+                angle=angle,
                 upper_limit=self.axis.limit.upper,
                 lower_limit=self.axis.limit.lower,
                 axis=axis,
@@ -374,8 +405,10 @@ class Joint(ElementBase):
             warnings.warn("Revolute2 type joint is not added yet.")
             link = tf.Translation((0, 0, 0))
         elif self.type == "prismatic":
+            amount = np.clip(1, self.axis.limit.lower, self.axis.limit.upper)
             link = tf.PrismaticJoint(
-                rotvec=joint_axis,
+                joint_axis1,
+                amount=amount,
                 upper_limit=self.axis.limit.upper,
                 lower_limit=self.axis.limit.lower,
                 axis=axis,
@@ -621,7 +654,7 @@ class Joint(ElementBase):
                 standard_args = cls._prepare_standard_args(
                     specific, args_with_default, version=version
                 )
-                return Joint.Axis.Dynamics(**standard_args)
+                return Joint.Axis.Dynamics(**standard_args, sdf_version=version)
 
         class Limit(ElementBase):
             """Joint limits along an axis.
@@ -709,7 +742,7 @@ class Joint(ElementBase):
                 standard_args = cls._prepare_standard_args(
                     specific, args_with_default, version=version
                 )
-                return Joint.Axis.Limit(**standard_args)
+                return Joint.Axis.Limit(**standard_args, sdf_version=version)
 
     class Physics(ElementBase):
         """
