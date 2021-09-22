@@ -2,7 +2,9 @@ import warnings
 from typing import List, Union, Dict, Any, Tuple
 from itertools import chain
 
-from .base import ElementBase, FloatElement, Pose, StringElement
+from numpy import exp
+
+from .base import BoolElement, ElementBase, FloatElement, Pose, StringElement, vector3
 from .sensor import Sensor
 from .frame import Frame
 from .origin import Origin
@@ -35,7 +37,7 @@ class Joint(ElementBase):
             revolute2
                 Two revolute joints connected in series. The first one rotates
                 around :class:``Joint.Axis``, and the second one rotates around
-                :class:``Joint.Axis2``.
+                :class:``Joint.Axis``.
             prismatic
                 A sliding joint that slides along :class:``Joint.Axis`` with a
                 limited range of motion.
@@ -79,7 +81,7 @@ class Joint(ElementBase):
         gearbox_reference_body to the parent link defined by :class:`Joint.Axis`
         and the second joint angle (theta_2) is the angle from the
         gearbox_reference_body to the child link defined by
-        :class:`Joint.Axis2`.
+        :class:`Joint.Axis`.
 
         .. versionadded:: SDFormat v1.4
     thread_pitch : float
@@ -88,7 +90,7 @@ class Joint(ElementBase):
     axis : Joint.Axis
         Configuration parameters for joints that rotate around or translate
         along at least one axis.
-    axis2 : Joint.Axis2
+    axis2 : Joint.Axis
         Configuration parameters for joints that rotate around or translate
         along at least two axis.
     physics : Joint.Physics
@@ -118,9 +120,9 @@ class Joint(ElementBase):
         See ``Parameters`` section.
     type : str
         See ``Parameters`` section.
-    parent : Union[str, Joint.Parent]
+    parent : str
         See ``Parameters`` section.
-    child : Union[str, Joint.Child]
+    child : str
         See ``Parameters`` section.
     pose : Pose
         See ``Parameters`` section.
@@ -132,7 +134,7 @@ class Joint(ElementBase):
         See ``Parameters`` section.
     axis : Joint.Axis
         See ``Parameters`` section.
-    axis2 : Joint.Axis2
+    axis2 : Joint.Axis
         See ``Parameters`` section.
     physics : Joint.Physics
         See ``Parameters`` section.
@@ -166,7 +168,7 @@ class Joint(ElementBase):
         gearbox_reference_body: str = None,
         thread_pitch: float = 1.0,
         axis: "Joint.Axis" = None,
-        axis2: "Joint.Axis2" = None,
+        axis2: "Joint.Axis" = None,
         physics: "Joint.Physics" = None,
         frames: List[Frame] = None,
         sensors: List[Sensor] = None,
@@ -175,8 +177,6 @@ class Joint(ElementBase):
         super().__init__(sdf_version=sdf_version)
         self.name = name
         self.type = type
-        self.parent = parent
-        self.child = child
         if origin is None:
             self._origin = Origin(sdf_version=sdf_version)
         elif sdf_version == "1.0":
@@ -193,15 +193,35 @@ class Joint(ElementBase):
         self.gearbox_ratio = gearbox_ratio
         self.gearbox_reference_body = gearbox_reference_body
         self.thread_pitch = thread_pitch
-        self.axis = Joint.Axis() if axis is None else axis
-        self.axis2 = Joint.Axis2() if axis2 is None else axis2
+        self.axis = Joint.Axis(sdf_version=sdf_version) if axis is None else axis
+        self.axis2 = Joint.Axis(sdf_version=sdf_version) if axis is None else axis
         self.physics = (
-            Joint.Physics() if physics is None else physics
-        )  #: "Joint.Physics" = None,
+            Joint.Physics(sdf_version=sdf_version) if physics is None else physics
+        )
         self._frames = [] if frames is None else frames
         self.sensors = [] if sensors is None else sensors
 
         self._origin.pose = self.pose
+
+        if isinstance(parent, Joint.Parent):
+            self.parent = parent.link
+        else:
+            self.parent = parent
+
+        if isinstance(child, Joint.Child):
+            self.child = child.link
+        else:
+            self.child = child
+
+        if self.axis._use_parent_model_frame:
+            self.axis.xyz.expressed_in = self.parent
+        elif self.axis.xyz.expressed_in is None:
+            self.axis.xyz.expressed_in = self.child
+
+        if self.axis2._use_parent_model_frame:
+            self.axis2.xyz.expressed_in = self.parent
+        elif self.axis2.xyz.expressed_in is None:
+            self.axis2.xyz.expressed_in = self.child
 
     @property
     def origin(self):
@@ -237,7 +257,7 @@ class Joint(ElementBase):
             "gearbox_reference_body": StringElement,
             "thread_pitch": FloatElement,
             "axis": Joint.Axis,
-            "axis2": Joint.Axis2,
+            "axis2": Joint.Axis,
             "physics": Joint.Physics,
         }
         list_args = {"frame": ("frames", Frame), "sensor": ("sensors", Sensor)}
@@ -296,12 +316,13 @@ class Joint(ElementBase):
         parent_name = self.parent
         child_name = self.child
         joint_name = self.name
+        joint_name_child = self.name + "_child"
         joint_name_parent = self.name + "_parent"
 
         parent = declared_frames[parent_name]
-        joint_parent = declared_frames[joint_name_parent]
-        joint_child = declared_frames[joint_name]
         child = declared_frames[child_name]
+        joint_parent = declared_frames[joint_name_parent]
+        joint_child = declared_frames[joint_name_child]
 
         parent_static = _scaffolding[parent_name]
         joint_static = _scaffolding[joint_name]
@@ -311,7 +332,7 @@ class Joint(ElementBase):
         link(parent, joint_parent)
 
         joint_link: tf.Link = self.to_tf_link()
-        joint_link(joint_parent, joint_child)
+        joint_link(joint_child, joint_parent)
 
         link = tf.CompundLink(joint_static.transform_chain(child_static))
         link(joint_child, child)
@@ -328,8 +349,52 @@ class Joint(ElementBase):
 
         return declared_frames[self.name]
 
-    def to_tf_link(self):
-        pass
+    def to_tf_link(
+        self, scaffolding: Dict[str, tf.Frame], *, shape: Tuple = (3,), axis=-1
+    ) -> tf.Link:
+        """tf.Link from **child** to **parent** frame"""
+        expressed_frame = scaffolding[self.axis.xyz.expressed_in]
+        child_frame = scaffolding[self.child]
+        joint_axis = expressed_frame.transform(self.axis.xyz.value, child_frame)
+
+        if self.type == "revolute":
+            link = tf.RotationalJoint(
+                rotvec=joint_axis,
+                upper_limit=self.axis.limit.upper,
+                lower_limit=self.axis.limit.lower,
+                axis=axis,
+            )
+        elif self.type == "hinge":
+            warnings.warn("Hinge joints have not been added yet.")
+            link = tf.Translation((0, 0, 0))
+        elif self.type == "gearbox":
+            warnings.warn("Gearbox joints have not been added yet.")
+            link = tf.Translation((0, 0, 0))
+        elif self.type == "revolute2":
+            warnings.warn("Revolute2 type joint is not added yet.")
+            link = tf.Translation((0, 0, 0))
+        elif self.type == "prismatic":
+            link = tf.PrismaticJoint(
+                rotvec=joint_axis,
+                upper_limit=self.axis.limit.upper,
+                lower_limit=self.axis.limit.lower,
+                axis=axis,
+            )
+        elif self.type == "ball":
+            warnings.warn("Ball joints have not been added yet.")
+            link = tf.Translation((0, 0, 0))
+        elif self.type == "screw":
+            warnings.warn("Screw joints have not been added yet.")
+            link = tf.Translation((0, 0, 0))
+        elif self.type == "universal":
+            warnings.warn("Universal joints have not been added yet.")
+            link = tf.Translation((0, 0, 0))
+        elif self.type == "fixed":
+            link = tf.Translation((0, 0, 0))
+        else:
+            raise ValueError(f"Unknown Joint type: {self.type}")
+
+        return link
 
     class Parent(ElementBase):
         def __init__(self, *, link: str, sdf_version: str) -> None:
@@ -350,85 +415,128 @@ class Joint(ElementBase):
             return Joint.Parent(link=specific.link, version=version)
 
     class Axis(ElementBase):
-        """
-          <element name="axis" required="0">
-          <description>
-            Parameters related to the axis of rotation for revolute joints,
-            the axis of translation for prismatic joints.
-          </description>
-          <element name="initial_position" type="double" default="0" required="-1">
-            <description>
-              (DEPRECATION WARNING: This tag has no known implementation. It is deprecated SDFormat 1.8 and will be removed in SDFormat 1.9) Default joint position for this joint axis.
-            </description>
-          </element>
-          <element name="xyz" type="vector3" default="0 0 1" required="1">
-            <description>
-              Represents the x,y,z components of the axis unit vector. The axis is
-              expressed in the joint frame unless a different frame is expressed in
-              the expressed_in attribute. The vector should be normalized.
-            </description>
-            <attribute name="expressed_in" type="string" default="" required="0">
-              <description>
-                Name of frame in whose coordinates the xyz unit vector is expressed.
-              </description>
-            </attribute>
-          </element>
-          <element name="dynamics" required="0">
-            <description>An element specifying physical properties of the joint. These values are used to specify modeling properties of the joint, particularly useful for simulation.</description>
-            <element name="damping" type="double" default="0" required="0">
-              <description>The physical velocity dependent viscous damping coefficient of the joint.</description>
-            </element>
-            <element name="friction" type="double" default="0" required="0">
-              <description>The physical static friction value of the joint.</description>
-            </element>
-            <element name="spring_reference" type="double" default="0" required="1">
-              <description>The spring reference position for this joint axis.</description>
-            </element>
-            <element name="spring_stiffness" type="double" default="0" required="1">
-              <description>The spring stiffness for this joint axis.</description>
-            </element>
-          </element> <!-- End Dynamics -->
-          <element name="limit" required="1">
-            <description>specifies the limits of this joint</description>
-            <element name="lower" type="double" default="-1e16" required="1">
-              <description>Specifies the lower joint limit (radians for revolute joints, meters for prismatic joints). Omit if joint is continuous.</description>
-            </element>
-            <element name="upper" type="double" default="1e16" required="1">
-              <description>Specifies the upper joint limit (radians for revolute joints, meters for prismatic joints). Omit if joint is continuous.</description>
-            </element>
-            <element name="effort" type="double" default="-1" required="0">
-              <description>A value for enforcing the maximum joint effort applied. Limit is not enforced if value is negative.</description>
-            </element>
-            <element name="velocity" type="double" default="-1" required="0">
-              <description>A value for enforcing the maximum joint velocity.</description>
-            </element>
+        """Parameters for rotating and/or translating joints.
 
-            <element name="stiffness" type="double" default="1e8" required="0">
-              <description>Joint stop stiffness.</description>
-            </element>
+        Parameters
+        ----------
+        initial_position : float
+            Default joint position for this joint axis.
+        xyz: Union[str, Joint.Axis.Xyz]
+            The direction of the Axis.
 
-            <element name="dissipation" type="double" default="1.0" required="0">
-              <description>Joint stop dissipation.</description>
-            </element>
+            .. versionchanged:: SDFormat v1.7
+                ``xyz`` is now a class. The direction vector is stored
+                in ``xaz.value``.
+        use_parent_model_frame : bool
+            Flag to interpret the axis xyz element in the parent model frame
+            instead of joint frame. Provided for Gazebo compatibility (see
+            https://github.com/osrf/gazebo/issue/494 ). Default is: ``False``.
 
-          </element> <!-- End Limit -->
-        </element> <!-- End Axis -->
+            .. depreciated:: SDFormat v1.7
+                Use :attr:`Joint.Axis.Xyz.expressed_in` instead.
+        dynamics: Joint.Axis.Dynamics
+            Dynamic Parameters related to the Axis.
+        limit : Joint.Axis.Limit
+            Constraints applied to parameters of this joint, e.g., upper/lower
+            limits.
+        sdf_version : str
+            The SDFormat version to use when constructing this element.
+
+        Attributes
+        ----------
+        initial_position : float
+            See ``Parameters`` section.
+        xyz: Joint.Axis.Xyz
+            See ``Parameters`` section.
+        dynamics: Joint.Axis.Dynamics
+            See ``Parameters`` section.
+        limit : Joint.Axis.Limit
+            See ``Parameters`` section.
+
         """
 
         def __init__(
             self,
             *,
             initial_position: float = 0,
-            xyz: Union[str, "Joint.Axis.Xyz"] = "0 0 1",
+            xyz: Union[str, "Joint.Axis.Xyz"] = None,
             use_parent_model_frame: bool = False,
             dynamics: "Joint.Axis.Dynamics" = None,
             limit: "Joint.Axis.Limit" = None,
             sdf_version: str,
         ) -> None:
-            warnings.warn("`Joint.Axis` is not implemented yet.")
             super().__init__(sdf_version=sdf_version)
+            self.initial_position = initial_position
+            if sdf_version in ["1.0", "1.2", "1.3", "1.4", "1.5", "1.6"]:
+                if xyz is None:
+                    # old default
+                    xyz = "0 0 1"
+                self.xyz = Joint.Axis.Xyz(
+                    value=xyz, expressed_in=None, sdf_version=sdf_version
+                )
+            elif xyz is None:
+                self.xyz = Joint.Axis.Xyz(sdf_version=sdf_version)
+            else:
+                self.xyz = xyz
+            self._use_parent_model_frame = use_parent_model_frame
+            self.dynamics = (
+                Joint.Axis.Dynamics(sdf_version=sdf_version)
+                if dynamics is None
+                else dynamics
+            )
+            self.limit = (
+                Joint.Axis.Limit(sdf_version=sdf_version) if limit is None else limit
+            )
+
+        @property
+        def use_parent_model_frame(self):
+            warnings.warn(
+                "`Joint.Axis.use_parent_model_frame` is depreciated."
+                " Use `Joint.Axis.Xyz.expressed_in` instead."
+            )
+            return self._use_parent_model_frame
+
+        @classmethod
+        def from_specific(cls, specific: Any, *, version: str) -> "ElementBase":
+            args_with_default = {
+                "initial_position": FloatElement,
+                "xyz": Joint.Axis.Xyz,
+                "use_parent_model_Frame": BoolElement,
+                "dynamics": Joint.Axis.Dynamics,
+                "limit": Joint.Axis.Limit,
+            }
+            standard_args = cls._prepare_standard_args(
+                specific, args_with_default, version=version
+            )
+
+            return Joint.Axis(**standard_args, sdf_version=version)
 
         class Xyz(ElementBase):
+            """The direction of an axis.
+
+            Represents the x,y,z components of the axis unit vector. The
+            vector should be normalized.
+
+            Parameters
+            ----------
+            value : str
+                The numerical value of the direction. Default: "0 0 1".
+            expressed_in : str
+                The frame of reference in which the direction is expressed.
+
+                .. versionadded:: SDFormat v1.7
+            sdf_version : str
+                The SDFormat version to use when constructing this element.
+
+            Attributes
+            ----------
+            value : np.ndarray
+                See ``Parameters`` section.
+            expressed_in : str
+                See ``Parameters`` section.
+
+            """
+
             def __init__(
                 self,
                 *,
@@ -436,10 +544,57 @@ class Joint(ElementBase):
                 expressed_in: str = None,
                 sdf_version: str,
             ) -> None:
-                warnings.warn("`Joint.Axis.Xyz` is not implemented yet.")
                 super().__init__(sdf_version=sdf_version)
+                self.value = vector3(value)
+
+                self.expressed_in = expressed_in
+                if self.expressed_in == "":
+                    self.expressed_in = None
+
+            @classmethod
+            def from_specific(cls, specific: Any, *, version: str) -> "ElementBase":
+                return Joint.Axis.Xyz(
+                    value=specific.value,
+                    expressed_in=specific.expressed_in,
+                    sdf_version=version,
+                )
 
         class Dynamics(ElementBase):
+            """Dynamic Parameters along an axis.
+
+            An element specifying physical properties of the joint related to
+            the axis. These values are used to specify modeling properties of
+            the joint, particularly useful for simulation.
+
+            Parameters
+            ----------
+            damping : float
+                Viscous damping coefficient along this axis. The default is
+                ``0``.
+            friction : float
+                Static friction along this axis. The default is ``0``.
+            spring_reference : float
+                The neutral position of the spring along this axis. The default
+                is ``0``.
+            spring_stiffness : float
+                The stiffness of the spring along this axis. The default is
+                ``0``.
+            sdf_version : str
+                The SDFormat version to use when constructing this element. The
+                default is ``0``.
+
+            Attributes
+            ----------
+            damping : float
+                See ``Parameters`` section.
+            friction : float
+                See ``Parameters`` section.
+            spring_reference : float
+                See ``Parameters`` section.
+            spring_stiffness : float
+                See ``Parameters`` section.
+            """
+
             def __init__(
                 self,
                 *,
@@ -449,10 +604,76 @@ class Joint(ElementBase):
                 spring_stiffness: float = 0,
                 sdf_version: str,
             ) -> None:
-                warnings.warn("`Joint.Axis.Dynamics` is not implemented yet.")
                 super().__init__(sdf_version=sdf_version)
+                self.damping = damping
+                self.friction = friction
+                self.spring_reference = spring_reference
+                self.spring_stiffness = spring_stiffness
+
+            @classmethod
+            def from_specific(cls, specific: Any, *, version: str) -> "ElementBase":
+                args_with_default = {
+                    "damping": FloatElement,
+                    "friction": FloatElement,
+                    "spring_reference": FloatElement,
+                    "spring_stiffness": FloatElement
+                }
+                standard_args = cls._prepare_standard_args(
+                    specific,
+                    args_with_default,
+                    version=version
+                )
+                return Joint.Axis.Dynamics(**standard_args)
+
 
         class Limit(ElementBase):
+            """Joint limits along an axis.
+
+            This class specifies limites/constraints for joint parameters along
+            the containing axis.
+
+            Parameters
+            ----------
+            lower : float
+                A lower limit for any joint parameter along this axis. In
+                radians for revolute joints and in meters for prismatic joints.
+                Default: ``-1e16``.
+            upper : float
+                A upper limit for any joint parameter along this axis. In
+                radians for revolute joints and in meters for prismatic joints.
+                Default: ``1e16``.
+            effort : float
+                The maximum effort that may be applied to/by a joint along this
+                axis. This limit is not enforced if its value is negative.
+                Default: ``-1``.
+            velocity : float
+                The maximum velocity (angular or directional respectively) that
+                may be applied to/by this joint. This limit is not enforced if
+                its value is negative. Default: ``-1``.
+            stiffness : float
+                Joint stop stiffness. Default: ```1e8``.
+            dissipation : float
+                Joint stop dissipation. Default: ```1.0``.
+            sdf_version : str
+                The SDFormat version to use when constructing this element.
+
+            Attributes
+            ----------
+            lower : float
+                See ``Parameters`` section.
+            upper : float
+                See ``Parameters`` section.
+            effort : float
+                See ``Parameters`` section.
+            velocity : float
+                See ``Parameters`` section.
+            stiffness : float
+                See ``Parameters`` section.
+            dissipation : float
+                See ``Parameters`` section.
+
+            """
+
             def __init__(
                 self,
                 *,
@@ -464,126 +685,36 @@ class Joint(ElementBase):
                 dissipation: float = 1.0,
                 sdf_version: str,
             ) -> None:
-                warnings.warn("`Joint.Axis.Limit` is not implemented yet.")
                 super().__init__(sdf_version=sdf_version)
+                self.lower = lower
+                self.upper = upper
+                if effort < 0:
+                    self.effort = float("inf")
+                else:
+                    self.effort = effort
+                if velocity < 0:
+                    self.velocity = float("inf")
+                else:
+                    self.velocity = velocity
+                self.stiffness = stiffness
+                self.dissipation = dissipation
 
-    class Axis2(ElementBase):
-        """
-          <element name="axis2" required="0">
-          <description>
-            Parameters related to the second axis of rotation for revolute2 joints and universal joints.
-          </description>
-          <element name="initial_position" type="double" default="0" required="-1">
-            <description>
-              (DEPRECATION WARNING: This tag has no known implementation. It is deprecated SDFormat 1.8 and will be removed in SDFormat 1.9) Default joint position for this joint axis.
-            </description>
-          </element>
-          <element name="xyz" type="vector3" default="0 0 1" required="1">
-            <description>
-              Represents the x,y,z components of the axis unit vector. The axis is
-              expressed in the joint frame unless a different frame is expressed in
-              the expressed_in attribute. The vector should be normalized.
-            </description>
-            <attribute name="expressed_in" type="string" default="" required="0">
-              <description>
-                Name of frame in whose coordinates the xyz unit vector is expressed.
-              </description>
-            </attribute>
-          </element>
-          <element name="dynamics" required="0">
-            <description>An element specifying physical properties of the joint. These values are used to specify modeling properties of the joint, particularly useful for simulation.</description>
-            <element name="damping" type="double" default="0" required="0">
-              <description>The physical velocity dependent viscous damping coefficient of the joint.  EXPERIMENTAL: if damping coefficient is negative and implicit_spring_damper is true, adaptive damping is used.</description>
-            </element>
-            <element name="friction" type="double" default="0" required="0">
-              <description>The physical static friction value of the joint.</description>
-            </element>
-            <element name="spring_reference" type="double" default="0" required="1">
-              <description>The spring reference position for this joint axis.</description>
-            </element>
-            <element name="spring_stiffness" type="double" default="0" required="1">
-              <description>The spring stiffness for this joint axis.</description>
-            </element>
-          </element> <!-- End Dynamics -->
-
-          <element name="limit" required="1">
-            <description></description>
-            <element name="lower" type="double" default="-1e16" required="0">
-              <description>An attribute specifying the lower joint limit (radians for revolute joints, meters for prismatic joints). Omit if joint is continuous.</description>
-            </element>
-            <element name="upper" type="double" default="1e16" required="0">
-              <description>An attribute specifying the upper joint limit (radians for revolute joints, meters for prismatic joints). Omit if joint is continuous.</description>
-            </element>
-            <element name="effort" type="double" default="-1" required="0">
-              <description>An attribute for enforcing the maximum joint effort applied by Joint::SetForce.  Limit is not enforced if value is negative.</description>
-            </element>
-            <element name="velocity" type="double" default="-1" required="0">
-              <description>(not implemented) An attribute for enforcing the maximum joint velocity.</description>
-            </element>
-
-            <element name="stiffness" type="double" default="1e8" required="0">
-              <description>Joint stop stiffness. Supported physics engines: SimBody.</description>
-            </element>
-
-            <element name="dissipation" type="double" default="1.0" required="0">
-              <description>Joint stop dissipation. Supported physics engines: SimBody.</description>
-            </element>
-
-          </element> <!-- End Limit -->
-        </element> <!-- End Axis2 -->
-        """
-
-        def __init__(
-            self,
-            *,
-            initial_position: float = 0,
-            xyz: Union[str, "Joint.Axis2.Xyz"] = "0 0 1",
-            use_parent_model_frame: bool = False,
-            dynamics: "Joint.Axis2.Dynamics" = None,
-            limit: "Joint.Axis2.Limit" = None,
-            sdf_version: str,
-        ) -> None:
-            warnings.warn("`Joint.Axis2` is not implemented yet.")
-            super().__init__(sdf_version=sdf_version)
-
-        class Xyz(ElementBase):
-            def __init__(
-                self,
-                *,
-                value: str = "0 0 1",
-                expressed_in: str = None,
-                sdf_version: str,
-            ) -> None:
-                warnings.warn("`Joint.Axis2.Xyz` is not implemented yet.")
-                super().__init__(sdf_version=sdf_version)
-
-        class Dynamics(ElementBase):
-            def __init__(
-                self,
-                *,
-                damping: float = 0,
-                friction: float = 0,
-                spring_reference: float = 0,
-                spring_stiffness: float = 0,
-                sdf_version: str,
-            ) -> None:
-                warnings.warn("`Joint.Axis2.Dynamics` is not implemented yet.")
-                super().__init__(sdf_version=sdf_version)
-
-        class Limit(ElementBase):
-            def __init__(
-                self,
-                *,
-                lower: float = -1e16,
-                upper: float = 1e16,
-                effort: float = 0,
-                velocity: float = 0,
-                stiffness: float = 1e8,
-                dissipation: float = 1.0,
-                sdf_version: str,
-            ) -> None:
-                warnings.warn("`Joint.Axis2.Limit` is not implemented yet.")
-                super().__init__(sdf_version=sdf_version)
+            @classmethod
+            def from_specific(cls, specific: Any, *, version: str) -> "ElementBase":
+                args_with_default = {
+                    "lower": FloatElement,
+                    "upper": FloatElement,
+                    "effort": FloatElement,
+                    "velocity": FloatElement,
+                    "stiffness": FloatElement,
+                    "dissipation": FloatElement,
+                }
+                standard_args = cls._prepare_standard_args(
+                    specific,
+                    args_with_default,
+                    version=version
+                )
+                return Joint.Axis.Limit(**standard_args)
 
     class Physics(ElementBase):
         """
