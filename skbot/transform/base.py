@@ -148,9 +148,7 @@ class InvertLink(Link):
     """
 
     def __init__(self, link: Link) -> None:
-        try:
-            link.__inverse_transform__(np.zeros(link.child_dim))
-        except NotImplementedError:
+        if link.__inverse_transform__.__func__ is Link.__inverse_transform__:
             raise ValueError("Link doesn't implement __inverse_transform__.") from None
 
         super().__init__(link.child_dim, link.parent_dim)
@@ -159,6 +157,9 @@ class InvertLink(Link):
 
     def transform(self, x: ArrayLike) -> np.ndarray:
         return self._forward_link.__inverse_transform__(x)
+
+    def __inverse_transform__(self, x: ArrayLike) -> np.ndarray:
+        return self._forward_link.transform(x)
 
     def __getattr__(self, attr):
         return getattr(self._forward_link, attr)
