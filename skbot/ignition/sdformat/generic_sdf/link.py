@@ -318,14 +318,6 @@ class Link(ElementBase):
         for el in chain(self._frames):
             declared_frames.update(el.declared_frames())
 
-        # inertial: Inertial = None,
-        # collisions: List[Collision] = None,
-        # visuals: List[Visual] = None,
-        # sensors: List[Sensor] = None,
-        # projector: Projector = None,
-        # audio_sources: List[AudioSource] = None,
-        # lights: List["Light"] = None,
-        # particle_emitters: List[ParticleEmitter] = None,
         return declared_frames
 
     def to_static_graph(
@@ -346,14 +338,7 @@ class Link(ElementBase):
         link(child, parent)
 
         for el in chain(self._frames):
-            parent_name = el.pose.relative_to
-            child_name = el.name
-
-            parent = declared_frames[parent_name]
-            child = declared_frames[child_name]
-
-            link = self.pose.to_tf_link()
-            link(child, parent)
+            el.to_static_graph(declared_frames, seed=seed, shape=shape, axis=axis)
 
         return declared_frames[self.name]
 

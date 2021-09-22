@@ -104,7 +104,7 @@ class Model(ElementBase):
         .. versionadded:: SDFormat v1.6
     sdf_version : str
         The SDFormat version to use when constructing this element.
-    origin : Model.Origin
+    origin : Origin
         The model's origin.
 
         .. depreciated:: SDFormat v1.2
@@ -230,7 +230,8 @@ class Model(ElementBase):
         for el in chain(
             self.models,
             self.frames,
-            self.links
+            self.links,
+            self.joints
             # lights
         ):
             if el.pose.relative_to is None:
@@ -284,7 +285,7 @@ class Model(ElementBase):
     def declared_frames(self) -> Dict[str, tf.Frame]:
         declared_frames = {"__model__": tf.Frame(3, name=self.name)}
 
-        for el in chain(self.frames, self.links):
+        for el in chain(self.frames, self.links, self.joints):
             declared_frames.update(el.declared_frames())
 
         for model in self.models:
@@ -321,7 +322,7 @@ class Model(ElementBase):
             child = declared_frames[child_name]
             link(child, parent)
 
-        for el in chain(self.frames, self.links):
+        for el in chain(self.frames, self.links, self.joints):
             el.to_static_graph(declared_frames, seed=seed, shape=shape, axis=axis)
 
             link = el.pose.to_tf_link()
@@ -381,6 +382,7 @@ class Model(ElementBase):
         for el in chain(
             self.frames,
             self.links,
+            self.joints
         ):
             el.to_dynamic_graph(
                 declared_frames,

@@ -269,8 +269,9 @@ class World(ElementBase):
         el: PoseBearing
         pose_bearing: List[PoseBearing] = [
             # lights,
-            frames,
-            models,
+            self.frames,
+            self.models,
+            self._joints
         ]
         for el in chain(*pose_bearing):
             if el.pose.relative_to is None:
@@ -405,35 +406,6 @@ class World(ElementBase):
             _scaffolding = self.declared_frames()
             self.to_static_graph(_scaffolding, seed=seed, shape=shape, axis=axis)
 
-        # # refactor into joints.to_dynamic_graph
-        # for joint_child in self._joints:
-        #     parent_name = joint_child.parent
-        #     child_name = joint_child.child
-        #     joint_name = joint_child.name
-        #     joint_name_parent = joint_child.name + "_parent"
-
-        #     parent = declared_frames[parent_name]
-        #     joint_parent = declared_frames[joint_name_parent]
-        #     joint_child = declared_frames[joint_name]
-        #     child = declared_frames[child_name]
-
-        #     parent_static = _scaffolding[parent_name]
-        #     joint_static = _scaffolding[joint_name]
-        #     child_static = _scaffolding[child_name]
-
-        #     link = tf.CompundLink(
-        #         parent_static.transform_chain(joint_static)
-        #     )
-        #     link(parent, joint_parent)
-
-        #     joint_link:tf.Link = joint_child.to_tf_link()
-        #     joint_link(joint_parent, joint_child)
-
-        #     link = tf.CompundLink(
-        #         joint_static.transform_chain(child_static)
-        #     )
-        #     link(joint_child, child)
-
         for model in self.models:
             scaffold_scope = {
                 name.split("::", 1)[1]: frame
@@ -459,6 +431,7 @@ class World(ElementBase):
 
         for el in chain(
             self.frames,
+            self._joints
         ):
             el.to_dynamic_graph(
                 declared_frames,
