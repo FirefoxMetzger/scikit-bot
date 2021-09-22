@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.7.6 (2021-09-22)
+### Fix
+* Add inverse of inverse link ([#79](https://github.com/FirefoxMetzger/scikit-bot/issues/79)) ([`328d7e8`](https://github.com/FirefoxMetzger/scikit-bot/commit/328d7e845ea1cd98e98213cdea6fb2db8691eeb7))
+
 ## v0.7.5 (2021-09-20)
 ### Fix
 * Bump build from 0.6.0.post1 to 0.7.0 ([#76](https://github.com/FirefoxMetzger/scikit-bot/issues/76)) ([`f5ae0ab`](https://github.com/FirefoxMetzger/scikit-bot/commit/f5ae0ab6ae63f769d0ee13d982b7d3aa546e4a4f))
