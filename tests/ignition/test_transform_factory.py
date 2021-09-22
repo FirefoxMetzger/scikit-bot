@@ -219,15 +219,35 @@ def test_nd_panda():
     root_frame = ign.sdformat.to_frame_graph(sdf_string, shape=(5, 3))
 
 
+def test_must_be_base_link():
+    model_file = Path(__file__).parent / "sdf" / "v18" / "pose_testing.sdf"
+    sdf_string = model_file.read_text()
+
+    generic_sdf = ign.sdformat.loads_generic(sdf_string)
+    world_sdf = generic_sdf.worlds[0]
+
+    frames = world_sdf.declared_frames()
+    world_frame = world_sdf.to_dynamic_graph(frames)
+
+    for name in ["A", "B", "C", "D"]:
+        chain = world_frame.transform_chain(name)
+        assert len(chain) == 1
+
 def test_poses():
     model_file = Path(__file__).parent / "sdf" / "v18" / "pose_testing.sdf"
     sdf_string = model_file.read_text()
 
+    generic_sdf = ign.sdformat.loads_generic(sdf_string)
+    world_sdf = generic_sdf.worlds[0]
+
+    static_frames = world_sdf.declared_frames()
+    static_graph = world_sdf.to_static_graph(static_frames)
+
     world = ign.sdformat.to_frame_graph(sdf_string)
-    frame_a = world.find_frame("world/A")
-    frame_b = world.find_frame("world/B")
-    frame_c = world.find_frame("world/C")
-    frame_d = world.find_frame("world/D")
+    frame_a = world.find_frame("A")
+    frame_b = world.find_frame("B")
+    frame_c = world.find_frame("C")
+    frame_d = world.find_frame("D")
 
     # origin tests
     origin_a = frame_a.transform((0, 0, 0), world)
