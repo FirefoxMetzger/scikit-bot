@@ -80,14 +80,22 @@ class Include(ElementBase):
         specific_sdf = sdformat.loads(sdf_string)
 
         for el in priority:
-            collection:List = getattr(specific_sdf, el)
-            if len(collection) > 0:
-                break
+            fragment = getattr(specific_sdf, el)
+            
+            if fragment is None:
+                continue
+            
+            if isinstance(fragment, list):
+                if len(fragment) == 0:
+                    continue
+                fragment = fragment[0]
+
+            break
         else:
             raise ParseError(f"No fragments found at  `{self.uri}`.")
 
         if el == "model":
-            model = Model.from_specific(collection[0], version=specific_sdf.version)
+            model = Model.from_specific(fragment, version=specific_sdf.version)
             if self.name is not None:
                 model.name = self.name
             if self.static is not None:
@@ -99,8 +107,8 @@ class Include(ElementBase):
             # model.plugins.extend(self.plugins)
             return model
         elif el == "actor":
-            actor = Actor.from_specific(collection[0], version=specific_sdf.version)
+            actor = Actor.from_specific(fragment, version=specific_sdf.version)
             raise NotImplementedError()
         else:
-            light = Light.from_specific(collection[0], version=specific_sdf.version)
+            light = Light.from_specific(fragment, version=specific_sdf.version)
             raise NotImplementedError()
