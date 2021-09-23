@@ -1,7 +1,6 @@
 import pytest
 from pathlib import Path
 import numpy as np
-from typing import Dict
 from itertools import chain
 
 import skbot.ignition as ign
@@ -89,16 +88,30 @@ def test_static_matches_dynamic():
     world_sdf = generic_sdf.worlds[0]
 
     static_frames = world_sdf.declared_frames()
-    static_graph = world_sdf.to_static_graph(static_frames)
+    static_root = world_sdf.to_static_graph(static_frames)
     
     dynamic_frames = world_sdf.declared_frames()
-    dynamic_graph = world_sdf.to_dynamic_graph(dynamic_frames)
+    dynamic_root = world_sdf.to_dynamic_graph(dynamic_frames, apply_state=False)
 
+    # assert that frames are similar
     for key, value in dynamic_frames.items():
         assert key in static_frames
         assert value.name == static_frames[key].name
+        assert value.ndim == static_frames[key].ndim
 
-    frame_list = ign.sdformat.to_frame_graph(sdf_string, unwrap=False)
+    # assert that transformations yield similar result
+    for name in dynamic_frames:
+        dynamic_frame = dynamic_frames[name]
+        static_frame = static_frames[name]
+
+        null = np.zeros(dynamic_frame.ndim)
+        try:
+            world_coords = dynamic_frame.transform(null, dynamic_root)
+        except RuntimeError:
+            continue
+        else:
+            expected = static_frame.transform(null, static_root)
+            assert np.allclose(world_coords, expected)
 
 def test_declared_frames():
     def assert_matching_frames(frames):
@@ -321,7 +334,7 @@ def test_perspective_transform_straight():
     sdf_string = model_file.read_text()
 
     root_frame = ign.sdformat.to_frame_graph(sdf_string)
-    px_space = root_frame.find_frame(".../pixel-space")
+    px_space = root_frame.find_frame(".../pixel_space")
     box = root_frame.find_frame(".../box_visual")
     center = np.array([0, 0, 0])
     corners = np.array(
@@ -443,18 +456,23 @@ def test_link_offset():
     assert np.allclose(actual, expected, atol=1e-2)
 
 
-
 def test_four_goals():
     model_file = Path(__file__).parent / "sdf" / "v18" / "four_goals.sdf"
     sdf_string = model_file.read_text()
 
-    root_frame = ign.sdformat.to_frame_graph(sdf_string)
-    cam_base = root_frame.find_frame(".../main_camera::__model__")
-    px_space = cam_base.find_frame(".../pixel-space")
-    cam_space = cam_base.find_frame(".../camera-space")
+    generic_sdf = ign.sdformat.loads_generic(sdf_string)
+    world_sdf = generic_sdf.worlds[0]
 
-    box_base = root_frame.find_frame(".../box_copy_0::__model__")
-    box = root_frame.find_frame(".../box_visual")
+    static_frames = world_sdf.declared_frames()
+    static_graph = world_sdf.to_static_graph(static_frames)
+
+    root_frame = static_graph
+    cam_base = static_frames["main_camera::__model__"]
+    px_space = static_frames["main_camera::link::camera::pixel_space"]
+    cam_space = static_frames["main_camera::link::camera::camera"]
+
+    box_base = static_frames["box_copy_1"]
+    box = static_frames["box_copy_1::box_link"]
     vertices = np.array(
         [
             [0.025, 0.025, 0.025],  # 0

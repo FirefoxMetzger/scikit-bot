@@ -225,10 +225,21 @@ class Joint(ElementBase):
         for frame in self._frames:
             if frame.attached_to is None:
                 frame.attached_to = self.name
+            if frame.pose.relative_to is None:
+                frame.pose.relative_to = self.name
 
-        for el in chain(self._frames, self.sensors):
-            if el.pose.relative_to is None:
-                el.pose.relative_to = self.name
+        for sensor in sensors:
+            if sensor.pose.relative_to is None:
+                sensor.pose.relative_to = self.name
+
+            if sensor.camera.pose.relative_to is None:
+                sensor.camera.pose.relative_to = f"{self.name}::{sensor.name}"
+
+            for frame in sensor.camera._frames:
+                if frame.pose.relative_to is None:
+                    frame.pose.relative_to = f"{self.name}::{sensor.name}::{sensor.camera.name}"
+                if frame.attached_to is None:
+                    frame.attached_to = f"{self.name}::{sensor.name}"
 
     @property
     def origin(self):
@@ -318,7 +329,7 @@ class Joint(ElementBase):
         for sensor in self.sensors:
             sensor.to_static_graph(
                 declared_frames,
-                declared_frames[f"{self.name}::{sensor.name}"],
+                f"{self.name}::{sensor.name}",
                 seed=seed,
                 shape=shape,
                 axis=axis,
@@ -387,7 +398,7 @@ class Joint(ElementBase):
 
             sensor.to_dynamic_graph(
                 declared_frames,
-                declared_frames[f"{self.name}::{sensor.name}"],
+                f"{self.name}::{sensor.name}",
                 seed=seed,
                 shape=shape,
                 axis=axis,

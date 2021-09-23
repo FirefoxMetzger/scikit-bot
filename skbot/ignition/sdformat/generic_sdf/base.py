@@ -228,7 +228,9 @@ class ElementBase:
 
             if clazz in [StringElement, BoolElement, FloatElement]:
                 value = getattr(specific, name)
-                if value is not None:
+                if value == "__default__":
+                    continue
+                elif value is not None:
                     generic_args[name] = value
                 else:
                     continue

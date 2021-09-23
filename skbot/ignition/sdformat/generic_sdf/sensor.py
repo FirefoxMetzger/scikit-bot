@@ -308,12 +308,6 @@ class Sensor(ElementBase):
 
         self._origin.pose = self.pose
 
-        for frame in self._frames:
-            if frame.pose.relative_to is None:
-                frame.pose.relative_to = self.name
-            if frame.attached_to is None:
-                frame.attached_to = self.name
-
     @property
     def origin(self):
         warnings.warn(
@@ -374,27 +368,14 @@ class Sensor(ElementBase):
     def declared_frames(self) -> Dict[str, tf.Frame]:
         declared_frames = {self.name: tf.Frame(3, name=self.name)}
 
-        for el in chain(
-            [
-                # self.air_pressure,
-                # self.camera,
-                # self.ray,
-                # self.contact,
-                # self.rfid,
-                # self.rfidtag,
-                # self.imu,
-                # self.force_torque,
-                # self.gps,
-                # self.sonar,
-                # self.transceiver,
-                # self.altimeter,
-                # self.lidar,
-                # self.logical_camera,
-                # self.magnetometer,
-                # self.navsat
-            ]
-        ):
-            nested_elements = el.declared_frames()
+        relevant_config = None
+        if self.type == "camera":
+            relevant_config = self.camera
+        else:
+            warnings.warn(f"Sensor type `{self.type}` is not implemented.")
+
+        if relevant_config is not None:
+            nested_elements = relevant_config.declared_frames()
             for name, frame in nested_elements.items():
                 declared_frames[f"{self.name}::{name}"] = frame
 
@@ -406,7 +387,7 @@ class Sensor(ElementBase):
     def to_static_graph(
         self,
         declared_frames: Dict[str, tf.Frame],
-        sensor_frame: tf.Frame,
+        sensor_frame: str,
         *,
         seed: int = None,
         shape: Tuple,
@@ -415,42 +396,19 @@ class Sensor(ElementBase):
         parent_name = self.pose.relative_to
 
         parent = declared_frames[parent_name]
-        child = sensor_frame
+        child = declared_frames[sensor_frame]
 
         link = self.pose.to_tf_link()
         link(child, parent)
 
-        # if self.type == "camera":
-        #     parent_name = self.camera.pose.relative_to
-        #     child_name = self.camera.name
+        relevant_config = None
+        if self.type == "camera":
+            relevant_config = self.camera
+        else:
+            warnings.warn(f"Sensor type `{self.type}` is not implemented.")
 
-        #     parent = declared_frames[parent_name]
-        #     child = declared_frames[child_name]
-
-        #     link = self.pose.to_tf_link()
-        #     link(child, parent)
-
-        for el in chain(
-            [
-                # self.air_pressure,
-                # self.camera,
-                # self.ray,
-                # self.contact,
-                # self.rfid,
-                # self.rfidtag,
-                # self.imu,
-                # self.force_torque,
-                # self.gps,
-                # self.sonar,
-                # self.transceiver,
-                # self.altimeter,
-                # self.lidar,
-                # self.logical_camera,
-                # self.magnetometer,
-                # self.navsat
-            ]
-        ):
-            el.to_static_graph(
+        if relevant_config is not None:
+            relevant_config.to_static_graph(
                 declared_frames,
                 sensor_frame,
                 seed=seed,
@@ -458,12 +416,12 @@ class Sensor(ElementBase):
                 axis=axis,
             )
 
-        return sensor_frame
+        return declared_frames[sensor_frame]
 
     def to_dynamic_graph(
         self,
         declared_frames: Dict[str, tf.Frame],
-        sensor_frame: tf.Frame,
+        sensor_frame: str,
         *,
         seed: int = None,
         shape: Tuple,
@@ -471,5 +429,21 @@ class Sensor(ElementBase):
         apply_state: bool = True,
         _scaffolding: Dict[str, tf.Frame],
     ) -> tf.Frame:
+        relevant_config = None
+        if self.type == "camera":
+            relevant_config = self.camera
+        else:
+            warnings.warn(f"Sensor type `{self.type}` is not implemented.")
 
-        return sensor_frame
+        if relevant_config is not None:
+            relevant_config.to_dynamic_graph(
+                declared_frames,
+                sensor_frame,
+                seed=seed,
+                shape=shape,
+                axis=axis,
+                apply_state=apply_state,
+                _scaffolding=_scaffolding
+            )
+
+        return declared_frames[sensor_frame]

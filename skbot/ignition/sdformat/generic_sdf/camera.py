@@ -1,12 +1,383 @@
 import warnings
+from typing import DefaultDict, List, Dict, Any, Tuple, Union
 
-from .base import ElementBase
+from .base import ElementBase, FloatElement, Pose, StringElement
+from .frame import Frame
+from .... import transform as tf
+from ...transformations import FrustumProjection
 
 
 class Camera(ElementBase):
-  def __init__(self, *, sdf_version: str) -> None:
-    warnings.warn("`Camera` has not been implemented yet.")
-    super().__init__(sdf_version=sdf_version)
+    def __init__(
+        self,
+        *,
+        name: str = "camera",
+        pose: Pose = None,
+        horizontal_fov: Union[float, "Camera.HorizontalFov"] = 1.047,
+        image: "Camera.Image" = None,
+        clip: "Camera.Clip" = None,
+        save: "Camera.Save" = None,
+        depth_camera: "Camera.DepthCamera" = None,
+        noise: "Camera.Noise" = None,
+        distortion: "Camera.Distortion" = None,
+        lense: "Camera.Lense" = None,
+        frames: List[Frame] = None,
+        intrinsics: "Camera.Intrinsics" = None,
+        visibility_mask:int = 4294967295,
+        sdf_version: str
+    ) -> None:
+        warnings.warn("`Camera` has not been implemented yet.")
+        super().__init__(sdf_version=sdf_version)
+
+        self.name = name
+        self.pose = Pose(sdf_version=sdf_version) if pose is None else pose
+        if sdf_version == "1.0":
+            self.horizontal_fov = Camera.HorizontalFov(sdf_version=sdf_version) if horizontal_fov is None else horizontal_fov
+        else:
+            self.horizontal_fov = horizontal_fov
+        self.image = Camera.Image(sdf_version=sdf_version) if image is None else image
+        self.clip = Camera.Clip(sdf_version=sdf_version) if clip is None else clip
+        self.save = Camera.Save(sdf_version=sdf_version) if save is None else save
+        self.depth_camera = Camera.DepthCamera(sdf_version=sdf_version) if depth_camera is None else depth_camera
+        self.noise = Camera.Noise(sdf_version=sdf_version) if noise is None else noise
+        self.distortion = Camera.Distortion(sdf_version=sdf_version) if distortion is None else distortion
+        self.lense = Camera.Lense(sdf_version=sdf_version) if lense is None else lense
+        self._frames = [] if frames is None else frames
+        self.intrinsics = Camera.Intrinsics(sdf_version=sdf_version) if intrinsics is None else intrinsics
+        self.visibility_mask = visibility_mask
+
+    @property
+    def frames(self):
+        warnings.warn(
+            "`Sensor.frames` is depreciated since SDF v1.7."
+            " Use `Model.frames` instead and set `Frame.attached_to` to the name of this link.",
+            DeprecationWarning,
+        )
+        return self._frames
+
+    @classmethod
+    def from_specific(cls, specific: Any, *, version: str) -> "ElementBase":
+        camera_args = {
+            "visibility_mask": specific.visibility_mask
+        }
+        default_args = {
+            "name": StringElement,
+            "pose": Pose,
+            "image": Camera.Image,
+            "clip": Camera.Clip,
+            "save": Camera.Save,
+            "depth_camera": Camera.DepthCamera,
+            "noise": Camera.Noise,
+            "distortion": Camera.Distortion,
+            "lense": Camera.Lense,
+            "intrinsics": Camera.Intrinsics
+        }
+        if version == "1.0":
+            default_args["horizontal_fov"] = Camera.HorizontalFov
+        else:
+            default_args["horizontal_fov"] = FloatElement
+        list_args = {
+            "frame": ("frames", Frame)
+        }
+        standard_args = cls._prepare_standard_args(
+            specific,
+            default_args,
+            list_args,
+            version=version
+        )
+
+        return Camera(**camera_args, **standard_args, sdf_version=version)
+
+    def declared_frames(self) -> Dict[str, tf.Frame]:
+        declared_frames = {
+            self.name: tf.Frame(3, name=self.name),
+            "pixel_space": tf.Frame(2, name="pixel_space"),
+        }
+
+        for frame in self._frames:
+            declared_frames.update(frame.declared_frames())
+
+        return declared_frames
+
+    def to_static_graph(self, declared_frames: Dict[str, tf.Frame], sensor_frame:str, *, seed: int = None, shape: Tuple, axis: int = -1) -> tf.Frame:
+        parent_name = self.pose.relative_to
+        child_name = sensor_frame + f"::{self.name}"
+
+        parent = declared_frames[parent_name]
+        child = declared_frames[child_name]
+
+        link = self.pose.to_tf_link()
+        link(child, parent)
+
+        if self.sdf_version == "1.0":
+            hfov = self.horizontal_fov.angle
+        else:
+            hfov = self.horizontal_fov
+
+        parent = declared_frames[sensor_frame + f"::{self.name}"]
+        child = declared_frames[sensor_frame + "::pixel_space"]
+        projection = FrustumProjection(hfov, (self.image.height, self.image.width))
+        projection(parent, child)
+
+        return declared_frames[sensor_frame + f"::{self.name}"]
+
+    def to_dynamic_graph(self, declared_frames: Dict[str, tf.Frame], sensor_frame:str, *, seed: int = None, shape: Tuple, axis: int = -1, apply_state: bool = True, _scaffolding: Dict[str, tf.Frame]) -> tf.Frame:
+        parent_name = sensor_frame
+        child_name = sensor_frame + f"::{self.name}"
+
+        parent = declared_frames[parent_name]
+        child = declared_frames[child_name]
+        
+        parent_static = _scaffolding[parent_name]
+        child_static = _scaffolding[child_name]
+
+        link = tf.CompundLink(
+            parent_static.transform_chain(child_static)
+        )
+        link(parent, child)
+
+        if self.sdf_version == "1.0":
+            hfov = self.horizontal_fov.angle
+        else:
+            hfov = self.horizontal_fov
+
+        parent = declared_frames[sensor_frame + f"::{self.name}"]
+        child = declared_frames[sensor_frame + "::pixel_space"]
+        projection = FrustumProjection(hfov, (self.image.height, self.image.width))
+        projection(parent, child)
+        
+        return declared_frames[sensor_frame + f"::{self.name}"]
+
+    class HorizontalFov(ElementBase):
+        def __init__(self, *, angle: float = 1.047, sdf_version: str) -> None:
+            super().__init__(sdf_version=sdf_version)
+            self.angle = angle
+
+        @classmethod
+        def from_specific(cls, specific: Any, *, version: str) -> "ElementBase":
+            return Camera.HorizontalFov(angle=specific.angle, sdf_version=version)
+
+    class Image(ElementBase):
+        def __init__(
+            self,
+            *,
+            width: int = 320,
+            height: int = 240,
+            format: str = "R8G8B8",
+            sdf_version: str
+        ) -> None:
+            super().__init__(sdf_version=sdf_version)
+            self.width = width
+            self.height = height
+            self.format = format
+
+        @classmethod
+        def from_specific(cls, specific: Any, *, version: str) -> "ElementBase":
+            return Camera.Image(
+                width=specific.width,
+                height=specific.height,
+                format=specific.format,
+                sdf_version=version,
+            )
+
+    class Clip(ElementBase):
+        def __init__(
+            self, *, near: float = 0.1, far: float = 100, sdf_version: str
+        ) -> None:
+            super().__init__(sdf_version=sdf_version)
+            self.near = near
+            self.far = far
+
+        @classmethod
+        def from_specific(cls, specific: Any, *, version: str) -> "ElementBase":
+            return Camera.Clip(
+                near=specific.near, far=specific.far, sdf_version=version
+            )
+
+    class Save(ElementBase):
+        def __init__(
+            self, *, enabled: bool = False, path: str = None, sdf_version: str
+        ) -> None:
+            super().__init__(sdf_version=sdf_version)
+            self.enabled = enabled
+            self.path = path
+
+        @classmethod
+        def from_specific(cls, specific: Any, *, version: str) -> "ElementBase":
+            return Camera.Save(
+                enabled=specific.enabled, path=specific.path, sdf_version=version
+            )
+
+    class DepthCamera(ElementBase):
+        def __init__(self, *, output: str = "depths", clip: "Camera.Clip"=None, sdf_version: str) -> None:
+            super().__init__(sdf_version=sdf_version)
+            self.output = output
+            self.clip = clip
+
+        @classmethod
+        def from_specific(cls, specific: Any, *, version: str) -> "ElementBase":
+            args_with_default = {
+                "clip": Camera.Clip
+            }
+            standard_args = cls._prepare_standard_args(
+                specific,
+                args_with_default,
+                version=version
+            )
+            return Camera.DepthCamera(output=specific.output, **standard_args, sdf_version=version)
+
+    class Noise(ElementBase):
+        def __init__(
+            self,
+            *,
+            type: str = "gaussian",
+            mean: float = 0,
+            stddev: float = 0,
+            sdf_version: str
+        ) -> None:
+            super().__init__(sdf_version=sdf_version)
+            self.type = type
+            self.mean = (mean,)
+            self.stddev = stddev
+
+        @classmethod
+        def from_specific(cls, specific: Any, *, version: str) -> "ElementBase":
+            return Camera.Noise(
+                type=specific.type,
+                mean=specific.mean,
+                stddev=specific.stddev,
+                sdf_version=version,
+            )
+
+    class Distortion(ElementBase):
+        def __init__(
+            self,
+            *,
+            k1: float = 0,
+            k2: float = 0,
+            k3: float = 0,
+            p1: float = 0,
+            p2: float = 0,
+            center: str = "0.5, 0.5",
+            sdf_version: str
+        ) -> None:
+            super().__init__(sdf_version=sdf_version)
+            self.k1 = k1
+            self.k2 = k2
+            self.k3 = k3
+            self.p1 = p1
+            self.p2 = p2
+            self.center = center
+
+        @classmethod
+        def from_specific(cls, specific: Any, *, version: str) -> "ElementBase":
+            return Camera.Distortion(
+                k1=specific.k1,
+                k2=specific.k2,
+                k3=specific.k3,
+                p1=specific.p1,
+                p2=specific.p2,
+                center=specific.center,
+                sdf_version=version,
+            )
+
+    class Lense(ElementBase):
+        def __init__(
+            self,
+            *,
+            type: str = "stereographic",
+            scale_to_hfov: bool = True,
+            custom_function: "Camera.Lense.CustomFunction" = None,
+            cuttoff_angle: float = 1.5707,
+            env_texture_size: int = 256,
+            sdf_version: str
+        ) -> None:
+            super().__init__(sdf_version=sdf_version)
+            self.type = type
+            self.scale_to_hfov = scale_to_hfov
+            self.custom_function = (
+                Camera.Lense.CustomFunction(sdf_version=sdf_version)
+                if custom_function is None
+                else custom_function
+            )
+            self.cuttoff_angle = cuttoff_angle
+            self.env_texture_size = env_texture_size
+
+        @classmethod
+        def from_specific(cls, specific: Any, *, version: str) -> "ElementBase":
+            lense_args = {
+                "type": specific.type,
+                "scale_to_hfov": specific.scale_to_hfov,
+                "custom_function": specific.custom_function,
+                "cuttoff_angle": specific.cuttoff_angle,
+                "env_texture_size": specific.env_texture_size,
+            }
+            args_with_default = {
+                "custom_function": Camera.Lense.CustomFunction
+            }
+            standard_args = cls._prepare_standard_args(
+                specific,
+                args_with_default,
+                version=version
+            )
+            lense_args.update(standard_args)
+
+            return Camera.Lense(**lense_args)
+
+        class CustomFunction(ElementBase):
+            def __init__(
+                self,
+                *,
+                c1: float = 1,
+                c2: float = 1,
+                c3: float = 0,
+                f: float = 1,
+                fun: str = "tan",
+                sdf_version: str
+            ) -> None:
+                super().__init__(sdf_version=sdf_version)
+                self.c1 = (c1,)
+                self.c2 = (c2,)
+                self.c3 = (c3,)
+                self.f = (f,)
+                self.fun = fun
+
+            @classmethod
+            def from_specific(cls, specific: Any, *, version: str) -> "ElementBase":
+                return Camera.Lense.CustomFunction(
+                    c1=specific.c1,
+                    c2=specific.c2,
+                    c3=specific.c3,
+                    f=specific.f,
+                    fun=specific.fun,
+                    sdf_version=version,
+                )
+
+    class Intrinsics(ElementBase):
+        def __init__(self, *, 
+            fx:float=277,
+            fy:float=277,
+            cx:float=160,
+            cy:float=120,
+            s:float=0,
+        sdf_version: str) -> None:
+            super().__init__(sdf_version=sdf_version)
+            self.fx = fx
+            self.fy = fy
+            self.cx = cx
+            self.cy = cy
+            self.s = s
+
+        @classmethod
+        def from_specific(cls, specific: Any, *, version: str) -> "ElementBase":
+            return Camera.Intrinsics(
+                fx = specific.fx,
+                fy = specific.fy,
+                cx = specific.cx,
+                cy = specific.cy,
+                s = specific.s,
+                sdf_version=version
+            )
 
 """<element name="camera" required="0">
   <description>These elements are specific to camera sensors.</description>
