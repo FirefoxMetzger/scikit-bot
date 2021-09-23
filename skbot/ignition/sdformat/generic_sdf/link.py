@@ -228,7 +228,7 @@ class Link(ElementBase):
             # self.visuals,
             # self.collisions,
             # self.audio_sources,
-            # self.sensors,
+            self.sensors,
             # self.lights,
             self._frames,
             # self.particle_emitters
@@ -318,6 +318,10 @@ class Link(ElementBase):
         for el in chain(self._frames):
             declared_frames.update(el.declared_frames())
 
+        for sensor in self.sensors:
+            for name, frame in sensor.declared_frames().items():
+                declared_frames[f"{self.name}::{name}"] = frame
+
         return declared_frames
 
     def to_static_graph(
@@ -337,8 +341,17 @@ class Link(ElementBase):
         link = self.pose.to_tf_link()
         link(child, parent)
 
-        for el in chain(self._frames):
-            el.to_static_graph(declared_frames, seed=seed, shape=shape, axis=axis)
+        for frame in self._frames:
+            frame.to_static_graph(declared_frames, seed=seed, shape=shape, axis=axis)
+
+        for sensor in self.sensors:
+            sensor.to_static_graph(
+                declared_frames,
+                declared_frames[f"{self.name}::{sensor.name}"],
+                seed=seed,
+                shape=shape,
+                axis=axis,
+            )
 
         return declared_frames[self.name]
 
@@ -358,18 +371,39 @@ class Link(ElementBase):
 
             parent = declared_frames[parent_name]
             child = declared_frames[child_name]
-            
+
             parent_static = _scaffolding[parent_name]
             child_static = _scaffolding[child_name]
 
-            link = tf.CompundLink(
-                parent_static.transform_chain(child_static)
-            )
+            link = tf.CompundLink(parent_static.transform_chain(child_static))
             link(parent, child)
 
         for frame in self._frames:
             frame.to_dynamic_graph(
                 declared_frames,
+                seed=seed,
+                shape=shape,
+                axis=axis,
+                apply_state=apply_state,
+                _scaffolding=_scaffolding,
+            )
+
+        for sensor in self.sensors:
+            parent_name = self.name
+            child_name = f"{self.name}::{sensor.name}"
+
+            parent = declared_frames[parent_name]
+            child = declared_frames[child_name]
+
+            parent_static = _scaffolding[parent_name]
+            child_static = _scaffolding[child_name]
+
+            link = tf.CompundLink(parent_static.transform_chain(child_static))
+            link(parent, child)
+
+            sensor.to_dynamic_graph(
+                declared_frames,
+                declared_frames[f"{self.name}::{sensor.name}"],
                 seed=seed,
                 shape=shape,
                 axis=axis,

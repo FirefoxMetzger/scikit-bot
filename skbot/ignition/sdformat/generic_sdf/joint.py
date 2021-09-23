@@ -222,6 +222,14 @@ class Joint(ElementBase):
         elif self.axis2.xyz.expressed_in is None:
             self.axis2.xyz.expressed_in = self.child
 
+        for frame in self._frames:
+            if frame.attached_to is None:
+                frame.attached_to = self.name
+
+        for el in chain(self._frames, self.sensors):
+            if el.pose.relative_to is None:
+                el.pose.relative_to = self.name
+
     @property
     def origin(self):
         warnings.warn(
@@ -278,6 +286,10 @@ class Joint(ElementBase):
         for el in chain(self._frames):
             declared_frames.update(el.declared_frames())
 
+        for sensor in self.sensors:
+            for name, frame in sensor.declared_frames().items():
+                declared_frames[f"{self.name}::{name}"] = frame
+
         return declared_frames
 
     def to_static_graph(
@@ -300,8 +312,17 @@ class Joint(ElementBase):
         link(joint_child, parent)
         link(joint_parent, parent)
 
-        for el in chain(self._frames):
-            el.to_static_graph(declared_frames, seed=seed, shape=shape, axis=axis)
+        for frame in self._frames:
+            frame.to_static_graph(declared_frames, seed=seed, shape=shape, axis=axis)
+
+        for sensor in self.sensors:
+            sensor.to_static_graph(
+                declared_frames,
+                declared_frames[f"{self.name}::{sensor.name}"],
+                seed=seed,
+                shape=shape,
+                axis=axis,
+            )
 
         return declared_frames[self.name]
 
@@ -342,6 +363,31 @@ class Joint(ElementBase):
         for el in chain(self._frames):
             el.to_dynamic_graph(
                 declared_frames,
+                seed=seed,
+                shape=shape,
+                axis=axis,
+                apply_state=apply_state,
+                _scaffolding=_scaffolding,
+            )
+
+        for sensor in self.sensors:
+            parent_name = self.name
+            child_name = f"{self.name}::{sensor.name}"
+
+            parent = declared_frames[parent_name]
+            child = declared_frames[child_name]
+            
+            parent_static = _scaffolding[parent_name]
+            child_static = _scaffolding[child_name]
+
+            link = tf.CompundLink(
+                parent_static.transform_chain(child_static)
+            )
+            link(parent, child)
+
+            sensor.to_dynamic_graph(
+                declared_frames,
+                declared_frames[f"{self.name}::{sensor.name}"],
                 seed=seed,
                 shape=shape,
                 axis=axis,

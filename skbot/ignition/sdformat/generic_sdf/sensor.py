@@ -1,139 +1,475 @@
 import warnings
-from typing import List
+from typing import List, Any, Dict, Tuple
+from itertools import chain
 
-from .base import ElementBase, NamedPoseBearing, Pose
+from .base import (
+    BoolElement,
+    ElementBase,
+    FloatElement,
+    NamedPoseBearing,
+    Pose,
+    StringElement,
+)
 from .frame import Frame
+from .origin import Origin
+from .plugin import Plugin
+from .camera import Camera
+from .ray import Ray
+from .contact import Contact
+from .rfid import RfidTag
+from .rfidtag import Rfid
+from .imu import Imu
+from .forcetorque import ForceTorque
+from .gps import Gps
+from .sonar import Sonar
+from .transceiver import Transceiver
+from .altimeter import Altimeter
+from .logical_camera import LogicalCamera
+from .magnetometer import Magnetometer
+from .air_pressure import AirPressure
+from .lidar import Lidar
+from .navsat import Navsat
+from .... import transform as tf
 
 
 class Sensor(ElementBase):
-    def __init__(self, *, sdf_version: str) -> None:
-        warnings.warn("`Sensor` has not been implemented yet.")
+    """A sensor.
+
+    Parameters
+    ----------
+    name : str
+        A unique name for the sensor. This name must not match another sensor
+        under the same parent.
+    type : str
+        The type name of the sensor. The "ray", "gpu_ray", and "gps" types are
+        equivalent to "lidar", "gpu_lidar", and "navsat", respectively. It is
+        preferred to use "lidar", "gpu_lidar", and "navsat" since "ray",
+        "gpu_ray", and "gps" will be deprecated. The "ray", "gpu_ray", and "gps"
+        types are maintained for legacy support. Must be one of:
+            - air_pressure
+            - altimeter
+            - camera
+            - contact
+            - depth_camera, depth
+            - force_torque
+            - gps
+            - gpu_lidar
+            - gpu_ray
+            - imu
+            - lidar
+            - logical_camera
+            - magnetometer
+            - multicamera
+            - navsat
+            - ray
+            - rfid
+            - rfidtag
+            - rgbd_camera, rgbd
+            - sonar
+            - thermal_camera, thermal
+            - wireless_receiver
+            - wireless_transmitter
+    always_on : bool
+        If true the sensor will always be updated according to the update rate.
+        Default is ``False``.
+    update_rate : float
+        The frequency at which the sensor data is generated. If set to 0, the
+        sensor will generate data every cycle. Default is ``0``.
+    visualize : bool
+        If true, the sensor is visualized in the GUI. Default is ``False``.
+    enable_metrics : bool
+        If true, the sensor will publish performance metrics. Default is ``False``.
+
+        .. versionadded:: SDFormat v1.7
+    pose : Pose
+        The links's initial position (x,y,z) and orientation (roll, pitch, yaw).
+
+        .. versionadded:: SDFormat 1.2
+    topic : str
+        Name of the topic on which data is published.
+    plugins : List[Plugin]
+        A list of plugins used to customize the runtime behavior of the
+        simulation.
+    air_pressure : AirPressure
+        Parameters of a Barometer sensor.
+
+        .. versionadded:: SDFormat v1.6
+    camera : Camera
+        Parameters of a Camera sensor.
+    ray : Ray
+        Parameters of a Laser sensor.
+    contact : Contact
+        Parameters of a Contact sensor.
+    rfid : Rfid
+        Parameters of a RFID sensor.
+    rfidtag : RfidTag
+        Parameters of a RFID Tag.
+    imu : Imu
+        Parameters of a Inertial Measurement Unit (IMU).
+
+        .. versionadded:: SDFormat v1.3
+    force_torque : ForceTorque
+        Parameters of a torque sensor.
+        
+        .. versionadded:: SDFormat v1.4
+    gps : Gps
+        Parameters of a GPS.
+
+        .. versionadded:: SDFormat v1.4
+    sonar : Sonar
+        parameters of a Sonar.
+
+        .. versionadded:: SDFormat v1.4
+    transceiver : Transceiver
+        Parameters for a wireless transceiver.
+
+        .. versionadded:: SDFormat v1.4
+    altimeter : Altimeter
+        Parameters for an Altimeter,
+
+        .. versionadded:: SDFormat v1.5
+    lidar : Lidar
+        Parameters of a LIDAR sensor.
+
+        .. versionadded:: SDFormat v1.6
+    logical_camera : LogicalCamera
+        Parameters of a logical camera.
+    magnetometer : Magnetometer
+        Parameters of a magnetometer.
+
+        .. versionadded:: SDFormat v1.5
+    navsat : Navsat
+        Parameters of a GPS.
+
+        .. versionadded:: SDFormat v1.7
+    sdf_version : str
+        The SDFormat version to use when constructing this element.
+    origin : Origin
+        The link's origin.
+
+        .. depreciated:: SDFormat v1.2
+            Use `Sensor.pose` instead.
+    frames : List["Frame"]
+        A list of frames of reference in which poses may be expressed.
+
+        .. depreciated:: SDFormat v1.7
+            Use :attr:`Model.frame` instead.
+        .. versionadded:: SDFormat v1.5
+
+    Attributes
+    ----------
+    particle_emitters : List[ParticleEmitter]
+        See ``Parameters`` section.
+    name : str
+        See ``Parameters`` section.
+    type : str
+        See ``Parameters`` section.
+    always_on : bool
+        See ``Parameters`` section.
+    update_rate : float
+        See ``Parameters`` section.
+    visualize : bool
+        See ``Parameters`` section.
+    enable_metrics : bool
+        See ``Parameters`` section.
+    pose : Pose
+        See ``Parameters`` section.
+    topic : str
+        See ``Parameters`` section.
+    plugins : List[Plugin]
+        See ``Parameters`` section.
+    air_pressure : AirPressure
+        See ``Parameters`` section.
+    camera : Camera
+        See ``Parameters`` section.
+    ray : Ray
+        See ``Parameters`` section.
+    contact : Contact
+        See ``Parameters`` section.
+    rfid : Rfid
+        See ``Parameters`` section.
+    rfidtag : RfidTag
+        See ``Parameters`` section.
+    imu : Imu
+        See ``Parameters`` section.
+    force_torque : ForceTorque
+        See ``Parameters`` section.
+    gps : Gps
+        See ``Parameters`` section.
+    sonar : Sonar
+        See ``Parameters`` section.
+    transceiver : Transceiver
+        See ``Parameters`` section.
+    altimeter : Altimeter
+        See ``Parameters`` section.
+    lidar : Lidar
+        See ``Parameters`` section.
+    logical_camera : LogicalCamera
+        See ``Parameters`` section.
+    magnetometer : Magnetometer
+        See ``Parameters`` section.
+    navsat : Navsat
+        See ``Parameters`` section.
+
+    """
+
+    def __init__(
+        self,
+        *,
+        name: str,
+        type: str,
+        always_on: bool = False,
+        update_rate: float = 0,
+        visualize: bool = False,
+        enable_metrics: bool = False,
+        origin: Origin = None,
+        pose: Pose = None,
+        topic: str = None,
+        plugins: List[Plugin],
+        air_pressure: AirPressure = None,
+        camera: Camera = None,
+        ray: Ray = None,
+        contact: Contact = None,
+        rfid: Rfid = None,
+        rfidtag: RfidTag = None,
+        imu: Imu = None,
+        force_torque: ForceTorque = None,
+        gps: Gps = None,
+        sonar: Sonar = None,
+        transceiver: Transceiver = None,
+        frames: List[Frame] = None,
+        altimeter: Altimeter = None,
+        lidar: Lidar = None,
+        logical_camera: LogicalCamera = None,
+        magnetometer: Magnetometer = None,
+        navsat: Navsat = None,
+        sdf_version: str,
+    ) -> None:
         super().__init__(sdf_version=sdf_version)
 
+        self.name = name
+        self.type = type
+        self.always_on = always_on
+        self.update_rate = update_rate
+        self.visualize = visualize
+        self.enable_metrics = enable_metrics
+        if origin is None:
+            self._origin = Origin(sdf_version=sdf_version)
+        elif sdf_version == "1.0":
+            self._origin = origin
+        else:
+            warnings.warn("`origin` is depreciated. Use `Sensor.pose` instead.")
+            self._origin = origin
+        if sdf_version == "1.0":
+            self.pose = self._origin.pose
+        elif pose is None:
+            self.pose = Pose(sdf_version=sdf_version)
+        else:
+            self.pose = pose
+        self.topic = self.type if topic is None else topic
+        self.plugins = [] if plugins is None else plugins
+        self.air_pressure = (
+            AirPressure(sdf_version=sdf_version)
+            if air_pressure is None
+            else air_pressure
+        )
+        self.camera = Camera(sdf_version=sdf_version) if camera is None else camera
+        self.ray = Ray(sdf_version=sdf_version) if ray is None else ray
+        self.contact = Contact(sdf_version=sdf_version) if contact is None else contact
+        self.rfid = Rfid(sdf_version=sdf_version) if rfid is None else rfid
+        self.rfidtag = RfidTag(sdf_version=sdf_version) if rfidtag is None else rfidtag
+        self.imu = Imu(sdf_version=sdf_version) if imu is None else imu
+        self.force_torque = (
+            ForceTorque(sdf_version=sdf_version)
+            if force_torque is None
+            else force_torque
+        )
+        self.gps = Gps(sdf_version=sdf_version) if gps is None else gps
+        self.sonar = Sonar(sdf_version=sdf_version) if sonar is None else sonar
+        self.transceiver = (
+            Transceiver(sdf_version=sdf_version) if transceiver is None else transceiver
+        )
+        self._frames = [] if frames is None else frames
+        self.altimeter = (
+            Altimeter(sdf_version=sdf_version) if altimeter is None else altimeter
+        )
+        self.lidar = Lidar(sdf_version=sdf_version) if lidar is None else lidar
+        self.logical_camera = (
+            LogicalCamera(sdf_version=sdf_version)
+            if logical_camera is None
+            else logical_camera
+        )
+        self.magnetometer = (
+            Magnetometer(sdf_version=sdf_version)
+            if magnetometer is None
+            else magnetometer
+        )
+        self.navsat = Navsat(sdf_version=sdf_version) if navsat is None else navsat
 
-# class Sensor(NamedPoseBearing):
-#     def __init__(
-#         self,
-#         *,
-#         name: str,
-#         type: str,
-#         pose: Pose = None,
-#         camera: "Camera" = None,
-#         frames: List["Frame"] = None,
-#     ) -> None:
-#         super().__init__(name=name, pose=pose)
-#         self.type = type
-#         self.camera = camera
-#         self.frames = frames
+        self._origin.pose = self.pose
 
-#         if frames is None:
-#             self.frames = list()
+        for frame in self._frames:
+            if frame.pose.relative_to is None:
+                frame.pose.relative_to = self.name
+            if frame.attached_to is None:
+                frame.attached_to = self.name
 
-#     class Camera(NamedPoseBearing):
-#         def __init__(
-#             self,
-#             *,
-#             name: str,
-#             pose: Pose = None,
-#             horizontal_fov: float = 1.047,
-#             image: "Image" = None,
-#             frames: "Frame" = None,
-#         ) -> None:
-#             super().__init__(name=name, pose=pose)
-#             self.horizontal_fov = horizontal_fov
-#             self.image = image
-#             self.frames = frames
+    @property
+    def origin(self):
+        warnings.warn(
+            "`Sensor.origin` is depreciated since SDFormat v1.2. Use `Sensor.pose` instead."
+        )
+        return self._origin
 
-#             if self.frames is None:
-#                 self.frames = list()
+    @property
+    def frames(self):
+        warnings.warn(
+            "`Sensor.frames` is depreciated since SDF v1.7."
+            " Use `Model.frames` instead and set `Frame.attached_to` to the name of this link.",
+            DeprecationWarning,
+        )
+        return self._frames
 
-#             if self.image is None:
-#                 self.image = Sensor.Camera.Image()
+    @classmethod
+    def from_specific(cls, specific: Any, *, version: str) -> "ElementBase":
+        sensor_args = {
+            "name": specific.name,
+            "type": specific.type,
+        }
+        args_with_default = {
+            "always_on": BoolElement,
+            "update_rate": FloatElement,
+            "visualize": BoolElement,
+            "enable_metrics": BoolElement,
+            "origin": Origin,
+            "pose": Pose,
+            "topic": StringElement,
+            "air_pressure": AirPressure,
+            "camera": Camera,
+            "ray": Ray,
+            "contact": Contact,
+            "rfid": Rfid,
+            "rfidtag": RfidTag,
+            "imu": Imu,
+            "force_torque": ForceTorque,
+            "gps": Gps,
+            "sonar": Sonar,
+            "transceiver": Transceiver,
+            "altimeter": Altimeter,
+            "lidar": Lidar,
+            "logical_camera": LogicalCamera,
+            "magnetometer": Magnetometer,
+            "navsat": Navsat,
+        }
+        list_args = {
+            "plugin": ("plugins", Plugin),
+            "frame": ("frames", Frame),
+        }
+        standard_args = cls._prepare_standard_args(
+            specific, args_with_default, list_args, version=version
+        )
+        sensor_args.update(standard_args)
+        return Sensor(**sensor_args, sdf_version=version)
 
-#         class Image:
-#             def __init__(
-#                 self, *, width: int = 320, height: int = 240, format: str = "R8G8B8"
-#             ) -> None:
-#                 self.width = width
-#                 self.height = height
-#                 self.format = format
+    def declared_frames(self) -> Dict[str, tf.Frame]:
+        declared_frames = {self.name: tf.Frame(3, name=self.name)}
 
+        for el in chain(
+            [
+                # self.air_pressure,
+                # self.camera,
+                # self.ray,
+                # self.contact,
+                # self.rfid,
+                # self.rfidtag,
+                # self.imu,
+                # self.force_torque,
+                # self.gps,
+                # self.sonar,
+                # self.transceiver,
+                # self.altimeter,
+                # self.lidar,
+                # self.logical_camera,
+                # self.magnetometer,
+                # self.navsat
+            ]
+        ):
+            nested_elements = el.declared_frames()
+            for name, frame in nested_elements.items():
+                declared_frames[f"{self.name}::{name}"] = frame
 
-"""<!-- Sensor -->
-<element name="sensor" required="0">
-  <description>The sensor tag describes the type and properties of a sensor.</description>
+        for frame in self._frames:
+            declared_frames.update(frame)
 
-  <attribute name="name" type="string" default="__default__" required="1">
-    <description>A unique name for the sensor. This name must not match another model in the model.</description>
-  </attribute>
+        return declared_frames
 
-  <attribute name="type" type="string" default="__default__" required="1">
-    <description>The type name of the sensor. By default, SDFormat supports types
-                  air_pressure,
-                  altimeter,
-                  camera,
-                  contact,
-                  depth_camera, depth,
-                  force_torque,
-                  gps,
-                  gpu_lidar,
-                  gpu_ray,
-                  imu,
-                  lidar,
-                  logical_camera,
-                  magnetometer,
-                  multicamera,
-                  navsat,
-                  ray,
-                  rfid,
-                  rfidtag,
-                  rgbd_camera, rgbd,
-                  sonar,
-                  thermal_camera, thermal,
-                  wireless_receiver, and
-                  wireless_transmitter.
-      The "ray", "gpu_ray", and "gps" types are equivalent to "lidar", "gpu_lidar", and "navsat", respectively. It is preferred to use "lidar", "gpu_lidar", and "navsat" since "ray", "gpu_ray", and "gps" will be deprecated. The "ray", "gpu_ray", and "gps" types are maintained for legacy support.
-    </description>
-  </attribute>
+    def to_static_graph(
+        self,
+        declared_frames: Dict[str, tf.Frame],
+        sensor_frame: tf.Frame,
+        *,
+        seed: int = None,
+        shape: Tuple,
+        axis: int = -1,
+    ) -> tf.Frame:
+        parent_name = self.pose.relative_to
 
-  <element name="always_on" type="bool" default="false" required="0">
-    <description>If true the sensor will always be updated according to the update rate.</description>
-  </element>
+        parent = declared_frames[parent_name]
+        child = sensor_frame
 
-  <element name="update_rate" type="double" default="0" required="0">
-    <description>The frequency at which the sensor data is generated. If left unspecified, the sensor will generate data every cycle.</description>
-  </element>
+        link = self.pose.to_tf_link()
+        link(child, parent)
 
-  <element name="visualize" type="bool" default="false" required="0">
-    <description>If true, the sensor is visualized in the GUI</description>
-  </element>
+        # if self.type == "camera":
+        #     parent_name = self.camera.pose.relative_to
+        #     child_name = self.camera.name
 
-  <element name="topic" type="string" default="__default__" required="0">
-    <description>Name of the topic on which data is published. This is necessary for visualization</description>
-  </element>
+        #     parent = declared_frames[parent_name]
+        #     child = declared_frames[child_name]
 
-  <element name="enable_metrics" type="bool" default="false" required="0">
-    <description>If true, the sensor will publish performance metrics</description>
-  </element>
+        #     link = self.pose.to_tf_link()
+        #     link(child, parent)
 
-  <include filename="pose.sdf" required="0"/>
-  <include filename="plugin.sdf" required="*"/>
-  <include filename="air_pressure.sdf" required="0"/>
-  <include filename="altimeter.sdf" required="0"/>
-  <include filename="camera.sdf" required="0"/>
-  <include filename="contact.sdf" required="0"/>
-  <include filename="forcetorque.sdf" required="0"/>
-  <include filename="gps.sdf" required="0"/>
-  <include filename="imu.sdf" required="0"/>
-  <include filename="lidar.sdf" required="0"/>
-  <include filename="logical_camera.sdf" required="0"/>
-  <include filename="magnetometer.sdf" required="0"/>
-  <include filename="navsat.sdf" required="0"/>
-  <include filename="ray.sdf" required="0"/>
-  <include filename="rfid.sdf" required="0"/>
-  <include filename="rfidtag.sdf" required="0"/>
-  <include filename="sonar.sdf" required="0"/>
-  <include filename="transceiver.sdf" required="0"/>
+        for el in chain(
+            [
+                # self.air_pressure,
+                # self.camera,
+                # self.ray,
+                # self.contact,
+                # self.rfid,
+                # self.rfidtag,
+                # self.imu,
+                # self.force_torque,
+                # self.gps,
+                # self.sonar,
+                # self.transceiver,
+                # self.altimeter,
+                # self.lidar,
+                # self.logical_camera,
+                # self.magnetometer,
+                # self.navsat
+            ]
+        ):
+            el.to_static_graph(
+                declared_frames,
+                sensor_frame,
+                seed=seed,
+                shape=shape,
+                axis=axis,
+            )
 
-</element> <!-- End Sensor -->
-"""
+        return sensor_frame
+
+    def to_dynamic_graph(
+        self,
+        declared_frames: Dict[str, tf.Frame],
+        sensor_frame: tf.Frame,
+        *,
+        seed: int = None,
+        shape: Tuple,
+        axis: int = -1,
+        apply_state: bool = True,
+        _scaffolding: Dict[str, tf.Frame],
+    ) -> tf.Frame:
+
+        return sensor_frame

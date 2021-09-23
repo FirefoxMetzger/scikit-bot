@@ -135,8 +135,10 @@ def test_static_graph():
 
     # each frame should be reachable from the root frame
     for name, frame in static_frames.items():
-        # will raise exception on mising chain
-        tf_chain = world_frame.transform_chain(frame)
+        try:
+            tf_chain = world_frame.transform_chain(frame)
+        except RuntimeError:
+            raise AssertionError("A Frame in the static graph is unreachable.") from None
 
 
 def test_dynamic_graph():
@@ -146,8 +148,8 @@ def test_dynamic_graph():
     generic_sdf = ign.sdformat.loads_generic(sdf_string)
     world_sdf = generic_sdf.worlds[0]
 
-    static_frames = world_sdf.declared_frames()
-    world_frame = world_sdf.to_static_graph(static_frames)
+    # static_frames = world_sdf.declared_frames()
+    # world_frame = world_sdf.to_static_graph(static_frames)
 
     all_frames = world_sdf.declared_frames()
     dynamic_world_frame = world_sdf.to_dynamic_graph(all_frames)
