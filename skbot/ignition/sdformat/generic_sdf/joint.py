@@ -237,7 +237,9 @@ class Joint(ElementBase):
 
             for frame in sensor.camera._frames:
                 if frame.pose.relative_to is None:
-                    frame.pose.relative_to = f"{self.name}::{sensor.name}::{sensor.camera.name}"
+                    frame.pose.relative_to = (
+                        f"{self.name}::{sensor.name}::{sensor.camera.name}"
+                    )
                 if frame.attached_to is None:
                     frame.attached_to = f"{self.name}::{sensor.name}"
 
@@ -387,13 +389,11 @@ class Joint(ElementBase):
 
             parent = declared_frames[parent_name]
             child = declared_frames[child_name]
-            
+
             parent_static = _scaffolding[parent_name]
             child_static = _scaffolding[child_name]
 
-            link = tf.CompundLink(
-                parent_static.transform_chain(child_static)
-            )
+            link = tf.CompundLink(parent_static.transform_chain(child_static))
             link(parent, child)
 
             sensor.to_dynamic_graph(
@@ -752,7 +752,7 @@ class Joint(ElementBase):
                 The maximum velocity (angular or directional respectively) that
                 may be applied to/by this joint. This limit is not enforced if
                 its value is negative. Default: ``-1``.
-                
+
                 .. versionchanged:: SDFormat v1.3
                     The default changed from 0 to -1.
             stiffness : float

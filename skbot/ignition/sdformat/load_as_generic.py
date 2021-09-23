@@ -2,8 +2,8 @@ from . import sdformat
 from .generic_sdf.sdf import Sdf
 
 
-def loads_generic(sdf:str):
-    """ Turn a SDFormat string into an object tree.
+def loads_generic(sdf: str):
+    """Turn a SDFormat string into an object tree.
 
     The returned object tree is oppinionated. In addition to converting the
     tree, it does the following:
@@ -24,7 +24,7 @@ def loads_generic(sdf:str):
     ----------
     sdf : str
         A string containing SDFormat XML.
-    
+
     Returns
     -------
     root : generic.Sdf

@@ -89,7 +89,7 @@ def test_static_matches_dynamic():
 
     static_frames = world_sdf.declared_frames()
     static_root = world_sdf.to_static_graph(static_frames)
-    
+
     dynamic_frames = world_sdf.declared_frames()
     dynamic_root = world_sdf.to_dynamic_graph(dynamic_frames, apply_state=False)
 
@@ -112,6 +112,7 @@ def test_static_matches_dynamic():
         else:
             expected = static_frame.transform(null, static_root)
             assert np.allclose(world_coords, expected)
+
 
 def test_declared_frames():
     def assert_matching_frames(frames):
@@ -151,7 +152,9 @@ def test_static_graph():
         try:
             tf_chain = world_frame.transform_chain(frame)
         except RuntimeError:
-            raise AssertionError("A Frame in the static graph is unreachable.") from None
+            raise AssertionError(
+                "A Frame in the static graph is unreachable."
+            ) from None
 
 
 def test_dynamic_graph():
@@ -166,6 +169,7 @@ def test_dynamic_graph():
 
     all_frames = world_sdf.declared_frames()
     dynamic_world_frame = world_sdf.to_dynamic_graph(all_frames)
+
 
 def test_unwrapping():
     model_file = Path(__file__).parent / "sdf" / "v18" / "world_with_state.sdf"
@@ -188,9 +192,9 @@ def test_pose_relative_to_leaking():
         if isinstance(element, Pose):
             assert element.relative_to is not None
             assert element.relative_to != ""
-    
+
     assert_recursive(generic_sdf, pose_has_relative_to)
-        
+
 
 def test_frame_attached_to_leaking():
     model_file = Path(__file__).parent / "sdf" / "v18" / "world_with_state.sdf"
@@ -202,7 +206,7 @@ def test_frame_attached_to_leaking():
         if isinstance(element, Frame):
             assert element.attached_to is not None
             assert element.attached_to != ""
-    
+
     assert_recursive(generic_sdf, pose_has_relative_to)
 
 
@@ -216,7 +220,7 @@ def test_joint_axis_expressed_in_leaking():
         if isinstance(element, Joint.Axis.Xyz):
             assert element.expressed_in is not None
             assert element.expressed_in != ""
-    
+
     assert_recursive(generic_sdf, pose_has_relative_to)
 
 
@@ -250,6 +254,7 @@ def test_must_be_base_link():
 
         chain = world_frame.find_frame(f"world/{name}").transform_chain(world_frame)
         assert len(chain) == 1
+
 
 def test_poses():
     model_file = Path(__file__).parent / "sdf" / "v18" / "pose_testing.sdf"
@@ -289,6 +294,7 @@ def test_poses():
     assert np.allclose(vector_c, (0, 1, 0))
     assert np.allclose(vector_d, (1, 3, 3))
 
+
 def test_poses_relative_to():
     model_file = Path(__file__).parent / "sdf" / "v18" / "pose_relative_to.sdf"
     sdf_string = model_file.read_text()
@@ -307,16 +313,21 @@ def test_poses_relative_to():
     origin_box = box_link.transform((0, 0, 0), static_frames["world"])
 
     assert np.allclose(origin_cam, (2.0003185305832973, 0.19999974634550793, 1.75))
-    assert np.allclose(origin_box, (0.8305268741307381, -0.237974865830905, 1.0399999999999998))
+    assert np.allclose(
+        origin_box, (0.8305268741307381, -0.237974865830905, 1.0399999999999998)
+    )
 
     # test vector x
     vector_cam = cam_link.transform((1, 0, 0), static_frames["world"])
     vector_box = box_link.transform((1, 0, 0), static_frames["world"])
 
-    assert np.allclose(vector_cam, (1.0400594540571846, 0.2015291077039671, 1.4708939860858379))
-    
+    assert np.allclose(
+        vector_cam, (1.0400594540571846, 0.2015291077039671, 1.4708939860858379)
+    )
+
     # I can not get ground truth for this test case :(
     # assert np.allclose(vector_box, (0, 1, 0))
+
 
 def test_double_pendulum():
     model_file = (
@@ -447,8 +458,8 @@ def test_link_offset():
     cam_base = root_frame.find_frame(".../camera::__model__")
     cam_link = cam_base.find_frame("camera::__model__/link")
     cam_space = cam_base.find_frame(".../camera/camera-space")
-    
-    actual = cam_link.transform((0,0,0), root_frame)
+
+    actual = cam_link.transform((0, 0, 0), root_frame)
     expected = (0.8003185305832974, 0.19999974634550793, 1.35)
 
     # the accuraccy here is quite low. TODO: investigate which rotation is

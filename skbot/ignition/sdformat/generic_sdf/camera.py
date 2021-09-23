@@ -23,8 +23,8 @@ class Camera(ElementBase):
         lense: "Camera.Lense" = None,
         frames: List[Frame] = None,
         intrinsics: "Camera.Intrinsics" = None,
-        visibility_mask:int = 4294967295,
-        sdf_version: str
+        visibility_mask: int = 4294967295,
+        sdf_version: str,
     ) -> None:
         warnings.warn("`Camera` has not been implemented yet.")
         super().__init__(sdf_version=sdf_version)
@@ -32,18 +32,34 @@ class Camera(ElementBase):
         self.name = name
         self.pose = Pose(sdf_version=sdf_version) if pose is None else pose
         if sdf_version == "1.0":
-            self.horizontal_fov = Camera.HorizontalFov(sdf_version=sdf_version) if horizontal_fov is None else horizontal_fov
+            self.horizontal_fov = (
+                Camera.HorizontalFov(sdf_version=sdf_version)
+                if horizontal_fov is None
+                else horizontal_fov
+            )
         else:
             self.horizontal_fov = horizontal_fov
         self.image = Camera.Image(sdf_version=sdf_version) if image is None else image
         self.clip = Camera.Clip(sdf_version=sdf_version) if clip is None else clip
         self.save = Camera.Save(sdf_version=sdf_version) if save is None else save
-        self.depth_camera = Camera.DepthCamera(sdf_version=sdf_version) if depth_camera is None else depth_camera
+        self.depth_camera = (
+            Camera.DepthCamera(sdf_version=sdf_version)
+            if depth_camera is None
+            else depth_camera
+        )
         self.noise = Camera.Noise(sdf_version=sdf_version) if noise is None else noise
-        self.distortion = Camera.Distortion(sdf_version=sdf_version) if distortion is None else distortion
+        self.distortion = (
+            Camera.Distortion(sdf_version=sdf_version)
+            if distortion is None
+            else distortion
+        )
         self.lense = Camera.Lense(sdf_version=sdf_version) if lense is None else lense
         self._frames = [] if frames is None else frames
-        self.intrinsics = Camera.Intrinsics(sdf_version=sdf_version) if intrinsics is None else intrinsics
+        self.intrinsics = (
+            Camera.Intrinsics(sdf_version=sdf_version)
+            if intrinsics is None
+            else intrinsics
+        )
         self.visibility_mask = visibility_mask
 
     @property
@@ -57,9 +73,7 @@ class Camera(ElementBase):
 
     @classmethod
     def from_specific(cls, specific: Any, *, version: str) -> "ElementBase":
-        camera_args = {
-            "visibility_mask": specific.visibility_mask
-        }
+        camera_args = {"visibility_mask": specific.visibility_mask}
         default_args = {
             "name": StringElement,
             "pose": Pose,
@@ -70,20 +84,15 @@ class Camera(ElementBase):
             "noise": Camera.Noise,
             "distortion": Camera.Distortion,
             "lense": Camera.Lense,
-            "intrinsics": Camera.Intrinsics
+            "intrinsics": Camera.Intrinsics,
         }
         if version == "1.0":
             default_args["horizontal_fov"] = Camera.HorizontalFov
         else:
             default_args["horizontal_fov"] = FloatElement
-        list_args = {
-            "frame": ("frames", Frame)
-        }
+        list_args = {"frame": ("frames", Frame)}
         standard_args = cls._prepare_standard_args(
-            specific,
-            default_args,
-            list_args,
-            version=version
+            specific, default_args, list_args, version=version
         )
 
         return Camera(**camera_args, **standard_args, sdf_version=version)
@@ -99,7 +108,15 @@ class Camera(ElementBase):
 
         return declared_frames
 
-    def to_static_graph(self, declared_frames: Dict[str, tf.Frame], sensor_frame:str, *, seed: int = None, shape: Tuple, axis: int = -1) -> tf.Frame:
+    def to_static_graph(
+        self,
+        declared_frames: Dict[str, tf.Frame],
+        sensor_frame: str,
+        *,
+        seed: int = None,
+        shape: Tuple,
+        axis: int = -1,
+    ) -> tf.Frame:
         parent_name = self.pose.relative_to
         child_name = sensor_frame + f"::{self.name}"
 
@@ -121,19 +138,27 @@ class Camera(ElementBase):
 
         return declared_frames[sensor_frame + f"::{self.name}"]
 
-    def to_dynamic_graph(self, declared_frames: Dict[str, tf.Frame], sensor_frame:str, *, seed: int = None, shape: Tuple, axis: int = -1, apply_state: bool = True, _scaffolding: Dict[str, tf.Frame]) -> tf.Frame:
+    def to_dynamic_graph(
+        self,
+        declared_frames: Dict[str, tf.Frame],
+        sensor_frame: str,
+        *,
+        seed: int = None,
+        shape: Tuple,
+        axis: int = -1,
+        apply_state: bool = True,
+        _scaffolding: Dict[str, tf.Frame],
+    ) -> tf.Frame:
         parent_name = sensor_frame
         child_name = sensor_frame + f"::{self.name}"
 
         parent = declared_frames[parent_name]
         child = declared_frames[child_name]
-        
+
         parent_static = _scaffolding[parent_name]
         child_static = _scaffolding[child_name]
 
-        link = tf.CompundLink(
-            parent_static.transform_chain(child_static)
-        )
+        link = tf.CompundLink(parent_static.transform_chain(child_static))
         link(parent, child)
 
         if self.sdf_version == "1.0":
@@ -145,7 +170,7 @@ class Camera(ElementBase):
         child = declared_frames[sensor_frame + "::pixel_space"]
         projection = FrustumProjection(hfov, (self.image.height, self.image.width))
         projection(parent, child)
-        
+
         return declared_frames[sensor_frame + f"::{self.name}"]
 
     class HorizontalFov(ElementBase):
@@ -164,7 +189,7 @@ class Camera(ElementBase):
             width: int = 320,
             height: int = 240,
             format: str = "R8G8B8",
-            sdf_version: str
+            sdf_version: str,
         ) -> None:
             super().__init__(sdf_version=sdf_version)
             self.width = width
@@ -209,22 +234,26 @@ class Camera(ElementBase):
             )
 
     class DepthCamera(ElementBase):
-        def __init__(self, *, output: str = "depths", clip: "Camera.Clip"=None, sdf_version: str) -> None:
+        def __init__(
+            self,
+            *,
+            output: str = "depths",
+            clip: "Camera.Clip" = None,
+            sdf_version: str,
+        ) -> None:
             super().__init__(sdf_version=sdf_version)
             self.output = output
             self.clip = clip
 
         @classmethod
         def from_specific(cls, specific: Any, *, version: str) -> "ElementBase":
-            args_with_default = {
-                "clip": Camera.Clip
-            }
+            args_with_default = {"clip": Camera.Clip}
             standard_args = cls._prepare_standard_args(
-                specific,
-                args_with_default,
-                version=version
+                specific, args_with_default, version=version
             )
-            return Camera.DepthCamera(output=specific.output, **standard_args, sdf_version=version)
+            return Camera.DepthCamera(
+                output=specific.output, **standard_args, sdf_version=version
+            )
 
     class Noise(ElementBase):
         def __init__(
@@ -233,7 +262,7 @@ class Camera(ElementBase):
             type: str = "gaussian",
             mean: float = 0,
             stddev: float = 0,
-            sdf_version: str
+            sdf_version: str,
         ) -> None:
             super().__init__(sdf_version=sdf_version)
             self.type = type
@@ -259,7 +288,7 @@ class Camera(ElementBase):
             p1: float = 0,
             p2: float = 0,
             center: str = "0.5, 0.5",
-            sdf_version: str
+            sdf_version: str,
         ) -> None:
             super().__init__(sdf_version=sdf_version)
             self.k1 = k1
@@ -290,7 +319,7 @@ class Camera(ElementBase):
             custom_function: "Camera.Lense.CustomFunction" = None,
             cuttoff_angle: float = 1.5707,
             env_texture_size: int = 256,
-            sdf_version: str
+            sdf_version: str,
         ) -> None:
             super().__init__(sdf_version=sdf_version)
             self.type = type
@@ -312,13 +341,9 @@ class Camera(ElementBase):
                 "cuttoff_angle": specific.cuttoff_angle,
                 "env_texture_size": specific.env_texture_size,
             }
-            args_with_default = {
-                "custom_function": Camera.Lense.CustomFunction
-            }
+            args_with_default = {"custom_function": Camera.Lense.CustomFunction}
             standard_args = cls._prepare_standard_args(
-                specific,
-                args_with_default,
-                version=version
+                specific, args_with_default, version=version
             )
             lense_args.update(standard_args)
 
@@ -333,7 +358,7 @@ class Camera(ElementBase):
                 c3: float = 0,
                 f: float = 1,
                 fun: str = "tan",
-                sdf_version: str
+                sdf_version: str,
             ) -> None:
                 super().__init__(sdf_version=sdf_version)
                 self.c1 = (c1,)
@@ -354,13 +379,16 @@ class Camera(ElementBase):
                 )
 
     class Intrinsics(ElementBase):
-        def __init__(self, *, 
-            fx:float=277,
-            fy:float=277,
-            cx:float=160,
-            cy:float=120,
-            s:float=0,
-        sdf_version: str) -> None:
+        def __init__(
+            self,
+            *,
+            fx: float = 277,
+            fy: float = 277,
+            cx: float = 160,
+            cy: float = 120,
+            s: float = 0,
+            sdf_version: str,
+        ) -> None:
             super().__init__(sdf_version=sdf_version)
             self.fx = fx
             self.fy = fy
@@ -371,13 +399,14 @@ class Camera(ElementBase):
         @classmethod
         def from_specific(cls, specific: Any, *, version: str) -> "ElementBase":
             return Camera.Intrinsics(
-                fx = specific.fx,
-                fy = specific.fy,
-                cx = specific.cx,
-                cy = specific.cy,
-                s = specific.s,
-                sdf_version=version
+                fx=specific.fx,
+                fy=specific.fy,
+                cx=specific.cx,
+                cy=specific.cy,
+                s=specific.s,
+                sdf_version=version,
             )
+
 
 """<element name="camera" required="0">
   <description>These elements are specific to camera sensors.</description>

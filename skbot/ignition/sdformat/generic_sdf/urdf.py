@@ -4,9 +4,9 @@ from .base import ElementBase
 
 
 class URDF(ElementBase):
-  def __init__(self, *, sdf_version: str) -> None:
-    warnings.warn("`URDF` has not been implemented yet.")
-    super().__init__(sdf_version=sdf_version)
+    def __init__(self, *, sdf_version: str) -> None:
+        warnings.warn("`URDF` has not been implemented yet.")
+        super().__init__(sdf_version=sdf_version)
 
 
 """<!-- Robot URDF -->
@@ -27,4 +27,3 @@ class URDF(ElementBase):
   <include filename="gripper.sdf" required="*"/>
 
 </element> <!-- End Model -->"""
-

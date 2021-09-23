@@ -368,7 +368,6 @@ class Model(ElementBase):
                 _scaffolding=scaffold_scope,
             )
 
-
         if self.static:
             parent = declared_frames["world"]
             parent_static = _scaffolding["world"]
@@ -379,11 +378,7 @@ class Model(ElementBase):
         child_static = _scaffolding["__model__"]
         tf.CompundLink(parent_static.transform_chain(child_static))(parent, child)
 
-        for el in chain(
-            self.frames,
-            self.links,
-            self.joints
-        ):
+        for el in chain(self.frames, self.links, self.joints):
             el.to_dynamic_graph(
                 declared_frames,
                 seed=seed,

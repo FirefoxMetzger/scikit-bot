@@ -4,9 +4,10 @@ from .base import ElementBase
 
 
 class Collision(ElementBase):
-  def __init__(self, *, sdf_version: str) -> None:
-    warnings.warn("`Collision` has not been implemented yet.")
-    super().__init__(sdf_version=sdf_version)
+    def __init__(self, *, sdf_version: str) -> None:
+        warnings.warn("`Collision` has not been implemented yet.")
+        super().__init__(sdf_version=sdf_version)
+
 
 """<!-- Collision -->
 <element name="collision" required="*">

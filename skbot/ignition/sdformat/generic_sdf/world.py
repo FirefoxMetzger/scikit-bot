@@ -271,7 +271,7 @@ class World(ElementBase):
             # lights,
             self.frames,
             self.models,
-            self._joints
+            self._joints,
         ]
         for el in chain(*pose_bearing):
             if el.pose.relative_to is None:
@@ -429,10 +429,7 @@ class World(ElementBase):
                 _scaffolding=scaffold_scope,
             )
 
-        for el in chain(
-            self.frames,
-            self._joints
-        ):
+        for el in chain(self.frames, self._joints):
             el.to_dynamic_graph(
                 declared_frames,
                 seed=seed,

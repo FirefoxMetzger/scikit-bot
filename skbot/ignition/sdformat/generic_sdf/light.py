@@ -4,10 +4,12 @@ from typing import List, Any
 from .base import ElementBase, NamedPoseBearing, Pose
 from .frame import Frame
 
+
 class Light(ElementBase):
-  def __init__(self, *, sdf_version: str) -> None:
-    warnings.warn("`Light` has not been implemented yet.")
-    super().__init__(sdf_version=sdf_version)
+    def __init__(self, *, sdf_version: str) -> None:
+        warnings.warn("`Light` has not been implemented yet.")
+        super().__init__(sdf_version=sdf_version)
+
 
 # class Light(NamedPoseBearing):
 #     def __init__(
@@ -27,7 +29,7 @@ class Light(ElementBase):
 #     @classmethod
 #     def from_specific(cls, light: Any, *, version: str) -> "Light":
 #         raise NotImplementedError()
- 
+
 
 """<!-- Light -->
 <element name="light" required="*">

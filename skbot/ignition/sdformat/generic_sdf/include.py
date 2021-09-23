@@ -46,10 +46,7 @@ class Include(ElementBase):
             sdf_version=version,
         )
 
-
-    def resolve(
-        self, *, priority: Tuple[str, str, str] = ("model", "actor", "light")
-    ):
+    def resolve(self, *, priority: Tuple[str, str, str] = ("model", "actor", "light")):
         """Resolve the include.
 
         This function loads the included fragment as a generic :class:`Actor`,
@@ -60,7 +57,7 @@ class Include(ElementBase):
         priority : str
             The order in which to check the included SDF for fragments. If
             multiple fragments are defined in the same SDF only the first
-            fragment is returned. It is a 3-tuple with values `model`, 
+            fragment is returned. It is a 3-tuple with values `model`,
             `actor`, `light` in any order.
 
         Returns
@@ -81,10 +78,10 @@ class Include(ElementBase):
 
         for el in priority:
             fragment = getattr(specific_sdf, el)
-            
+
             if fragment is None:
                 continue
-            
+
             if isinstance(fragment, list):
                 if len(fragment) == 0:
                     continue
@@ -103,7 +100,7 @@ class Include(ElementBase):
             if self.pose is not None:
                 model.pose = self.pose
             if self.placement_frame is not None:
-                model.placement_frame=self.placement_frame,
+                model.placement_frame = (self.placement_frame,)
             # model.plugins.extend(self.plugins)
             return model
         elif el == "actor":

@@ -4,9 +4,10 @@ from .base import ElementBase
 
 
 class Contact(ElementBase):
-  def __init__(self, *, sdf_version: str) -> None:
-    warnings.warn("`Contact` has not been implemented yet.")
-    super().__init__(sdf_version=sdf_version)
+    def __init__(self, *, sdf_version: str) -> None:
+        warnings.warn("`Contact` has not been implemented yet.")
+        super().__init__(sdf_version=sdf_version)
+
 
 """<element name="contact" required="0">
   <description>These elements are specific to the contact sensor.</description>

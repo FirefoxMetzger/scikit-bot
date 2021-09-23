@@ -110,7 +110,7 @@ class Sensor(ElementBase):
         .. versionadded:: SDFormat v1.3
     force_torque : ForceTorque
         Parameters of a torque sensor.
-        
+
         .. versionadded:: SDFormat v1.4
     gps : Gps
         Parameters of a GPS.
@@ -443,7 +443,7 @@ class Sensor(ElementBase):
                 shape=shape,
                 axis=axis,
                 apply_state=apply_state,
-                _scaffolding=_scaffolding
+                _scaffolding=_scaffolding,
             )
 
         return declared_frames[sensor_frame]

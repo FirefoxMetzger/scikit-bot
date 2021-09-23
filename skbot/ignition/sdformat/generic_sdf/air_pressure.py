@@ -4,9 +4,9 @@ from .base import ElementBase
 
 
 class AirPressure(ElementBase):
-  def __init__(self, *, sdf_version: str) -> None:
-    warnings.warn("`AirPressure` has not been implemented yet.")
-    super().__init__(sdf_version=sdf_version)
+    def __init__(self, *, sdf_version: str) -> None:
+        warnings.warn("`AirPressure` has not been implemented yet.")
+        super().__init__(sdf_version=sdf_version)
 
 
 """<element name="air_pressure" required="0">

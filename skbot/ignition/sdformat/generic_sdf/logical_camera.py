@@ -4,9 +4,10 @@ from .base import ElementBase
 
 
 class LogicalCamera(ElementBase):
-  def __init__(self, *, sdf_version: str) -> None:
-    warnings.warn("`LogicalCamera` has not been implemented yet.")
-    super().__init__(sdf_version=sdf_version)
+    def __init__(self, *, sdf_version: str) -> None:
+        warnings.warn("`LogicalCamera` has not been implemented yet.")
+        super().__init__(sdf_version=sdf_version)
+
 
 """<element name="logical_camera" required="0">
   <description>These elements are specific to logical camera sensors. A logical camera reports objects that fall within a frustum. Computation should be performed on the CPU.</description>

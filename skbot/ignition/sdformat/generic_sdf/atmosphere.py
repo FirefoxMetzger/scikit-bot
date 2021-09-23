@@ -4,9 +4,10 @@ from .base import ElementBase
 
 
 class Atmosphere(ElementBase):
-  def __init__(self, *, sdf_version: str) -> None:
-    warnings.warn("`Atmosphere` has not been implemented yet.")
-    super().__init__(sdf_version=sdf_version)
+    def __init__(self, *, sdf_version: str) -> None:
+        warnings.warn("`Atmosphere` has not been implemented yet.")
+        super().__init__(sdf_version=sdf_version)
+
 
 """<!-- Atmosphere -->
 <element name="atmosphere" required="1">

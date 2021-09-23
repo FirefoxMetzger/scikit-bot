@@ -4,9 +4,10 @@ from .base import ElementBase
 
 
 class Noise(ElementBase):
-  def __init__(self, *, sdf_version: str) -> None:
-    warnings.warn("`Noise` has not been implemented yet.")
-    super().__init__(sdf_version=sdf_version)
+    def __init__(self, *, sdf_version: str) -> None:
+        warnings.warn("`Noise` has not been implemented yet.")
+        super().__init__(sdf_version=sdf_version)
+
 
 """<element name="noise" required="1">
   <description>The properties of a sensor noise model.</description>
