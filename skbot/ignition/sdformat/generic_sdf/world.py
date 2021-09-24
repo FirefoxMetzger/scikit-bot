@@ -215,7 +215,9 @@ class World(ElementBase):
         self.wind = World.Wind(sdf_version=sdf_version) if wind is None else wind
         self.gravity = vector3(gravity)
         self.magnetic_field = vector3(magnetic_field)
-        self.atmosphere = Atmosphere(sdf_version=sdf_version) if atmosphere is None else atmosphere
+        self.atmosphere = (
+            Atmosphere(sdf_version=sdf_version) if atmosphere is None else atmosphere
+        )
         self.gui = Gui(sdf_version=sdf_version) if gui is None else gui
         if sdf_version in ["1.0", "1.2", "1.3", "1.4", "1.5"]:
             if physics_engines is not None:

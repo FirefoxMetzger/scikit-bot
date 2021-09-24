@@ -48,22 +48,15 @@ class Include(ElementBase):
             "uri": StringElement,
             "static": BoolElement,
             "pose": Pose,
-            "placement_frame": StringElement
+            "placement_frame": StringElement,
         }
-        list_args = {
-            "plugin": ("plugins", Plugin)
-        }
+        list_args = {"plugin": ("plugins", Plugin)}
         standard_args = cls._prepare_standard_args(
-            specific,
-            args_with_default,
-            list_args,
-            version=version
+            specific, args_with_default, list_args, version=version
         )
-
 
         # if version not in ["1.0", "1.2", "1.3", "1.4", "1.5", "1.6", "1.7"]:
         #     include_args["placement_frame"] = specific.placement_frame
-
 
         return Include(
             **standard_args,

@@ -51,7 +51,6 @@ def test_v17_parsing(v17_sdf):
         assert isinstance(frame, tf.Frame)
 
 
-
 def test_v15_parsing(v15_sdf):
     try:
         frame = ign.sdformat.to_frame_graph(v15_sdf)
@@ -530,7 +529,6 @@ def test_link_offset():
     actual = cam_space.transform((0, 0, 0), root)
     expected = (0.8003185305832974, 0.19999974634550793, 1.35)
     assert np.allclose(actual, expected)
-
 
 
 def test_four_goals():

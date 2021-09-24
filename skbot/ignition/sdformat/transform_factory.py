@@ -7,7 +7,12 @@ from .generic_sdf.world import World
 
 
 def to_frame_graph(
-    sdf: str, *, unwrap: bool = True, insert_world_frame:bool=True, shape: Tuple[int] = (3,), axis: int = -1
+    sdf: str,
+    *,
+    unwrap: bool = True,
+    insert_world_frame: bool = True,
+    shape: Tuple[int] = (3,),
+    axis: int = -1
 ) -> Union[tf.Frame, List[tf.Frame]]:
     """Create a frame graph from a sdformat string.
 
@@ -32,11 +37,11 @@ def to_frame_graph(
         outside of the provided SDF and hence the full graph can't be
         determined. As a consequence, any ``model``, ``actor``, or ``light``
         elements are ignored.
-        
+
         If ``True`` (default), this function will insert a ``world`` frame into
         the graph of each simulation fragment (non-world element) to allow
         smooth construction of the frame graph.
-        
+
         The default is ``True``; however, it will change to ``False`` starting
         with scikit-bot v1.0.
 
@@ -86,7 +91,7 @@ def to_frame_graph(
     if insert_world_frame:
         if root.actor is not None:
             elements.append(root.actor)
-        
+
         if root.model is not None:
             elements.append(root.model)
 
@@ -102,7 +107,9 @@ def to_frame_graph(
             scaffold_frames["world"] = tf.Frame(3, name="world")
 
         el.to_static_graph(scaffold_frames, shape=shape, axis=axis)
-        frame_graph_root = el.to_dynamic_graph(frames, shape=shape, axis=axis, _scaffolding=scaffold_frames)
+        frame_graph_root = el.to_dynamic_graph(
+            frames, shape=shape, axis=axis, _scaffolding=scaffold_frames
+        )
         graphs.append(frame_graph_root)
 
     if unwrap and len(graphs) == 1:

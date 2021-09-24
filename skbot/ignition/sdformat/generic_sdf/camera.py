@@ -44,7 +44,7 @@ class Camera(ElementBase):
         Configuration parameters related to the depth camera.
     noise : Camera.Noise
         Parameters for the noise model.
-        
+
         .. versionadded:: SDFormat 1.4
     distortion : Camera.Distortion
         Parameters for the distortion model.
@@ -174,7 +174,7 @@ class Camera(ElementBase):
             "noise": Camera.Noise,
             "distortion": Camera.Distortion,
             "lense": Camera.Lense,
-            "visbility_mask": IntegerElement
+            "visbility_mask": IntegerElement,
         }
         if version == "1.0":
             default_args["horizontal_fov"] = Camera.HorizontalFov
@@ -264,7 +264,6 @@ class Camera(ElementBase):
         return declared_frames[sensor_frame + f"::{self.name}"]
 
     class HorizontalFov(ElementBase):
-
         def __init__(self, *, angle: float = 1.047, sdf_version: str) -> None:
             super().__init__(sdf_version=sdf_version)
             self.angle = angle
@@ -288,6 +287,7 @@ class Camera(ElementBase):
         </element>
         </element> <!-- End Image -->
         """
+
         def __init__(
             self,
             *,
@@ -324,6 +324,7 @@ class Camera(ElementBase):
         </element>
         </element> <!-- End Clip -->
         """
+
         def __init__(
             self, *, near: float = 0.1, far: float = 100, sdf_version: str
         ) -> None:
@@ -349,6 +350,7 @@ class Camera(ElementBase):
         </element>
         </element> <!-- End Save -->
         """
+
         def __init__(
             self, *, enabled: bool = False, path: str = None, sdf_version: str
         ) -> None:
@@ -382,6 +384,7 @@ class Camera(ElementBase):
         </element>
         </element> <!-- End depth_camera -->
         """
+
         def __init__(
             self,
             *,
@@ -416,8 +419,9 @@ class Camera(ElementBase):
         <element name="stddev" type="double" default="0.0" required="0">
         <description>For type "gaussian," the standard deviation of the Gaussian distribution from which noise values are drawn.</description>
         </element>
-        </element> <!-- End Noise -->        
+        </element> <!-- End Noise -->
         """
+
         def __init__(
             self,
             *,
@@ -464,6 +468,7 @@ class Camera(ElementBase):
         </element>
         </element> <!-- End Distortion -->
         """
+
         def __init__(
             self,
             *,
@@ -554,6 +559,7 @@ class Camera(ElementBase):
         </element> <!-- End Intrinsics -->
         </element> <!-- End Lens -->
         """
+
         def __init__(
             self,
             *,

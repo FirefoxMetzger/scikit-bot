@@ -243,7 +243,7 @@ class ElementBase:
 
         for their_name in list_args:
             our_name, clazz = list_args[their_name]
-            
+
             if not hasattr(specific, their_name):
                 generic_args[our_name] = []
                 continue

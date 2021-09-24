@@ -97,10 +97,10 @@ class Sdf(ElementBase):
     ) -> None:
         super().__init__(sdf_version=version)
         self.version = version
-        self.worlds:List[World] = []
-        self._actors:List[Actor] = []
-        self._models:List[Model] = []
-        self._lights:List[Light] = []
+        self.worlds: List[World] = []
+        self._actors: List[Actor] = []
+        self._models: List[Model] = []
+        self._lights: List[Light] = []
 
         if self.sdf_version == "1.8":
             if worlds is not None:

@@ -597,13 +597,13 @@ class Joint(ElementBase):
         @classmethod
         def from_specific(cls, specific: Any, *, version: str) -> "ElementBase":
             args_with_default = {
-                    "initial_position": FloatElement,
-                    "xyz": Joint.Axis.Xyz,
-                    "use_parent_model_Frame": BoolElement,
-                    "dynamics": Joint.Axis.Dynamics,
-                    "limit": Joint.Axis.Limit,
-                }
-            
+                "initial_position": FloatElement,
+                "xyz": Joint.Axis.Xyz,
+                "use_parent_model_Frame": BoolElement,
+                "dynamics": Joint.Axis.Dynamics,
+                "limit": Joint.Axis.Limit,
+            }
+
             if version in ["1.0", "1.2", "1.3", "1.4", "1.5", "1.6"]:
                 args_with_default["xyz"] = StringElement
 
@@ -618,7 +618,7 @@ class Joint(ElementBase):
 
             Represents the x,y,z components of the axis unit vector. The
             vector should be normalized.
-                
+
             .. versionadded:: SDFormat v1.7
 
             Parameters
