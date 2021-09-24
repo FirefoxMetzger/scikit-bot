@@ -273,19 +273,38 @@ class Camera(ElementBase):
             return Camera.HorizontalFov(angle=specific.angle, sdf_version=version)
 
     class Image(ElementBase):
-        """
-        <element name="image" required="1">
-        <description>The image size in pixels and format.</description>
-        <element name="width" type="int" default="320" required="1">
-        <description>Width in pixels</description>
-        </element>
-        <element name="height" type="int" default="240" required="1">
-        <description>Height in pixels </description>
-        </element>
-        <element name="format" type="string" default="R8G8B8" required="0">
-        <description>(L8|L16|R_FLOAT16|R_FLOAT32|R8G8B8|B8G8R8|BAYER_RGGB8|BAYER_BGGR8|BAYER_GBRG8|BAYER_GRBG8)</description>
-        </element>
-        </element> <!-- End Image -->
+        """Image shape and color format
+
+        An image is a rectangular subset of a 2D plane measured in pixels.
+        Coordinates on this plane are referred to using a two dimensional
+        coordinate system with basis vectors u and v (the uv-plane).
+
+        Parameters
+        ----------
+        width : int
+            Number of pixels along the v-axis. Default: ``320``.
+        height : int
+            Number of pixels along the u-axis. Default: ``240``.
+        format : str
+            The data format of the color channel. This value determines the
+            number of channels, their order, and their meaning. Possible values
+            are: L8, L16, R_FLOAT16, R_FLOAT32, R8G8B8, B8G8R8, BAYER_RGGB8,
+            BAYER_BGGR8, BAYER_GBRG8, BAYER_GRBG8. Default: ``R8G8B8``.
+
+            .. versionadded:: SDFormat v1.7
+                Formats: L16, R_FLOAT16, R_FLOAT32
+        sdf_version : str
+            The SDFormat version to use when constructing this element.
+
+        Attributes
+        ----------
+        width : int
+            See ``Parameters`` section.
+        height : int
+            See ``Parameters`` section.
+        format : str
+            See ``Parameters`` section.
+
         """
 
         def __init__(
@@ -311,18 +330,24 @@ class Camera(ElementBase):
             )
 
     class Clip(ElementBase):
-        """
-        <element name="clip" required="1">
-        <description>The near and far clip planes. Objects closer or farther than these planes are not rendered.</description>
+        """Near and Far Clipping distance.
 
-        <element name="near" type="double" default=".1" min="0.0" required="1">
-        <description>Near clipping plane</description>
-        </element>
+        Parameters
+        ----------
+        near : float
+            Near clip distance. Default: ``0.1``.
+        far : float
+            Far clip distance. Default: ``100``.
+        sdf_version : str
+            The SDFormat version to use when constructing this element.
 
-        <element name="far" type="double" default="100" min="0.1" required="1">
-        <description>Far clipping plane</description>
-        </element>
-        </element> <!-- End Clip -->
+        Attributes
+        ----------
+        near : float
+            See ``Parameters`` section.
+        far : float
+            See ``Parameters`` section.
+
         """
 
         def __init__(
@@ -339,16 +364,26 @@ class Camera(ElementBase):
             )
 
     class Save(ElementBase):
-        """
-        <element name="save" required="0">
-        <description>Enable or disable saving of camera frames.</description>
-        <attribute name="enabled" type="bool" default="false" required="1">
-        <description>True = saving enabled</description>
-        </attribute>
-        <element name="path" type="string" default="__default__" required="1">
-        <description>The path name which will hold the frame data. If path name is relative, then directory is relative to current working directory.</description>
-        </element>
-        </element> <!-- End Save -->
+        """Save/Export frames as images.
+
+        Parameters
+        ----------
+        enabled : bool
+            Enable export as images. Default: ``False``.
+        path : str
+            The path name which will hold the frame data. If path name is
+            relative, then directory is relative to current working directory.
+            Default: None
+        sdf_version : str
+            The SDFormat version to use when constructing this element.
+
+        Attributes
+        ----------
+        enabled : bool
+            See ``Parameters`` section.
+        path : str
+            See ``Parameters`` section.
+
         """
 
         def __init__(
@@ -365,24 +400,24 @@ class Camera(ElementBase):
             )
 
     class DepthCamera(ElementBase):
-        """
-        <element name="depth_camera" required="0">
-        <description>Depth camera parameters</description>
-        <element name="output" type="string" default="depths" required="1">
-        <description>Type of output</description>
-        </element>
-        <element name="clip" required="0">
-        <description>The near and far clip planes. Objects closer or farther than these planes are not detected by the depth camera.</description>
+        """Depth Camera configuration
 
-        <element name="near" type="double" default=".1" min="0.0" required="0">
-            <description>Near clipping plane for depth camera</description>
-        </element>
+        Parameters
+        ----------
+        output : str
+            The type of data to output. Default: ``depths``.
+        clip: Camera.Clip
+            Depth camera clipping distance.
+        sdf_version : str
+            The SDFormat version to use when constructing this element.
 
-        <element name="far" type="double" default="10.0" min="0.1" required="0">
-            <description>Far clipping plane for depth camera</description>
-        </element>
-        </element>
-        </element> <!-- End depth_camera -->
+        Attributes
+        ----------
+        output : str
+            See ``Parameters`` section.
+        clip: Camera.Clip
+            See ``Parameters`` section.
+
         """
 
         def __init__(
@@ -407,19 +442,30 @@ class Camera(ElementBase):
             )
 
     class Noise(ElementBase):
-        """
-        <element name="noise" required="0">
-        <description>The properties of the noise model that should be applied to generated images</description>
-        <element name="type" type="string" default="gaussian" required="1">
-        <description>The type of noise.  Currently supported types are: "gaussian" (draw additive noise values independently for each pixel from a Gaussian distribution).</description>
-        </element>
-        <element name="mean" type="double" default="0.0" required="0">
-        <description>For type "gaussian," the mean of the Gaussian distribution from which noise values are drawn.</description>
-        </element>
-        <element name="stddev" type="double" default="0.0" required="0">
-        <description>For type "gaussian," the standard deviation of the Gaussian distribution from which noise values are drawn.</description>
-        </element>
-        </element> <!-- End Noise -->
+        """The camera's noise model.
+
+        Parameters
+        ----------
+        type : str
+            The shape of the random noise distribution. Currently supported
+            types are: "gaussian" (draw additive noise values independently for
+            each pixel from a Gaussian distribution). Default: ``gaussian``.
+        mean : float
+            The distribution mean. Default: ``0``.
+        stddev : float
+            The distribution's standard deviation. Default: ``0``.
+        sdf_version : str
+            The SDFormat version to use when constructing this element.
+
+        Attributes
+        ----------
+        type : str
+            See ``Parameters`` section.
+        mean : float
+            See ``Parameters`` section.
+        stddev : float
+            See ``Parameters`` section.
+
         """
 
         def __init__(
@@ -445,28 +491,43 @@ class Camera(ElementBase):
             )
 
     class Distortion(ElementBase):
-        """
-        <element name="distortion" required="0">
-        <description>Lens distortion to be applied to camera images. See http://en.wikipedia.org/wiki/Distortion_(optics)#Software_correction</description>
-        <element name="k1" type="double" default="0.0" required="0">
-        <description>The radial distortion coefficient k1</description>
-        </element>
-        <element name="k2" type="double" default="0.0" required="0">
-        <description>The radial distortion coefficient k2</description>
-        </element>
-        <element name="k3" type="double" default="0.0" required="0">
-        <description>The radial distortion coefficient k3</description>
-        </element>
-        <element name="p1" type="double" default="0.0" required="0">
-        <description>The tangential distortion coefficient p1</description>
-        </element>
-        <element name="p2" type="double" default="0.0" required="0">
-        <description>The tangential distortion coefficient p2</description>
-        </element>
-        <element name="center" type="vector2d" default="0.5 0.5" required="0">
-        <description>The distortion center or principal point</description>
-        </element>
-        </element> <!-- End Distortion -->
+        """The camera's distortion model
+
+        Lens distortion to be applied to camera images. See
+        http://en.wikipedia.org/wiki/Distortion_(optics)#Software_correction
+
+        Parameters
+        ----------
+        k1 : float
+            The first radial distortion coefficient. Default: ``0``.
+        k2 : float
+            The second radial distortion coefficient. Default: ``0``.
+        k3 : float
+            The third radial distortion coefficient. Default: ``0``.
+        p1 : float
+            The first tangential distortion coefficient. Default: ``0``
+        p2 : float
+            The second tangential distortion coefficient. Default: ``0``.
+        center : str
+            The distortion center or principal point. Default: ``0.5, 0.5``.
+        sdf_version : str
+            The SDFormat version to use when constructing this element.
+
+        Attributes
+        ----------
+        k1 : float
+            See ``Parameters`` section.
+        k2 : float
+            See ``Parameters`` section.
+        k3 : float
+            See ``Parameters`` section.
+        p1 : float
+            See ``Parameters`` section.
+        p2 : float
+            See ``Parameters`` section.
+        center : str
+            See ``Parameters`` section.
+
         """
 
         def __init__(
@@ -501,63 +562,48 @@ class Camera(ElementBase):
             )
 
     class Lense(ElementBase):
-        """
-        <element name="lens" required="0">
-        <description>Lens projection description</description>
+        """A Camera's lense properties.
 
-        <element name="type" type="string" default="stereographic" required="1">
-        <description>Type of the lens mapping. Supported values are gnomonical, stereographic, equidistant, equisolid_angle, orthographic, custom. For gnomonical (perspective) projection, it is recommended to specify a horizontal_fov of less than or equal to 90°</description>
-        </element>
-        <element name="scale_to_hfov" type="bool" default="true" required="1">
-        <description>If true the image will be scaled to fit horizontal FOV, otherwise it will be shown according to projection type parameters</description>
-        </element>
+        Parameters
+        ----------
+        type : str
+            Type of the lens mapping. Supported values are gnomonical,
+            stereographic, equidistant, equisolid_angle, orthographic, custom.
+            For gnomonical (perspective) projection, it is recommended to
+            specify a horizontal_fov of less than or equal to 90°. Default:
+            ``stereographic``.
+        scale_to_hfov : bool
+            If true the image will be scaled to fit horizontal FOV, otherwise it
+            will be shown according to projection type parameters. Default:
+            ``True``.
+        custom_function : Camera.Lense.CustomFunction
+            A custom lense map.
+        cuttoff_angle : float
+            Everything outside of the specified angle will be hidden. Default:
+            ``.5707``.
+        env_texture_size : int
+            Resolution of the environment cube map used to draw the world.
+            Default: ``56``.
+        intrinsics : Camera.Lense.Intrinsics
+            Parameters of a custom perspective matrix.
+        sdf_version : str
+            The SDFormat version to use when constructing this element.
 
-        <element name="custom_function" required="0">
-        <description>Definition of custom mapping function in a form of r=c1*f*fun(theta/c2 + c3). See https://en.wikipedia.org/wiki/Fisheye_lens#Mapping_function</description>
-        <element name="c1" type="double" default="1" required="0">
-            <description>Linear scaling constant</description>
-        </element>
-        <element name="c2" type="double" default="1" required="0">
-            <description>Angle scaling constant</description>
-        </element>
-        <element name="c3" type="double" default="0" required="0">
-            <description>Angle offset constant</description>
-        </element>
-        <element name="f" type="double" default="1" required="0">
-            <description>Focal length of the optical system. Note: It's not a focal length of the lens in a common sense! This value is ignored if 'scale_to_fov' is set to true</description>
-        </element>
-        <element name="fun" type="string" default="tan" required="1">
-            <description>Possible values are 'sin', 'tan' and 'id'</description>
-        </element>
-        </element> <!-- End Custom Function -->
+        Attributes
+        ----------
+        type : str
+            See ``Parameters`` section.
+        scale_to_hfov : bool
+            See ``Parameters`` section.
+        custom_function : Camera.Lense.CustomFunction
+            See ``Parameters`` section.
+        cuttoff_angle : float
+            See ``Parameters`` section.
+        env_texture_size : int
+            See ``Parameters`` section.
+        intrinsics : Camera.Lense.Intrinsics
+            See ``Parameters`` section.
 
-        <element name="cutoff_angle" type="double" default="1.5707" min="0.0" max="3.141592653" required="0">
-        <description>Everything outside of the specified angle will be hidden, 90° by default</description>
-        </element>
-
-        <element name="env_texture_size" type="int" default="256" min="4" max="2048" required="0">
-        <description>Resolution of the environment cube map used to draw the world</description>
-        </element>
-
-        <element name="intrinsics" required="0">
-        <description>Camera intrinsic parameters for setting a custom perspective projection matrix (cannot be used with WideAngleCamera since this class uses image stitching from 6 different cameras for achieving a wide field of view). The focal lengths can be computed using focal_length_in_pixels = (image_width_in_pixels * 0.5) / tan(field_of_view_in_degrees * 0.5 * PI/180)</description>
-        <element name="fx" type="double" default="277" required="1">
-            <description>X focal length (in pixels, overrides horizontal_fov)</description>
-        </element>
-        <element name="fy" type="double" default="277" required="1">
-            <description>Y focal length (in pixels, overrides horizontal_fov)</description>
-        </element>
-        <element name="cx" type="double" default="160" required="1">
-            <description>X principal point (in pixels)</description>
-        </element>
-        <element name="cy" type="double" default="120" required="1">
-            <description>Y principal point (in pixels)</description>
-        </element>
-        <element name="s" type="double" default="0.0" required="1">
-            <description>XY axis skew</description>
-        </element>
-        </element> <!-- End Intrinsics -->
-        </element> <!-- End Lens -->
         """
 
         def __init__(
@@ -568,6 +614,7 @@ class Camera(ElementBase):
             custom_function: "Camera.Lense.CustomFunction" = None,
             cuttoff_angle: float = 1.5707,
             env_texture_size: int = 256,
+            intrinsics: "Camera.Lense.Intrinsics" = None,
             sdf_version: str,
         ) -> None:
             super().__init__(sdf_version=sdf_version)
@@ -580,6 +627,11 @@ class Camera(ElementBase):
             )
             self.cuttoff_angle = cuttoff_angle
             self.env_texture_size = env_texture_size
+            self.intrinsics = (
+                Camera.Lense.Intrinsics(sdf_version=sdf_version)
+                if intrinsics is None
+                else intrinsics
+            )
 
         @classmethod
         def from_specific(cls, specific: Any, *, version: str) -> "ElementBase":
@@ -590,15 +642,56 @@ class Camera(ElementBase):
                 "cuttoff_angle": specific.cuttoff_angle,
                 "env_texture_size": specific.env_texture_size,
             }
-            args_with_default = {"custom_function": Camera.Lense.CustomFunction}
+            args_with_default = {
+                "custom_function": Camera.Lense.CustomFunction,
+                "intrinsics": Camera.Lense.Intrinsics,
+            }
             standard_args = cls._prepare_standard_args(
                 specific, args_with_default, version=version
             )
-            lense_args.update(standard_args)
 
-            return Camera.Lense(**lense_args)
+            return Camera.Lense(**lense_args, **standard_args)
 
         class CustomFunction(ElementBase):
+            """A custom lense map.
+
+            Definition of custom mapping function in a form of
+            r=c1*f*fun(theta/c2 + c3). See
+            https://en.wikipedia.org/wiki/Fisheye_lens#Mapping_function
+
+            Parameters
+            ----------
+            c1 : float
+                Linear scaling constant. Default: ``1``.
+            c2 : float
+                Angle scaling constant. Default: ``1``.
+            c3 : float
+                Angle offset constant. Default: ``0``.
+            f : float
+                Focal length of the optical system. Note: It's not a focal
+                length of the lens in a common sense! This value is ignored if
+                'scale_to_fov' is set to true. Default: ``1``.
+            fun : str 
+                The non-linear element to use. Possible values are 'sin', 'tan'
+                and 'id'. Default: ``tan``.
+            sdf_version : str
+                The SDFormat version to use when constructing this element.
+
+            Attributes
+            ----------
+            c1 : float
+                See ``Parameters`` section.
+            c2 : float
+                See ``Parameters`` section.
+            c3 : float
+                See ``Parameters`` section.
+            f : float
+                See ``Parameters`` section.
+            fun : str 
+                See ``Parameters`` section.
+
+            """
+
             def __init__(
                 self,
                 *,
@@ -628,6 +721,45 @@ class Camera(ElementBase):
                 )
 
         class Intrinsics(ElementBase):
+            """ Custom projection matrix.
+
+            Camera intrinsic parameters for setting a custom perspective
+            projection matrix (cannot be used with WideAngleCamera since this
+            class uses image stitching from 6 different cameras for achieving a
+            wide field of view). The focal lengths can be computed using
+            focal_length_in_pixels = (image_width_in_pixels * 0.5) /
+            tan(field_of_view_in_degrees * 0.5 * PI/180)
+
+            Parameters
+            ----------
+            fx : float
+                X focal length (in pixels, overrides horizontal_fov). Default: ``277``.
+            fy : float
+                Y focal length (in pixels, overrides horizontal_fov). Default: ``277``.
+            cx : float
+                X principal point (in pixels). Default: ``160``.
+            cy : float
+                Y principal point (in pixels). Default: ``120``.
+            s : float
+                XY axis skew. Default: ``0``.
+            sdf_version : str
+                The SDFormat version to use when constructing this element.
+
+            Attributes
+            ----------
+            fx : float
+                See ``Parameters`` section.
+            fy : float
+                See ``Parameters`` section.
+            cx : float
+                See ``Parameters`` section.
+            cy : float
+                See ``Parameters`` section.
+            s : float
+                See ``Parameters`` section.
+
+            """
+
             def __init__(
                 self,
                 *,
