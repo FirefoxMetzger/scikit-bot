@@ -295,6 +295,45 @@ def test_poses():
     assert np.allclose(vector_d, (1, 3, 3))
 
 
+def test_poses_dynamic():
+    model_file = Path(__file__).parent / "sdf" / "v18" / "pose_testing.sdf"
+    sdf_string = model_file.read_text()
+
+    generic_sdf = ign.sdformat.loads_generic(sdf_string)
+    world_sdf = generic_sdf.worlds[0]
+
+    frames = world_sdf.declared_frames()
+    root = world_sdf.to_dynamic_graph(frames)
+
+    world = ign.sdformat.to_frame_graph(sdf_string)
+    frame_a = world.find_frame("world/A")
+    frame_b = world.find_frame("world/B")
+    frame_c = world.find_frame("world/C")
+    frame_d = world.find_frame("world/D")
+
+    # origin tests
+    origin_a = frame_a.transform((0, 0, 0), world)
+    origin_b = frame_b.transform((0, 0, 0), world)
+    origin_c = frame_c.transform((0, 0, 0), world)
+    origin_d = frame_d.transform((0, 0, 0), world)
+
+    assert np.allclose(origin_a, (1, 2, 3))
+    assert np.allclose(origin_b, (0, 0, 0))
+    assert np.allclose(origin_c, (0, 0, 0))
+    assert np.allclose(origin_d, (1, 2, 3))
+
+    # test vector x
+    vector_a = frame_a.transform((1, 0, 0), world)
+    vector_b = frame_b.transform((1, 0, 0), world)
+    vector_c = frame_c.transform((1, 0, 0), world)
+    vector_d = frame_d.transform((1, 0, 0), world)
+
+    assert np.allclose(vector_a, (2, 2, 3))
+    assert np.allclose(vector_b, (0, 1, 0))
+    assert np.allclose(vector_c, (0, 1, 0))
+    assert np.allclose(vector_d, (1, 3, 3))
+
+
 def test_poses_relative_to():
     model_file = Path(__file__).parent / "sdf" / "v18" / "pose_relative_to.sdf"
     sdf_string = model_file.read_text()
@@ -302,15 +341,15 @@ def test_poses_relative_to():
     generic_sdf = ign.sdformat.loads_generic(sdf_string)
     world_sdf = generic_sdf.worlds[0]
 
-    static_frames = world_sdf.declared_frames()
-    static_graph = world_sdf.to_static_graph(static_frames)
+    frames = world_sdf.declared_frames()
+    root = world_sdf.to_static_graph(frames)
 
-    cam_link = static_frames["camera::link"]
-    box_link = static_frames["box::box_link"]
+    cam_link = frames["camera::link"]
+    box_link = frames["box::box_link"]
 
     # origin tests
-    origin_cam = cam_link.transform((0, 0, 0), static_frames["world"])
-    origin_box = box_link.transform((0, 0, 0), static_frames["world"])
+    origin_cam = cam_link.transform((0, 0, 0), frames["world"])
+    origin_box = box_link.transform((0, 0, 0), frames["world"])
 
     assert np.allclose(origin_cam, (2.0003185305832973, 0.19999974634550793, 1.75))
     assert np.allclose(
@@ -318,8 +357,42 @@ def test_poses_relative_to():
     )
 
     # test vector x
-    vector_cam = cam_link.transform((1, 0, 0), static_frames["world"])
-    vector_box = box_link.transform((1, 0, 0), static_frames["world"])
+    vector_cam = cam_link.transform((1, 0, 0), frames["world"])
+    vector_box = box_link.transform((1, 0, 0), frames["world"])
+
+    assert np.allclose(
+        vector_cam, (1.0400594540571846, 0.2015291077039671, 1.4708939860858379)
+    )
+
+    # I can not get ground truth for this test case :(
+    # assert np.allclose(vector_box, (0, 1, 0))
+
+
+def test_poses_relative_to_dynamic():
+    model_file = Path(__file__).parent / "sdf" / "v18" / "pose_relative_to.sdf"
+    sdf_string = model_file.read_text()
+
+    generic_sdf = ign.sdformat.loads_generic(sdf_string)
+    world_sdf = generic_sdf.worlds[0]
+
+    frames = world_sdf.declared_frames()
+    root = world_sdf.to_static_graph(frames)
+
+    cam_link = frames["camera::link"]
+    box_link = frames["box::box_link"]
+
+    # origin tests
+    origin_cam = cam_link.transform((0, 0, 0), frames["world"])
+    origin_box = box_link.transform((0, 0, 0), frames["world"])
+
+    assert np.allclose(origin_cam, (2.0003185305832973, 0.19999974634550793, 1.75))
+    assert np.allclose(
+        origin_box, (0.8305268741307381, -0.237974865830905, 1.0399999999999998)
+    )
+
+    # test vector x
+    vector_cam = cam_link.transform((1, 0, 0), frames["world"])
+    vector_box = box_link.transform((1, 0, 0), frames["world"])
 
     assert np.allclose(
         vector_cam, (1.0400594540571846, 0.2015291077039671, 1.4708939860858379)
@@ -346,7 +419,7 @@ def test_perspective_transform_straight():
 
     root_frame = ign.sdformat.to_frame_graph(sdf_string)
     px_space = root_frame.find_frame(".../pixel_space")
-    box = root_frame.find_frame(".../box_visual")
+    box = root_frame.find_frame(".../box_link")
     center = np.array([0, 0, 0])
     corners = np.array(
         [
@@ -380,8 +453,8 @@ def test_perspective_transform_offset():
     sdf_string = model_file.read_text()
 
     root_frame = ign.sdformat.to_frame_graph(sdf_string)
-    px_space = root_frame.find_frame(".../pixel-space")
-    box = root_frame.find_frame(".../box_visual")
+    px_space = root_frame.find_frame(".../pixel_space")
+    box = root_frame.find_frame(".../box_link")
     center = np.array([0, 0, 0])
     corners = np.array(
         [
@@ -413,8 +486,8 @@ def test_perspective_transform_rotations():
     sdf_string = model_file.read_text()
 
     root_frame = ign.sdformat.to_frame_graph(sdf_string)
-    px_space = root_frame.find_frame(".../pixel-space")
-    box = root_frame.find_frame(".../box_visual")
+    px_space = root_frame.find_frame(".../pixel_space")
+    box = root_frame.find_frame(".../box_link")
     center = np.array([0, 0, 0])
     corners = np.array(
         [
@@ -454,17 +527,22 @@ def test_link_offset():
     model_file = Path(__file__).parent / "sdf" / "v18" / "link_offset.sdf"
     sdf_string = model_file.read_text()
 
-    root_frame = ign.sdformat.to_frame_graph(sdf_string)
-    cam_base = root_frame.find_frame(".../camera::__model__")
-    cam_link = cam_base.find_frame("camera::__model__/link")
-    cam_space = cam_base.find_frame(".../camera/camera-space")
+    generic_sdf = ign.sdformat.loads_generic(sdf_string)
+    world_sdf = generic_sdf.worlds[0]
 
-    actual = cam_link.transform((0, 0, 0), root_frame)
+    frames = world_sdf.declared_frames()
+    root = world_sdf.to_static_graph(frames)
+
+    cam_link = frames["camera::link"]
+    actual = cam_link.transform((0, 0, 0), root)
     expected = (0.8003185305832974, 0.19999974634550793, 1.35)
+    assert np.allclose(actual, expected)
 
-    # the accuraccy here is quite low. TODO: investigate which rotation is
-    # more accurate
-    assert np.allclose(actual, expected, atol=1e-2)
+    cam_space = frames["camera::link::camera::camera"]
+    actual = cam_space.transform((0, 0, 0), root)
+    expected = (0.8003185305832974, 0.19999974634550793, 1.35)
+    assert np.allclose(actual, expected)
+
 
 
 def test_four_goals():
@@ -482,8 +560,8 @@ def test_four_goals():
     px_space = static_frames["main_camera::link::camera::pixel_space"]
     cam_space = static_frames["main_camera::link::camera::camera"]
 
-    box_base = static_frames["box_copy_1"]
-    box = static_frames["box_copy_1::box_link"]
+    box_base = static_frames["box_copy_3"]
+    box = static_frames["box_copy_3::box_link"]
     vertices = np.array(
         [
             [0.025, 0.025, 0.025],  # 0

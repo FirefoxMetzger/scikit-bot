@@ -13,7 +13,7 @@
                 <enable_wind>false</enable_wind>
                 <self_collide>false</self_collide>
                 <kinematic>false</kinematic>
-                <must_be_base_link>false</must_be_base_link>
+                <must_be_base_link>true</must_be_base_link>
                 <visual name="visual">
                     <cast_shadows>true</cast_shadows>
                     <laser_retro>0.0</laser_retro>
@@ -57,7 +57,7 @@
                 <enable_wind>false</enable_wind>
                 <self_collide>false</self_collide>
                 <kinematic>false</kinematic>
-                <must_be_base_link>false</must_be_base_link>
+                <must_be_base_link>true</must_be_base_link>
                 <inertial>
                     <mass>1.0</mass>
                     <pose>0 0 0 0 0 0</pose>
