@@ -171,17 +171,6 @@ class Model(ElementBase):
 
         self.name = name
 
-        if canonical_link == "":
-            canonical_link = None
-        if canonical_link is not None:
-            self.canonical_link = canonical_link
-        elif len(links) > 0:
-            self.canonical_link = links[0].name
-        else:
-            raise ValueError(
-                "`Model` must specify `canonical_link` or have at least one `link`."
-            )
-
         if placement_frame == "":
             placement_frame = None
         if placement_frame is None:
@@ -226,6 +215,21 @@ class Model(ElementBase):
                 self.models.append(fragment)
             else:
                 raise ValueError("`Model.include` can only be used to include models.")
+
+        if canonical_link == "":
+            canonical_link = None
+        if canonical_link is not None:
+            self.canonical_link = canonical_link
+        elif len(self.links) > 0:
+            self.canonical_link = links[0].name
+        elif len(self.models) > 0:
+            model_name = self.models[0].name
+            model_canonical_link = self.models[0].canonical_link
+            self.canonical_link = f"{model_name}::{model_canonical_link}"
+        else:
+            raise ValueError(
+                "`Model` must specify `canonical_link` or have at least one `link`."
+            )
 
         for el in chain(
             self.models,

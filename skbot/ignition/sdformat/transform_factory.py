@@ -1,4 +1,5 @@
 from typing import Union, List, Tuple, Dict
+import warnings
 
 from ... import transform as tf
 from .load_as_generic import loads_generic
@@ -6,22 +7,39 @@ from .generic_sdf.world import World
 
 
 def to_frame_graph(
-    sdf: str, *, unwrap: bool = True, shape: Tuple[int] = (3,), axis: int = -1
+    sdf: str, *, unwrap: bool = True, insert_world_frame:bool=True, shape: Tuple[int] = (3,), axis: int = -1
 ) -> Union[tf.Frame, List[tf.Frame]]:
     """Create a frame graph from a sdformat string.
 
+    .. versionadded:: 0.8.0
+        Added the ability to limit loading to worlds
     .. versionadded:: 0.6.0
         This function has been added to the library.
 
     Parameters
     ----------
-    sdf: str
+    sdf : str
         A SDFormat XML string describing one (or many) worlds.
     unwrap : bool
         If True (default) and the sdf only contains a single light, model, or
         world element return that element's frame. If the sdf contains multiple
         lights, models, or worlds a list of root frames is returned. If False,
         always return a list of frames.
+    insert_world_frame : bool
+        If ``False``, creation of frame graphs is restricted to world elements
+        contained in the provided SDF. This is because non-world elements
+        (simulation fragments) may refer to a ``world`` frame that is defined
+        outside of the provided SDF and hence the full graph can't be
+        determined. As a consequence, any ``model``, ``actor``, or ``light``
+        elements are ignored.
+        
+        If ``True`` (default), this function will insert a ``world`` frame into
+        the graph of each simulation fragment (non-world element) to allow
+        smooth construction of the frame graph.
+        
+        The default is ``True``; however, it will change to ``False`` starting
+        with scikit-bot v1.0.
+
     shape : tuple
         A tuple describing the shape of elements that the resulting graph should
         transform. This can be used to add batch dimensions to the graph, for
@@ -62,13 +80,32 @@ def to_frame_graph(
     """
 
     root = loads_generic(sdf)
-    worlds = list()
-    for world in root.worlds:
-        world_frames = world.declared_frames()
-        world_graph = world.to_dynamic_graph(world_frames, shape=shape, axis=axis)
-        worlds.append(world_graph)
+    graphs = list()
+    elements = [*root.worlds]
 
-    if unwrap and len(worlds) == 1:
-        return worlds[0]
+    if insert_world_frame:
+        if root.actor is not None:
+            elements.append(root.actor)
+        
+        if root.model is not None:
+            elements.append(root.model)
+
+        if root.light is not None:
+            elements.append(root.light)
+
+    for el in elements:
+        frames = el.declared_frames()
+        scaffold_frames = el.declared_frames()
+
+        if insert_world_frame and "world" not in frames:
+            frames["world"] = tf.Frame(3, name="world")
+            scaffold_frames["world"] = tf.Frame(3, name="world")
+
+        el.to_static_graph(scaffold_frames, shape=shape, axis=axis)
+        frame_graph_root = el.to_dynamic_graph(frames, shape=shape, axis=axis, _scaffolding=scaffold_frames)
+        graphs.append(frame_graph_root)
+
+    if unwrap and len(graphs) == 1:
+        return graphs[0]
     else:
-        return worlds
+        return graphs

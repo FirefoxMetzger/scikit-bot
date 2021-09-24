@@ -35,14 +35,20 @@ class Include(ElementBase):
                 )
 
     @classmethod
-    def from_specific(cls, include: Any, *, version: str) -> "Include":
+    def from_specific(cls, specific: Any, *, version: str) -> "Include":
+        include_args = {
+            "uri": specific.uri,
+            "static": specific.static,
+            "pose": Pose.from_specific(specific.pose, version=version),
+            "plugins": [Plugin.from_specific(x, version=version) for x in specific.plugin],
+        }
+
+        if version not in ["1.0", "1.2", "1.3", "1.4", "1.5", "1.6", "1.7"]:
+            include_args["placement_frame"] = specific.placement_frame
+
+
         return Include(
-            uri=include.uri,
-            name=include.name,
-            static=include.static,
-            pose=Pose.from_specific(include.pose, version=version),
-            plugins=[Plugin.from_specific(x, version=version) for x in include.plugin],
-            placement_frame=include.placement_frame,
+            **include_args,
             sdf_version=version,
         )
 

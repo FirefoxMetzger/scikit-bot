@@ -97,10 +97,10 @@ class Sdf(ElementBase):
     ) -> None:
         super().__init__(sdf_version=version)
         self.version = version
-        self._worlds = []
-        self._actors = []
-        self._models = []
-        self._lights = []
+        self.worlds:List[World] = []
+        self._actors:List[Actor] = []
+        self._models:List[Model] = []
+        self._lights:List[Light] = []
 
         if self.sdf_version == "1.8":
             if worlds is not None:
@@ -117,7 +117,7 @@ class Sdf(ElementBase):
             if isinstance(payload, list) and all(
                 [isinstance(x, World) for x in payload]
             ):
-                self._worlds = payload
+                self.worlds = payload
             elif isinstance(payload, Actor):
                 self._actors.append(payload)
             elif isinstance(payload, Model):
@@ -140,19 +140,16 @@ class Sdf(ElementBase):
             if lights is None:
                 raise ValueError("`Sdf` must specify `lights` prior to SDFormat v1.8.")
 
-            self._worlds = worlds
+            self.worlds = worlds
             self._models = models
             self._lights = lights
             self._actors = actors
         else:
             raise ParseError("`Sdf` does not exist prior to SDFormat v1.3.")
 
-    @property
-    def worlds(self) -> List[World]:
-        if len(self._worlds) == 0:
-            raise AttributeError("`Sdf` does not contain any worlds.")
-
-        return self._worlds
+    # @property
+    # def worlds(self) -> List[World]:
+    #     return self._worlds
 
     @property
     def actor(self) -> Actor:

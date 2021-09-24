@@ -237,6 +237,8 @@ def test_nd_panda():
 
     root_frame = ign.sdformat.to_frame_graph(sdf_string, shape=(5, 3))
 
+    ## todo: assert that constructed shape is (5, 3)
+
 
 def test_must_be_base_link():
     model_file = Path(__file__).parent / "sdf" / "v18" / "pose_testing.sdf"

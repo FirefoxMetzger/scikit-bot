@@ -379,7 +379,7 @@ class World(ElementBase):
             child = declared_frames[child_name]
             link(child, parent)
 
-        for el in chain(self.actors, self.frames, self._joints):
+        for el in chain(self.frames, self._joints):
             link: tf.Link = el.pose.to_tf_link()
             parent_name = el.pose.relative_to
             child_name = el.name
