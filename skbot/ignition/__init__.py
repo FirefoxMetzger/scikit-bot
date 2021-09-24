@@ -106,7 +106,6 @@ bindings for documentation on how to do this:
     :toctree:
     :recursive:
 
-    skbot.ignition.sdformat._transform_factory.generic
     skbot.ignition.sdformat.bindings.v18
     skbot.ignition.sdformat.bindings.v17
     skbot.ignition.sdformat.bindings.v16
