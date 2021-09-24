@@ -149,7 +149,7 @@ class Sensor(ElementBase):
 
         .. depreciated:: SDFormat v1.2
             Use `Sensor.pose` instead.
-    frames : List["Frame"]
+    frames : List[Frame]
         A list of frames of reference in which poses may be expressed.
 
         .. depreciated:: SDFormat v1.7
