@@ -13,12 +13,6 @@
       <static>false</static>
       <pose>0.794 0 0 0 -0 1.5708</pose>
     </include>
-    <include>
-      <uri>https://fuel.ignitionrobotics.org/1.0/AndrejOrsula/models/panda</uri>
-      <name>panda</name>
-      <static>false</static>
-      <pose>0.2 0 1.025 0 -0 0</pose>
-    </include>
     <gravity>0 0 -9.8</gravity>
     <magnetic_field>5.5645e-6 22.8758e-6 -42.3884e-6</magnetic_field>
     <physics name="1ms" default="false" type="ignored">
