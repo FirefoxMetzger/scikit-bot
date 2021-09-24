@@ -380,7 +380,7 @@ class Sensor(ElementBase):
                 declared_frames[f"{self.name}::{name}"] = frame
 
         for frame in self._frames:
-            declared_frames.update(frame)
+            declared_frames.update(frame.declared_frames())
 
         return declared_frames
 

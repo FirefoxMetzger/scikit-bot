@@ -3,7 +3,7 @@ from itertools import chain
 from typing import List, Any, Dict, Tuple
 
 
-from .base import BoolElement, ElementBase, Pose, PoseBearing, NamedPoseBearing
+from .base import BoolElement, ElementBase, Pose
 from .light import Light
 from .frame import Frame
 from .sensor import Sensor

@@ -1,6 +1,6 @@
 from typing import List, Any, Tuple, Union
 
-from .base import ElementBase, Pose
+from .base import BoolElement, ElementBase, Pose, StringElement
 from .plugin import Plugin
 from ..exceptions import ParseError
 from ... import fuel
@@ -36,19 +36,37 @@ class Include(ElementBase):
 
     @classmethod
     def from_specific(cls, specific: Any, *, version: str) -> "Include":
-        include_args = {
-            "uri": specific.uri,
-            "static": specific.static,
-            "pose": Pose.from_specific(specific.pose, version=version),
-            "plugins": [Plugin.from_specific(x, version=version) for x in specific.plugin],
-        }
+        # include_args = {
+        #     "uri": specific.uri,
+        #     "static": specific.static,
+        #     "pose": Pose.from_specific(specific.pose, version=version),
+        #     "plugins": [Plugin.from_specific(x, version=version) for x in specific.plugin],
+        # }
 
-        if version not in ["1.0", "1.2", "1.3", "1.4", "1.5", "1.6", "1.7"]:
-            include_args["placement_frame"] = specific.placement_frame
+        args_with_default = {
+            "name": StringElement,
+            "uri": StringElement,
+            "static": BoolElement,
+            "pose": Pose,
+            "placement_frame": StringElement
+        }
+        list_args = {
+            "plugin": ("plugins", Plugin)
+        }
+        standard_args = cls._prepare_standard_args(
+            specific,
+            args_with_default,
+            list_args,
+            version=version
+        )
+
+
+        # if version not in ["1.0", "1.2", "1.3", "1.4", "1.5", "1.6", "1.7"]:
+        #     include_args["placement_frame"] = specific.placement_frame
 
 
         return Include(
-            **include_args,
+            **standard_args,
             sdf_version=version,
         )
 
@@ -78,6 +96,9 @@ class Include(ElementBase):
         from .actor import Actor
         from .model import Model
         from .light import Light
+
+        if not self.uri.startswith("https://fuel.ignitionrobotics.org"):
+            raise ParseError("Includes from non-fuel sources are not implemented yet.")
 
         sdf_string = fuel.get_fuel_model(self.uri)
         specific_sdf = sdformat.loads(sdf_string)

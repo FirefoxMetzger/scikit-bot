@@ -37,11 +37,6 @@ def test_v18_parsing(v18_worlds):
         assert isinstance(frame, tf.Frame)
 
 
-def test_v18_refuted(v18_sdf_refuted):
-    with pytest.raises(ign.sdformat.sdformat.ParseError):
-        ign.sdformat.to_frame_graph(v18_sdf_refuted)
-
-
 def test_v17_parsing(v17_sdf):
     try:
         frame = ign.sdformat.to_frame_graph(v17_sdf)
@@ -56,10 +51,6 @@ def test_v17_parsing(v17_sdf):
         assert isinstance(frame, tf.Frame)
 
 
-def test_v17_refuted(v17_sdf_refuted):
-    with pytest.raises(ign.sdformat.sdformat.ParseError):
-        ign.sdformat.to_frame_graph(v17_sdf_refuted)
-
 
 def test_v15_parsing(v15_sdf):
     try:
@@ -73,11 +64,6 @@ def test_v15_parsing(v15_sdf):
             assert isinstance(el, tf.Frame)
     else:
         assert isinstance(frame, tf.Frame)
-
-
-def test_v15_refuted(v15_sdf_refuted):
-    with pytest.raises(ign.sdformat.sdformat.ParseError):
-        ign.sdformat.to_frame_graph(v15_sdf_refuted)
 
 
 def test_static_matches_dynamic():

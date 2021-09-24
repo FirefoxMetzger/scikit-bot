@@ -226,7 +226,7 @@ class ElementBase:
             if not hasattr(specific, name):
                 continue
 
-            if clazz in [StringElement, BoolElement, FloatElement]:
+            if clazz in [StringElement, BoolElement, FloatElement, IntegerElement]:
                 value = getattr(specific, name)
                 if value == "__default__":
                     continue
@@ -242,15 +242,12 @@ class ElementBase:
                 )
 
         for their_name in list_args:
+            our_name, clazz = list_args[their_name]
+            
             if not hasattr(specific, their_name):
+                generic_args[our_name] = []
                 continue
 
-            # catch //list/projector which seems
-            # to be bound wrongly
-            if getattr(specific, their_name) is None:
-                return []
-
-            our_name, clazz = list_args[their_name]
             generic_args[our_name] = [
                 clazz.from_specific(x, version=version)
                 for x in getattr(specific, their_name)
@@ -264,6 +261,10 @@ class StringElement(ElementBase):
 
 
 class FloatElement(ElementBase):
+    """Plumbing for smoother conversion"""
+
+
+class IntegerElement(ElementBase):
     """Plumbing for smoother conversion"""
 
 
@@ -331,7 +332,9 @@ class Pose(ElementBase):
 
     @classmethod
     def from_specific(cls, specific: Any, *, version: str):
-        if version in ["1.0", "1.2", "1.3", "1.4"]:
+        if specific is None:
+            return Pose(sdf_version=version)
+        elif version in ["1.0", "1.2", "1.3", "1.4"]:
             return Pose(value=specific, sdf_version=version)
         elif version in ["1.5", "1.6"]:
             return Pose(value=specific.value, frame=specific.frame, sdf_version=version)

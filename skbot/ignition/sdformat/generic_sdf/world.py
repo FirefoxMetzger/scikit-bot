@@ -211,12 +211,12 @@ class World(ElementBase):
     ) -> None:
         super().__init__(sdf_version=sdf_version)
         self.name = name
-        self.audio = World.Audio() if audio is None else audio
-        self.wind = World.Wind() if wind is None else wind
+        self.audio = World.Audio(sdf_version=sdf_version) if audio is None else audio
+        self.wind = World.Wind(sdf_version=sdf_version) if wind is None else wind
         self.gravity = vector3(gravity)
         self.magnetic_field = vector3(magnetic_field)
-        self.atmosphere = Atmosphere() if atmosphere is None else atmosphere
-        self.gui = Gui() if gui is None else gui
+        self.atmosphere = Atmosphere(sdf_version=sdf_version) if atmosphere is None else atmosphere
+        self.gui = Gui(sdf_version=sdf_version) if gui is None else gui
         if sdf_version in ["1.0", "1.2", "1.3", "1.4", "1.5"]:
             if physics_engines is not None:
                 raise ValueError(
@@ -333,7 +333,7 @@ class World(ElementBase):
 
         if version in ["1.0", "1.1", "1.2", "1.3", "1.4", "1.5", "1.6"]:
             world_args["joints"] = [
-                Joint.from_specific(x, version=version) for x in specific.joints
+                Joint.from_specific(x, version=version) for x in specific.joint
             ]
 
         return World(**world_args, sdf_version=version)

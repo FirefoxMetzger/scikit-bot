@@ -55,7 +55,6 @@ def sdf_string(request):
         "sdformat/joint_invalid_parent_same_as_child.sdf",
         "sdformat/world_frame_relative_to.sdf",
         "sdformat/whitespace.sdf",
-        "sdformat/flattened_test_nested_model_with_frames.sdf",
         "sdformat/empty_road_sph_coords.sdf",
         "sdformat/world_nested_frame.sdf",
         "sdformat/joint_complete.sdf",
@@ -85,7 +84,6 @@ def sdf_string(request):
         "sdformat/link_duplicate_sibling_collisions.sdf",
         "sdformat/bad_syntax_vector.sdf",
         "sdformat/world_duplicate.sdf",
-        "sdformat/model_invalid_reserved_names.sdf",
         "sdformat/model_invalid_link_relative_to.sdf",
         "sdformat/box_plane_low_friction_test.sdf",
         "sdformat/model_joint_axis_expressed_in.sdf",
@@ -259,7 +257,6 @@ def v18_sdf_refuted(request):
 @pytest.fixture(
     params=[
         "sdformat/empty_road_sph_coords.sdf",
-        "sdformat/flattened_test_nested_model_with_frames.sdf",
         "sdformat/ignore_sdf_in_plugin.sdf",
         "sdformat/joint_sensors.sdf",
         "sdformat/material.sdf",
@@ -303,13 +300,11 @@ def v17_sdf(request):
         "sdformat/model_invalid_frame_relative_to.sdf",
         "sdformat/model_invalid_joint_relative_to.sdf",
         "sdformat/model_invalid_link_relative_to.sdf",
-        "sdformat/model_invalid_reserved_names.sdf",
         "sdformat/model_without_links.sdf",
         "sdformat/nested_without_links_invalid.sdf",
         "sdformat/root_multiple_models.sdf",
         "sdformat/world_frame_invalid_attached_to.sdf",
         "sdformat/world_frame_invalid_relative_to.sdf",
-        "sdformat/world_model_frame_same_name.sdf",
     ]
 )
 def v17_sdf_refuted(request):

@@ -1,7 +1,7 @@
 import warnings
 from typing import DefaultDict, List, Dict, Any, Tuple, Union
 
-from .base import ElementBase, FloatElement, Pose, StringElement
+from .base import ElementBase, FloatElement, IntegerElement, Pose, StringElement
 from .frame import Frame
 from .... import transform as tf
 from ...transformations import FrustumProjection
@@ -162,7 +162,8 @@ class Camera(ElementBase):
 
     @classmethod
     def from_specific(cls, specific: Any, *, version: str) -> "ElementBase":
-        camera_args = {"visibility_mask": specific.visibility_mask}
+        # camera_args = {"visibility_mask": specific.visibility_mask}
+
         default_args = {
             "name": StringElement,
             "pose": Pose,
@@ -173,6 +174,7 @@ class Camera(ElementBase):
             "noise": Camera.Noise,
             "distortion": Camera.Distortion,
             "lense": Camera.Lense,
+            "visbility_mask": IntegerElement
         }
         if version == "1.0":
             default_args["horizontal_fov"] = Camera.HorizontalFov
@@ -183,7 +185,7 @@ class Camera(ElementBase):
             specific, default_args, list_args, version=version
         )
 
-        return Camera(**camera_args, **standard_args, sdf_version=version)
+        return Camera(**standard_args, sdf_version=version)
 
     def declared_frames(self) -> Dict[str, tf.Frame]:
         declared_frames = {
