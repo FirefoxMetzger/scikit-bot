@@ -539,15 +539,33 @@ def test_four_goals():
     world_sdf = generic_sdf.worlds[0]
 
     static_frames = world_sdf.declared_frames()
-    static_graph = world_sdf.to_static_graph(static_frames)
+    world_sdf.to_static_graph(static_frames)
 
-    root_frame = static_graph
-    cam_base = static_frames["main_camera::__model__"]
     px_space = static_frames["main_camera::link::camera::pixel_space"]
-    cam_space = static_frames["main_camera::link::camera::camera"]
 
-    box_base = static_frames["box_copy_3"]
-    box = static_frames["box_copy_3::box_link"]
+    box0 = static_frames["box_copy_0::box_link"]
+    box1 = static_frames["box_copy_1::box_link"]
+    box2 = static_frames["box_copy_2::box_link"]
+    box3 = static_frames["box_copy_3::box_link"]
+
+    center = np.array([0, 0, 0])
+
+    result = box0.transform(center, px_space)
+    expected = np.array([1020.82067749, 734.8918789])
+    assert np.allclose(result, expected)
+
+    result = box1.transform(center, px_space)
+    expected = np.array([992.80649538, 968.49419778])
+    assert np.allclose(result, expected)
+
+    result = box2.transform(center, px_space)
+    expected = np.array([838.7474601, 835.07845297])
+    assert np.allclose(result, expected)
+
+    result = box3.transform(center, px_space)
+    expected = np.array([884.74738832, 1026.83742041])
+    assert np.allclose(result, expected)
+
     vertices = np.array(
         [
             [0.025, 0.025, 0.025],  # 0
@@ -561,43 +579,62 @@ def test_four_goals():
         ]
     )
 
-    edges = [
-        (0, 1),
-        (0, 2),
-        (0, 4),
-        (1, 3),
-        (1, 6),
-        (2, 3),
-        (2, 5),
-        (3, 7),
-        (4, 5),
-        (4, 6),
-        (5, 7),
-        (6, 7),
-    ]
+    result = box0.transform(vertices, px_space)
+    expected = np.array(
+        [
+            [978.18175552, 767.08033062],
+            [1012.11134805, 759.70657528],
+            [1029.06133727, 769.14839751],
+            [1064.56165032, 761.93590852],
+            [978.23390215, 708.56146282],
+            [1029.11592056, 711.25700098],
+            [1012.16761173, 698.9209838],
+            [1064.62049417, 701.82705878],
+        ]
+    )
+    assert np.allclose(result, expected)
 
-    center = np.array([0, 0, 0])
+    result = box1.transform(vertices, px_space)
+    expected = np.array(
+        [
+            [951.81098295, 996.71126484],
+            [983.69175102, 998.18248457],
+            [1001.44940597, 996.32944756],
+            [1034.82841433, 997.7706284],
+            [951.86003774, 939.9670349],
+            [1001.5007861, 940.17540062],
+            [983.74455559, 939.30942781],
+            [1034.88367886, 939.53262033],
+        ]
+    )
+    assert np.allclose(result, expected)
 
-    from matplotlib.patches import Circle
-    import matplotlib.pyplot as plt
-    import imageio as iio
+    result = box2.transform(vertices, px_space)
+    expected = np.array(
+        [
+            [806.40774548, 859.888948],
+            [828.17240135, 856.87310206],
+            [848.88202459, 860.753543],
+            [871.75365298, 857.79101721],
+            [806.44144929, 812.84770527],
+            [848.91745204, 814.11862562],
+            [828.20822016, 808.37815077],
+            [871.79128351, 809.72777729],
+        ]
+    )
+    assert np.allclose(result, expected)
 
-    img = iio.imread("front_view.png")
-    _, ax = plt.subplots(1)
-    ax.imshow(img)
-    corner_px = box.transform(vertices, px_space)
-    distance = list()
-    for idx_a, idx_b in edges:
-        x = np.linspace(corner_px[idx_a, 1], corner_px[idx_b, 1], 100)
-        y = np.linspace(corner_px[idx_a, 0], corner_px[idx_b, 0], 100)
-        ax.plot(x, y, "blue")
-        distance.append(np.linalg.norm(y - x))
-
-    # ax.scatter(corner_px[:, 1], corner_px[:, 0], 10)
-    ax.add_patch(Circle(box.transform(center, px_space)[::-1], radius=3, color="red"))
-
-    # centered_corner_px = cam_space.transform(vertices+np.array([0.5, 0, 0]), px_space)
-    # ax.scatter(centered_corner_px[:, 1], centered_corner_px[:, 0], 10)
-    plt.show()
-
-    print("")
+    result = box3.transform(vertices, px_space)
+    expected = np.array(
+        [
+            [849.89096928, 1051.01033953],
+            [874.47255373, 1054.08402528],
+            [894.5646881, 1050.17626586],
+            [920.36810868, 1053.19371029],
+            [849.92896277, 1001.07476015],
+            [894.60458206, 1000.69830731],
+            [874.51308589, 1002.50722699],
+            [920.41064267, 1002.10496116],
+        ]
+    )
+    assert np.allclose(result, expected)
