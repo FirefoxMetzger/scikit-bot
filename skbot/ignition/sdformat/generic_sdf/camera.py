@@ -671,7 +671,7 @@ class Camera(ElementBase):
                 Focal length of the optical system. Note: It's not a focal
                 length of the lens in a common sense! This value is ignored if
                 'scale_to_fov' is set to true. Default: ``1``.
-            fun : str 
+            fun : str
                 The non-linear element to use. Possible values are 'sin', 'tan'
                 and 'id'. Default: ``tan``.
             sdf_version : str
@@ -687,7 +687,7 @@ class Camera(ElementBase):
                 See ``Parameters`` section.
             f : float
                 See ``Parameters`` section.
-            fun : str 
+            fun : str
                 See ``Parameters`` section.
 
             """
@@ -721,7 +721,7 @@ class Camera(ElementBase):
                 )
 
         class Intrinsics(ElementBase):
-            """ Custom projection matrix.
+            """Custom projection matrix.
 
             Camera intrinsic parameters for setting a custom perspective
             projection matrix (cannot be used with WideAngleCamera since this
