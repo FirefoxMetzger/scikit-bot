@@ -2,13 +2,13 @@ import pytest
 from pathlib import Path
 import numpy as np
 from itertools import chain
-import warnings
 
 import skbot.ignition as ign
 import skbot.transform as tf
 from skbot.ignition.sdformat.generic_sdf.base import ElementBase, Pose
 from skbot.ignition.sdformat.generic_sdf.frame import Frame
 from skbot.ignition.sdformat.generic_sdf.joint import Joint
+
 
 pytestmark = pytest.mark.filterwarnings("ignore::UserWarning", "ignore::DeprecationWarning")
 
@@ -26,39 +26,8 @@ def assert_recursive(tree, assert_fn):
                 assert_recursive(el2, assert_fn)
 
 
-def test_v18_parsing(v18_worlds):
-    try:
-        frame = ign.sdformat.to_frame_graph(v18_worlds)
-    except NotImplementedError:
-        pytest.skip("Elements not implemented yet.")
-
-    if isinstance(frame, list):
-        assert len(frame) > 1
-        for el in frame:
-            assert isinstance(el, tf.Frame)
-    else:
-        assert isinstance(frame, tf.Frame)
-
-
-def test_v17_parsing(v17_sdf):
-    try:
-        frame = ign.sdformat.to_frame_graph(v17_sdf)
-    except NotImplementedError:
-        pytest.skip("Elements not implemented yet.")
-
-    if isinstance(frame, list):
-        assert len(frame) > 1
-        for el in frame:
-            assert isinstance(el, tf.Frame)
-    else:
-        assert isinstance(frame, tf.Frame)
-
-
-def test_v15_parsing(v15_sdf):
-    try:
-        frame = ign.sdformat.to_frame_graph(v15_sdf)
-    except NotImplementedError:
-        pytest.skip("Elements not implemented yet.")
+def test_parsing(verifiable_sdf_string):
+    frame = ign.sdformat.to_frame_graph(verifiable_sdf_string)
 
     if isinstance(frame, list):
         assert len(frame) > 1
@@ -163,6 +132,15 @@ def test_unwrapping():
     model_file = Path(__file__).parent / "sdf" / "v18" / "world_with_state.sdf"
     sdf_string = model_file.read_text()
 
+    frame = ign.sdformat.to_frame_graph(sdf_string)
+
+    assert isinstance(frame, tf.Frame)
+
+
+def test_wrapped():
+    model_file = Path(__file__).parent / "sdf" / "v18" / "world_with_state.sdf"
+    sdf_string = model_file.read_text()
+
     frame_list = ign.sdformat.to_frame_graph(sdf_string, unwrap=False)
 
     assert isinstance(frame_list, list)
@@ -170,11 +148,8 @@ def test_unwrapping():
         assert isinstance(el, tf.Frame)
 
 
-def test_pose_relative_to_leaking():
-    model_file = Path(__file__).parent / "sdf" / "v18" / "world_with_state.sdf"
-    sdf_string = model_file.read_text()
-
-    generic_sdf = ign.sdformat.loads_generic(sdf_string)
+def test_pose_relative_to_leaking(verifiable_sdf_string):
+    generic_sdf = ign.sdformat.loads_generic(verifiable_sdf_string)
 
     def pose_has_relative_to(element):
         if isinstance(element, Pose):
@@ -184,11 +159,8 @@ def test_pose_relative_to_leaking():
     assert_recursive(generic_sdf, pose_has_relative_to)
 
 
-def test_frame_attached_to_leaking():
-    model_file = Path(__file__).parent / "sdf" / "v18" / "world_with_state.sdf"
-    sdf_string = model_file.read_text()
-
-    generic_sdf = ign.sdformat.loads_generic(sdf_string)
+def test_frame_attached_to_leaking(verifiable_sdf_string):
+    generic_sdf = ign.sdformat.loads_generic(verifiable_sdf_string)
 
     def pose_has_relative_to(element):
         if isinstance(element, Frame):
@@ -226,6 +198,15 @@ def test_nd_panda():
     root_frame = ign.sdformat.to_frame_graph(sdf_string, shape=(5, 3))
 
     ## todo: assert that constructed shape is (5, 3)
+
+
+def test_double_pendulum():
+    model_file = (
+        Path(__file__).parent / "sdf" / "robots" / "double_pendulum" / "model.sdf"
+    )
+    sdf_string = model_file.read_text()
+
+    root_frame = ign.sdformat.to_frame_graph(sdf_string)
 
 
 def test_must_be_base_link():
@@ -390,15 +371,6 @@ def test_poses_relative_to_dynamic():
 
     # I can not get ground truth for this test case :(
     # assert np.allclose(vector_box, (0, 1, 0))
-
-
-def test_double_pendulum():
-    model_file = (
-        Path(__file__).parent / "sdf" / "robots" / "double_pendulum" / "model.sdf"
-    )
-    sdf_string = model_file.read_text()
-
-    root_frame = ign.sdformat.to_frame_graph(sdf_string)
 
 
 def test_perspective_transform_straight():
