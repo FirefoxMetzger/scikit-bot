@@ -328,14 +328,7 @@ class Model(ElementBase):
 
         for el in chain(self.frames, self.links, self.joints):
             el.to_static_graph(declared_frames, seed=seed, shape=shape, axis=axis)
-
-            link = el.pose.to_tf_link()
-            parent_name = el.pose.relative_to
-            child_name = el.name
-
-            parent = declared_frames[parent_name]
-            child = declared_frames[child_name]
-            link(child, parent)
+            el.pose.to_static_graph(declared_frames, el.name, shape=shape, axis=axis)
 
         return declared_frames["__model__"]
 
