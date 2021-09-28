@@ -243,11 +243,9 @@ def invalid_sdf_string(request):
         "sdformat/model_multi_nested_model.sdf",
         "sdformat/model_nested_frame_attached_to.sdf",
         "sdformat/model_nested_model_relative_to.sdf",
-
         # potentially faulty. Tracking Issue:
         # https://github.com/ignitionrobotics/sdformat/issues/718
         # "sdformat/model_nested_static_model.sdf",
-        
         "sdformat/model_relative_to_nested_reference.sdf",
         "sdformat/model_with_placement_frame_attribute.sdf",
         "sdformat/nested_canonical_link.sdf",
@@ -255,11 +253,9 @@ def invalid_sdf_string(request):
         "sdformat/nested_model_cross_references.sdf",
         "sdformat/nested_model.sdf",
         "sdformat/root_duplicate_models.sdf",
-
         # potentially faulty SDF. Tracking Issue
         # https://github.com/ignitionrobotics/sdformat/issues/718
         # "sdformat/root_multiple_models.sdf",
-        
         "sdformat/scene_with_sky.sdf",
         "sdformat/sensors.sdf",
         "sdformat/shapes_world.sdf",

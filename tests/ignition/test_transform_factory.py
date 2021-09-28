@@ -10,7 +10,10 @@ from skbot.ignition.sdformat.generic_sdf.frame import Frame
 from skbot.ignition.sdformat.generic_sdf.joint import Joint
 
 
-pytestmark = pytest.mark.filterwarnings("ignore::UserWarning", "ignore::DeprecationWarning")
+pytestmark = pytest.mark.filterwarnings(
+    "ignore::UserWarning", "ignore::DeprecationWarning"
+)
+
 
 def assert_recursive(tree, assert_fn):
     assert_fn(tree)
