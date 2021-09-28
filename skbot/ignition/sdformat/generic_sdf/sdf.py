@@ -215,7 +215,9 @@ class Sdf(ElementBase):
                 version=version,
             )
 
-    def declared_frames(self) -> Dict[str, Union[List[Dict[str, tf.Frame]], Dict[str, tf.Frame]]]:
+    def declared_frames(
+        self,
+    ) -> Dict[str, Union[List[Dict[str, tf.Frame]], Dict[str, tf.Frame]]]:
         declared_frames = {
             "worlds": [x.declared_frames() for x in self.worlds],
             "models": [x.declared_frames() for x in self._models],
@@ -239,7 +241,7 @@ class Sdf(ElementBase):
 
         if "worlds" not in declared_frames:
             declared_frames["worlds"] = [x.declared_frames() for x in self.worlds]
-        
+
         if "models" not in declared_frames:
             declared_frames["models"] = [x.declared_frames() for x in self._models]
 
@@ -249,17 +251,19 @@ class Sdf(ElementBase):
         }
 
         for idx, world in enumerate(self.worlds):
-            try: 
+            try:
                 static_frames = declared_frames["worlds"][idx]
             except IndexError:
                 declared_frames["worlds"].append(world.declared_frames())
                 static_frames = declared_frames["worlds"][idx]
 
-            root = world.to_static_graph(static_frames, seed=seed, shape=shape, axis=axis)
+            root = world.to_static_graph(
+                static_frames, seed=seed, shape=shape, axis=axis
+            )
             graphs["worlds"].append(root)
 
         for idx, model in enumerate(self._models):
-            try: 
+            try:
                 static_frames = declared_frames["models"][idx]
             except IndexError:
                 declared_frames["models"].append(model.declared_frames())
@@ -268,11 +272,14 @@ class Sdf(ElementBase):
             if "world" not in static_frames:
                 static_frames["world"] = tf.Frame(3, name="world")
 
-            root = model.to_static_graph(static_frames, seed=seed, shape=shape, axis=axis)
+            root = model.to_static_graph(
+                static_frames, seed=seed, shape=shape, axis=axis
+            )
             graphs["models"].append(root)
 
-            model.pose.to_static_graph(static_frames, "__model__", shape=shape, axis=axis)
-
+            model.pose.to_static_graph(
+                static_frames, "__model__", shape=shape, axis=axis
+            )
 
         return graphs
 

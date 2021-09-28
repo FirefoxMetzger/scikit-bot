@@ -412,7 +412,9 @@ class Sensor(ElementBase):
             )
 
         for frame in self._frames:
-            frame.pose.to_static_graph(declared_frames, f"{sensor_frame}::{frame.name}", shape=shape, axis=axis)
+            frame.pose.to_static_graph(
+                declared_frames, f"{sensor_frame}::{frame.name}", shape=shape, axis=axis
+            )
 
         return declared_frames[sensor_frame]
 

@@ -222,7 +222,12 @@ class Camera(ElementBase):
         projection(parent, child)
 
         for frame in self._frames:
-            frame.pose.to_static_graph(declared_frames, sensor_frame + f"::{frame.name}", shape=shape, axis=axis)
+            frame.pose.to_static_graph(
+                declared_frames,
+                sensor_frame + f"::{frame.name}",
+                shape=shape,
+                axis=axis,
+            )
 
         return declared_frames[sensor_frame + f"::{self.name}"]
 
