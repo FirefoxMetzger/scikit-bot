@@ -105,18 +105,11 @@ def test_static_graph(verifiable_sdf_string):
                     ) from None
 
 
-def test_dynamic_graph():
-    model_file = Path(__file__).parent / "sdf" / "v18" / "world_with_state.sdf"
-    sdf_string = model_file.read_text()
+def test_dynamic_graph(verifiable_sdf_string):
+    generic_sdf = ign.sdformat.loads_generic(verifiable_sdf_string)
 
-    generic_sdf = ign.sdformat.loads_generic(sdf_string)
-    world_sdf = generic_sdf.worlds[0]
-
-    # static_frames = world_sdf.declared_frames()
-    # world_frame = world_sdf.to_static_graph(static_frames)
-
-    all_frames = world_sdf.declared_frames()
-    dynamic_world_frame = world_sdf.to_dynamic_graph(all_frames)
+    all_frames = generic_sdf.declared_frames()
+    dynamic_world_frame = generic_sdf.to_dynamic_graph(all_frames)
 
 
 def test_unwrapping():

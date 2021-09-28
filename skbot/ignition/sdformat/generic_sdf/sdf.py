@@ -230,21 +230,12 @@ class Sdf(ElementBase):
 
     def to_static_graph(
         self,
-        declared_frames: Dict[str, List[tf.Frame]] = None,
+        declared_frames: Dict[str, List[tf.Frame]],
         *,
         seed: int = None,
         shape: Tuple[int] = (3,),
         axis: int = -1,
     ) -> Dict[str, List[tf.Frame]]:
-        if declared_frames is None:
-            declared_frames = dict()
-
-        if "worlds" not in declared_frames:
-            declared_frames["worlds"] = [x.declared_frames() for x in self.worlds]
-
-        if "models" not in declared_frames:
-            declared_frames["models"] = [x.declared_frames() for x in self._models]
-
         graphs = {
             "worlds": list(),
             "models": list(),
@@ -254,8 +245,7 @@ class Sdf(ElementBase):
             try:
                 static_frames = declared_frames["worlds"][idx]
             except IndexError:
-                declared_frames["worlds"].append(world.declared_frames())
-                static_frames = declared_frames["worlds"][idx]
+                break
 
             root = world.to_static_graph(
                 static_frames, seed=seed, shape=shape, axis=axis
@@ -266,8 +256,7 @@ class Sdf(ElementBase):
             try:
                 static_frames = declared_frames["models"][idx]
             except IndexError:
-                declared_frames["models"].append(model.declared_frames())
-                static_frames = declared_frames["models"][idx]
+                break
 
             if "world" not in static_frames:
                 static_frames["world"] = tf.Frame(3, name="world")
@@ -285,22 +274,43 @@ class Sdf(ElementBase):
 
     def to_dynamic_graph(
         self,
-        declared_frames: Dict[str, tf.Frame],
+        declared_frames: Dict[str, List[tf.Frame]],
         *,
         seed: int = None,
         shape: Tuple[int] = (3,),
         axis: int = -1,
         apply_state: bool = True,
-        _scaffolding: Dict[str, tf.Frame] = None,
-    ) -> List[tf.Frame]:
-        return [
-            x.to_dynamic_graph(
-                declared_frames,
-                seed=seed,
-                shape=shape,
-                axis=axis,
-                apply_state=apply_state,
-                _scaffolding=_scaffolding,
+    ) -> Dict[str, List[tf.Frame]]:
+        graphs = {
+            "worlds": list(),
+            "models": list(),
+        }
+        scaffold = self.declared_frames()
+        self.to_static_graph(scaffold, seed=seed, shape=shape, axis=axis)
+
+        for idx, world in enumerate(self.worlds):
+            try:
+                frames = declared_frames["worlds"][idx]
+            except IndexError:
+                break
+
+            root = world.to_dynamic_graph(frames, seed=seed, shape=shape, axis=axis)
+            graphs["worlds"].append(root)
+
+        for idx, model in enumerate(self._models):
+            try:
+                frames = declared_frames["models"][idx]
+            except IndexError:
+                break
+
+            static_frames = scaffold["models"][idx]
+
+            if "world" not in frames:
+                frames["world"] = tf.Frame(3, name="world")
+
+            root = model.to_dynamic_graph(
+                frames, seed=seed, shape=shape, axis=axis, _scaffolding=static_frames
             )
-            for x in self.worlds
-        ]
+            graphs["models"].append(root)
+
+        return graphs

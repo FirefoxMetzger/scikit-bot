@@ -1,5 +1,5 @@
 from typing import Union, List, Tuple, Dict
-import warnings
+from itertools import chain
 
 from ... import transform as tf
 from .load_as_generic import loads_generic
@@ -85,32 +85,17 @@ def to_frame_graph(
     """
 
     root = loads_generic(sdf)
-    graphs = list()
-    elements = [*root.worlds]
+    declared_frames = root.declared_frames()
+    dynamic_graphs = root.to_dynamic_graph(declared_frames, shape=shape, axis=axis)
 
     if insert_world_frame:
-        if root.actor is not None:
-            elements.append(root.actor)
+        candidates = dynamic_graphs.values()
+    else:
+        candidates = dynamic_graphs["worlds"]
 
-        if root.model is not None:
-            elements.append(root.model)
-
-        if root.light is not None:
-            elements.append(root.light)
-
-    for el in elements:
-        frames = el.declared_frames()
-        scaffold_frames = el.declared_frames()
-
-        if insert_world_frame and "world" not in frames:
-            frames["world"] = tf.Frame(3, name="world")
-            scaffold_frames["world"] = tf.Frame(3, name="world")
-
-        el.to_static_graph(scaffold_frames, shape=shape, axis=axis)
-        frame_graph_root = el.to_dynamic_graph(
-            frames, shape=shape, axis=axis, _scaffolding=scaffold_frames
-        )
-        graphs.append(frame_graph_root)
+    graphs = list()
+    for x in chain([x for x in candidates]):
+        graphs.extend(x)
 
     if unwrap and len(graphs) == 1:
         return graphs[0]

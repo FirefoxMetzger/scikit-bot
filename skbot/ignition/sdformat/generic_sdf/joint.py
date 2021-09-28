@@ -450,7 +450,10 @@ class Joint(ElementBase):
         child_frame = scaffolding[self.child]
         joint_axis1 = expressed_frame.transform(self.axis.xyz.value, child_frame)
 
-        if self.type == "revolute":
+        if self.type == "continuous":
+            warnings.warn("Hinge joints have not been added yet.")
+            link = tf.Translation((0, 0, 0))
+        elif self.type == "revolute":
             angle = np.clip(0, self.axis.limit.lower, self.axis.limit.upper)
             link = tf.RotationalJoint(
                 joint_axis1,
