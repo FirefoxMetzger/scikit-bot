@@ -253,6 +253,15 @@ class Link(ElementBase):
                 if frame.attached_to is None:
                     frame.attached_to = f"{self.name}::{sensor.name}"
 
+            for frame in sensor._frames:
+                if frame.pose.relative_to is None:
+                    frame.pose.relative_to = (
+                        f"{self.name}::{sensor.name}"
+                    )
+
+                if frame.attached_to is None:
+                    frame.attached_to = f"{self.name}::{sensor.name}"
+
     @property
     def origin(self):
         warnings.warn(
