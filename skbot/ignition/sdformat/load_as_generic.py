@@ -7,8 +7,10 @@ def loads_generic(sdf: str):
 
     The returned object tree is oppinionated. In addition to converting the
     tree, it does the following:
+
     - Some SDFormat elements are ignored/not implemented (contributions welcome!)
     - its variable names differ from SDFormat
+
         - If an element may have multiple children of the same kind, they
           corresponding attribute uses plural instead of singular, e.g.
           ``models`` instead of ``model``.
@@ -16,6 +18,7 @@ def loads_generic(sdf: str):
           they are converted into the name used in the most recent SDFormat
           version. Old names are still available via a @property and will raise
           a depreciation warning.
+
     - it converts all vectors to numpy arrays
     - it resolves includes, removes them, and inserts the included element
     - it appends __model__ to frame references where necessary
