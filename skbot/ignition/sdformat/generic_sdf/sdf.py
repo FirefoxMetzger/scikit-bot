@@ -103,17 +103,6 @@ class Sdf(ElementBase):
         self._lights: List[Light] = []
 
         if self.sdf_version == "1.8":
-            if worlds is not None:
-                raise ValueError(
-                    "`Sdf` does not support the `worlds` kwarg for SDFormat v1.8. Use `payload` instead."
-                )
-            if actors is not None:
-                raise ParseError("`Sdf` only supports a single actor in SDFormat v1.8.")
-            if models is not None:
-                raise ParseError("`Sdf` only supports a single model in SDFormat v1.8.")
-            if lights is not None:
-                raise ParseError("`Sdf` only supports a single light in SDFormat v1.8.")
-
             if isinstance(payload, list) and all(
                 [isinstance(x, World) for x in payload]
             ):
@@ -127,29 +116,16 @@ class Sdf(ElementBase):
             else:
                 raise ParseError("Invalid `Sdf` element.")
         elif version in ["1.7", "1.6", "1.5", "1.4", "1.3"]:
-            if payload is not None:
-                raise ParseError(
-                    "`Sdf` does not support `payload` prior to SDFormat v1.8."
-                )
-            if worlds is None:
-                raise ValueError("`Sdf` must specify `worlds` prior to SDFormat v1.8.")
-            if actors is None:
-                raise ValueError("`Sdf` must specify `actors` prior to SDFormat v1.8.")
-            if models is None:
-                raise ValueError("`Sdf` must specify `models` prior to SDFormat v1.8.")
-            if lights is None:
-                raise ValueError("`Sdf` must specify `lights` prior to SDFormat v1.8.")
-
-            self.worlds = worlds
-            self._models = models
-            self._lights = lights
-            self._actors = actors
+            self.worlds.extend(worlds)
+            self._models.extend(models)
+            self._lights.extend(lights)
+            self._actors.extend(actors)
         else:
             raise ParseError("`Sdf` does not exist prior to SDFormat v1.3.")
 
-    # @property
-    # def worlds(self) -> List[World]:
-    #     return self._worlds
+        for model in self._models:
+            if model.pose.relative_to is None:
+                model.pose.relative_to = "world"
 
     @property
     def actor(self) -> Actor:

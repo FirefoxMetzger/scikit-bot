@@ -200,14 +200,13 @@ class Model(ElementBase):
             self.pose = Pose(sdf_version=sdf_version)
         else:
             self.pose = pose
+        self._origin.pose = self.pose
 
         self.joints = joints
         self.plugins = plugins
         self.grippers = grippers
         self.models = [] if models is None else models
         self.enable_wind = enable_wind
-
-        self._origin.pose = self.pose
 
         for include in includes:
             fragment = include.resolve()
@@ -218,14 +217,15 @@ class Model(ElementBase):
 
         if canonical_link == "":
             canonical_link = None
-        if canonical_link is not None:
+        if self.static:
+            self.canonical_link = "world"
+        elif canonical_link is not None:
             self.canonical_link = canonical_link
         elif len(self.links) > 0:
             self.canonical_link = links[0].name
         elif len(self.models) > 0:
             model_name = self.models[0].name
-            model_canonical_link = self.models[0].canonical_link
-            self.canonical_link = f"{model_name}::{model_canonical_link}"
+            self.canonical_link = f"{model_name}"
         else:
             raise ValueError(
                 "`Model` must specify `canonical_link` or have at least one `link`."

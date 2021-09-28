@@ -119,9 +119,10 @@ class Include(ElementBase):
                 model.static = self.static
             if self.pose is not None:
                 model.pose = self.pose
+                model._origin.pose = self.pose
             if self.placement_frame is not None:
-                model.placement_frame = (self.placement_frame,)
-            # model.plugins.extend(self.plugins)
+                model.placement_frame = self.placement_frame
+            model.plugins.extend(self.plugins)
             return model
         elif el == "actor":
             actor = Actor.from_specific(fragment, version=specific_sdf.version)
