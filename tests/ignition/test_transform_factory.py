@@ -2,6 +2,7 @@ import pytest
 from pathlib import Path
 import numpy as np
 from itertools import chain
+import warnings
 
 import skbot.ignition as ign
 import skbot.transform as tf
@@ -9,12 +10,14 @@ from skbot.ignition.sdformat.generic_sdf.base import ElementBase, Pose
 from skbot.ignition.sdformat.generic_sdf.frame import Frame
 from skbot.ignition.sdformat.generic_sdf.joint import Joint
 
+pytestmark = pytest.mark.filterwarnings("ignore::UserWarning", "ignore::DeprecationWarning")
 
 def assert_recursive(tree, assert_fn):
     assert_fn(tree)
 
     for el in dir(tree):
         item = getattr(tree, el)
+
         if not isinstance(item, list):
             item = [item]
 
