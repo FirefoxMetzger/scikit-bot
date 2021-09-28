@@ -357,6 +357,22 @@ class Pose(ElementBase):
             ]
         )
 
+    def to_static_graph(
+        self,
+        declared_frames: Dict[str, tf.Frame],
+        child_name: str,
+        *,
+        shape: Tuple,
+        axis: int = -1,
+    ) -> None:
+        parent_name = self.relative_to
+
+        parent = declared_frames[parent_name]
+        child = declared_frames[child_name]
+
+        link = self.to_tf_link()
+        link(child, parent)
+
 
 class PoseBearing(ElementBase):
     def __init__(self, *, pose: Pose = None) -> None:

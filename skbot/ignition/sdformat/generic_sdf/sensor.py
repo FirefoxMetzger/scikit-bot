@@ -380,7 +380,8 @@ class Sensor(ElementBase):
                 declared_frames[f"{self.name}::{name}"] = frame
 
         for frame in self._frames:
-            declared_frames.update(frame.declared_frames())
+            for name, frame in frame.declared_frames().items():
+                declared_frames[f"{self.name}::{name}"] = frame
 
         return declared_frames
 
@@ -393,13 +394,7 @@ class Sensor(ElementBase):
         shape: Tuple,
         axis: int = -1,
     ) -> tf.Frame:
-        parent_name = self.pose.relative_to
-
-        parent = declared_frames[parent_name]
-        child = declared_frames[sensor_frame]
-
-        link = self.pose.to_tf_link()
-        link(child, parent)
+        self.pose.to_static_graph(declared_frames, sensor_frame, shape=shape, axis=axis)
 
         relevant_config = None
         if self.type == "camera":
@@ -415,6 +410,9 @@ class Sensor(ElementBase):
                 shape=shape,
                 axis=axis,
             )
+
+        for frame in self._frames:
+            frame.pose.to_static_graph(declared_frames, f"{sensor_frame}::{frame.name}", shape=shape, axis=axis)
 
         return declared_frames[sensor_frame]
 

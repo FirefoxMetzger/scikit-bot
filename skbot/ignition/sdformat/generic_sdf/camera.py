@@ -207,14 +207,9 @@ class Camera(ElementBase):
         shape: Tuple,
         axis: int = -1,
     ) -> tf.Frame:
-        parent_name = self.pose.relative_to
-        child_name = sensor_frame + f"::{self.name}"
-
-        parent = declared_frames[parent_name]
-        child = declared_frames[child_name]
-
-        link = self.pose.to_tf_link()
-        link(child, parent)
+        self.pose.to_static_graph(
+            declared_frames, sensor_frame + f"::{self.name}", shape=shape, axis=axis
+        )
 
         if self.sdf_version == "1.0":
             hfov = self.horizontal_fov.angle
@@ -225,6 +220,9 @@ class Camera(ElementBase):
         child = declared_frames[sensor_frame + "::pixel_space"]
         projection = FrustumProjection(hfov, (self.image.height, self.image.width))
         projection(parent, child)
+
+        for frame in self._frames:
+            frame.pose.to_static_graph(declared_frames, sensor_frame + f"::{frame.name}", shape=shape, axis=axis)
 
         return declared_frames[sensor_frame + f"::{self.name}"]
 

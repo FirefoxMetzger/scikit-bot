@@ -29,17 +29,6 @@ def assert_recursive(tree, assert_fn):
                 assert_recursive(el2, assert_fn)
 
 
-def test_parsing(verifiable_sdf_string):
-    frame = ign.sdformat.to_frame_graph(verifiable_sdf_string)
-
-    if isinstance(frame, list):
-        assert len(frame) > 1
-        for el in frame:
-            assert isinstance(el, tf.Frame)
-    else:
-        assert isinstance(frame, tf.Frame)
-
-
 def test_static_matches_dynamic():
     model_file = Path(__file__).parent / "sdf" / "v18" / "world_with_state.sdf"
     sdf_string = model_file.read_text()
@@ -97,24 +86,23 @@ def test_declared_frames():
         assert_matching_frames(generic_sdf.light.declared_frames())
 
 
-def test_static_graph():
-    model_file = Path(__file__).parent / "sdf" / "v18" / "world_with_state.sdf"
-    sdf_string = model_file.read_text()
+def test_static_graph(verifiable_sdf_string):
+    generic_sdf = ign.sdformat.loads_generic(verifiable_sdf_string)
+    static_frame_dict = generic_sdf.declared_frames()
+    root_dict = generic_sdf.to_static_graph(static_frame_dict)
 
-    generic_sdf = ign.sdformat.loads_generic(sdf_string)
-    world_sdf = generic_sdf.worlds[0]
-
-    static_frames = world_sdf.declared_frames()
-    world_frame = world_sdf.to_static_graph(static_frames)
-
-    # each frame should be reachable from the root frame
-    for name, frame in static_frames.items():
-        try:
-            tf_chain = world_frame.transform_chain(frame)
-        except RuntimeError:
-            raise AssertionError(
-                "A Frame in the static graph is unreachable."
-            ) from None
+    for key in ["worlds", "models"]:
+        frames = static_frame_dict[key]
+        roots = root_dict[key]
+        for static_frames, root in zip(frames, roots):
+            # each frame should be reachable from the root frame
+            for name, frame in static_frames.items():
+                try:
+                    tf_chain = root.transform_chain(frame)
+                except RuntimeError:
+                    raise AssertionError(
+                        "A Frame in the static graph is unreachable."
+                    ) from None
 
 
 def test_dynamic_graph():
