@@ -19,7 +19,7 @@ extras_require = {
         "matplotlib == 3.4.3",
         "pydata-sphinx-theme == 0.6.3",
         "cachetools == 4.2.2",
-        "sphinx-gallery == 0.9.0",
+        "sphinx-gallery == 0.10.0",
         "xsdata == 21.9",
         "lxml == 4.6.3",
     ],
