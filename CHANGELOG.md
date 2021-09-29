@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.8.1 (2021-09-29)
+### Fix
+* Bump sphinx-gallery from 0.9.0 to 0.10.0 ([#82](https://github.com/FirefoxMetzger/scikit-bot/issues/82)) ([`476d0b7`](https://github.com/FirefoxMetzger/scikit-bot/commit/476d0b745e18c42f9815b12e68cafca10cddb36e))
+
 ## v0.8.0 (2021-09-29)
 ### Feature
 * Version agnostic SDF bindings ([#80](https://github.com/FirefoxMetzger/scikit-bot/issues/80)) ([`e1ec526`](https://github.com/FirefoxMetzger/scikit-bot/commit/e1ec526acdfccd1b2d928531db43591d8dfefd75))
