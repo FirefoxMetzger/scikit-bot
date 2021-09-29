@@ -110,6 +110,7 @@ def test_ccd_linesearch_maxiter(double_pendulum):
             (0, 0, 0), root_pos, tool_frame, base_frame, joints, line_search_maxiter=1
         )
 
+
 def test_multi_frame_ccd(panda):
     base_frame: tf.Frame
     joints: List[joint_types]
@@ -131,7 +132,7 @@ def test_multi_frame_ccd(panda):
         [base_frame, base_frame],
         joints,
         metric=lambda x, y: np.linalg.norm(x - y, ord=4),
-        weights=[1, 0.7]
+        weights=[1, 0.7],
     )
     final_pos = tool_frame.transform((0, 0, 0), base_frame)
 
