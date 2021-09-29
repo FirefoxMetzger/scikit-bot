@@ -22,6 +22,8 @@ def panda():
         if isinstance(link, (tf.RotationalJoint, tf.PrismaticJoint)):
             joints.append(link)
 
+    for value, joint in zip([0, -0.785,0, -2.356, 0, 1.571, 0.785], reversed(joints)):
+        joint.param = value
     return base_frame, joints
 
 

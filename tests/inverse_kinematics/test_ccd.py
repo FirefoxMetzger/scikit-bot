@@ -109,3 +109,31 @@ def test_ccd_linesearch_maxiter(double_pendulum):
         ik.ccd(
             (0, 0, 0), root_pos, tool_frame, base_frame, joints, line_search_maxiter=1
         )
+
+def test_multi_frame_ccd(panda):
+    base_frame: tf.Frame
+    joints: List[joint_types]
+    base_frame, joints = panda
+    tool_frame = base_frame.find_frame(".../panda_link8")
+
+    root_pos = tool_frame.transform((0, 0, 0), base_frame)
+    root_ori = tool_frame.transform((1, 0, 0), base_frame)
+    expected = np.zeros(len(joints))
+
+    for idx, joint in enumerate(joints):
+        expected[idx] = joint.param
+        joint.param = (joint.upper_limit - joint.lower_limit) / 2
+
+    angles = ik.ccd(
+        [(0, 0, 0), (1, 0, 0)],
+        [root_pos, root_ori],
+        [tool_frame, tool_frame],
+        [base_frame, base_frame],
+        joints,
+        metric=lambda x, y: np.linalg.norm(x - y, ord=4),
+        weights=[1, 0.7]
+    )
+    final_pos = tool_frame.transform((0, 0, 0), base_frame)
+
+    assert np.allclose(final_pos, root_pos, atol=0.001)
+    # assert np.allclose(angles, expected)
