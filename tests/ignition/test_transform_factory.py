@@ -597,3 +597,12 @@ def test_four_goals():
         ]
     )
     assert np.allclose(result, expected)
+
+def test_insert_world():
+    model_file = (
+        Path(__file__).parent / "sdf" / "robots" / "double_pendulum" / "model.sdf"
+    )
+    sdf_string = model_file.read_text()
+
+    with pytest.raises(ValueError):
+        ign.sdformat.to_frame_graph(sdf_string, insert_world_frame=False)

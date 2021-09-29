@@ -91,11 +91,14 @@ def to_frame_graph(
     if insert_world_frame:
         candidates = dynamic_graphs.values()
     else:
-        candidates = dynamic_graphs["worlds"]
+        candidates = [dynamic_graphs["worlds"]]
 
     graphs = list()
     for x in chain([x for x in candidates]):
         graphs.extend(x)
+
+    if len(graphs) == 0:
+        raise ValueError("No graphs could be loaded from the provided SDF.")
 
     if unwrap and len(graphs) == 1:
         return graphs[0]
