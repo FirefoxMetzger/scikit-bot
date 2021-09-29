@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.8.0 (2021-09-29)
+### Feature
+* Version agnostic SDF bindings ([#80](https://github.com/FirefoxMetzger/scikit-bot/issues/80)) ([`e1ec526`](https://github.com/FirefoxMetzger/scikit-bot/commit/e1ec526acdfccd1b2d928531db43591d8dfefd75))
+
 ## v0.7.6 (2021-09-22)
 ### Fix
 * Add inverse of inverse link ([#79](https://github.com/FirefoxMetzger/scikit-bot/issues/79)) ([`328d7e8`](https://github.com/FirefoxMetzger/scikit-bot/commit/328d7e845ea1cd98e98213cdea6fb2db8691eeb7))
