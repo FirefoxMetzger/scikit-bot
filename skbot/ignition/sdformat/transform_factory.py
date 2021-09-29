@@ -1,27 +1,50 @@
-from typing import Union, List, Tuple
+from typing import Union, List, Tuple, Dict
+from itertools import chain
 
 from ... import transform as tf
-from ._transform_factory.scopes import LightScope, ModelScope, Scope, WorldScope
-from ._transform_factory.factory import transform_factory
+from .load_as_generic import loads_generic
+from .generic_sdf.world import World
 
 
 def to_frame_graph(
-    sdf: str, *, unwrap: bool = True, shape: Tuple[int] = (3,), axis: int = -1
+    sdf: str,
+    *,
+    unwrap: bool = True,
+    insert_world_frame: bool = True,
+    shape: Tuple[int] = (3,),
+    axis: int = -1
 ) -> Union[tf.Frame, List[tf.Frame]]:
     """Create a frame graph from a sdformat string.
 
+    .. versionadded:: 0.8.0
+        Added the ability to limit loading to worlds
     .. versionadded:: 0.6.0
         This function has been added to the library.
 
     Parameters
     ----------
-    sdf: str
-        A string containing SDFormat XML.
+    sdf : str
+        A SDFormat XML string describing one (or many) worlds.
     unwrap : bool
         If True (default) and the sdf only contains a single light, model, or
         world element return that element's frame. If the sdf contains multiple
         lights, models, or worlds a list of root frames is returned. If False,
         always return a list of frames.
+    insert_world_frame : bool
+        If ``False``, creation of frame graphs is restricted to world elements
+        contained in the provided SDF. This is because non-world elements
+        (simulation fragments) may refer to a ``world`` frame that is defined
+        outside of the provided SDF and hence the full graph can't be
+        determined. As a consequence, any ``model``, ``actor``, or ``light``
+        elements are ignored.
+
+        If ``True`` (default), this function will insert a ``world`` frame into
+        the graph of each simulation fragment (non-world element) to allow
+        smooth construction of the frame graph.
+
+        The default is ``True``; however, it will change to ``False`` starting
+        with scikit-bot v1.0.
+
     shape : tuple
         A tuple describing the shape of elements that the resulting graph should
         transform. This can be used to add batch dimensions to the graph, for
@@ -61,23 +84,23 @@ def to_frame_graph(
         link = child_frame.transform_chain(child_frame)[0]
     """
 
-    scope_list: List[Scope] = transform_factory(sdf)
-    frame_list: List[tf.Frame] = list()
-    for scope in scope_list:
-        scope.build_scaffolding()
-        scope.resolve_links(shape=shape, axis=axis)
+    root = loads_generic(sdf)
+    declared_frames = root.declared_frames()
+    dynamic_graphs = root.to_dynamic_graph(declared_frames, shape=shape, axis=axis)
 
-        if isinstance(scope, WorldScope):
-            frame_list.append(scope.get("world", scaffolding=False))
-        elif isinstance(scope, ModelScope):
-            frame = scope.get(scope.canonical_link, scaffolding=False)
-            frame_list.append(frame)
-        else:
-            scope: LightScope
-            frame = scope.get(scope.name, scaffolding=False)
-            frame_list.append(frame)
-
-    if unwrap and len(frame_list) == 1:
-        return frame_list[0]
+    if insert_world_frame:
+        candidates = dynamic_graphs.values()
     else:
-        return frame_list
+        candidates = [dynamic_graphs["worlds"]]
+
+    graphs = list()
+    for x in chain([x for x in candidates]):
+        graphs.extend(x)
+
+    if len(graphs) == 0:
+        raise ValueError("No graphs could be loaded from the provided SDF.")
+
+    if unwrap and len(graphs) == 1:
+        return graphs[0]
+    else:
+        return graphs

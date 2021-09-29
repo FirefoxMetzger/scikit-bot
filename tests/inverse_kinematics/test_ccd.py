@@ -91,7 +91,7 @@ def test_ccd_maxiter(double_pendulum):
         joint.param = (joint.upper_limit - joint.lower_limit) / 2
 
     with pytest.raises(RuntimeError):
-        ik.ccd((0, 0, 0), root_pos, tool_frame, base_frame, joints, maxiter=2)
+        ik.ccd((0, 0, 0), root_pos, tool_frame, base_frame, joints, maxiter=0)
 
 
 def test_ccd_linesearch_maxiter(double_pendulum):

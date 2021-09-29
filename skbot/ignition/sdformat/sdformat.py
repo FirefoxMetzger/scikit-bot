@@ -11,6 +11,7 @@ import io
 from typing import Dict, Callable, Type, TypeVar
 import importlib
 import warnings
+from .exceptions import ParseError
 
 
 T = TypeVar("T")
@@ -30,10 +31,6 @@ _parser_roots = {
 # recommended to reuse the same parser context
 # see: https://xsdata.readthedocs.io/en/latest/xml.html
 xml_ctx = XmlContext()
-
-
-class ParseError(XSDataParserError):
-    pass
 
 
 def get_version(sdf: str) -> str:

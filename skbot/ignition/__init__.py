@@ -57,6 +57,7 @@ Functions
     skbot.ignition.sdformat.dumps
     skbot.ignition.sdformat.get_version
     skbot.ignition.sdformat.loads
+    skbot.ignition.sdformat.loads_generic
     skbot.ignition.sdformat.to_frame_graph
 
 

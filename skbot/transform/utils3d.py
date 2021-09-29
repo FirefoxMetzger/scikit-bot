@@ -212,9 +212,10 @@ class FrustumProjection(Link):
         image_shape = np.asarray(image_shape)
 
         aspect_ratio = image_shape[1] / image_shape[0]
-        amounts = np.array(
-            [[0, 0, 1 / (tan(hfov / 2))], [0, 0, aspect_ratio * 1 / (tan(hfov / 2))]]
-        )
+
+        f_x = 1 / (tan(hfov / 2))
+        f_y = aspect_ratio * f_x
+        amounts = np.array([[0, 0, f_y], [0, 0, f_x]])
         directions = np.array([[0, 2 / image_shape[0], 0], [2 / image_shape[1], 0, 0]])
 
         self.proj = PerspectiveProjection(directions, amounts, axis=-1)
