@@ -86,7 +86,7 @@ def test_compound_frame(vec_child, vec_parent):
     assert np.allclose(out, vec_child)
 
 
-def test_named_transform_chain():
+def test_named_links_between():
     link = tf.Translation((1, 0))
 
     a = tf.Frame(2, name="foo")
@@ -95,6 +95,20 @@ def test_named_transform_chain():
     z = link(y)
 
     elements = z.links_between("foo")
+
+    assert len(elements) == 3
+
+
+def test_named_links_between():
+    link = tf.Translation((1, 0))
+
+    a = tf.Frame(2, name="foo")
+    x = link(a)
+    y = link(x)
+    z = link(y)
+
+    with pytest.deprecated_call():
+        elements = z.transform_chain("foo")
 
     assert len(elements) == 3
 
@@ -118,3 +132,24 @@ def test_inverse_inverse():
     expected = link.transform(point)
 
     assert np.allclose(result, expected)
+
+
+def test_frames_between():
+    link = tf.Translation((1, 0))
+
+    a = tf.Frame(2, name="foo")
+    x = link(a)
+    y = link(x)
+    z = link(y)
+
+    elements = z.frames_between("foo")
+    assert len(elements) == 4
+    assert elements[0] == z
+    assert elements[1] == y
+    assert elements[2] == x
+    assert elements[3] == a
+
+    elements = z.frames_between("foo", include_self=False, include_to_frame=False)
+    assert len(elements) == 2
+    assert elements[0] == y
+    assert elements[1] == x
