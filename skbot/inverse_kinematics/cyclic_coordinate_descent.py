@@ -1,12 +1,31 @@
 from .. import transform as tf
 from numpy.typing import ArrayLike
-from typing import List, Callable, Union
+from typing import List, Callable, Union, Tuple
 import numpy as np
 from scipy.optimize import minimize_scalar
 from itertools import cycle
 from scipy.optimize import OptimizeResult
 
 joint = Union[tf.PrismaticJoint, tf.RotationalJoint]
+
+
+def step_generic_joint(joint:joint, generic_objective:Callable, maxiter:int) -> float:
+    """Find the optimal value for the current joint."""
+    result: OptimizeResult = minimize_scalar(
+            lambda x: generic_objective(x, joint),
+            bounds=(joint.lower_limit, joint.upper_limit),
+            method="bounded",
+            options={"maxiter": maxiter},
+        )
+
+    if not result.success:
+        raise RuntimeError(f"IK failed. Reason: {result.message}")
+
+    return result.x
+
+def step_rotational_joint(joint:tf.RotationalJoint, score, maxiter:int) -> float:
+    
+    return step_generic_joint(joint, score, maxiter)
 
 
 def ccd(
@@ -119,7 +138,7 @@ def ccd(
     pointA = [x for x in map(np.asarray, pointA)]
     pointB = [x for x in map(np.asarray, pointB)]
 
-    targets = [
+    targets:List[Tuple[np.ndarray, np.ndarray, List[tf.Link]]] = [
         (x[0], x[1], x[2].links_between(x[3]))
         for x in zip(pointA, pointB, frameA, frameB)
     ]
@@ -137,9 +156,10 @@ def ccd(
 
         return np.sum(weights * scores)
 
-    def optimizely(x: float, current_joint: joint) -> float:
+    def generic_objective(x: float, current_joint: joint) -> float:
         current_joint.param = x
         return score()
+
 
     for _ in range(maxiter * len(cycle_links)):
         distance = score()
@@ -149,17 +169,12 @@ def ccd(
 
         current_joint = next(joints)
 
-        result: OptimizeResult = minimize_scalar(
-            lambda x: optimizely(x, current_joint),
-            bounds=(current_joint.lower_limit, current_joint.upper_limit),
-            method="bounded",
-            options={"maxiter": line_search_maxiter},
-        )
+        if isinstance(current_joint, tf.RotationalJoint):
+            result = step_rotational_joint(current_joint, generic_objective, line_search_maxiter)
+        else:
+            result = step_generic_joint(current_joint, generic_objective, line_search_maxiter)
 
-        if not result.success:
-            raise RuntimeError(f"IK failed. Reason: {result.message}")
-
-        current_joint.param = result.x
+        current_joint.param = result
     else:
         raise RuntimeError(f"IK exceeded maxiter.")
 
