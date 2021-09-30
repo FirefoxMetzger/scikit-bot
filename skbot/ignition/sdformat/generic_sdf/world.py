@@ -78,7 +78,7 @@ class World(ElementBase):
         Layout of the Ignition Gazebo GUI. (Applications other than Gazebo will
         likely not need this.)
     physics_engine : Physics
-        .. depreciated:: SDFormat v1.6
+        .. deprecated:: SDFormat v1.6
             Use `physics_engines` instead.
 
         Configuration parameters of the dynamics engine.
@@ -102,7 +102,7 @@ class World(ElementBase):
         A list of plugins used to customize the runtime behavior of the
         simulation.
     joints : List[Joint]
-        .. depreciated:: SDFormat v1.7
+        .. deprecated:: SDFormat v1.7
             To attach models to the world, use the canonical_link kwarg
             instead. All other usage of `joints` has no replacement.
 
@@ -165,10 +165,10 @@ class World(ElementBase):
         The current state of this simulation.
 
     physics_engine : Physics
-        .. depreciated:: SDFormat v1.6
+        .. deprecated:: SDFormat v1.6
             Use `physics_engines` instead.
     joints : List[Joint]
-        .. depreciated:: SDFormat v1.7
+        .. deprecated:: SDFormat v1.7
             Use `Model.joints` instead and set `Model.joints.parent` to
             `world`.
 
@@ -228,7 +228,7 @@ class World(ElementBase):
         else:
             if physics_engine is not None:
                 raise ValueError(
-                    "`World.physics_engine` is depreciated. Use `physics_engines` instead."
+                    "`World.physics_engine` is deprecated. Use `physics_engines` instead."
                 )
             self.physics_engines = [] if physics_engines is None else physics_engines
         self.scene = scene
@@ -242,7 +242,7 @@ class World(ElementBase):
             self._joints = [] if joints is None else joints
         elif joints is not None:
             raise ValueError(
-                "`World.joints` is depreciated."
+                "`World.joints` is deprecated."
                 "To connect a model to the world use `Model.canonical_link` instead."
             )
         else:
@@ -282,7 +282,7 @@ class World(ElementBase):
     @property
     def joints(self):
         warnings.warn(
-            "`World.joints` has been depreciated. Use `Model.joints` with"
+            "`World.joints` has been deprecated. Use `Model.joints` with"
             " `Model.joints.parent = 'world'` instead.",
             DeprecationWarning,
         )

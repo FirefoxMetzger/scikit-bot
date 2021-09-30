@@ -107,7 +107,7 @@ class Model(ElementBase):
     origin : Origin
         The model's origin.
 
-        .. depreciated:: SDFormat v1.2
+        .. deprecated:: SDFormat v1.2
             Use ``Model.pose`` instead.
 
 
@@ -186,7 +186,7 @@ class Model(ElementBase):
         elif sdf_version == "1.0":
             self._origin = origin
         else:
-            warnings.warn("`origin` is depreciated. Use `Model.pose` instead.")
+            warnings.warn("`origin` is deprecated. Use `Model.pose` instead.")
             self._origin = origin
 
         if len(links) == 0 and sdf_version in ["1.0", "1.2", "1.3", "1.4"]:
@@ -248,7 +248,7 @@ class Model(ElementBase):
     @property
     def origin(self):
         warnings.warn(
-            "`Model.origin` is depreciated since SDFormat v1.2. Use `Model.pose` instead."
+            "`Model.origin` is deprecated since SDFormat v1.2. Use `Model.pose` instead."
         )
         return self._origin
 

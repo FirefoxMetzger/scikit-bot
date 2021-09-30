@@ -434,10 +434,10 @@ class Frame:
         metric: Callable[[Tuple["Frame"], Tuple[Link]], float] = DepthFirst,
         max_depth: int = None,
     ) -> List[Link]:
-        """Get a transformation chain into ``to_frame`` (depreciated).
+        """Get a transformation chain into ``to_frame`` (deprecated).
 
-        .. depreciated:: 0.9.0
-            This method is depreciated and will be removed in scikit-bot v1.0.
+        .. deprecated:: 0.9.0
+            This method is deprecated and will be removed in scikit-bot v1.0.
             Use ``Frame.links_between`` instead.
         .. versionadded:: 0.5.0
             This method was added to Frame.
@@ -481,7 +481,7 @@ class Frame:
         """
 
         warnings.warn(
-            "`Frame.transform_chain` is depreciated."
+            "`Frame.transform_chain` is deprecated."
             " Use `Frame.links_between` instead.",
             DeprecationWarning,
         )

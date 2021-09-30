@@ -93,17 +93,17 @@ class Link(ElementBase):
     origin : Origin
         The link's origin.
 
-        .. depreciated:: SDFormat v1.2
+        .. deprecated:: SDFormat v1.2
             Use `Link.pose` instead.
     damping : Link.Damping
         Exponential damping of the link's velocity.
 
-        .. depreciated:: SDFormat 1.2
+        .. deprecated:: SDFormat 1.2
             Use `Link.velocity_decay` instead.
     frames : List["Frame"]
         A list of frames of reference in which poses may be expressed.
 
-        .. depreciated:: SDFormat v1.7
+        .. deprecated:: SDFormat v1.7
             Use :attr:`Model.frame` instead.
         .. versionadded:: SDFormat v1.5
 
@@ -186,7 +186,7 @@ class Link(ElementBase):
         elif sdf_version == "1.0":
             self._origin = origin
         else:
-            warnings.warn("`origin` is depreciated. Use `pose` instead.")
+            warnings.warn("`origin` is deprecated. Use `pose` instead.")
             self._origin = origin
         if sdf_version == "1.0":
             self.pose = self._origin.pose
@@ -200,7 +200,7 @@ class Link(ElementBase):
         elif sdf_version == "1.0":
             self._damping = damping
         else:
-            warnings.warn("`damping` is depreciated. Use `velocity_decay` instead.")
+            warnings.warn("`damping` is deprecated. Use `velocity_decay` instead.")
             self._damping = damping
         if sdf_version == "1.0":
             self.velocity_decay = self._damping
@@ -263,7 +263,7 @@ class Link(ElementBase):
     @property
     def origin(self):
         warnings.warn(
-            "`Link.origin` is depreciated since SDF v1.7. Use `Link.pose` instead.",
+            "`Link.origin` is deprecated since SDF v1.7. Use `Link.pose` instead.",
             DeprecationWarning,
         )
         return self._origin
@@ -271,7 +271,7 @@ class Link(ElementBase):
     @property
     def damping(self):
         warnings.warn(
-            "`Link.daming` is depreciated since SDF v1.7."
+            "`Link.daming` is deprecated since SDF v1.7."
             " Use `Link.velocity_decay` instead.",
             DeprecationWarning,
         )
@@ -280,7 +280,7 @@ class Link(ElementBase):
     @property
     def frames(self):
         warnings.warn(
-            "`Link.frames` is depreciated since SDF v1.7."
+            "`Link.frames` is deprecated since SDF v1.7."
             " Use `Model.frames` instead and set `Frame.attached_to` to the name of this link.",
             DeprecationWarning,
         )

@@ -98,7 +98,7 @@ class Joint(ElementBase):
     frames : List[Frame]
         A list of frames of reference in which poses may be expressed.
 
-        .. depreciated:: SDFormat v1.7
+        .. deprecated:: SDFormat v1.7
             Use :attr:`Model.frame` instead.
         .. versionadded:: SDFormat v1.5
     sensors : List[Sensor]
@@ -110,7 +110,7 @@ class Joint(ElementBase):
     origin : Origin
         The joint's origin.
 
-        .. depreciated:: SDFormat v1.2
+        .. deprecated:: SDFormat v1.2
             Use ``Joint.pose`` instead.
 
     Attributes
@@ -181,7 +181,7 @@ class Joint(ElementBase):
         elif sdf_version == "1.0":
             self._origin = origin
         else:
-            warnings.warn("`origin` is depreciated. Use `pose` instead.")
+            warnings.warn("`origin` is deprecated. Use `pose` instead.")
             self._origin = origin
         if sdf_version == "1.0":
             self.pose = self._origin.pose
@@ -253,7 +253,7 @@ class Joint(ElementBase):
     @property
     def origin(self):
         warnings.warn(
-            "`Joint.origin` is depreciated since SDFormat v1.2."
+            "`Joint.origin` is deprecated since SDFormat v1.2."
             " Use `Joint.pose` instead.",
             DeprecationWarning,
         )
@@ -262,7 +262,7 @@ class Joint(ElementBase):
     @property
     def frames(self):
         warnings.warn(
-            "`Link.frames` is depreciated since SDF v1.7."
+            "`Link.frames` is deprecated since SDF v1.7."
             " Use `Model.frames` instead and set `Frame.attached_to`"
             " to the name of this joint.",
             DeprecationWarning,
@@ -522,7 +522,7 @@ class Joint(ElementBase):
         initial_position : float
             Default joint position for this joint axis.
 
-            .. depreciated:: SDFormat v1.8
+            .. deprecated:: SDFormat v1.8
                 Use `World.State` instead to set the initial position.
             .. versionadded:: SDFormat v1.6
         xyz: Union[str, Joint.Axis.Xyz]
@@ -536,7 +536,7 @@ class Joint(ElementBase):
             instead of joint frame. Provided for Gazebo compatibility (see
             https://github.com/osrf/gazebo/issue/494 ). Default is: ``False``.
 
-            .. depreciated:: SDFormat v1.7
+            .. deprecated:: SDFormat v1.7
                 Use :attr:`Joint.Axis.Xyz.expressed_in` instead.
             .. versionadded:: SDFormat v1.5
         dynamics: Joint.Axis.Dynamics
@@ -599,7 +599,7 @@ class Joint(ElementBase):
         @property
         def use_parent_model_frame(self):
             warnings.warn(
-                "`Joint.Axis.use_parent_model_frame` is depreciated."
+                "`Joint.Axis.use_parent_model_frame` is deprecated."
                 " Use `Joint.Axis.Xyz.expressed_in` instead."
             )
             return self._use_parent_model_frame
