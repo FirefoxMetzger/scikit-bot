@@ -216,24 +216,19 @@ class Rotation(AffineLink):
 class Translation(AffineLink):
     """Translation in N-D.
 
-    .. versionadded:: 0.6.0
-        Added batch computation.
+    .. versionchanged:: 0.6.0
+        ``direction`` and ``scalar`` may now be broadcastable arrays
 
 
     Parameters
     ----------
     direction : ArrayLike
-        A vector describing the translation. May be batched.
+        A vector, or batch of vectors, describing the translation.
     amount : ArrayLike
         A scalar indicating by how much to scale ``direction``. Default is 1.
     axis : int
         The axis along which computation takes place. All other axes are considered
         batch dimensions.
-
-    Notes
-    -----
-    This class implements :func:`Link.__inverse_transform__`. You can get a syncronized inverse
-    link via ``inverse_link = skbot.transform.affine.Inverse(link)``.
 
     """
 
@@ -288,3 +283,40 @@ class Translation(AffineLink):
         x = np.moveaxis(x, self._axis, -1)
         result = translate(x, -self._amount[..., None] * self._direction)
         return np.moveaxis(result, -1, self._axis)
+
+
+class AffineSpace(Link):
+    """Transform to affine space
+
+    Parameters
+    ----------
+    ndim : int
+        The number of dimensions of the cartesian space.
+    axis : int
+        The axis along which computation takes place. All other axes are considered
+        batch dimensions.
+
+
+    """
+
+    def __init__(self, ndim: int, *, axis=-1) -> None:
+        super().__init__(ndim, ndim + 1)
+        self._axis = axis
+
+    def transform(self, x: ArrayLike) -> np.ndarray:
+        x = np.moveaxis(x, self._axis, -1)
+
+        shape = list(x.shape)
+        shape[-1] += 1
+
+        affine_vector = np.ones(shape, dtype=x.dtype)
+        affine_vector[..., :-1] = x
+        return affine_vector
+
+    def __inverse_transform__(self, x: ArrayLike) -> np.ndarray:
+        x = np.moveaxis(x, self._axis, -1)
+
+        values = x[..., :-1]
+        scaling = x[..., -1][..., None]
+
+        return values / scaling

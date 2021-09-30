@@ -104,7 +104,7 @@ from .functions import (
     scale,
 )
 
-from .affine import Translation, Rotation, Inverse
+from .affine import Translation, Rotation, Inverse, AffineSpace
 from .projections import PerspectiveProjection
 from .utils3d import (
     FrustumProjection,
@@ -121,22 +121,23 @@ __all__ = [
     "Frame",
     "metrics",  # transform chain metrics
     "Link",
-    # Meta Links
+    # nD Links
+    "AffineSpace",
+    "Rotation",
+    "Translation",
+    "PerspectiveProjection",
+    # 3D Links
+    "EulerRotation",
+    "QuaternionRotation",
+    "RotationalJoint",
+    "PrismaticJoint",
+    "RotvecRotation",
+    "FrustumProjection",
+    # Other Links
     "CustomLink",
     "InvertLink",
     "CompundLink",
-    # Affine Links
-    "RotationalJoint",
-    "PrismaticJoint",
-    "Translation",
-    "Rotation",
-    "EulerRotation",
-    "QuaternionRotation",
-    "RotvecRotation",
     "Inverse",
-    # Projections
-    "PerspectiveProjection",
-    "FrustumProjection",
     # basic transformation functions
     "translate",
     "rotate",
