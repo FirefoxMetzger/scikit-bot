@@ -136,7 +136,8 @@ def loads(
         warnings.warn(
             "SAX handlers have been depreciated in xsData >= 21.9;"
             " falling back to EventHandler. If you need the SAX handler, please open an issue."
-            " To make this warning dissapear change `handler` to the corresponding EventHandler."
+            " To make this warning dissapear change `handler` to the corresponding EventHandler.",
+            DeprecationWarning
         )
 
     if handler == "XmlSaxHandler":
