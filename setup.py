@@ -10,7 +10,7 @@ extras_require = {
         "requests == 2.26.0",
         "xsdata == 21.9",
         "lxml == 4.6.3",
-        "cachetools == 4.2.2",
+        "cachetools == 4.2.4",
     ],
     "docs": [
         "sphinx == 4.2.0",
@@ -18,7 +18,7 @@ extras_require = {
         "sphinx-autodoc-typehints == 1.12.0",
         "matplotlib == 3.4.3",
         "pydata-sphinx-theme == 0.6.3",
-        "cachetools == 4.2.2",
+        "cachetools == 4.2.4",
         "sphinx-gallery == 0.10.0",
         "xsdata == 21.9",
         "lxml == 4.6.3",
