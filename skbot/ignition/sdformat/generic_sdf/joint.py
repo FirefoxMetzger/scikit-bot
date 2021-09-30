@@ -371,13 +371,13 @@ class Joint(ElementBase):
         joint_static = _scaffolding[joint_name]
         child_static = _scaffolding[child_name]
 
-        link = tf.CompundLink(parent_static.transform_chain(joint_static))
+        link = tf.CompundLink(parent_static.links_between(joint_static))
         link(parent, joint_parent)
 
         joint_link: tf.Link = self.to_tf_link(_scaffolding, shape=shape, axis=axis)
         joint_link(joint_child, joint_parent)
 
-        link = tf.CompundLink(joint_static.transform_chain(child_static))
+        link = tf.CompundLink(joint_static.links_between(child_static))
         link(joint_child, child)
 
         for el in chain(self._frames):
@@ -400,7 +400,7 @@ class Joint(ElementBase):
             parent_static = _scaffolding[parent_name]
             child_static = _scaffolding[child_name]
 
-            link = tf.CompundLink(parent_static.transform_chain(child_static))
+            link = tf.CompundLink(parent_static.links_between(child_static))
             link(parent, child)
 
             sensor.to_dynamic_graph(

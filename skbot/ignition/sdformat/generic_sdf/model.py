@@ -373,7 +373,7 @@ class Model(ElementBase):
             parent_static = _scaffolding[self.canonical_link]
         child = declared_frames["__model__"]
         child_static = _scaffolding["__model__"]
-        tf.CompundLink(parent_static.transform_chain(child_static))(parent, child)
+        tf.CompundLink(parent_static.links_between(child_static))(parent, child)
 
         for el in chain(self.frames, self.links, self.joints):
             el.to_dynamic_graph(

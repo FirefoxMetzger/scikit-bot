@@ -101,7 +101,7 @@ def create_frame_graph(sdf: str) -> Tuple[Dict[str, rtf.Frame], Dict[str, rtf.Li
         :func:``skbot.ignition.to_frame_graph`` instead. To find frames in the
         frame graph returned by ``to_frame_graph`` use
         :func:``skbot.transform.Frame.find_frame``. Links/Joints can be obtained
-        from :func:``skbot.transform.Frame.transform_chain``.
+        from :func:``skbot.transform.Frame.links_between``.
 
     Parameters
     ----------

@@ -124,5 +124,5 @@ class Frame(ElementBase):
         parent_static = _scaffolding[parent_name]
         child_static = _scaffolding[child_name]
 
-        link = tf.CompundLink(parent_static.transform_chain(child_static))
+        link = tf.CompundLink(parent_static.links_between(child_static))
         link(parent, child)
