@@ -56,9 +56,6 @@ class RotationalJoint(RotvecRotation):
 
         self._v = np.cos(value / 2) * self._u - np.sin(value / 2) * self._u_ortho
 
-        self._update_transformation_matrix(self._u.shape)
-        self._update_inverse_transformation_matrix(self._u.shape)
-
     @RotvecRotation.angle.setter
     def angle(self, angle: ArrayLike) -> None:
         angle = np.asarray(angle)
@@ -113,9 +110,6 @@ class PrismaticJoint(Translation):
     @param.setter
     def param(self, value: ArrayLike) -> None:
         self._amount = np.asarray(value)
-
-        self._update_transformation_matrix(self._direction.shape)
-        self._update_inverse_transformation_matrix(self._direction.shape)
 
     @Translation.amount.setter
     def amount(self, amount: ArrayLike) -> None:

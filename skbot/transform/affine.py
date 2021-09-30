@@ -4,7 +4,7 @@ import numpy as np
 
 from .base import Frame, Link, InvertLink
 from ._utils import vector_project, angle_between
-from .functions import translate, rotate
+from .functions import translate, rotate, as_affine_matrix
 
 
 class AffineLink(Link):
@@ -35,65 +35,35 @@ class AffineLink(Link):
         super().__init__(parent_dim, child_dim)
 
         self._tf_matrix = None
-        self._inverse_tf_matrix = None
         self._axis = axis
 
     @property
     def affine_matrix(self) -> np.ndarray:
         """The transformation matrix mapping the parent to the child frame."""
-        return self._tf_matrix
+
+        cartesian_parent = Frame(self.parent_dim)
+        cartesian_child = Frame(self.child_dim)
+        self(cartesian_parent, cartesian_child)
+        
+        affine_parent = AffineSpace(self.parent_dim, axis=self._axis)(cartesian_parent)
+        affine_child = AffineSpace(self.child_dim, axis=self._axis)(cartesian_child)
+
+        affine_matrix = as_affine_matrix(affine_parent, affine_child, axis=self._axis)
+
+        return affine_matrix
 
     @property
-    def _inverse_affine_matrix(self) -> np.ndarray:
-        """The inverse transformation matrix mapping the child to the parent frame."""
-        raise NotImplementedError
+    def _inverse_tf_matrix(self):
+        cartesian_parent = Frame(self.parent_dim)
+        cartesian_child = Frame(self.child_dim)
+        self(cartesian_parent, cartesian_child)
+        
+        affine_parent = AffineSpace(self.parent_dim, axis=self._axis)(cartesian_parent)
+        affine_child = AffineSpace(self.child_dim, axis=self._axis)(cartesian_child)
 
-    def _update_transformation_matrix(self, shape: ArrayLike) -> None:
-        shape = np.asarray(shape)
-        reordered_shape = np.moveaxis(shape, self._axis, -1)
+        affine_matrix = as_affine_matrix(affine_child, affine_parent, axis=self._axis)
 
-        mapped_basis = list()
-        for basis in np.eye(self.parent_dim):
-            batch_vector = np.zeros(reordered_shape)
-            batch_vector[..., :] = basis
-            batch_vector = np.moveaxis(batch_vector, -1, self._axis)
-            mapped = self.transform(basis)
-            mapped = np.moveaxis(mapped, self._axis, -1)
-            mapped_basis.append(mapped)
-        mapped_basis = np.stack(mapped_basis, axis=-2)
-        offset = self.transform(np.zeros(shape))
-        offset = np.moveaxis(offset, self._axis, -1)
-        offset_remove = np.expand_dims(offset, -2)
-
-        self._tf_matrix = np.zeros(
-            (*reordered_shape[:-1], self.child_dim + 1, self.parent_dim + 1)
-        )
-        self._tf_matrix[..., :-1, :-1] = mapped_basis - offset_remove
-        self._tf_matrix[..., :-1, -1] = offset
-        self._tf_matrix[..., -1, -1] = 1
-
-    def _update_inverse_transformation_matrix(self, shape: ArrayLike = None) -> None:
-        shape = np.asarray(shape)
-        reoreded_shape = np.moveaxis(shape, self._axis, -1)
-
-        mapped_basis = list()
-        for basis in np.eye(self.child_dim):
-            batch_vector = np.zeros(reoreded_shape)
-            batch_vector[..., :] = basis
-            batch_vector = np.moveaxis(batch_vector, -1, self._axis)
-            mapped = self.__inverse_transform__(basis)
-            mapped = np.moveaxis(mapped, self._axis, -1)
-            mapped_basis.append(mapped)
-        mapped_basis = np.stack(mapped_basis, axis=-2)
-        offset = self.__inverse_transform__(np.zeros(shape))
-        offset = np.moveaxis(offset, self._axis, -1)
-
-        self._inverse_tf_matrix = np.zeros(
-            (*reoreded_shape[:-1], self.child_dim + 1, self.parent_dim + 1)
-        )
-        self._inverse_tf_matrix[..., :-1, :-1] = mapped_basis - offset[..., None]
-        self._inverse_tf_matrix[..., :-1, -1] = offset
-        self._inverse_tf_matrix[..., -1, -1] = 1
+        return affine_matrix
 
     def invert(self) -> Frame:
         """Return a new Link that is the inverse of this link."""
@@ -189,9 +159,6 @@ class Rotation(AffineLink):
         u_orthogonal = v - vector_project(v, u)
         self._u_ortho = u_orthogonal / np.linalg.norm(u_orthogonal)
 
-        self._update_transformation_matrix(shape=u.shape)
-        self._update_inverse_transformation_matrix(shape=u.shape)
-
     def transform(self, x: ArrayLike) -> np.ndarray:
         return rotate(x, self._u, self._v)
 
@@ -208,9 +175,6 @@ class Rotation(AffineLink):
         self._angle = angle
 
         self._v = np.cos(angle / 2) * self._u - np.sin(angle / 2) * self._u_ortho
-
-        self._update_transformation_matrix(self._u.shape)
-        self._update_inverse_transformation_matrix(self._u.shape)
 
 
 class Translation(AffineLink):
@@ -245,8 +209,6 @@ class Translation(AffineLink):
         self._amount = np.asarray(amount)
         self._direction = np.moveaxis(direction, axis, -1)
 
-        self._update_transformation_matrix(self._direction.shape)
-        self._update_inverse_transformation_matrix(self._direction.shape)
 
     @property
     def direction(self) -> np.ndarray:
@@ -257,9 +219,6 @@ class Translation(AffineLink):
     def direction(self, direction: ArrayLike) -> None:
         self._direction = np.asarray(direction)
 
-        self._update_transformation_matrix(self._direction.shape)
-        self._update_inverse_transformation_matrix(self._direction.shape)
-
     @property
     def amount(self) -> float:
         """The amount by which to scale the direction vector."""
@@ -268,9 +227,6 @@ class Translation(AffineLink):
     @amount.setter
     def amount(self, amount: ArrayLike) -> None:
         self._amount = np.asarray(amount)
-
-        self._update_transformation_matrix(self._direction.shape)
-        self._update_inverse_transformation_matrix(self._direction.shape)
 
     def transform(self, x: ArrayLike) -> np.ndarray:
         x = np.asarray(x)
@@ -311,7 +267,8 @@ class AffineSpace(Link):
 
         affine_vector = np.ones(shape, dtype=x.dtype)
         affine_vector[..., :-1] = x
-        return affine_vector
+
+        return np.moveaxis(affine_vector, -1, self._axis)
 
     def __inverse_transform__(self, x: ArrayLike) -> np.ndarray:
         x = np.moveaxis(x, self._axis, -1)
@@ -319,4 +276,6 @@ class AffineSpace(Link):
         values = x[..., :-1]
         scaling = x[..., -1][..., None]
 
-        return values / scaling
+        cartesian_vector = values / scaling
+
+        return np.moveaxis(cartesian_vector, -1, self._axis)
