@@ -18,31 +18,28 @@ esoteric transformations like spherical coordinates, too.
 Examples
 --------
 
-Manual construction of a 1D robot arm
-
->>> import skbot.transform as rtf
+>>> import skbot.transform as tf
 >>> import numpy as np
->>> arm_link = rtf.affine.Translation((1, 0))
->>> arm_joint = rtf.affine.Rotation((1, 0), (0, 1))
 
->>> tool_frame = rtf.Frame(2)
->>> ellbow_frame = arm_link(tool_frame)
->>> world_frame = arm_joint(ellbow_frame)
+Forward kinematics on a 1 DoF robot arm in 2D
 
->>> arm_joint.angle = 0
->>> tool_pos = tool_frame.transform((0, 0), to_frame=world_frame)
+>>> # setup of the arm
+>>> link = tf.Translation((1, 0))
+>>> joint = tf.Rotation((1, 0), (0, 1))
+>>> tool_frame = tf.Frame(2)
+>>> joint_frame = link(tool_frame)
+>>> world = joint(joint_frame)
+>>> joint.angle = 0
+>>> # FK of initial position
+>>> tool_pos = tool_frame.transform((0, 0), to_frame=world)
 >>> assert np.allclose(tool_pos, (1, 0))
-
->>> arm_joint.angle = np.pi / 2
->>> tool_pos = tool_frame.transform((0, 0), to_frame=world_frame)
+>>> # Set new joint angle and compute new FK
+>>> joint.angle = np.pi / 2
+>>> tool_pos = tool_frame.transform((0, 0), to_frame=world)
 >>> assert np.allclose(tool_pos, (0, 1))
 
-As with any other repository, you can always find more examples by exploring
-the accompanying unit tests.
-
-
-Basic functions
----------------
+Base Elements
+-------------
 
 .. autosummary::
     :template: transform_class.rst
@@ -50,36 +47,43 @@ Basic functions
 
     Frame
     Link
-    InvertLink
-    CustomLink
-    CompundLink
 
+Available Transformations
+-------------------------
 
-Affine Transformations
-----------------------
+.. rubric:: nD Links
 
 .. autosummary::
     :template: transform_class.rst
     :toctree:
 
+    AffineSpace
     Translation
     Rotation
+    PerspectiveProjection
+
+.. rubric:: 3D Links
+
+.. autosummary::
+    :template: transform_class.rst
+    :toctree:
+
     EulerRotation
     QuaternionRotation
     RotvecRotation
+    FrustumProjection
     RotationalJoint
     PrismaticJoint
 
-
-Projections
------------
+.. rubric:: Other Links
 
 .. autosummary::
     :template: transform_class.rst
     :toctree:
 
-    PerspectiveProjection
-    FrustumProjection
+    CustomLink
+    CompundLink
+    InvertLink
 
 """
 

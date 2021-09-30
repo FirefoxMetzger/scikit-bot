@@ -33,9 +33,7 @@ def test_chain_resolution_bfs(simple_graph: List[tf.Frame]):
     assert len(links) == 3
 
     # depends on which link is expanded first
-    links = simple_graph[0].links_between(
-        simple_graph[7], metric=tf.metrics.DepthFirst
-    )
+    links = simple_graph[0].links_between(simple_graph[7], metric=tf.metrics.DepthFirst)
     assert len(links) == 3 or len(links) == 5
 
 

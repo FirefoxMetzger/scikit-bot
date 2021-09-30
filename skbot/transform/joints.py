@@ -5,6 +5,32 @@ from .affine import Translation
 
 
 class RotationalJoint(RotvecRotation):
+    """Rotation with constraints in 3D.
+
+    Parameters
+    ----------
+    rotvec : ArrayLike
+        The vector around which points are rotated.
+    angle : ArrayLike
+        The magnitude of the rotation. If None, the length of ``vector`` will be
+        used.
+    degrees : bool
+        If True, angle is assumed to be in degrees. Default is False.
+    axis : int
+        The axis along which to to compute. Default: -1.
+    upper_limit : ArrayLike
+        The maximum joint angle. Default: 2pi.
+    lower_limit : ArrayLike
+        The minimum joint angle. Default: 0.
+
+    Notes
+    -----
+    Batch dimensions of ``rotvec`` and ``angle`` must be broadcastable.
+
+    Setting ``RotationalJoint.angle`` will check if the joint angle limits are
+    respected; however, setting ``RotationalJoint.param`` will not.
+    
+    """
     def __init__(
         self,
         rotvec: ArrayLike,
@@ -21,6 +47,7 @@ class RotationalJoint(RotvecRotation):
 
     @property
     def param(self) -> float:
+        """Magnitude of the rotation (in radians)."""
         return self._angle
 
     @param.setter
@@ -43,6 +70,28 @@ class RotationalJoint(RotvecRotation):
 
 
 class PrismaticJoint(Translation):
+    """Translation with constraints in 3D.
+
+    Parameters
+    ----------
+    direction : ArrayLike
+        A vector describing the translation.
+    amount : ArrayLike
+        A scalar indicating by how much to scale ``direction``. Default is 1.
+    axis : int
+        The axis along which computation takes place. All other axes are considered
+        batch dimensions.
+    upper_limit : ArrayLike
+        The maximum value of amount. Default: 1.
+    lower_limit : ArrayLike
+        The minimum value of amount. Default: 0.
+
+    Notes
+    -----
+    Setting ``PrismaticJoint.amount`` will enforce joint limits; however,
+    setting ``PrismaticJoint.param`` will not.
+
+    """
     def __init__(
         self,
         direction: ArrayLike,
