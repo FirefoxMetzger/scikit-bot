@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.9.1 (2021-10-01)
+### Fix
+* Bump cachetools from 4.2.2 to 4.2.4 ([#84](https://github.com/FirefoxMetzger/scikit-bot/issues/84)) ([`79d43db`](https://github.com/FirefoxMetzger/scikit-bot/commit/79d43dbd64966789aecade50a40e464fe1d213a7))
+
 ## v0.9.0 (2021-10-01)
 ### Feature
 * AffineSpace link + Frame.X_between ([#85](https://github.com/FirefoxMetzger/scikit-bot/issues/85)) ([`901b293`](https://github.com/FirefoxMetzger/scikit-bot/commit/901b29325011bd1480cd919f4d1794a979d04ed6))
