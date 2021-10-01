@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.9.0 (2021-10-01)
+### Feature
+* AffineSpace link + Frame.X_between ([#85](https://github.com/FirefoxMetzger/scikit-bot/issues/85)) ([`901b293`](https://github.com/FirefoxMetzger/scikit-bot/commit/901b29325011bd1480cd919f4d1794a979d04ed6))
+
 ## v0.8.1 (2021-09-29)
 ### Fix
 * Bump sphinx-gallery from 0.9.0 to 0.10.0 ([#82](https://github.com/FirefoxMetzger/scikit-bot/issues/82)) ([`476d0b7`](https://github.com/FirefoxMetzger/scikit-bot/commit/476d0b745e18c42f9815b12e68cafca10cddb36e))
