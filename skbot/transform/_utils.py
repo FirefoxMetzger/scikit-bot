@@ -128,43 +128,37 @@ def vector_project(a: ArrayLike, b: ArrayLike, axis: int = -1) -> np.ndarray:
     return numerator / denominator * b
 
 
-@numba.jit(nopython=True, cache=True)
 def scalar_project(
-    a: ArrayLike, b: ArrayLike, axis: int = -1, keepdims=False
+    a: ArrayLike, b: ArrayLike, *, axis: int = -1, keepdims=False
 ) -> np.ndarray:
     """Returns the length of the components of each a along each b."""
 
-    a = np.asarray(a)
-    b = np.asarray(b)
-
     projected = vector_project(a, b, axis=axis)
-    magnitude = reduce(np.linalg.norm, projected, axis=axis, keepdims=keepdims)
-    sign = np.sign(reduce(np.sum, projected * b, axis=axis, keepdims=keepdims))
+    magnitude = np.linalg.norm(projected, axis=axis, keepdims=keepdims)
+    sign = np.sign(np.sum(projected * b, axis=axis, keepdims=keepdims))
 
     return sign * magnitude
 
 
-@numba.jit(nopython=True, cache=True)
 def angle_between(
-    vec_a: ArrayLike, vec_b: ArrayLike, axis: int = -1, eps=1e-10
+    vec_a: ArrayLike, vec_b: ArrayLike, *, axis: int = -1, eps=1e-10
 ) -> np.ndarray:
     """Computes the angle from a to b (in a right-handed frame)
-
     Notes
     -----
     Implementation is based on this StackOverflow post:
     https://scicomp.stackexchange.com/a/27694
     """
 
-    vec_a = np.expand_dims(np.asfarray(vec_a), 0)
-    vec_b = np.expand_dims(np.asfarray(vec_b), 0)
+    vec_a = np.asarray(vec_a)[None, :]
+    vec_b = np.asarray(vec_b)[None, :]
 
     if axis >= 0:
         axis += 1
 
-    len_c = reduce(np.linalg.norm, vec_a - vec_b, axis=axis)
-    len_a = reduce(np.linalg.norm, vec_a, axis=axis)
-    len_b = reduce(np.linalg.norm, vec_b, axis=axis)
+    len_c = np.linalg.norm(vec_a - vec_b, axis=axis)
+    len_a = np.linalg.norm(vec_a, axis=axis)
+    len_b = np.linalg.norm(vec_b, axis=axis)
 
     mask = len_a >= len_b
     tmp = np.where(mask, len_a, len_b)
@@ -178,9 +172,9 @@ def angle_between(
     denominator = (len_a + (len_b + len_c)) * ((len_a - len_c) + len_b)
 
     mask = denominator > eps
-    angle = np.divide(numerator, denominator)  # , where=mask)
-    angle = np.sqrt(angle)
-    angle = np.arctan(angle)
+    angle = np.divide(numerator, denominator, where=mask)
+    np.sqrt(angle, out=angle)
+    np.arctan(angle, out=angle)
     angle *= 2
     np.putmask(angle, ~mask, np.pi)
     return angle[0]
