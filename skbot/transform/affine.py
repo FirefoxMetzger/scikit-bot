@@ -44,7 +44,7 @@ class AffineLink(Link):
         cartesian_parent = Frame(self.parent_dim)
         cartesian_child = Frame(self.child_dim)
         self(cartesian_parent, cartesian_child)
-        
+
         affine_parent = AffineSpace(self.parent_dim, axis=self._axis)(cartesian_parent)
         affine_child = AffineSpace(self.child_dim, axis=self._axis)(cartesian_child)
 
@@ -57,7 +57,7 @@ class AffineLink(Link):
         cartesian_parent = Frame(self.parent_dim)
         cartesian_child = Frame(self.child_dim)
         self(cartesian_parent, cartesian_child)
-        
+
         affine_parent = AffineSpace(self.parent_dim, axis=self._axis)(cartesian_parent)
         affine_child = AffineSpace(self.child_dim, axis=self._axis)(cartesian_child)
 
@@ -208,7 +208,6 @@ class Translation(AffineLink):
         self._axis = axis
         self._amount = np.asarray(amount)
         self._direction = np.moveaxis(direction, axis, -1)
-
 
     @property
     def direction(self) -> np.ndarray:

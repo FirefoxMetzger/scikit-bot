@@ -29,8 +29,9 @@ class RotationalJoint(RotvecRotation):
 
     Setting ``RotationalJoint.angle`` will check if the joint angle limits are
     respected; however, setting ``RotationalJoint.param`` will not.
-    
+
     """
+
     def __init__(
         self,
         rotvec: ArrayLike,
@@ -89,6 +90,7 @@ class PrismaticJoint(Translation):
     setting ``PrismaticJoint.param`` will not.
 
     """
+
     def __init__(
         self,
         direction: ArrayLike,

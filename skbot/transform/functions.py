@@ -174,7 +174,7 @@ def shear(
     return vector + tmp1 * direction
 
 
-def as_affine_matrix(from_frame:Frame, to_frame:Frame, *, axis:int=-1):
+def as_affine_matrix(from_frame: Frame, to_frame: Frame, *, axis: int = -1):
     """Transformation Matrix between two frames at a given point.
 
     Given two frames ``from_frame`` and ``to_frame`` that represent affine space
@@ -196,13 +196,13 @@ def as_affine_matrix(from_frame:Frame, to_frame:Frame, *, axis:int=-1):
     matrix : np.ndarray
         The matrix representation of the transformation. It will have the shape
         ``(batch_shape, to_frame.ndim, from_frame.ndim)``.
-    
+
     Notes
     -----
     The matrix representation will only be accurate if the transformation chain
     between the two given frames is linear.
 
-    The 
+    The
 
     """
 
@@ -213,7 +213,7 @@ def as_affine_matrix(from_frame:Frame, to_frame:Frame, *, axis:int=-1):
     basis_set[:, -1] = 1
 
     mapped_basis = from_frame.transform(basis_set, to_frame).T
-    
+
     # normalize affine matrix
     scaling = mapped_basis[-1, :]
     mapped_basis /= scaling[None, :]
