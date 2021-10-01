@@ -1,31 +1,124 @@
 from .. import transform as tf
+from ..transform._utils import scalar_project
 from numpy.typing import ArrayLike
 from typing import List, Callable, Union, Tuple
 import numpy as np
 from scipy.optimize import minimize_scalar
-from itertools import cycle
 from scipy.optimize import OptimizeResult
 
-joint = Union[tf.PrismaticJoint, tf.RotationalJoint]
+joint_type = Union[tf.PrismaticJoint, tf.RotationalJoint]
 
 
-def step_generic_joint(joint:joint, generic_objective:Callable, maxiter:int) -> float:
+def _usage_count(joint: tf.Link, static: tf.Frame, dynamic: tf.Frame) -> int:
+    """The number of occurences of a link within a chain of links"""
+    occurences = 0
+
+    for link in static.links_between(dynamic):
+        if link is joint:
+            occurences += 1
+        elif isinstance(link, tf.InvertLink) and link._forward_link is joint:
+            occurences += 1
+
+    return occurences
+
+def _find_idx(joint: tf.Link, static: tf.Frame, dynamic: tf.Frame) -> int:
+    """The first index at which a given link occurrs in a transformation chain"""
+
+    for idx, link in enumerate(static.links_between(dynamic)):
+        if link is joint:
+            return idx
+        elif isinstance(link, tf.InvertLink) and link._forward_link is joint:
+            return idx
+
+    raise ValueError(f"The link is not involved in transformation between the two frames.")
+
+
+
+def step_generic_joint(joint: joint_type, score: Callable, maxiter: int) -> float:
     """Find the optimal value for the current joint."""
-    result: OptimizeResult = minimize_scalar(
+
+    def generic_objective(x: float, current_joint: joint_type) -> float:
+        current_joint.param = x
+        return score()
+
+    def inner():
+        result: OptimizeResult = minimize_scalar(
             lambda x: generic_objective(x, joint),
             bounds=(joint.lower_limit, joint.upper_limit),
             method="bounded",
             options={"maxiter": maxiter},
         )
 
-    if not result.success:
-        raise RuntimeError(f"IK failed. Reason: {result.message}")
+        if not result.success:
+            raise RuntimeError(f"IK failed. Reason: {result.message}")
 
-    return result.x
+        return result.x
 
-def step_rotational_joint(joint:tf.RotationalJoint, score, maxiter:int) -> float:
-    
-    return step_generic_joint(joint, score, maxiter)
+    return inner
+
+
+def step_rotational_joint(
+    joint: tf.RotationalJoint,
+    static_points: List[np.ndarray],
+    dynamic_points: List[np.ndarray],
+    static_frames: List[tf.Frame],
+    dynamic_frames: List[tf.Frame],
+) -> float:
+    static: tf.Frame
+    dynamic: tf.Frame
+    parent_frames: List[tf.Frame] = list()
+    child_frames: List[tf.Frame] = list()
+
+    # filter out targets that can't be influenced by this joint
+    used_idxs = [
+        idx
+        for idx, frames in enumerate(zip(static_frames, dynamic_frames))
+        if _usage_count(joint, *frames) == 1
+    ]
+    static_points = [
+        point for idx, point in enumerate(static_points) if idx in used_idxs
+    ]
+    dynamic_points = [
+        point for idx, point in enumerate(dynamic_points) if idx in used_idxs
+    ]
+    static_frames = [
+        point for idx, point in enumerate(static_frames) if idx in used_idxs
+    ]
+    dynamic_frames = [
+        point for idx, point in enumerate(dynamic_frames) if idx in used_idxs
+    ]
+
+    # get the frame just before and after the selected joint
+    for static, dynamic in zip(static_frames, dynamic_frames):
+        idx = _find_idx(joint, static, dynamic)
+        
+        parents = static.frames_between(dynamic, include_to_frame=False)
+        children = static.frames_between(dynamic, include_self=False)
+
+        parent_frames.append(parents[idx])
+        child_frames.append(children[idx])
+
+    basis1 = joint._u
+    basis2 = joint._u_ortho
+
+    def inner():
+        current_static:List[np.ndarray] = list()
+        current_dynamic:List[np.ndarray] = list()
+
+        for idx in range(len(parent_frames)):
+            parent_frame = parent_frames[idx]
+            child_frame = child_frames[idx]
+            static_frame = static_frames[idx]
+            dynamic_frame = dynamic_frames[idx]
+            static = static_points[idx]
+            dynamic = dynamic_points[idx]
+
+            parent = static_frame.transform(static, parent_frame)
+            child = dynamic_frame.transform(dynamic, child_frame)
+
+
+
+    return inner
 
 
 def ccd(
@@ -33,7 +126,7 @@ def ccd(
     pointB: Union[ArrayLike, List[ArrayLike]],
     frameA: Union[tf.Frame, List[tf.Frame]],
     frameB: Union[tf.Frame, List[tf.Frame]],
-    cycle_links: List[joint],
+    cycle_links: List[joint_type],
     *,
     metric: Callable[[np.ndarray, np.ndarray], float] = None,
     tol: float = 1e-3,
@@ -123,13 +216,13 @@ def ccd(
 
     """
 
-    joints = cycle(cycle_links)
     joint_values = [l.param for l in cycle_links]
 
+    _original_metric = metric
     if metric is None:
         metric = lambda x, y: np.linalg.norm(x - y)
 
-    if not isinstance(frameA, list):
+    if not (isinstance(frameA, list) or isinstance(frameA, tuple)):
         frameA = [frameA]
         frameB = [frameB]
         pointA = [pointA]
@@ -138,7 +231,7 @@ def ccd(
     pointA = [x for x in map(np.asarray, pointA)]
     pointB = [x for x in map(np.asarray, pointB)]
 
-    targets:List[Tuple[np.ndarray, np.ndarray, List[tf.Link]]] = [
+    targets: List[Tuple[np.ndarray, np.ndarray, List[tf.Link]]] = [
         (x[0], x[1], x[2].links_between(x[3]))
         for x in zip(pointA, pointB, frameA, frameB)
     ]
@@ -156,25 +249,46 @@ def ccd(
 
         return np.sum(weights * scores)
 
-    def generic_objective(x: float, current_joint: joint) -> float:
-        current_joint.param = x
-        return score()
+    step_fn = [
+        step_generic_joint(joint, score, line_search_maxiter) for joint in cycle_links
+    ]
 
+    def usage_count(joint):
+        occurences = 0
 
-    for _ in range(maxiter * len(cycle_links)):
+        static: tf.Frame
+        dynamic: tf.Frame
+        for static, dynamic in zip(frameA, frameB):
+            chain_usage = _usage_count(joint, static, dynamic)
+            if chain_usage > occurences:
+                occurences = chain_usage
+
+        return occurences
+
+    cycle_links = [link for link in cycle_links if usage_count(link) > 0]
+
+    # for idx in range(len(cycle_links)):
+    #     joint = cycle_links[idx]
+    #     if (
+    #         isinstance(joint, tf.RotationalJoint)
+    #         and usage_count(joint) == 1
+    #         and _original_metric is None
+    #     ):
+    #         step_fn[idx] = step_rotational_joint(joint, pointA, pointB, frameA, frameB)
+
+    for step in range(maxiter * len(cycle_links)):
         distance = score()
-
         if distance <= tol:
             break
 
-        current_joint = next(joints)
+        iteration = step // len(cycle_links)
+        joint_idx = step % len(cycle_links)
+        joint = cycle_links[joint_idx]
+        step_joint = step_fn[joint_idx]
 
-        if isinstance(current_joint, tf.RotationalJoint):
-            result = step_rotational_joint(current_joint, generic_objective, line_search_maxiter)
-        else:
-            result = step_generic_joint(current_joint, generic_objective, line_search_maxiter)
+        result = step_joint()
 
-        current_joint.param = result
+        joint.param = result
     else:
         raise RuntimeError(f"IK exceeded maxiter.")
 
