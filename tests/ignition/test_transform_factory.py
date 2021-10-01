@@ -98,7 +98,7 @@ def test_static_graph(verifiable_sdf_string):
             # each frame should be reachable from the root frame
             for name, frame in static_frames.items():
                 try:
-                    tf_chain = root.transform_chain(frame)
+                    tf_chain = root.links_between(frame)
                 except RuntimeError:
                     raise AssertionError(
                         "A Frame in the static graph is unreachable."
@@ -204,10 +204,10 @@ def test_must_be_base_link():
     world_frame = world_sdf.to_dynamic_graph(frames)
 
     for name in ["A", "B", "C", "D"]:
-        chain = world_frame.transform_chain(name)
+        chain = world_frame.links_between(name)
         assert len(chain) == 1
 
-        chain = world_frame.find_frame(f"world/{name}").transform_chain(world_frame)
+        chain = world_frame.find_frame(f"world/{name}").links_between(world_frame)
         assert len(chain) == 1
 
 

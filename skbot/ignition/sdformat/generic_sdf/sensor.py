@@ -147,12 +147,12 @@ class Sensor(ElementBase):
     origin : Origin
         The link's origin.
 
-        .. depreciated:: SDFormat v1.2
+        .. deprecated:: SDFormat v1.2
             Use `Sensor.pose` instead.
     frames : List[Frame]
         A list of frames of reference in which poses may be expressed.
 
-        .. depreciated:: SDFormat v1.7
+        .. deprecated:: SDFormat v1.7
             Use :attr:`Model.frame` instead.
         .. versionadded:: SDFormat v1.5
 
@@ -258,7 +258,7 @@ class Sensor(ElementBase):
         elif sdf_version == "1.0":
             self._origin = origin
         else:
-            warnings.warn("`origin` is depreciated. Use `Sensor.pose` instead.")
+            warnings.warn("`origin` is deprecated. Use `Sensor.pose` instead.")
             self._origin = origin
         if sdf_version == "1.0":
             self.pose = self._origin.pose
@@ -311,14 +311,14 @@ class Sensor(ElementBase):
     @property
     def origin(self):
         warnings.warn(
-            "`Sensor.origin` is depreciated since SDFormat v1.2. Use `Sensor.pose` instead."
+            "`Sensor.origin` is deprecated since SDFormat v1.2. Use `Sensor.pose` instead."
         )
         return self._origin
 
     @property
     def frames(self):
         warnings.warn(
-            "`Sensor.frames` is depreciated since SDF v1.7."
+            "`Sensor.frames` is deprecated since SDF v1.7."
             " Use `Model.frames` instead and set `Frame.attached_to` to the name of this link.",
             DeprecationWarning,
         )

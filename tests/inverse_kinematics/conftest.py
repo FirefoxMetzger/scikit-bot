@@ -18,7 +18,7 @@ def panda():
     tool_frame = base_frame.find_frame(".../panda_link8")
 
     joints = list()
-    for link in tool_frame.transform_chain(base_frame):
+    for link in tool_frame.links_between(base_frame):
         if isinstance(link, (tf.RotationalJoint, tf.PrismaticJoint)):
             joints.append(link)
 
@@ -33,7 +33,7 @@ def double_pendulum():
     tool_frame = base_frame.find_frame(".../lower_link")
 
     joints = list()
-    for link in tool_frame.transform_chain(base_frame):
+    for link in tool_frame.links_between(base_frame):
         if isinstance(link, (tf.RotationalJoint, tf.PrismaticJoint)):
             joints.append(link)
 

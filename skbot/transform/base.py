@@ -3,16 +3,17 @@ from typing import List, Tuple, Union, Callable
 import numpy as np
 from dataclasses import dataclass, field
 from queue import PriorityQueue
+import warnings
 
 
 def DepthFirst(frames: Tuple["Frame"], links: Tuple["Link"]) -> float:
-    """Depth-first search metric for Frame.transform_chain"""
+    """Depth-first search metric for Frame.chain_between"""
 
     return -len(links)
 
 
 def BreadthFirst(frames: Tuple["Frame"], links: Tuple["Link"]) -> float:
-    """Beadth-first search metric for Frame.transform_chain"""
+    """Beadth-first search metric for Frame.chain_between"""
     return -1 / len(frames)
 
 
@@ -228,7 +229,7 @@ class Frame:
         """
 
         x_new = np.asarray(x)
-        for link in self.transform_chain(to_frame, ignore_frames=ignore_frames):
+        for link in self.links_between(to_frame, ignore_frames=ignore_frames):
             x_new = link.transform(x_new)
 
         return x_new
@@ -268,7 +269,7 @@ class Frame:
         """
 
         tf_matrix = np.eye(self.ndim + 1)
-        for link in self.transform_chain(to_frame, ignore_frames=ignore_frames):
+        for link in self.links_between(to_frame, ignore_frames=ignore_frames):
             tf_matrix = link.affine_matrix @ tf_matrix
 
         return tf_matrix
@@ -299,7 +300,7 @@ class Frame:
         metric: Callable[[Tuple["Frame"], Tuple[Link]], float],
         max_depth: int,
     ) -> None:
-        """Internal logic for :func:transform_chain.
+        """Internal logic for :func:chain_between.
 
         Appends all children that have not been visited previously to
         the search queue.
@@ -322,26 +323,29 @@ class Frame:
             new_item = QueueItem(priority, new_frames, new_chain)
             queue.put(new_item)
 
-    def transform_chain(
+    def chain_between(
         self,
         to_frame: Union["Frame", str],
         *,
         ignore_frames: List["Frame"] = None,
         metric: Callable[[Tuple["Frame"], Tuple[Link]], float] = DepthFirst,
         max_depth: int = None,
-    ) -> List[Link]:
-        """Get a transformation chain into ``to_frame``.
+    ) -> Tuple[List["Frame"], List[Link]]:
+        """Get the frames and links between this frame and ``to_frame``.
 
-        .. versionadded:: 0.5.0
-            This method was added to Frame.
+        .. versionadded:: 0.9.0
 
         This function searches the frame graph for a chain of transformations
-        from the current frame into ``to_frame`` and returns the sequence of
-        links involved in this transformation. The first element of the returned
-        sequence takes as input the vector expressed in the current frame; each
-        following element takes as input the vector expressed in its
-        predecessor's output frame. The last element outputs the vector
-        expressed in ``to_frame``.
+        from the current frame into ``to_frame`` and returns both, the sequence
+        of frames and the sequence of links involved in this transformation.
+
+        The sequence of frames will have this frame as its first element,
+        and ```to_frame`` as its last element.
+
+        The first element of the returned sequence of links takes as input the
+        vector expressed in the current frame; each following element takes as
+        input the vector expressed in its predecessor's output frame. The last
+        element outputs the vector expressed in ``to_frame``.
 
         Parameters
         ----------
@@ -371,8 +375,14 @@ class Frame:
             If not None, the maximum depth to search, i.e., the maximum length
             of the transform chain.
 
-        """
+        Returns
+        -------
+        frames : List[Frame]
+            A list of frames between this frame and ``to_frame`` (inclusive).
+        links : List[Link]
+            A list of links between this frame and ``to_frame``.
 
+        """
         if max_depth is None:
             max_depth = float("inf")
 
@@ -414,7 +424,195 @@ class Frame:
                 "Did not find a transformation chain to the target frame."
             )
 
-        return sub_chain
+        return list(frames), sub_chain
+
+    def transform_chain(
+        self,
+        to_frame: Union["Frame", str],
+        *,
+        ignore_frames: List["Frame"] = None,
+        metric: Callable[[Tuple["Frame"], Tuple[Link]], float] = DepthFirst,
+        max_depth: int = None,
+    ) -> List[Link]:
+        """Get a transformation chain into ``to_frame`` (deprecated).
+
+        .. deprecated:: 0.9.0
+            This method is deprecated and will be removed in scikit-bot v1.0.
+            Use ``Frame.links_between`` instead.
+        .. versionadded:: 0.5.0
+            This method was added to Frame.
+
+        This function searches the frame graph for a chain of transformations
+        from the current frame into ``to_frame`` and returns the sequence of
+        links involved in this transformation. The first element of the returned
+        sequence takes as input the vector expressed in the current frame; each
+        following element takes as input the vector expressed in its
+        predecessor's output frame. The last element outputs the vector
+        expressed in ``to_frame``.
+
+        Parameters
+        ----------
+        to_frame : Frame, str
+            The frame in which to express vectors. If ``str``, the graph is
+            searched for any node matching that name and the transformation
+            chain to the first node matching the name is returned.
+        ignore_frames : List[Frame]
+            A list of frames to exclude while searching for a transformation
+            chain.
+        metric : Callable[[Tuple[Frame], Tuple[Link]], float]
+            A function to compute the priority of a sub-chain. Sub-chains are
+            searched in order of priority starting with the lowest value. The
+            first chain that matches ``to_frame`` is returned. You can use a
+            custom function that takes a sequence of frames and links involved
+            in the sub-chain as input and returns a float (signature
+            ``custom_fn(frames, links) -> float``), or you can use a pre-build
+            function:
+
+                skbot.transform.metric.DepthFirst
+                    The frame graph is searched depth-first with no
+                    preference among frames (default).
+                skbot.transform.metric.BreadthFirst
+                    The frame graph is searched breadth-first with no
+                    preference among frames.
+        max_depth : int
+            If not None, the maximum depth to search, i.e., the maximum length
+            of the transform chain.
+
+        """
+
+        warnings.warn(
+            "`Frame.transform_chain` is deprecated."
+            " Use `Frame.links_between` instead.",
+            DeprecationWarning,
+        )
+
+        _, links = self.chain_between(
+            to_frame, ignore_frames=ignore_frames, metric=metric, max_depth=max_depth
+        )
+
+        return links
+
+    def links_between(
+        self,
+        to_frame: Union["Frame", str],
+        *,
+        ignore_frames: List["Frame"] = None,
+        metric: Callable[[Tuple["Frame"], Tuple[Link]], float] = DepthFirst,
+        max_depth: int = None,
+    ):
+        """Get the links between this frame and ``to_frame``.
+
+        .. versionadded:: 0.9.0
+
+        This function searches the frame graph for a chain of transformations
+        from the current frame into ``to_frame`` and returns the sequence of
+        links involved in this transformation. The first element of the returned
+        sequence takes as input the vector expressed in the current frame; each
+        following element takes as input the vector expressed in its
+        predecessor's output frame. The last element outputs the vector
+        expressed in ``to_frame``.
+
+        Parameters
+        ----------
+        to_frame : Frame, str
+            The frame in which to express vectors. If ``str``, the graph is
+            searched for any node matching that name and the transformation
+            chain to the first node matching the name is returned.
+        ignore_frames : List[Frame]
+            A list of frames to exclude while searching for a transformation
+            chain.
+        metric : Callable[[Tuple[Frame], Tuple[Link]], float]
+            A function to compute the priority of a sub-chain. Sub-chains are
+            searched in order of priority starting with the lowest value. The
+            first chain that matches ``to_frame`` is returned. You can use a
+            custom function that takes a sequence of frames and links involved
+            in the sub-chain as input and returns a float (signature
+            ``custom_fn(frames, links) -> float``), or you can use a pre-build
+            function:
+
+                skbot.transform.metric.DepthFirst
+                    The frame graph is searched depth-first with no
+                    preference among frames (default).
+                skbot.transform.metric.BreadthFirst
+                    The frame graph is searched breadth-first with no
+                    preference among frames.
+        max_depth : int
+            If not None, the maximum depth to search, i.e., the maximum length
+            of the transform chain.
+
+        """
+
+        _, links = self.chain_between(
+            to_frame, ignore_frames=ignore_frames, metric=metric, max_depth=max_depth
+        )
+
+        return links
+
+    def frames_between(
+        self,
+        to_frame: Union["Frame", str],
+        *,
+        include_self: bool = True,
+        include_to_frame: bool = True,
+        ignore_frames: List["Frame"] = None,
+        metric: Callable[[Tuple["Frame"], Tuple[Link]], float] = DepthFirst,
+        max_depth: int = None,
+    ):
+        """Get the frames between this frame and ``to_frame``.
+
+        .. versionadded:: 0.9.0
+
+        This function searches the frame graph for a chain of transformations
+        from the current frame into ``to_frame`` and returns the sequence of
+        frames between this frame and ``to_frame``.
+
+        Parameters
+        ----------
+        include_self : bool
+            If ``True`` (default) this frame will be added as the first
+            element of the returned sequence.
+        include_to_frame : bool
+            If ``True`` (default) ``to_frame`` will be added as the last
+            element of the returned sequence.
+        to_frame : Frame, str
+            The frame in which to express vectors. If ``str``, the graph is
+            searched for any node matching that name and the transformation
+            chain to the first node matching the name is returned.
+        ignore_frames : List[Frame]
+            A list of frames to exclude while searching for a transformation
+            chain.
+        metric : Callable[[Tuple[Frame], Tuple[Link]], float]
+            A function to compute the priority of a sub-chain. Sub-chains are
+            searched in order of priority starting with the lowest value. The
+            first chain that matches ``to_frame`` is returned. You can use a
+            custom function that takes a sequence of frames and links involved
+            in the sub-chain as input and returns a float (signature
+            ``custom_fn(frames, links) -> float``), or you can use a pre-build
+            function:
+
+                skbot.transform.metric.DepthFirst
+                    The frame graph is searched depth-first with no
+                    preference among frames (default).
+                skbot.transform.metric.BreadthFirst
+                    The frame graph is searched breadth-first with no
+                    preference among frames.
+        max_depth : int
+            If not None, the maximum depth to search, i.e., the maximum length
+            of the transform chain.
+
+        """
+
+        frames, _ = self.chain_between(
+            to_frame, ignore_frames=ignore_frames, metric=metric, max_depth=max_depth
+        )
+
+        if not include_self:
+            frames.pop(0)
+
+        if not include_to_frame:
+            frames.pop(-1)
+
+        return frames
 
     def find_frame(self, path: str, *, ignore_frames: List["Frame"] = None) -> "Frame":
         """Find a frame matching a given path.

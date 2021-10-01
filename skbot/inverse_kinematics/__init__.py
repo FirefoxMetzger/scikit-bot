@@ -15,7 +15,7 @@ frame coincides with a desired position in the world frame.
 
 While using tool and world frame may be most common - after all it is textbook
 IK -, this module is not limited to these frames. Any two frames that have (at
-least) one valid :func:`transform chain <skbot.transform.Frame.transform_chain>`
+least) one valid :func:`transform chain <skbot.transform.Frame.links_between>`
 between them that depends on the joints can be used. Expanding on the previous
 example, we can specify IK between the camera frame of a static camera and
 panda's tool frame.

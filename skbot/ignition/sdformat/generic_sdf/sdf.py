@@ -38,24 +38,24 @@ class Sdf(ElementBase):
     version : str
         The SDFormat version.
     worlds : List[World]
-        .. depreciated:: SDFormat v1.8
+        .. deprecated:: SDFormat v1.8
             Worlds, models, lights, and/or actors can no longer be combined. Use
             `payload` instead.
         The worlds contained in this SDF.
     models : List[Model]
-        .. depreciated:: SDFormat v1.8
+        .. deprecated:: SDFormat v1.8
             Starting with SDFormat v1.8 only a single model is supported. Use the
             `model` kwarg instead.
 
         The models contained in this SDF.
     lights : List[Light]
-        .. depreciated:: SDFormat v1.8
+        .. deprecated:: SDFormat v1.8
             Starting with SDFormat v1.8 only a single light is supported. Use the
             `light` kwarg instead.
 
         The lights contained in this SDF.
     actors : List[Actor]
-        .. depreciated:: SDFormat v1.8
+        .. deprecated:: SDFormat v1.8
             Starting with SDFormat v1.8 only a single actor is supported. Use the
             `actor` kwarg instead.
 
@@ -74,13 +74,13 @@ class Sdf(ElementBase):
     version : str
         The SDFormat version.
     models : List[Model]
-        .. depreciated:: SDFormat v1.8
+        .. deprecated:: SDFormat v1.8
             Use the `Sdf.model` instead.
     lights : List[Light]
-        .. depreciated:: SDFormat v1.8
+        .. deprecated:: SDFormat v1.8
             Use the `Sdf.light` instead.
     actors : List[Actor]
-        .. depreciated:: SDFormat v1.8
+        .. deprecated:: SDFormat v1.8
             Use the `Sdf.actor` instead.
 
     """
@@ -148,11 +148,11 @@ class Sdf(ElementBase):
         except IndexError:
             return None
 
-    # Depreciated properties
+    # deprecated properties
     @property
     def actors(self) -> List[Actor]:
         warnings.warn(
-            "`sdf.actors` is depreciated since SDFormat v1.8. Use `sdf.actor` instead.",
+            "`sdf.actors` is deprecated since SDFormat v1.8. Use `sdf.actor` instead.",
             DeprecationWarning,
         )
         return self._actors
@@ -160,7 +160,7 @@ class Sdf(ElementBase):
     @property
     def models(self) -> List[Model]:
         warnings.warn(
-            "`sdf.models` is depreciated since SDFormat v1.8. Use `sdf.models` instead.",
+            "`sdf.models` is deprecated since SDFormat v1.8. Use `sdf.models` instead.",
             DeprecationWarning,
         )
         return self._models
@@ -168,7 +168,7 @@ class Sdf(ElementBase):
     @property
     def lights(self) -> List[Light]:
         warnings.warn(
-            "`sdf.lights` is depreciated since SDFormat v1.8. Use `sdf.lights` instead.",
+            "`sdf.lights` is deprecated since SDFormat v1.8. Use `sdf.lights` instead.",
             DeprecationWarning,
         )
         return self._lights

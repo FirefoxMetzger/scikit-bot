@@ -105,3 +105,29 @@ def test_translation_dims():
 
     assert link.parent_dim == 3
     assert link.child_dim == 3
+
+
+def test_affine():
+    cartesian = tf.Frame(3)
+    affine = tf.AffineSpace(3)(cartesian)
+
+    input = np.array([[1, 0, 0], [1, 1, 0], [1, 1, 1]])
+    expected = np.array([[1, 0, 0, 1], [1, 1, 0, 1], [1, 1, 1, 1]])
+
+    as_affine = cartesian.transform(input, affine)
+    assert np.allclose(as_affine, expected)
+
+    as_cartesian = affine.transform(as_affine, cartesian)
+    assert np.allclose(as_cartesian, input)
+
+    input = np.array(
+        [
+            [1, 1, 1, 1],
+            [0.5, 0.5, 0.5, 0.5],
+            [3, 3, 3, 3],
+            [0.1, 0.1, 0.1, 0.1],
+        ]
+    )
+    expected = np.ones((4, 3))
+    result = affine.transform(input, cartesian)
+    assert np.allclose(result, expected)

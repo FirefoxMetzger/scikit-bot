@@ -303,7 +303,7 @@ class Pose(ElementBase):
             `nested_model_A::nested_model_B::awesome_frame`.
     frame : str
         Old name for `relative_to`.
-        .. depreciated:: SDFormat v1.7
+        .. deprecated:: SDFormat v1.7
 
 
     """
@@ -327,7 +327,7 @@ class Pose(ElementBase):
 
     @property
     def frame(self):
-        warnings.warn("`Pose.frame` is depreciated. Use `Pose.relative_to` instead.")
+        warnings.warn("`Pose.frame` is deprecated. Use `Pose.relative_to` instead.")
         return self.relative_to
 
     @classmethod

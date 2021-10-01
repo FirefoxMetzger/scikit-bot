@@ -80,13 +80,13 @@ def ccd(
     if metric is None:
         metric = lambda x, y: np.linalg.norm(x - y)
 
-    transform_chain = frameA.transform_chain(frameB)
+    links = frameA.links_between(frameB)
 
     def optimizely(x, current_joint):
         current_joint.param = x
 
         current_point = pointA
-        for link in transform_chain:
+        for link in links:
             current_point = link.transform(current_point)
 
         return metric(current_point, pointB)

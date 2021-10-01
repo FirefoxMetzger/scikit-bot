@@ -65,7 +65,7 @@ class Camera(ElementBase):
     frames : List[Frame]
         A list of frames of reference in which poses may be expressed.
 
-        .. depreciated:: SDFormat v1.7
+        .. deprecated:: SDFormat v1.7
             Use :attr:`Model.frame` instead.
         .. versionadded:: SDFormat v1.5
 
@@ -154,7 +154,7 @@ class Camera(ElementBase):
     @property
     def frames(self):
         warnings.warn(
-            "`Sensor.frames` is depreciated since SDF v1.7."
+            "`Sensor.frames` is deprecated since SDF v1.7."
             " Use `Model.frames` instead and set `Frame.attached_to` to the name of this link.",
             DeprecationWarning,
         )
@@ -251,7 +251,7 @@ class Camera(ElementBase):
         parent_static = _scaffolding[parent_name]
         child_static = _scaffolding[child_name]
 
-        link = tf.CompundLink(parent_static.transform_chain(child_static))
+        link = tf.CompundLink(parent_static.links_between(child_static))
         link(parent, child)
 
         if self.sdf_version == "1.0":

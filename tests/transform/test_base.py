@@ -27,21 +27,19 @@ def test_chain_resolution_dfs(simple_graph: List[tf.Frame]):
 
 
 def test_chain_resolution_bfs(simple_graph: List[tf.Frame]):
-    links = simple_graph[0].transform_chain(
+    links = simple_graph[0].links_between(
         simple_graph[7], metric=tf.metrics.BreadthFirst
     )
     assert len(links) == 3
 
     # depends on which link is expanded first
-    links = simple_graph[0].transform_chain(
-        simple_graph[7], metric=tf.metrics.DepthFirst
-    )
+    links = simple_graph[0].links_between(simple_graph[7], metric=tf.metrics.DepthFirst)
     assert len(links) == 3 or len(links) == 5
 
 
 def test_transform_chain_max_depth(simple_graph: List[tf.Frame]):
     with pytest.raises(RuntimeError):
-        simple_graph[0].transform_chain(simple_graph[7], max_depth=2)
+        simple_graph[0].links_between(simple_graph[7], max_depth=2)
 
 
 def test_find_frame(simple_graph):
@@ -86,7 +84,7 @@ def test_compound_frame(vec_child, vec_parent):
     assert np.allclose(out, vec_child)
 
 
-def test_named_transform_chain():
+def test_named_links_between():
     link = tf.Translation((1, 0))
 
     a = tf.Frame(2, name="foo")
@@ -94,7 +92,21 @@ def test_named_transform_chain():
     y = link(x)
     z = link(y)
 
-    elements = z.transform_chain("foo")
+    elements = z.links_between("foo")
+
+    assert len(elements) == 3
+
+
+def test_named_links_between():
+    link = tf.Translation((1, 0))
+
+    a = tf.Frame(2, name="foo")
+    x = link(a)
+    y = link(x)
+    z = link(y)
+
+    with pytest.deprecated_call():
+        elements = z.transform_chain("foo")
 
     assert len(elements) == 3
 
@@ -118,3 +130,24 @@ def test_inverse_inverse():
     expected = link.transform(point)
 
     assert np.allclose(result, expected)
+
+
+def test_frames_between():
+    link = tf.Translation((1, 0))
+
+    a = tf.Frame(2, name="foo")
+    x = link(a)
+    y = link(x)
+    z = link(y)
+
+    elements = z.frames_between("foo")
+    assert len(elements) == 4
+    assert elements[0] == z
+    assert elements[1] == y
+    assert elements[2] == x
+    assert elements[3] == a
+
+    elements = z.frames_between("foo", include_self=False, include_to_frame=False)
+    assert len(elements) == 2
+    assert elements[0] == y
+    assert elements[1] == x

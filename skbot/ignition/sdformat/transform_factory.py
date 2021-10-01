@@ -76,12 +76,12 @@ def to_frame_graph(
     to the child frame is named after the joint (<joint_name>), and the
     (implicit) joint frame attached to the parent is named
     (<joint_name>_parent). The link between the two frames can be retrieved via
-    :func:`skbot.transform.Frame.transform_chain`. For example if there is a
+    :func:`skbot.transform.Frame.links_between`. For example if there is a
     joint named "robot_joint0" its link can be retrieved using::
 
         child_frame = frame_graph.find_frame(".../robot_joint0")
         parent_frame = frame_graph.find_frame(".../robot_joint0_parent")
-        link = child_frame.transform_chain(child_frame)[0]
+        link = child_frame.links_between(child_frame)[0]
     """
 
     root = loads_generic(sdf)

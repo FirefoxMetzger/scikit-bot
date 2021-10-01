@@ -1,7 +1,7 @@
 import numpy as np
-from math import sin, cos
 from numpy.typing import ArrayLike
 
+from .base import Frame
 from ._utils import vector_project
 
 
@@ -172,3 +172,51 @@ def shear(
     tmp1 = np.sum(vector * amount, axis=axis)
 
     return vector + tmp1 * direction
+
+
+def as_affine_matrix(from_frame: Frame, to_frame: Frame, *, axis: int = -1):
+    """Transformation Matrix between two frames at a given point.
+
+    Given two frames ``from_frame`` and ``to_frame`` that represent affine space
+    and are connected by a sequence of linear transformations, compute a matrix
+    representation of the transformation.
+
+    Parameters
+    ----------
+    from_frame : tf.Frame
+        The parent frame.
+    to_frame : tf.Frame
+        The child frame.
+    axis : int
+        The axis along which computation takes place. All other axes are considered
+        batch dimensions.
+
+    Returns
+    -------
+    matrix : np.ndarray
+        The matrix representation of the transformation. It will have the shape
+        ``(batch_shape, to_frame.ndim, from_frame.ndim)``.
+
+    Notes
+    -----
+    The matrix representation will only be accurate if the transformation chain
+    between the two given frames is linear.
+
+    The
+
+    """
+
+    if axis != -1:
+        raise NotImplementedError("Axis is not implemented yet.")
+
+    basis_set = np.eye(from_frame.ndim)
+    basis_set[:, -1] = 1
+
+    mapped_basis = from_frame.transform(basis_set, to_frame).T
+
+    # normalize affine matrix
+    scaling = mapped_basis[-1, :]
+    mapped_basis /= scaling[None, :]
+    mapped_basis[..., :-1] -= mapped_basis[..., -1][..., None]
+
+    return mapped_basis
