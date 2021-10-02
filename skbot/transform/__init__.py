@@ -85,6 +85,15 @@ Available Transformations
     CompundLink
     InvertLink
 
+Functions
+---------
+
+.. autosummary::
+    :toctree:
+
+    simplify_links
+
+
 """
 
 from .base import (
@@ -115,6 +124,7 @@ from .utils3d import (
 from .joints import RotationalJoint, PrismaticJoint
 
 from . import metrics
+from .simplfy import simplify_links
 
 __all__ = [
     # Core Classes for Frame Management
@@ -144,4 +154,5 @@ __all__ = [
     "reflect",
     "shear",
     "scale",
+    "simplify_links",
 ]
