@@ -21,6 +21,7 @@ def simplify_links(
     - It drops 0 degree :class:`Rotations <Rotation>` (identities).
     - It drops 0 amount :class:`Translations <Translation>` (identities).
     - It combines series of translations into a single translation.
+    - It sorts translations before rotations.
 
     .. versionadded:: 0.10.0
 
@@ -157,7 +158,53 @@ def simplify_links(
 
         return improved_links
 
-    improved_links = simplify(links)
-    improved_links = combine_translations(improved_links)
 
-    return improved_links
+    def sort_links(links: List[Link]) -> List[Link]:
+        improved_links: List[Link] = [x for x in links]
+
+        repeat = True
+        while repeat:
+            repeat = False
+            for idx in range(len(improved_links) - 1):
+                link = improved_links[idx]
+                next_link = improved_links[idx+1]
+
+                if isinstance(link, Rotation) and isinstance(next_link, Translation):
+                    vector = next_link.amount * next_link.direction
+                    vector = link.__inverse_transform__(vector)
+                    
+                    improved_links[idx + 1] = improved_links[idx]
+                    improved_links[idx] = Translation(vector)
+                    
+                    repeat = True
+                    continue
+
+        return improved_links
+
+    improved_links = simplify(links)
+
+    subchains: List[List[Link]] = list()
+    keepsies:List[Link] = list()
+    current_subchain:List[Link] = list()
+    for link in improved_links:
+        if link in keep_links:
+            keepsies.append(link)
+            subchains.append(current_subchain)
+            current_subchain = list()
+        else:
+            current_subchain.append(link)
+    subchains.append(current_subchain)
+    
+    improved_chains:List[List[Link]] = list()
+    for subchain in subchains:
+        improved_links = sort_links(subchain)
+        improved_links = combine_translations(improved_links)
+        improved_chains.append(improved_links)
+
+    improved_chain:List[Link] = list()
+    for chain, keepsie in zip(improved_chains, keepsies):
+        improved_chain += chain
+        improved_chain += [keepsie]
+    improved_chain += improved_chains[-1]
+
+    return improved_chain

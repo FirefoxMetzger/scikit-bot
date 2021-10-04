@@ -2,6 +2,8 @@ import pytest
 import skbot.transform as tf
 import numpy as np
 from numpy.typing import ArrayLike
+from typing import List
+
 
 
 def test_compound_unwrapping():
@@ -198,3 +200,25 @@ def test_inverted_custom_link():
     for link in simplified_links:
         result = link.transform(result)
     assert np.allclose(result, expected)
+
+
+def test_link_ordering():
+    points = np.arange(200 * 3).reshape(200, 3)
+
+    links:List[tf.Link] = [
+        tf.Rotation((1, 0, 0), (0, 1, 0)),
+        tf.Translation((1, 0, 0)),
+        tf.Translation((1, 1, 0)),
+        tf.Translation((1, 1, 1)),
+    ]
+    simplified_links = tf.simplify_links(links)
+
+    expected = points
+    for link in links:
+        expected = link.transform(expected)
+    result = points
+    for link in simplified_links:
+        result = link.transform(result)
+    assert np.allclose(result, expected)
+
+    assert isinstance(simplified_links[-1], tf.Rotation)
