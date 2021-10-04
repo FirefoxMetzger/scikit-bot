@@ -5,7 +5,6 @@ from numpy.typing import ArrayLike
 from typing import List
 
 
-
 def test_compound_unwrapping():
     points = np.arange(200 * 3).reshape(200, 3)
 
@@ -205,7 +204,7 @@ def test_inverted_custom_link():
 def test_link_ordering():
     points = np.arange(200 * 3).reshape(200, 3)
 
-    links:List[tf.Link] = [
+    links: List[tf.Link] = [
         tf.Rotation((1, 0, 0), (0, 1, 0)),
         tf.Translation((1, 0, 0)),
         tf.Translation((1, 1, 0)),

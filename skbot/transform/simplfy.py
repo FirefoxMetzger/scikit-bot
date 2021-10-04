@@ -158,7 +158,6 @@ def simplify_links(
 
         return improved_links
 
-
     def sort_links(links: List[Link]) -> List[Link]:
         improved_links: List[Link] = [x for x in links]
 
@@ -167,15 +166,15 @@ def simplify_links(
             repeat = False
             for idx in range(len(improved_links) - 1):
                 link = improved_links[idx]
-                next_link = improved_links[idx+1]
+                next_link = improved_links[idx + 1]
 
                 if isinstance(link, Rotation) and isinstance(next_link, Translation):
                     vector = next_link.amount * next_link.direction
                     vector = link.__inverse_transform__(vector)
-                    
+
                     improved_links[idx + 1] = improved_links[idx]
                     improved_links[idx] = Translation(vector)
-                    
+
                     repeat = True
                     continue
 
@@ -184,8 +183,8 @@ def simplify_links(
     improved_links = simplify(links)
 
     subchains: List[List[Link]] = list()
-    keepsies:List[Link] = list()
-    current_subchain:List[Link] = list()
+    keepsies: List[Link] = list()
+    current_subchain: List[Link] = list()
     for link in improved_links:
         if link in keep_links:
             keepsies.append(link)
@@ -194,14 +193,14 @@ def simplify_links(
         else:
             current_subchain.append(link)
     subchains.append(current_subchain)
-    
-    improved_chains:List[List[Link]] = list()
+
+    improved_chains: List[List[Link]] = list()
     for subchain in subchains:
         improved_links = sort_links(subchain)
         improved_links = combine_translations(improved_links)
         improved_chains.append(improved_links)
 
-    improved_chain:List[Link] = list()
+    improved_chain: List[Link] = list()
     for chain, keepsie in zip(improved_chains, keepsies):
         improved_chain += chain
         improved_chain += [keepsie]

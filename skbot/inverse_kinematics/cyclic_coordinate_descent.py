@@ -1,37 +1,15 @@
 from .. import transform as tf
-from ..transform._utils import scalar_project
 from numpy.typing import ArrayLike
-from typing import List, Callable, Union, Tuple
+from typing import List, Callable, Union
 import numpy as np
 from scipy.optimize import minimize_scalar
 from scipy.optimize import OptimizeResult
+from .targets import Target, PositionTarget, RotationTarget
+
+import warnings
+
 
 joint_type = Union[tf.PrismaticJoint, tf.RotationalJoint]
-
-
-def _usage_count(joint: tf.Link, static: tf.Frame, dynamic: tf.Frame) -> int:
-    """The number of occurences of a link within a chain of links"""
-    occurences = 0
-
-    for link in static.links_between(dynamic):
-        if link is joint:
-            occurences += 1
-        elif isinstance(link, tf.InvertLink) and link._forward_link is joint:
-            occurences += 1
-
-    return occurences
-
-def _find_idx(joint: tf.Link, static: tf.Frame, dynamic: tf.Frame) -> int:
-    """The first index at which a given link occurrs in a transformation chain"""
-
-    for idx, link in enumerate(static.links_between(dynamic)):
-        if link is joint:
-            return idx
-        elif isinstance(link, tf.InvertLink) and link._forward_link is joint:
-            return idx
-
-    raise ValueError(f"The link is not involved in transformation between the two frames.")
-
 
 
 def step_generic_joint(joint: joint_type, score: Callable, maxiter: int) -> float:
@@ -57,77 +35,14 @@ def step_generic_joint(joint: joint_type, score: Callable, maxiter: int) -> floa
     return inner
 
 
-def step_rotational_joint(
-    joint: tf.RotationalJoint,
-    static_points: List[np.ndarray],
-    dynamic_points: List[np.ndarray],
-    static_frames: List[tf.Frame],
-    dynamic_frames: List[tf.Frame],
-) -> float:
-    static: tf.Frame
-    dynamic: tf.Frame
-    parent_frames: List[tf.Frame] = list()
-    child_frames: List[tf.Frame] = list()
-
-    # filter out targets that can't be influenced by this joint
-    used_idxs = [
-        idx
-        for idx, frames in enumerate(zip(static_frames, dynamic_frames))
-        if _usage_count(joint, *frames) == 1
-    ]
-    static_points = [
-        point for idx, point in enumerate(static_points) if idx in used_idxs
-    ]
-    dynamic_points = [
-        point for idx, point in enumerate(dynamic_points) if idx in used_idxs
-    ]
-    static_frames = [
-        point for idx, point in enumerate(static_frames) if idx in used_idxs
-    ]
-    dynamic_frames = [
-        point for idx, point in enumerate(dynamic_frames) if idx in used_idxs
-    ]
-
-    # get the frame just before and after the selected joint
-    for static, dynamic in zip(static_frames, dynamic_frames):
-        idx = _find_idx(joint, static, dynamic)
-        
-        parents = static.frames_between(dynamic, include_to_frame=False)
-        children = static.frames_between(dynamic, include_self=False)
-
-        parent_frames.append(parents[idx])
-        child_frames.append(children[idx])
-
-    basis1 = joint._u
-    basis2 = joint._u_ortho
-
-    def inner():
-        current_static:List[np.ndarray] = list()
-        current_dynamic:List[np.ndarray] = list()
-
-        for idx in range(len(parent_frames)):
-            parent_frame = parent_frames[idx]
-            child_frame = child_frames[idx]
-            static_frame = static_frames[idx]
-            dynamic_frame = dynamic_frames[idx]
-            static = static_points[idx]
-            dynamic = dynamic_points[idx]
-
-            parent = static_frame.transform(static, parent_frame)
-            child = dynamic_frame.transform(dynamic, child_frame)
-
-
-
-    return inner
-
-
 def ccd(
-    pointA: Union[ArrayLike, List[ArrayLike]],
-    pointB: Union[ArrayLike, List[ArrayLike]],
-    frameA: Union[tf.Frame, List[tf.Frame]],
-    frameB: Union[tf.Frame, List[tf.Frame]],
+    targets: List[Target],
     cycle_links: List[joint_type],
     *,
+    pointA: Union[ArrayLike, List[ArrayLike]] = None,
+    pointB: Union[ArrayLike, List[ArrayLike]] = None,
+    frameA: Union[tf.Frame, List[tf.Frame]] = None,
+    frameB: Union[tf.Frame, List[tf.Frame]] = None,
     metric: Callable[[np.ndarray, np.ndarray], float] = None,
     tol: float = 1e-3,
     maxiter: int = 500,
@@ -137,9 +52,12 @@ def ccd(
     """Cyclic Coordinate Descent.
 
     .. note::
-        This function will modify the passed-in frame graph as a side effect.
+        This function will modify the links given via ``cycle_links`` as a side effect.
 
-    .. versionadded:: 0.8.1
+    .. versionchanged:: 0.10.0
+        BREAKING CHANGE: The signature of ``ccd`` has changed. To keep using the old
+        signature make each argument a keyword argument.
+    .. versionchanged:: 0.10.0
         CCD can now jointly optimize for multiple targets.
     .. versionadded:: 0.7.0
         CCD was added to scikit-bot.
@@ -154,23 +72,9 @@ def ccd(
 
     Parameters
     ----------
-    pointA : ArrayLike
-        A list of points. The i-th pointA is represented in the i-th frame of
-        frameA. If only one point is given, the list can be omitted and the point
-        can be directly used as input.
-    pointB : ArrayLike
-        The desired positions of each point given in pointA. The i-th pointB is
-        represented in the i-th frame of frameB. If only one point is given, the
-        list can be omitted and the point can be directly used as input.
-    frameA : tf.Frame
-        The frame in which the points in pointA are represented. The i-th
-        element corresponds to the i-th pointA. If only one point is given, the
-        list can be omitted and the frame can be directly used as input.
-    frameB : tf.Frame
-        The frame in which the points in pointB are represented. The i-th
-        element corresponds to the i-th pointB. If only one point is given, the
-        list can be omitted and the frame can be directly used as input.
-    cycle_links: List[joint]
+    targets : List[CCDTarget]
+        A list of targets that the resulting pose should reach.
+    cycle_links : List[joint]
         A list of 1DoF joints which should be adjusted to make pointA and pointB
         valid representations of the same points.
     metric : Callable
@@ -189,6 +93,34 @@ def ccd(
     weights : List[float]
         The relative weight to give to each quartet ``(pointA[i], pointB[i],
         frameA[i], frameB[i])``. If None, each element will have equal weight.
+    pointA : ArrayLike
+        .. deprecated:: 0.10.0
+            Use ``targets`` and a ``CCDPositionTarget`` instead.
+
+        A list of points. The i-th pointA is represented in the i-th frame of
+        frameA. If only one point is given, the list can be omitted and the point
+        can be directly used as input.
+    pointB : ArrayLike
+        .. deprecated:: 0.10.0
+            Use ``targets`` and a ``CCDPositionTarget`` instead.
+
+        The desired positions of each point given in pointA. The i-th pointB is
+        represented in the i-th frame of frameB. If only one point is given, the
+        list can be omitted and the point can be directly used as input.
+    frameA : tf.Frame
+        .. deprecated:: 0.10.0
+            Use ``targets`` and a ``CCDPositionTarget`` instead.
+
+        The frame in which the points in pointA are represented. The i-th
+        element corresponds to the i-th pointA. If only one point is given, the
+        list can be omitted and the frame can be directly used as input.
+    frameB : tf.Frame
+        .. deprecated:: 0.10.0
+            Use ``targets`` and a ``CCDPositionTarget`` instead.
+
+        The frame in which the points in pointB are represented. The i-th
+        element corresponds to the i-th pointB. If only one point is given, the
+        list can be omitted and the frame can be directly used as input.
 
     Returns
     -------
@@ -218,76 +150,70 @@ def ccd(
 
     joint_values = [l.param for l in cycle_links]
 
-    _original_metric = metric
     if metric is None:
         metric = lambda x, y: np.linalg.norm(x - y)
 
-    if not (isinstance(frameA, list) or isinstance(frameA, tuple)):
-        frameA = [frameA]
-        frameB = [frameB]
-        pointA = [pointA]
-        pointB = [pointB]
-
-    pointA = [x for x in map(np.asarray, pointA)]
-    pointB = [x for x in map(np.asarray, pointB)]
-
-    targets: List[Tuple[np.ndarray, np.ndarray, List[tf.Link]]] = [
-        (x[0], x[1], x[2].links_between(x[3]))
-        for x in zip(pointA, pointB, frameA, frameB)
-    ]
+    if frameA is None:
+        pass
+    elif not (isinstance(frameA, list) or isinstance(frameA, tuple)):
+        warnings.warn(
+            "The use of `pointA`, `pointB`, `frameA`, and `frameB` is deprecated."
+            " Use `targets` and `CCDPoseTarget` instead."
+        )
+        target = PositionTarget(
+            static_position=np.asarray(pointA),
+            dynamic_position=np.asarray(pointB),
+            static_frame=frameA,
+            dynamic_frame=frameB,
+        )
+        targets.append(target)
+    else:
+        warnings.warn(
+            "The use of `pointA`, `pointB`, `frameA`, and `frameB` is deprecated."
+            " Use `targets` and `CCDPoseTarget` instead."
+        )
+        for static, dynamic, static_frame, dynamic_frame in zip(
+            pointA, pointB, frameA, frameB
+        ):
+            target = PositionTarget(
+                static_position=np.asarray(static),
+                dynamic_position=np.asarray(dynamic),
+                static_frame=static_frame,
+                dynamic_frame=dynamic_frame,
+            )
+            targets.append(target)
 
     if weights is None:
         weights = [1 / len(targets)] * len(targets)
+    weights = np.asarray(weights)
 
-    def score() -> float:
-        scores = np.empty((len(targets),), dtype=np.float_)
-        for idx in range(len(targets)):
-            current_point, target_point, chain = targets[idx]
-            for link in chain:
-                current_point = link.transform(current_point)
-            scores[idx] = metric(current_point, target_point)
-
+    def total_score() -> float:
+        scores = np.array([x.score() for x in targets])
         return np.sum(weights * scores)
 
-    step_fn = [
-        step_generic_joint(joint, score, line_search_maxiter) for joint in cycle_links
-    ]
+    step_fn = list()
+    for target in targets:
+        for joint in cycle_links:
+            step_fn.append(step_generic_joint(joint, target.score, line_search_maxiter))
 
-    def usage_count(joint):
-        occurences = 0
-
-        static: tf.Frame
-        dynamic: tf.Frame
-        for static, dynamic in zip(frameA, frameB):
-            chain_usage = _usage_count(joint, static, dynamic)
-            if chain_usage > occurences:
-                occurences = chain_usage
-
-        return occurences
-
-    cycle_links = [link for link in cycle_links if usage_count(link) > 0]
-
-    # for idx in range(len(cycle_links)):
-    #     joint = cycle_links[idx]
-    #     if (
-    #         isinstance(joint, tf.RotationalJoint)
-    #         and usage_count(joint) == 1
-    #         and _original_metric is None
-    #     ):
-    #         step_fn[idx] = step_rotational_joint(joint, pointA, pointB, frameA, frameB)
-
-    for step in range(maxiter * len(cycle_links)):
-        distance = score()
+    for step in range(maxiter * len(targets) * len(cycle_links)):
+        distance = total_score()
         if distance <= tol:
             break
 
-        iteration = step // len(cycle_links)
         joint_idx = step % len(cycle_links)
-        joint = cycle_links[joint_idx]
-        step_joint = step_fn[joint_idx]
+        residual = step % (len(cycle_links) * len(targets))
+        target_idx = residual // len(cycle_links)
+        iteration = step // (len(cycle_links) * len(targets))
+
+        if iteration % 10 == 0 and target_idx == 0 and joint_idx == 0:
+            print(iteration, target_idx, joint_idx)
+
+        step_joint = step_fn[len(cycle_links) * target_idx + joint_idx]
 
         result = step_joint()
 
+        joint = cycle_links[joint_idx]
         joint.param = result
     else:
         raise RuntimeError(f"IK exceeded maxiter.")
