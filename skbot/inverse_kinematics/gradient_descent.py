@@ -98,4 +98,5 @@ def gd(
     for joint, value in zip(joints, result.x):
         joint.param = value
 
+    joint_values = np.array([j.param for j in joints])
     return joint_values
