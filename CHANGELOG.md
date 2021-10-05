@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.9.2 (2021-10-05)
+### Fix
+* Bump coverage[toml] from 5.5 to 6.0 ([#89](https://github.com/FirefoxMetzger/scikit-bot/issues/89)) ([`18ea4ba`](https://github.com/FirefoxMetzger/scikit-bot/commit/18ea4bac466788c3a98643e8fd8fa142e82eb51b))
+
 ## v0.9.1 (2021-10-01)
 ### Fix
 * Bump cachetools from 4.2.2 to 4.2.4 ([#84](https://github.com/FirefoxMetzger/scikit-bot/issues/84)) ([`79d43db`](https://github.com/FirefoxMetzger/scikit-bot/commit/79d43dbd64966789aecade50a40e464fe1d213a7))
