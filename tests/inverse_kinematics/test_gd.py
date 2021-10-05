@@ -36,7 +36,7 @@ def test_panda_orientation(panda):
     joints: List[joint_types]
     base_frame, joints = panda
     tool_frame = base_frame.find_frame(".../panda_link8")
-    
+
     expected = np.zeros(len(joints))
     for idx, joint in enumerate(joints):
         expected[idx] = joint.param
@@ -114,7 +114,7 @@ def test_multi_frame_ccd(panda):
     tool_origin = tool_frame.transform((0, 0, 0), base_frame)
     tool_facing = tool_frame.transform((0, 1, 0), base_frame)
     initial_ori = tool_facing - tool_origin
-    
+
     expected = np.zeros(len(joints))
     for idx, joint in enumerate(joints):
         expected[idx] = joint.param

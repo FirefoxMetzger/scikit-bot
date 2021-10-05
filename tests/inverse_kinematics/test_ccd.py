@@ -168,7 +168,6 @@ def test_multi_frame_ccd(panda):
 
     tool_origin = tool_frame.transform((0, 0, 0), base_frame)
 
-    
     expected = np.zeros(len(joints))
     for idx, joint in enumerate(joints):
         expected[idx] = joint.param
