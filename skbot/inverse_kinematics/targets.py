@@ -103,4 +103,4 @@ class RotationTarget(Target):
         else:
             theta = np.arccos(trace / 2)
 
-        return theta
+        return np.pi - abs(theta - np.pi)

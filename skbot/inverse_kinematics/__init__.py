@@ -1,38 +1,42 @@
 """
 Inverse Kinematics (IK) Algorithms.
 
-The algorithms in this module assume that the environment is expressed as a
-frame graph (see :mod:`skbot.transform`). Once this is done, the problem of
-inverse kinematics can be neatly expressed as finding parameters for a set of
-:class:`Links <skbot.transform.Link>` such that a point (or set of points,
-depending on the algorithm) that has a certain representation in one frame has a
-certain representation in another frame.
+.. currentmodule:: skbot.inverse_kinematics
 
-For example, for a robot like panda we know the tool position in the tool frame
-(often 0), and we wish to change the joint angles (joints are
-:class:`Links <skbot.transform.Link>`) such that the given position in the tool
-frame coincides with a desired position in the world frame.
+The algorithms in this module find values for a set of joints (a glorified list
+of :class:`tf.Links <skbot.transform.Link>`) such that the score of one or more
+:class:`Targets <Target>` is minimal.
 
-While using tool and world frame may be most common - after all it is textbook
-IK -, this module is not limited to these frames. Any two frames that have (at
-least) one valid :func:`transform chain <skbot.transform.Frame.links_between>`
-between them that depends on the joints can be used. Expanding on the previous
-example, we can specify IK between the camera frame of a static camera and
-panda's tool frame.
+:class:`Targets <Target>` are specified between two :class`tf.Frames
+<skbot.transform.Frame>` that are connected by a sequence of :class:`tf.Links
+<skbot.transform.Link>` (the kinematic chain). For example, the
+:class:`PositionTarget` can be used to specify that a static position in a
+robot's tool frame should have a certain dynamic position when transformed into
+the world frame. The available IK algorithms will then attempt to find values
+for the ``joints`` between these two frames such that the value of the
+transformed static position and the value of dynamic position are identical.
 
+Targets
+-------
 
+.. autosummary::
+    :toctree:
+    PositionTarget
+    RotationTarget
 
-Functions
----------
+IK Algorithms
+-------------
 
 .. autosummary::
     :toctree:
 
     skbot.inverse_kinematics.ccd
+    skbot.inverse_kinematics.gd
 
 """
 
 from .targets import Target, PositionTarget, RotationTarget
 from .cyclic_coordinate_descent import ccd
+from .gradient_descent import gd
 
-__all__ = ["ccd", "Target", "PositionTarget", "RotationTarget"]
+__all__ = ["ccd", "gd", "Target", "PositionTarget", "RotationTarget"]
