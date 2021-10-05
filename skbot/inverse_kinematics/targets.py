@@ -14,7 +14,7 @@ class Target:
     def score(self):
         raise NotImplementedError
 
-    def usage_count(self, joint: tf.Link):
+    def usage_count(self, joint: tf.Link) -> int:
         """The number of occurences of a link within a chain of links"""
         occurences = 0
 
@@ -26,7 +26,7 @@ class Target:
 
         return occurences
 
-    def uses(self, joint: tf.Link):
+    def uses(self, joint: tf.Link) -> bool:
         """Check if joint exists in this goals chain."""
 
         for link in self._chain:

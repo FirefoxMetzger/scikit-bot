@@ -1,4 +1,5 @@
 from .. import transform as tf
+from ..transform._utils import scalar_project, angle_between
 from numpy.typing import ArrayLike
 from typing import List, Callable, Union
 import numpy as np
@@ -10,14 +11,16 @@ from .types import IKJoint
 import warnings
 
 
-def step_generic_joint(joint: IKJoint, score: Callable, maxiter: int) -> float:
+def step_generic_joint(
+    joint: IKJoint, score: Callable, maxiter: int
+) -> Callable[[], None]:
     """Find the optimal value for the current joint."""
 
     def generic_objective(x: float, current_joint: IKJoint) -> float:
         current_joint.param = x
         return score()
 
-    def inner():
+    def inner() -> None:
         result: OptimizeResult = minimize_scalar(
             lambda x: generic_objective(x, joint),
             bounds=(joint.lower_limit, joint.upper_limit),
@@ -28,7 +31,50 @@ def step_generic_joint(joint: IKJoint, score: Callable, maxiter: int) -> float:
         if not result.success:
             raise RuntimeError(f"IK failed. Reason: {result.message}")
 
-        return result.x
+        joint.param = result.x
+
+    return inner
+
+
+def analytic_rotation(
+    joint: tf.RotationalJoint, target: PositionTarget
+) -> Callable[[], None]:
+    joint_idx = target._chain.index(joint)
+
+    basis1 = np.array((1, 0), dtype=float)
+    basis2 = np.array((0, 1), dtype=float)
+
+    def inner() -> None:
+        target_point = target.dynamic_position
+        for link in target._chain[:joint_idx]:
+            target_point = link.transform(target_point)
+        target_projected = np.array(
+            [
+                scalar_project(target_point, joint._u),
+                scalar_project(target_point, joint._u_ortho),
+            ]
+        )
+
+        target_angle = angle_between(target_projected, basis1)
+        if angle_between(target_projected, basis2) > np.pi / 2:
+            target_angle = -target_angle
+
+        current_position = target.static_position
+        for link in reversed(target._chain[joint_idx:]):
+            current_position = link.__inverse_transform__(current_position)
+        current_projected = np.array(
+            [
+                scalar_project(current_position, joint._u),
+                scalar_project(current_position, joint._u_ortho),
+            ]
+        )
+        current_angle = angle_between(current_projected, basis1)
+        if angle_between(current_projected, basis2) > np.pi / 2:
+            current_angle = -current_angle
+
+        angle = target_angle - current_angle
+        angle = np.pi - abs(angle - np.pi)
+        joint.param = np.clip(joint.param + angle, joint.lower_limit, joint.upper_limit)
 
     return inner
 
@@ -40,7 +86,7 @@ def ccd(
     metric: Callable[[np.ndarray, np.ndarray], float] = None,
     atol: float = 1e-3,
     rtol: float = 1e-6,
-    maxiter: int = 500,
+    maxiter: int = 100,
     line_search_maxiter: int = 500,
     weights: List[float] = None,
     tol: float = None,
@@ -77,9 +123,8 @@ def ccd(
         euclidian distance will be used.
     atol : float
         Absolute tolerance above which the IK is considered to have failed.
-        Default: ``1e-3``.
     rtol : float
-        Relative tolerance for termination. Defaults to ``1e-6``.
+        Relative tolerance for termination.
     required_improvement : float
         The minimum required improvement of the objective after each iteration.
         If the improvement is less than this value, the algorithm fails and
@@ -145,6 +190,11 @@ def ccd(
     The current implementation is a naive python implementation and not very
     optimized. PRs improving performance are welcome :)
 
+    References
+    ----------
+    .. [1] Kenwright, Ben. "Inverse kinematics–cyclic coordinate descent (CCD)."
+    Journal of Graphics Tools 16.4 (2012): 177-217.
+
     """
 
     if cycle_links is not None:
@@ -155,6 +205,9 @@ def ccd(
             DeprecationWarning,
         )
         joints = cycle_links
+
+    for target in targets:
+        target._chain = tf.simplify_links(target._chain, keep_links=joints)
 
     joint_values = [l.param for l in joints]
 
@@ -215,11 +268,23 @@ def ccd(
     step_fn = list()
     for target in targets:
         for joint in joints:
-            step_fn.append(step_generic_joint(joint, target.score, line_search_maxiter))
+            stepper = None
+            if (
+                isinstance(target, PositionTarget)
+                and isinstance(joint, tf.RotationalJoint)
+                and target.static_frame.ndim == target.dynamic_frame.ndim
+                and target.static_frame.ndim == 3
+                and target.usage_count(joint) == 1
+            ):
+                stepper = None  # analytic_rotation(joint, target)
+
+            if stepper is None:
+                stepper = step_generic_joint(joint, target.score, line_search_maxiter)
+
+            step_fn.append(stepper)
 
     old_distance = float("inf")
     for step in range(maxiter * len(targets) * len(joints)):
-
         joint_idx = step % len(joints)
         residual = step % (len(joints) * len(targets))
         target_idx = residual // len(joints)
@@ -239,12 +304,7 @@ def ccd(
 
             old_distance = distance
 
-        step_joint = step_fn[len(joints) * target_idx + joint_idx]
-
-        result = step_joint()
-
-        joint = joints[joint_idx]
-        joint.param = result
+        step_fn[len(joints) * target_idx + joint_idx]()
     else:
         raise RuntimeError(f"IK exceeded maxiter.")
 

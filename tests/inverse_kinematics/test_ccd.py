@@ -23,8 +23,8 @@ def test_panda(panda):
     expected = np.zeros(len(joints))
 
     for idx, joint in enumerate(joints):
-        expected[idx] = joint.param
-        joint.param = (joint.upper_limit - joint.lower_limit) / 2
+        expected[idx] = joint.angle
+        joint.angle = (joint.upper_limit + joint.lower_limit) / 2
 
     targets = [ik.PositionTarget((0, 0, 0), root_pos, tool_frame, base_frame)]
     angles = ik.ccd(targets, joints)
@@ -45,7 +45,7 @@ def test_panda_orientation(panda):
 
     for idx, joint in enumerate(joints):
         expected[idx] = joint.param
-        joint.param = (joint.upper_limit - joint.lower_limit) / 2
+        joint.param = (joint.upper_limit + joint.lower_limit) / 2
 
     targets = [
         ik.RotationTarget(
@@ -100,14 +100,14 @@ def test_pendulum(double_pendulum):
     tool_frame = base_frame.find_frame(".../lower_link")
 
     for joint in joints:
-        joint.param = (joint.upper_limit - joint.lower_limit) / 4
+        joint.param = (joint.upper_limit + joint.lower_limit) / 4
 
     root_pos = tool_frame.transform((0, 0, 0), base_frame)
     expected = np.zeros(len(joints))
 
     for idx, joint in enumerate(joints):
         expected[idx] = joint.param
-        joint.param = (joint.upper_limit - joint.lower_limit) / 2
+        joint.param = (joint.upper_limit + joint.lower_limit) / 2
 
     targets = [
         ik.PositionTarget(
@@ -133,7 +133,7 @@ def test_ccd_maxiter(double_pendulum):
     root_pos = tool_frame.transform((0, 0, 0), base_frame)
 
     for joint in joints:
-        joint.param = (joint.upper_limit - joint.lower_limit) / 2
+        joint.param = (joint.upper_limit + joint.lower_limit) / 2
 
     targets = [ik.PositionTarget((0, 0, 0), root_pos, tool_frame, base_frame)]
 
@@ -150,7 +150,7 @@ def test_ccd_linesearch_maxiter(double_pendulum):
     root_pos = tool_frame.transform((0, 0, 0), base_frame)
 
     for joint in joints:
-        joint.param = (joint.upper_limit - joint.lower_limit) / 2
+        joint.param = (joint.upper_limit + joint.lower_limit) / 2
 
     targets = [ik.PositionTarget((0, 0, 0), root_pos, tool_frame, base_frame)]
 
