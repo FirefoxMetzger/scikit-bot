@@ -1,18 +1,15 @@
 from .. import transform as tf
-from .targets import Target, PositionTarget, RotationTarget
+from .targets import Target
 from typing import List
-from numpy.typing import ArrayLike
 import numpy as np
 from .types import IKJoint
 from scipy.optimize import minimize, OptimizeResult, Bounds
-import warnings
 
 
 def gd(
     targets: List[Target],
     joints: List[IKJoint],
     *,
-    jacobian=None,
     atol: float = 1e-3,
     rtol: float = 1e-6,
     maxiter: int = 500,
@@ -41,8 +38,9 @@ def gd(
         estimate.
     atol : float
         Absolute tolerance above which the IK is considered to have failed.
+        Default: ``1e-3``.
     rtol : float
-        Relative tolerance for termination. Defaults to 1e-6.
+        Relative tolerance for termination. Defaults to ``1e-6``.
     maxiter : int
         The maximum number of iterations.
 
@@ -86,14 +84,16 @@ def gd(
         joint_values,
         bounds=bounds,
         method="L-BFGS-B",
-        options={"maxiter": maxiter, "ftol":rtol},
+        options={"maxiter": maxiter, "ftol": rtol},
     )
 
     if not result.success:
         raise RuntimeError(f"IK failed. Reason: {result.message}")
 
     if result.fun > atol:
-        raise RuntimeError(f"IK failed. Reason: Loss in the local minimum is greater than `atol`.")
+        raise RuntimeError(
+            f"IK failed. Reason: Loss in the local minimum is greater than `atol`."
+        )
 
     for joint, value in zip(joints, result.x):
         joint.param = value

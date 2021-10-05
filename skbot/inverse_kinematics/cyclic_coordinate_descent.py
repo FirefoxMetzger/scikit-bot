@@ -5,17 +5,15 @@ import numpy as np
 from scipy.optimize import minimize_scalar
 from scipy.optimize import OptimizeResult
 from .targets import Target, PositionTarget, RotationTarget
+from .types import IKJoint
 
 import warnings
 
 
-joint_type = Union[tf.PrismaticJoint, tf.RotationalJoint]
-
-
-def step_generic_joint(joint: joint_type, score: Callable, maxiter: int) -> float:
+def step_generic_joint(joint: IKJoint, score: Callable, maxiter: int) -> float:
     """Find the optimal value for the current joint."""
 
-    def generic_objective(x: float, current_joint: joint_type) -> float:
+    def generic_objective(x: float, current_joint: IKJoint) -> float:
         current_joint.param = x
         return score()
 
@@ -37,22 +35,28 @@ def step_generic_joint(joint: joint_type, score: Callable, maxiter: int) -> floa
 
 def ccd(
     targets: List[Target],
-    cycle_links: List[joint_type],
+    joints: List[IKJoint] = None,
     *,
+    metric: Callable[[np.ndarray, np.ndarray], float] = None,
+    atol: float = 1e-3,
+    rtol: float = 1e-6,
+    maxiter: int = 500,
+    line_search_maxiter: int = 500,
+    weights: List[float] = None,
+    tol: float = None,
+    cycle_links: List[IKJoint] = None,
     pointA: Union[ArrayLike, List[ArrayLike]] = None,
     pointB: Union[ArrayLike, List[ArrayLike]] = None,
     frameA: Union[tf.Frame, List[tf.Frame]] = None,
     frameB: Union[tf.Frame, List[tf.Frame]] = None,
-    metric: Callable[[np.ndarray, np.ndarray], float] = None,
-    tol: float = 1e-3,
-    maxiter: int = 500,
-    line_search_maxiter: int = 500,
-    weights: List[float] = None,
 ) -> List[np.ndarray]:
     """Cyclic Coordinate Descent.
 
     .. note::
-        This function will modify the links given via ``cycle_links`` as a side effect.
+        This function will modify the links given via ``joints`` as a side effect.
+
+    This function cycles through ``joints`` and - one joint at a time - chooses
+    a value for each joint that minimizes the scores of the available targets.
 
     .. versionchanged:: 0.10.0
         BREAKING CHANGE: The signature of ``ccd`` has changed. To keep using the old
@@ -62,37 +66,44 @@ def ccd(
     .. versionadded:: 0.7.0
         CCD was added to scikit-bot.
 
-    This function adjusts the parameters of the links in ``cycle_links`` such that a
-    point that has ``pointA`` as its representation in ``frameA`` has ``pointB``
-    as representation in ``frameB``. Parameters are fitted in a cyclical
-    fashion, i.e., by repeatedly iterating over ``cycle_links``. Each time the
-    respective link's parameter is updated to minimize the distance between
-    ``pointB`` and ``pointA``'s representation in ``frameB``. Distance is
-    measured in frameB using euclidian distance or a custom metric if provided.
-
     Parameters
     ----------
-    targets : List[CCDTarget]
-        A list of targets that the resulting pose should reach.
-    cycle_links : List[joint]
-        A list of 1DoF joints which should be adjusted to make pointA and pointB
-        valid representations of the same points.
+    targets : List[Target]
+        A list of quality measures that a successful pose minimizes.
     metric : Callable
         A function that takes two points (expressed in the corresponding frameB)
         and that computs the distance between them. Its signature is
         ``metric(transformed_point, pointB) -> distance``. If None, the
         euclidian distance will be used.
-    tol : float
-        Absolute tolerance for termination. Defaults to 0.001, which corresponds
-        to 1 mm if the coordinate systems use meters as unit.
+    atol : float
+        Absolute tolerance above which the IK is considered to have failed.
+        Default: ``1e-3``.
+    rtol : float
+        Relative tolerance for termination. Defaults to ``1e-6``.
+    required_improvement : float
+        The minimum required improvement of the objective after each iteration.
+        If the improvement is less than this value, the algorithm fails and
+        raises a value error. This is useful to avoid cases where the
+        optimization gets stuck without finding a suitable pose.
     maxiter : int
-        The maximum number of cycles to perform.
+        The maximum number of iterations.
     line_search_maxiter : int
         The maximum number of iterations to use when optimizing a single joint
-        during a cycle.
+        during a cycle, if no fast-path is implemented.
     weights : List[float]
         The relative weight to give to each quartet ``(pointA[i], pointB[i],
         frameA[i], frameB[i])``. If None, each element will have equal weight.
+    cycle_links : List[IKJoint]
+        .. deprecated:: 0.10.0
+            Use ``joints`` instead.
+
+        A list of 1DoF joints which should be adjusted to minimize targets.
+    tol : float
+        .. deprecated:: 0.10.0
+            Use ``atol`` instead.
+
+        Absolute tolerance for termination. Defaults to 0.001, which corresponds
+        to 1 mm if the coordinate systems use meters as unit.
     pointA : ArrayLike
         .. deprecated:: 0.10.0
             Use ``targets`` and a ``CCDPositionTarget`` instead.
@@ -129,26 +140,32 @@ def ccd(
 
     Notes
     -----
-    The number of elements given to ``pointA``, ``pointB``, ``frameA``, and
-    ``frameB`` must match.
-
     Joint limits (min/max) are enforced as hard constraints.
-
-    To specify both a position and orientation you can pass a list of two
-    points. The second point expresses the orientation and *has unit
-    length*. For example, to move a robot's tool frame to the target position
-    ``(a, b, c)`` in the world_frame and align the frame's x-axis with the
-    world's y-axis you could call::
-
-        ik.ccd([(0, 0, 0), (1, 0, 0)], [(a, b, c), (0, 1, 0)],
-               [tool_frame, tool_frame], [world_frame, world_frame])
 
     The current implementation is a naive python implementation and not very
     optimized. PRs improving performance are welcome :)
 
     """
 
-    joint_values = [l.param for l in cycle_links]
+    if cycle_links is not None:
+        warnings.warn(
+            "The use of `cycle_links` is depreciated"
+            " and will be removed in scikit-bot v1.0."
+            " Use `joints` instead.",
+            DeprecationWarning,
+        )
+        joints = cycle_links
+
+    joint_values = [l.param for l in joints]
+
+    if tol is not None:
+        warnings.warn(
+            "The use of `tol` is depreciated"
+            " and will be removed in scikit-bot v1.0."
+            " Use `atol` instead.",
+            DeprecationWarning,
+        )
+        atol = tol
 
     if metric is None:
         metric = lambda x, y: np.linalg.norm(x - y)
@@ -157,8 +174,10 @@ def ccd(
         pass
     elif not (isinstance(frameA, list) or isinstance(frameA, tuple)):
         warnings.warn(
-            "The use of `pointA`, `pointB`, `frameA`, and `frameB` is deprecated."
-            " Use `targets` and `CCDPoseTarget` instead."
+            "The use of `pointA`, `pointB`, `frameA`, and `frameB` is deprecated"
+            " and will be removed in scikit-bot v1.0."
+            " Use `targets` and `CCDPoseTarget` instead.",
+            DeprecationWarning,
         )
         target = PositionTarget(
             static_position=np.asarray(pointA),
@@ -169,8 +188,10 @@ def ccd(
         targets.append(target)
     else:
         warnings.warn(
-            "The use of `pointA`, `pointB`, `frameA`, and `frameB` is deprecated."
-            " Use `targets` and `CCDPoseTarget` instead."
+            "The use of `pointA`, `pointB`, `frameA`, and `frameB` is deprecated"
+            " and will be removed in scikit-bot v1.0."
+            " Use `targets` and `CCDPoseTarget` instead.",
+            DeprecationWarning,
         )
         for static, dynamic, static_frame, dynamic_frame in zip(
             pointA, pointB, frameA, frameB
@@ -189,36 +210,45 @@ def ccd(
 
     def total_score() -> float:
         scores = np.array([x.score() for x in targets])
-        return np.sum(weights * scores)
+        return np.mean(weights * scores)
 
     step_fn = list()
     for target in targets:
-        for joint in cycle_links:
+        for joint in joints:
             step_fn.append(step_generic_joint(joint, target.score, line_search_maxiter))
 
-    for step in range(maxiter * len(targets) * len(cycle_links)):
-        distance = total_score()
-        if distance <= tol:
-            break
+    old_distance = float("inf")
+    for step in range(maxiter * len(targets) * len(joints)):
 
-        joint_idx = step % len(cycle_links)
-        residual = step % (len(cycle_links) * len(targets))
-        target_idx = residual // len(cycle_links)
-        iteration = step // (len(cycle_links) * len(targets))
+        joint_idx = step % len(joints)
+        residual = step % (len(joints) * len(targets))
+        target_idx = residual // len(joints)
+        iteration = step // (len(joints) * len(targets))
 
-        if iteration % 10 == 0 and target_idx == 0 and joint_idx == 0:
-            print(iteration, target_idx, joint_idx)
+        if target_idx == 0 and joint_idx == 0:
+            distance = total_score()
 
-        step_joint = step_fn[len(cycle_links) * target_idx + joint_idx]
+            if distance <= atol:
+                break
+
+            if (old_distance - distance) < rtol:
+                raise RuntimeError(
+                    "IK failed. Reason:"
+                    " Loss in the local minimum is greater than `atol`."
+                )
+
+            old_distance = distance
+
+        step_joint = step_fn[len(joints) * target_idx + joint_idx]
 
         result = step_joint()
 
-        joint = cycle_links[joint_idx]
+        joint = joints[joint_idx]
         joint.param = result
     else:
         raise RuntimeError(f"IK exceeded maxiter.")
 
-    for idx in range(len(cycle_links)):
-        joint_values[idx] = cycle_links[idx].param
+    for idx in range(len(joints)):
+        joint_values[idx] = joints[idx].param
 
     return joint_values
