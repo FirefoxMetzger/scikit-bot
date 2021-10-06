@@ -6,10 +6,13 @@ from ..transform._utils import angle_between
 
 
 class Target:
-    def __init__(self, static_frame: tf.Frame, dynamic_frame: tf.Frame) -> None:
+    def __init__(
+        self, static_frame: tf.Frame, dynamic_frame: tf.Frame, *, atol: float = 1e-3
+    ) -> None:
         self.static_frame = static_frame
         self.dynamic_frame = dynamic_frame
         self._chain = self.static_frame.links_between(self.dynamic_frame)
+        self.atol = atol
 
     def score(self):
         raise NotImplementedError
@@ -99,8 +102,12 @@ class RotationTarget(Target):
 
         trace = np.trace(desired_basis @ actual_basis.T)
         if self.static_frame.ndim == 3:
-            theta = np.arccos((trace - 1) / 2)
+            value = np.clip((trace - 1) / 2, -1, 1)
+            theta = np.arccos(value)
+        elif self.static_frame.ndim == 3:
+            value = np.clip(trace / 2, -1, 1)
+            theta = np.arccos(value)
         else:
-            theta = np.arccos(trace / 2)
+            raise NotImplementedError("Only 2D and 3D is currently supported.")
 
         return theta

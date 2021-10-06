@@ -12,15 +12,18 @@ import warnings
 
 
 def step_generic_joint(
-    joint: IKJoint, score: Callable, maxiter: int
+    joint: IKJoint, target: Target, maxiter: int
 ) -> Callable[[], None]:
     """Find the optimal value for the current joint."""
 
     def generic_objective(x: float, current_joint: IKJoint) -> float:
         current_joint.param = x
-        return score()
+        return target.score()
 
     def inner() -> None:
+        if target.score() < target.atol:
+            return  # nothing to do
+
         result: OptimizeResult = minimize_scalar(
             lambda x: generic_objective(x, joint),
             bounds=(joint.lower_limit, joint.upper_limit),
@@ -47,6 +50,9 @@ def analytic_rotation(
     eps = 1e-10
 
     def inner() -> None:
+        if target.score() < target.atol:
+            return  # nothing to do
+
         target_point = target.dynamic_position
         for link in reversed(target._chain[joint_idx:]):
             target_point = link.__inverse_transform__(target_point)
@@ -134,8 +140,6 @@ def ccd(
         and that computs the distance between them. Its signature is
         ``metric(transformed_point, pointB) -> distance``. If None, the
         euclidian distance will be used.
-    atol : float
-        Absolute tolerance above which the IK is considered to have failed.
     rtol : float
         Relative tolerance for termination.
     required_improvement : float
@@ -158,10 +162,9 @@ def ccd(
         A list of 1DoF joints which should be adjusted to minimize targets.
     tol : float
         .. deprecated:: 0.10.0
-            Use ``atol`` instead.
+            Specify ``atol`` on the desired target instead.
 
-        Absolute tolerance for termination. Defaults to 0.001, which corresponds
-        to 1 mm if the coordinate systems use meters as unit.
+        Absolute tolerance for termination.
     pointA : ArrayLike
         .. deprecated:: 0.10.0
             Use ``targets`` and a ``CCDPositionTarget`` instead.
@@ -261,10 +264,11 @@ def ccd(
         warnings.warn(
             "The use of `tol` is depreciated"
             " and will be removed in scikit-bot v1.0."
-            " Use `atol` instead.",
+            " Specify `atol` on the respective target instead.",
             DeprecationWarning,
         )
-        atol = tol
+        for target in targets:
+            target.atol = tol
 
     if metric is None:
         metric = lambda x, y: np.linalg.norm(x - y)
@@ -272,10 +276,6 @@ def ccd(
     if weights is None:
         weights = [1 / len(targets)] * len(targets)
     weights = np.asarray(weights)
-
-    def total_score() -> float:
-        scores = np.array([x.score() for x in targets])
-        return np.mean(weights * scores)
 
     step_fn = list()
     for target in targets:
@@ -291,11 +291,12 @@ def ccd(
                 stepper = analytic_rotation(joint, target)
 
             if stepper is None:
-                stepper = step_generic_joint(joint, target.score, line_search_maxiter)
+                stepper = step_generic_joint(joint, target, line_search_maxiter)
 
             step_fn.append(stepper)
 
-    old_distance = float("inf")
+    old_scores = np.array([float("inf")] * len(targets))
+    atols = np.array([x.atol for x in targets])
     for step in range(maxiter * len(targets) * len(joints)):
         joint_idx = step % len(joints)
         residual = step % (len(joints) * len(targets))
@@ -303,18 +304,18 @@ def ccd(
         iteration = step // (len(joints) * len(targets))
 
         if target_idx == 0 and joint_idx == 0:
-            distance = total_score()
+            scores = np.array([x.score() for x in targets])
 
-            if distance <= atol:
+            if np.all(scores < atols):
                 break
 
-            if (old_distance - distance) < rtol:
+            if not any(old_scores - scores > rtol):
                 raise RuntimeError(
                     "IK failed. Reason:"
                     " Loss in the local minimum is greater than `atol`."
                 )
 
-            old_distance = distance
+            old_scores = scores
 
         step_fn[len(joints) * target_idx + joint_idx]()
     else:
