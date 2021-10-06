@@ -50,11 +50,11 @@ def scalar_project(
 def angle_between(
     vec_a: ArrayLike, vec_b: ArrayLike, *, axis: int = -1, eps=1e-10
 ) -> np.ndarray:
-    """Computes the angle from a to b (in a right-handed frame)
+    """Computes the angle from a to b
 
     Notes
     -----
-    Implementation is based on this StackOverflow post:
+    Implementation is based on this post:
     https://scicomp.stackexchange.com/a/27694
     """
 
@@ -75,6 +75,11 @@ def angle_between(
 
     mask = len_c > len_b
     mu = np.where(mask, len_b - (len_a - len_c), len_c - (len_a - len_b))
+
+    # added after discussion in
+    # https://stackoverflow.com/q/69453679/
+    mask = np.abs(mu) < eps
+    mu = np.where(mask, 0, mu)
 
     numerator = ((len_a - len_b) + len_c) * mu
     denominator = (len_a + (len_b + len_c)) * ((len_a - len_c) + len_b)

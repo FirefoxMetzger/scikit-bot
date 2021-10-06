@@ -1,16 +1,10 @@
 from typing import List
 import pytest
 import skbot.inverse_kinematics as ik
-from skbot.inverse_kinematics import targets
-from skbot.inverse_kinematics.targets import PositionTarget
 import skbot.transform as tf
-from typing import Union, List
+from typing import List
 import numpy as np
-
-from skbot.transform.utils3d import EulerRotation
-
-
-joint_types = Union[tf.RotationalJoint, tf.PrismaticJoint]
+from skbot.inverse_kinematics.types import IKJoint as joint_types
 
 
 def test_panda(panda):
@@ -141,18 +135,24 @@ def test_ccd_maxiter(double_pendulum):
         ik.ccd(targets, joints, maxiter=0)
 
 
-def test_ccd_linesearch_maxiter(double_pendulum):
+def test_ccd_linesearch_maxiter(panda):
     base_frame: tf.Frame
     joints: List[joint_types]
-    base_frame, joints = double_pendulum
-    tool_frame = base_frame.find_frame(".../lower_link")
+    base_frame, joints = panda
+    tool_frame = base_frame.find_frame(".../panda_link8")
 
     root_pos = tool_frame.transform((0, 0, 0), base_frame)
+    expected = np.zeros(len(joints))
 
-    for joint in joints:
+    for idx, joint in enumerate(joints):
+        expected[idx] = joint.param
         joint.param = (joint.upper_limit + joint.lower_limit) / 2
 
-    targets = [ik.PositionTarget((0, 0, 0), root_pos, tool_frame, base_frame)]
+    targets = [
+        ik.RotationTarget(
+            tf.EulerRotation("Y", 90, degrees=True), tool_frame, base_frame
+        )
+    ]
 
     with pytest.raises(RuntimeError):
         ik.ccd(targets, joints, line_search_maxiter=1)
@@ -170,8 +170,8 @@ def test_multi_frame_ccd(panda):
 
     expected = np.zeros(len(joints))
     for idx, joint in enumerate(joints):
-        expected[idx] = joint.param
-        joint.param += 0.2
+        expected[idx] = joint.angle
+        joint.angle += 0.2
 
     targets = [
         ik.PositionTarget((0, 0, 0), root_pos, tool_frame, base_frame),

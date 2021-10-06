@@ -1,7 +1,7 @@
 from .. import transform as tf
 from ..transform._utils import scalar_project, angle_between
 from numpy.typing import ArrayLike
-from typing import List, Callable, Union
+from typing import List, Callable
 import numpy as np
 from scipy.optimize import minimize_scalar
 from scipy.optimize import OptimizeResult
@@ -44,10 +44,12 @@ def analytic_rotation(
     basis1 = np.array((1, 0), dtype=float)
     basis2 = np.array((0, 1), dtype=float)
 
+    eps = 1e-10
+
     def inner() -> None:
         target_point = target.dynamic_position
-        for link in target._chain[:joint_idx]:
-            target_point = link.transform(target_point)
+        for link in reversed(target._chain[joint_idx:]):
+            target_point = link.__inverse_transform__(target_point)
         target_projected = np.array(
             [
                 scalar_project(target_point, joint._u),
@@ -55,26 +57,37 @@ def analytic_rotation(
             ]
         )
 
-        target_angle = angle_between(target_projected, basis1)
-        if angle_between(target_projected, basis2) > np.pi / 2:
-            target_angle = -target_angle
-
         current_position = target.static_position
-        for link in reversed(target._chain[joint_idx:]):
-            current_position = link.__inverse_transform__(current_position)
+        for link in target._chain[:joint_idx]:
+            current_position = link.transform(current_position)
         current_projected = np.array(
             [
                 scalar_project(current_position, joint._u),
                 scalar_project(current_position, joint._u_ortho),
             ]
         )
+
+        # skip adjustment if the desired position is in the joints null space
+        if np.linalg.norm(target_projected) < eps:
+            return
+
+        # skip adjustment if the current position is in the joints null space
+        if np.linalg.norm(current_projected) < eps:
+            return
+
+        target_angle = angle_between(target_projected, basis1)
+        if angle_between(target_projected, basis2) > np.pi / 2:
+            target_angle = -target_angle
+
         current_angle = angle_between(current_projected, basis1)
         if angle_between(current_projected, basis2) > np.pi / 2:
             current_angle = -current_angle
 
         angle = target_angle - current_angle
-        angle = np.pi - abs(angle - np.pi)
-        joint.param = np.clip(joint.param + angle, joint.lower_limit, joint.upper_limit)
+
+        # it is a bit odd that I have to use - angle here instead of using
+        # + angle. There may be a bug regarding left/right handedness somewhere
+        joint.param = np.clip(joint.param - angle, joint.lower_limit, joint.upper_limit)
 
     return inner
 
@@ -82,19 +95,19 @@ def analytic_rotation(
 def ccd(
     targets: List[Target],
     joints: List[IKJoint] = None,
-    *,
+    *args,
     metric: Callable[[np.ndarray, np.ndarray], float] = None,
     atol: float = 1e-3,
     rtol: float = 1e-6,
-    maxiter: int = 100,
+    maxiter: int = 500,
     line_search_maxiter: int = 500,
     weights: List[float] = None,
     tol: float = None,
     cycle_links: List[IKJoint] = None,
-    pointA: Union[ArrayLike, List[ArrayLike]] = None,
-    pointB: Union[ArrayLike, List[ArrayLike]] = None,
-    frameA: Union[tf.Frame, List[tf.Frame]] = None,
-    frameB: Union[tf.Frame, List[tf.Frame]] = None,
+    pointA: ArrayLike = None,
+    pointB: ArrayLike = None,
+    frameA: tf.Frame = None,
+    frameB: tf.Frame = None,
 ) -> List[np.ndarray]:
     """Cyclic Coordinate Descent.
 
@@ -197,6 +210,39 @@ def ccd(
 
     """
 
+    if len(args) > 0:
+        if len(args) != 3:
+            raise TypeError(
+                f"ccd() takes 2 positional arguments, but {2+len(args)} were given."
+            )
+
+        warnings.warn(
+            "The signature `ccd(pointA, pointB, frameA, frameB, cycle_links)`"
+            " is depreciated and will be removed in scikit-bot v1.0."
+            " Use `targets` combined with a `ik.PositionTarget` instead.",
+            DeprecationWarning,
+        )
+
+        target = PositionTarget(targets, joints, args[2], args[3])
+        targets = [target]
+        joints = args[4]
+
+    elif frameA is not None:
+        warnings.warn(
+            "The use of `pointA`, `pointB`, `frameA`, and `frameB` is deprecated"
+            " and will be removed in scikit-bot v1.0."
+            " Use `targets` combined with a `ik.PositionTarget` instead.",
+            DeprecationWarning,
+        )
+
+        target = PositionTarget(
+            static_position=np.asarray(pointA),
+            dynamic_position=np.asarray(pointB),
+            static_frame=frameA,
+            dynamic_frame=frameB,
+        )
+        targets.append(target)
+
     if cycle_links is not None:
         warnings.warn(
             "The use of `cycle_links` is depreciated"
@@ -223,40 +269,6 @@ def ccd(
     if metric is None:
         metric = lambda x, y: np.linalg.norm(x - y)
 
-    if frameA is None:
-        pass
-    elif not (isinstance(frameA, list) or isinstance(frameA, tuple)):
-        warnings.warn(
-            "The use of `pointA`, `pointB`, `frameA`, and `frameB` is deprecated"
-            " and will be removed in scikit-bot v1.0."
-            " Use `targets` and `CCDPoseTarget` instead.",
-            DeprecationWarning,
-        )
-        target = PositionTarget(
-            static_position=np.asarray(pointA),
-            dynamic_position=np.asarray(pointB),
-            static_frame=frameA,
-            dynamic_frame=frameB,
-        )
-        targets.append(target)
-    else:
-        warnings.warn(
-            "The use of `pointA`, `pointB`, `frameA`, and `frameB` is deprecated"
-            " and will be removed in scikit-bot v1.0."
-            " Use `targets` and `CCDPoseTarget` instead.",
-            DeprecationWarning,
-        )
-        for static, dynamic, static_frame, dynamic_frame in zip(
-            pointA, pointB, frameA, frameB
-        ):
-            target = PositionTarget(
-                static_position=np.asarray(static),
-                dynamic_position=np.asarray(dynamic),
-                static_frame=static_frame,
-                dynamic_frame=dynamic_frame,
-            )
-            targets.append(target)
-
     if weights is None:
         weights = [1 / len(targets)] * len(targets)
     weights = np.asarray(weights)
@@ -276,7 +288,7 @@ def ccd(
                 and target.static_frame.ndim == 3
                 and target.usage_count(joint) == 1
             ):
-                stepper = None  # analytic_rotation(joint, target)
+                stepper = analytic_rotation(joint, target)
 
             if stepper is None:
                 stepper = step_generic_joint(joint, target.score, line_search_maxiter)
@@ -306,7 +318,7 @@ def ccd(
 
         step_fn[len(joints) * target_idx + joint_idx]()
     else:
-        raise RuntimeError(f"IK exceeded maxiter.")
+        raise RuntimeError(f"IK failed: maxiter exceeded.")
 
     for idx in range(len(joints)):
         joint_values[idx] = joints[idx].param

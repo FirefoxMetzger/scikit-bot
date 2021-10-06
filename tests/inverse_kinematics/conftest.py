@@ -1,4 +1,3 @@
-from skbot.transform import base
 import pytest
 import skbot.ignition as ign
 import skbot.transform as tf
