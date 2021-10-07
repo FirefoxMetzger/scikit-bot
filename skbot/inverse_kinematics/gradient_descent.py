@@ -63,21 +63,20 @@ def gd(
     for target in targets:
         target._chain = tf.simplify_links(target._chain, keep_links=joints)
 
+    atols = np.array([x.atol for x in targets])
     bounds = Bounds(
         [x.lower_limit for x in joints],
         [x.upper_limit for x in joints],
         keep_feasible=True,
     )
 
-    # make params views into joint_values
-    for idx in range(len(joints)):
-        joints[idx].param = joint_values[idx : idx + 1]
-
     def objective_function(joint_config: np.ndarray) -> float:
         for joint, value in zip(joints, joint_config):
             joint.param = value
         scores = np.array([x.score() for x in targets])
-        return np.sum(scores)
+        normalized_scores = scores / atol
+        return np.sum(normalized_scores)
+        # return np.max(normalized_scores)
 
     result: OptimizeResult = minimize(
         objective_function,
@@ -90,9 +89,10 @@ def gd(
     if not result.success:
         raise RuntimeError(f"IK failed. Reason: {result.message}")
 
-    if result.fun > atol:
+    scores = np.array([x.score() for x in targets])
+    if np.any(scores > atols):
         raise RuntimeError(
-            f"IK failed. Reason: Loss in the local minimum is greater than `atol`."
+            f"IK failed. Reason: Local minimum doesn't reach one or more targets."
         )
 
     for joint, value in zip(joints, result.x):
