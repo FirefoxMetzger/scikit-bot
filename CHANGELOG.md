@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.9.4 (2021-10-10)
+### Fix
+* Bump coverage[toml] from 6.0 to 6.0.1 ([#90](https://github.com/FirefoxMetzger/scikit-bot/issues/90)) ([`acbbaa8`](https://github.com/FirefoxMetzger/scikit-bot/commit/acbbaa8396f54df7b23bcb4aae2cfa0c3ad8981d))
+
 ## v0.9.3 (2021-10-05)
 ### Fix
 * Bump pydata-sphinx-theme from 0.6.3 to 0.7.1 ([#88](https://github.com/FirefoxMetzger/scikit-bot/issues/88)) ([`5dde672`](https://github.com/FirefoxMetzger/scikit-bot/commit/5dde67210b2645c99de65584246056f09b95a7a8))
