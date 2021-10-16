@@ -23,7 +23,7 @@ extras_require = {
         "xsdata == 21.9",
         "lxml == 4.6.3",
     ],
-    "linting": ["flake8 == 3.9.2", "black == 21.9b0"],
+    "linting": ["flake8 == 4.0.1", "black == 21.9b0"],
     "testing": ["pytest == 6.2.5", "coverage[toml] == 6.0.2"],
     "dev": [
         "lxml-stubs == 0.2.0",
