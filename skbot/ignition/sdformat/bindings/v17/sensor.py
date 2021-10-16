@@ -20,7 +20,7 @@ class Sensor:
         necessary for visualization
     enable_metrics: If true, the sensor will publish performance metrics
     pose: A position(x,y,z) and orientation(roll, pitch yaw) with
-        respect to the frame named in the relative_to attribute.
+        respect   to the frame named in the relative_to attribute.
     plugin: A plugin is a dynamically loaded chunk of code. It can exist
         as a child of world, model, and sensor.
     air_pressure: These elements are specific to an air pressure sensor.
@@ -253,8 +253,17 @@ class Sensor:
         Parameters
         ----------
         value:
-        relative_to: Name of frame relative to which the pose is
-            applied.
+        relative_to: If specified, this pose is expressed in the named
+            frame. The named frame       must be declared within the
+            same scope (world/model) as the element that       has its
+            pose specified by this tag.        If missing, the pose is
+            expressed in the frame of the parent XML element       of
+            the element that contains the pose. For exceptions to this
+            rule and       more details on the default behavior, see
+            http://sdformat.org/tutorials?tut=pose_frame_semantics.
+            Note that @relative_to merely affects an element's initial
+            pose and       does not affect the element's dynamic
+            movement thereafter.
         """
 
         value: str = field(
@@ -755,7 +764,7 @@ class Sensor:
             visibility_mask &amp; visual's visibility_flags) evaluates
             to non-zero, the visual will be visible to the camera.
         pose: A position(x,y,z) and orientation(roll, pitch yaw) with
-            respect to the frame named in the relative_to attribute.
+            respect   to the frame named in the relative_to attribute.
         name: An optional name for the camera.
         """
 
@@ -1307,8 +1316,18 @@ class Sensor:
             Parameters
             ----------
             value:
-            relative_to: Name of frame relative to which the pose is
-                applied.
+            relative_to: If specified, this pose is expressed in the
+                named frame. The named frame       must be declared
+                within the same scope (world/model) as the element that
+                has its pose specified by this tag.        If missing,
+                the pose is expressed in the frame of the parent XML
+                element       of the element that contains the pose. For
+                exceptions to this rule and       more details on the
+                default behavior, see
+                http://sdformat.org/tutorials?tut=pose_frame_semantics.
+                Note that @relative_to merely affects an element's
+                initial pose and       does not affect the element's
+                dynamic movement thereafter.
             """
 
             value: str = field(
