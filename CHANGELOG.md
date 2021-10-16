@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.9.7 (2021-10-16)
+### Fix
+* Sync SDF bindings ([#93](https://github.com/FirefoxMetzger/scikit-bot/issues/93)) ([`63dbe05`](https://github.com/FirefoxMetzger/scikit-bot/commit/63dbe05b83ccd62650205d67df95cf84f51f0a35))
+
 ## v0.9.6 (2021-10-16)
 ### Fix
 * Bump flake8 from 3.9.2 to 4.0.1 ([#92](https://github.com/FirefoxMetzger/scikit-bot/issues/92)) ([`c119859`](https://github.com/FirefoxMetzger/scikit-bot/commit/c1198596c6846d690256f936d5b62b99d1824f71))
