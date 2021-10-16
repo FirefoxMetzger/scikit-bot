@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.9.5 (2021-10-16)
+### Fix
+* Bump coverage[toml] from 6.0.1 to 6.0.2 ([#91](https://github.com/FirefoxMetzger/scikit-bot/issues/91)) ([`6046aa5`](https://github.com/FirefoxMetzger/scikit-bot/commit/6046aa50ec638c875a6c2c18f1fed33cdf2f0bdd))
+
 ## v0.9.4 (2021-10-10)
 ### Fix
 * Bump coverage[toml] from 6.0 to 6.0.1 ([#90](https://github.com/FirefoxMetzger/scikit-bot/issues/90)) ([`acbbaa8`](https://github.com/FirefoxMetzger/scikit-bot/commit/acbbaa8396f54df7b23bcb4aae2cfa0c3ad8981d))
