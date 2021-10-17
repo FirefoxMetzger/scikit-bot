@@ -216,7 +216,7 @@ def test_camera_steering():
     for value, joint in zip([0, -0.785, 0, -2.356, 0, 1.571, 0.785], reversed(joints)):
         joint.angle = value
 
-    targets = [ik.PositionTarget((0, 0, 0), (1920/3, 1080/2), tool_frame, px_space)]
+    targets = [ik.PositionTarget((0, 0, 0), (1920 / 3, 1080 / 2), tool_frame, px_space)]
     ik.ccd(targets, joints)
 
     for target in targets:
@@ -256,14 +256,16 @@ def test_camera_steering():
         joint.angle = value
 
     radius = 10
-    angles = np.linspace(0, 2*np.pi, 100)
-    circle_x = radius * np.cos(angles) + 1920/2
-    circle_y = radius * np.sin(angles) + 1080/2
+    angles = np.linspace(0, 2 * np.pi, 100)
+    circle_x = radius * np.cos(angles) + 1920 / 2
+    circle_y = radius * np.sin(angles) + 1080 / 2
     circle = np.stack([circle_x, circle_y], axis=1)
 
     for point in circle:
         targets = [ik.PositionTarget((0, 0, 0), point, tool_frame, px_space)]
-        for value, joint in zip([0, -0.785, 0, -2.356, 0, 1.571, 0.785], reversed(joints)):
+        for value, joint in zip(
+            [0, -0.785, 0, -2.356, 0, 1.571, 0.785], reversed(joints)
+        ):
             joint.angle = value
         ik.ccd(targets, joints)
 
