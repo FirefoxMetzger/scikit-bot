@@ -5,22 +5,23 @@ Inverse Kinematics (IK) Algorithms.
 
 The algorithms in this module find values for a set of joints (a glorified list
 of :class:`tf.Links <skbot.transform.Link>`) such that the score of one or more
-:class:`Targets <Target>` is minimal.
+Targets is below a given threshold.
 
-:class:`Targets <Target>` are specified between two :class`tf.Frames
-<skbot.transform.Frame>` that are connected by a sequence of :class:`tf.Links
-<skbot.transform.Link>` (the kinematic chain). For example, the
-:class:`PositionTarget` can be used to specify that a static position in a
-robot's tool frame should have a certain dynamic position when transformed into
-the world frame. The available IK algorithms will then attempt to find values
-for the ``joints`` between these two frames such that the value of the
-transformed static position and the value of dynamic position are identical.
+Targets are specified between two :class:`tf.Frames <skbot.transform.Frame>`
+that are connected by a sequence of :class:`tf.Links <skbot.transform.Link>`
+(the kinematic chain). For example, the :class:`PositionTarget` can be used to
+specify that a position in a robot's tool frame should have a certain position
+when transformed into the world frame. The available IK algorithms will then
+attempt to find values for the chosen joints - which are assumed to be between
+these two frames - such that the value of the transformed tool position and the
+value of the world position is closer than some threshold.
 
 Targets
 -------
 
 .. autosummary::
     :toctree:
+
     PositionTarget
     RotationTarget
 

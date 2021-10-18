@@ -2,10 +2,24 @@ from numpy.typing import ArrayLike
 from typing import Callable, List, Union
 import numpy as np
 from .. import transform as tf
-from ..transform._utils import angle_between
 
 
 class Target:
+    """Abstract IK target.
+
+    .. versionadded:: 0.10.0
+
+    Parameters
+    ----------
+    static_frame : tf.Frame
+        The frame in which the objective is constant.
+    dynamic_frame : tf.Frame
+        The frame in which the score is computed.
+    atol : float
+        The absolute tolerance for the score. If score is below this value
+        the target is considered to be reached.
+    """
+
     def __init__(
         self, static_frame: tf.Frame, dynamic_frame: tf.Frame, *, atol: float = 1e-3
     ) -> None:
@@ -15,10 +29,26 @@ class Target:
         self.atol = atol
 
     def score(self):
+        """The score of this target."""
         raise NotImplementedError
 
     def usage_count(self, joint: tf.Link) -> int:
-        """The number of occurences of a link within a chain of links"""
+        """Frequency of joint use in this target.
+
+        This function counts the number of times that ``joint`` is used when
+        computing the score for this target.
+
+        Parameters
+        ----------
+        joint : tf.Link
+            The link that has its frequency evaluated.
+
+        Returns
+        -------
+        frequency : int
+            The number of occurences of the link.
+
+        """
         occurences = 0
 
         for link in self._chain:
@@ -30,7 +60,19 @@ class Target:
         return occurences
 
     def uses(self, joint: tf.Link) -> bool:
-        """Check if joint exists in this goals chain."""
+        """Check if target uses a joint.
+
+        Parameters
+        ----------
+        joint : tf.Link
+            The link to check.
+
+        Returns
+        -------
+        is_used : bool
+            True if joint is used when evaluating this target's score. False
+            otherwise.
+        """
 
         for link in self._chain:
             if link is joint:
@@ -39,6 +81,36 @@ class Target:
 
 
 class PositionTarget(Target):
+    """IK position target (nD).
+
+    This target can be used to find an IK solution that positions a point
+    (``static_position``) expressed in ``static_frame`` at a desired target
+    position (``dynamic_position``) expressed in ``dynamic_frame``. To compute
+    the current score, this target transforms ``static_position`` from
+    ``static_frame`` into ``dynamic_frame`` and then measures the distance
+    between the transformed point and ``dynamic_positon`` under the desired norm
+    (default: L2).
+
+    .. versionadded:: 0.10.0
+
+    Parameters
+    ----------
+    static_position : ArrayLike
+        The value of a position that moves in ``dynamic_frame`` expressed in
+        ``static_frame``.
+    dynamic_positon : ArrayLike
+        The value of the target position expressed in ``dynamic_frame``.
+    static_frame : tf.Frame
+        The frame in which the moving position is expressed.
+    dynamic_frame : tf.Frame
+        The frame in which the target position is expressed.
+    norm : Callable
+        A function of the form ``norm(ArrayLike) -> float`` that computes the
+        norm of the distance between ``target_position`` and the transformed
+        ``static_position`` in ``dynamic_frame``. If None defaults to L2.
+
+    """
+
     def __init__(
         self,
         static_position: ArrayLike,
@@ -63,6 +135,29 @@ class PositionTarget(Target):
 
 
 class RotationTarget(Target):
+    """IK rotation target (2D/3D).
+
+    This target can be used to find an IK solution such that
+    ``dynamic_frame`` has rotation ``desired_rotation`` when the
+    rotation is expressed relative to ``static_frame``. The score
+    function computes the distance in radians between the current
+    rotation and desired rotation.
+
+    .. versionadded:: 0.10.0
+
+    Parameters
+    ----------
+    desired_rotation : Union[tf.Link, List[tf.Link]]
+        A link or list of links that expresses the rotation of
+        ``dynamic_frame`` relative to ``static_frame``.
+    static_frame : tf.Frame
+        The frame in which the rotation is expressed.
+    dynamic_frame : tf.Frame
+        The frame that should be rotated by
+        ``desired_rotation`` relative to ``static_frame``.
+
+    """
+
     def __init__(
         self,
         desired_rotation: Union[tf.Link, List[tf.Link]],

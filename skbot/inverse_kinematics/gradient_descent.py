@@ -10,39 +10,30 @@ def gd(
     targets: List[Target],
     joints: List[IKJoint],
     *,
-    atol: float = 1e-3,
     rtol: float = 1e-6,
     maxiter: int = 500,
 ):
-    """L-BFGS-B based Gradient Descent
+    """L-BFGS-B based Gradient Descent.
 
     .. note::
-        This function will modify the links given via ``joints`` as a side effect.
+        This function will modify the objects in ``joints`` as a side effect.
 
-    Use the gradient descent method specified by ``method`` to find values for
-    ``joints`` that minimize ``targets``. The implementation relies on
-    ``scipy.optimize``, and all methods that scipy supports are available.
+    Use L-BFGS-B to find values for ``joints`` such that the sum of all target
+    scores is minimal. L-BFGS-B is a quasi-Newton method that approximates both
+    the targets Jacobian and Hessian.
 
     Parameters
     ----------
     targets : List[Target]
         A list of quality measures that a successful pose minimizes.
     joints : List[joint]
-        A list of 1DoF joints which should be adjusted to minimize targets.
-    jacobian : Callable
-        A callable with signature `jacobian(np.ndarray) -> ArrayLike` that
-        computes the robot's jacobi matrix at the respective position. The input
-        will be an array of shape (len(joints),) and it should return an
-        ArrayLike with shape (len(joints), len(joints)). If ``None`` (default)
-        the jacobian will be approximated using a 2-point finite difference
-        estimate.
-    atol : float
-        Absolute tolerance above which the IK is considered to have failed.
-        Default: ``1e-3``.
+        A list of 1DoF joints which should be adjusted to minimize ``targets``.
     rtol : float
-        Relative tolerance for termination. Defaults to ``1e-6``.
+        Relative tolerance for termination. If, after one iteration, the sum of
+        scores has not improved by more than rtol the algorithm terminates and
+        assumes that a local optimum has been found.
     maxiter : int
-        The maximum number of iterations.
+        The maximum number of iterations to perform.
 
     Returns
     -------
@@ -51,10 +42,13 @@ def gd(
 
     Notes
     -----
-    A common cause of IK faulure due to the chosen initial condition
-    is too far away from the desired target position. One indicator for this
-    is that :fun:`gd` converges based on ``rtol``, but the result doesn't fall
-    under ``atol``.
+    Joint limits (min/max) are enforced as hard constraints throughout the
+    optimization.
+
+    A common cause of IK faulure is that the chosen initial condition is too far
+    away from the desired target position. One indicator for this is that
+    :func:`gd` converges based on ``rtol``, but the score of one or more targets
+    isn't below ``atol``.
 
     """
 
@@ -73,8 +67,7 @@ def gd(
     def objective_function(joint_config: np.ndarray) -> float:
         for joint, value in zip(joints, joint_config):
             joint.param = value
-        scores = np.array([x.score() for x in targets])
-        normalized_scores = scores / atol
+        normalized_scores = np.array([x.score() / x.atol for x in targets])
         return np.sum(normalized_scores)
         # return np.max(normalized_scores)
 

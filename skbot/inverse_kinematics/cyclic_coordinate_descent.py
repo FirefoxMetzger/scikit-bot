@@ -42,6 +42,14 @@ def step_generic_joint(
 def analytic_rotation(
     joint: tf.RotationalJoint, target: PositionTarget
 ) -> Callable[[], None]:
+    """Fast-path for rotation joints and position targets.
+
+    This computes the optimal joint value analytically instead of solving
+    a sub-optimization problem.
+
+    .. versionadded:: 0.10.0
+
+    """
     joint_idx = target._chain.index(joint)
 
     basis1 = np.array((1, 0), dtype=float)
@@ -102,8 +110,6 @@ def ccd(
     targets: List[Target],
     joints: List[IKJoint] = None,
     *args,
-    metric: Callable[[np.ndarray, np.ndarray], float] = None,
-    atol: float = 1e-3,
     rtol: float = 1e-6,
     maxiter: int = 500,
     line_search_maxiter: int = 500,
@@ -114,47 +120,45 @@ def ccd(
     pointB: ArrayLike = None,
     frameA: tf.Frame = None,
     frameB: tf.Frame = None,
+    metric: Callable[[np.ndarray, np.ndarray], float] = None,
 ) -> List[np.ndarray]:
     """Cyclic Coordinate Descent.
 
     .. note::
-        This function will modify the links given via ``joints`` as a side effect.
+        This function will modify the objects in ``joints`` as a side effect.
 
-    This function cycles through ``joints`` and - one joint at a time - chooses
-    a value for each joint that minimizes the scores of the available targets.
+    This function cycles through ``targets`` and ``joints``. For each pair it -
+    one joint at a time - chooses a value for the joint that minimizes the score
+    of the target. If all targets are reached, this function returns the the
+    corresponding joint parameters; otherwise an exception is raised.
 
     .. versionchanged:: 0.10.0
-        BREAKING CHANGE: The signature of ``ccd`` has changed. To keep using the old
-        signature make each argument a keyword argument.
+        CCD has a new signature and now makes use of Targets.
     .. versionchanged:: 0.10.0
         CCD can now jointly optimize for multiple targets.
     .. versionadded:: 0.7.0
-        CCD was added to scikit-bot.
 
     Parameters
     ----------
     targets : List[Target]
         A list of quality measures that a successful pose minimizes.
-    metric : Callable
-        A function that takes two points (expressed in the corresponding frameB)
-        and that computs the distance between them. Its signature is
-        ``metric(transformed_point, pointB) -> distance``. If None, the
-        euclidian distance will be used.
+    joints : List[joint]
+        A list of 1DoF joints which should be adjusted to minimize ``targets``.
     rtol : float
-        Relative tolerance for termination.
-    required_improvement : float
-        The minimum required improvement of the objective after each iteration.
-        If the improvement is less than this value, the algorithm fails and
-        raises a value error. This is useful to avoid cases where the
-        optimization gets stuck without finding a suitable pose.
+        Relative tolerance for termination. If, after one full cycle, none
+        of the targets have improved by more than rtol the algorithm terminates
+        and assumes that a local optimum has been found.
     maxiter : int
-        The maximum number of iterations.
+        The maximum number of times to cycle over target+joint pairs.
     line_search_maxiter : int
-        The maximum number of iterations to use when optimizing a single joint
-        during a cycle, if no fast-path is implemented.
+        If no fast-path is implemented for a joint+target pair then CCD solves a
+        1D sub-optimization problem for the pair instead. This parameter limits
+        the total number of iterations for this sub-optimization.
     weights : List[float]
-        The relative weight to give to each quartet ``(pointA[i], pointB[i],
-        frameA[i], frameB[i])``. If None, each element will have equal weight.
+        .. deprecated:: 0.10.0
+            Targets are optimized cyclical instead of optimizing a weighted sum.
+
+        This parameter has no effect.
     cycle_links : List[IKJoint]
         .. deprecated:: 0.10.0
             Use ``joints`` instead.
@@ -167,32 +171,45 @@ def ccd(
         Absolute tolerance for termination.
     pointA : ArrayLike
         .. deprecated:: 0.10.0
-            Use ``targets`` and a ``CCDPositionTarget`` instead.
+            Use ``targets`` and a :class:`ik.PositionTarget
+            <skbot.inverse_kinematics.PositionTarget>` instead.
 
         A list of points. The i-th pointA is represented in the i-th frame of
         frameA. If only one point is given, the list can be omitted and the point
         can be directly used as input.
     pointB : ArrayLike
         .. deprecated:: 0.10.0
-            Use ``targets`` and a ``CCDPositionTarget`` instead.
+            Use ``targets`` and a :class:`ik.PositionTarget
+            <skbot.inverse_kinematics.PositionTarget>` instead.
 
         The desired positions of each point given in pointA. The i-th pointB is
         represented in the i-th frame of frameB. If only one point is given, the
         list can be omitted and the point can be directly used as input.
     frameA : tf.Frame
         .. deprecated:: 0.10.0
-            Use ``targets`` and a ``CCDPositionTarget`` instead.
+            Use ``targets`` and a :class:`ik.PositionTarget
+            <skbot.inverse_kinematics.PositionTarget>` instead.
 
         The frame in which the points in pointA are represented. The i-th
         element corresponds to the i-th pointA. If only one point is given, the
         list can be omitted and the frame can be directly used as input.
     frameB : tf.Frame
         .. deprecated:: 0.10.0
-            Use ``targets`` and a ``CCDPositionTarget`` instead.
+            Use ``targets`` and a :class:`ik.PositionTarget
+            <skbot.inverse_kinematics.PositionTarget>` instead.
 
         The frame in which the points in pointB are represented. The i-th
         element corresponds to the i-th pointB. If only one point is given, the
         list can be omitted and the frame can be directly used as input.
+    metric : Callable
+        .. deprecated:: 0.10.0
+            Specify ``norm`` in a :class:`PositionTarget
+            <skbot.inverse_kinematics.PositionTarget>` instead.
+
+        A function that takes two points (expressed in the corresponding frameB)
+        and that computs the distance between them. Its signature is
+        ``metric(transformed_point, pointB) -> distance``. If None, the
+        euclidian distance will be used.
 
     Returns
     -------
@@ -208,8 +225,8 @@ def ccd(
 
     References
     ----------
-    .. [1] Kenwright, Ben. "Inverse kinematics–cyclic coordinate descent (CCD)."
-    Journal of Graphics Tools 16.4 (2012): 177-217.
+    .. [kenwright2012] Kenwright, Ben. "Inverse kinematics–cyclic coordinate descent (CCD)."
+        Journal of Graphics Tools 16.4 (2012): 177-217.
 
     """
 
@@ -269,9 +286,6 @@ def ccd(
         )
         for target in targets:
             target.atol = tol
-
-    if metric is None:
-        metric = lambda x, y: np.linalg.norm(x - y)
 
     if weights is None:
         weights = [1 / len(targets)] * len(targets)
