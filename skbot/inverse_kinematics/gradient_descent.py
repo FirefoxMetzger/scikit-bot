@@ -71,25 +71,34 @@ def gd(
         return np.sum(normalized_scores)
         # return np.max(normalized_scores)
 
-    result: OptimizeResult = minimize(
-        objective_function,
-        joint_values,
-        bounds=bounds,
-        method="L-BFGS-B",
-        options={"maxiter": maxiter, "ftol": rtol},
-    )
+    # check if optimization is needed
+    skip = False
+    for target in targets:
+        if target.score() > target.atol:
+            break
+    else:
+        skip = True
 
-    if not result.success:
-        raise RuntimeError(f"IK failed. Reason: {result.message}")
-
-    scores = np.array([x.score() for x in targets])
-    if np.any(scores > atols):
-        raise RuntimeError(
-            f"IK failed. Reason: Local minimum doesn't reach one or more targets."
+    if not skip:
+        result: OptimizeResult = minimize(
+            objective_function,
+            joint_values,
+            bounds=bounds,
+            method="L-BFGS-B",
+            options={"maxiter": maxiter, "ftol": rtol},
         )
 
-    for joint, value in zip(joints, result.x):
-        joint.param = value
+        if not result.success:
+            raise RuntimeError(f"IK failed. Reason: {result.message}")
+
+        scores = np.array([x.score() for x in targets])
+        if np.any(scores > atols):
+            raise RuntimeError(
+                f"IK failed. Reason: Local minimum doesn't reach one or more targets."
+            )
+
+        for joint, value in zip(joints, result.x):
+            joint.param = value
 
     joint_values = np.array([j.param for j in joints])
     return joint_values
