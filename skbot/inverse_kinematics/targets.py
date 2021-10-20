@@ -118,8 +118,10 @@ class PositionTarget(Target):
         static_frame: tf.Frame,
         dynamic_frame: tf.Frame,
         norm: Callable[[np.ndarray], float] = None,
+        *,
+        atol: float = 1e-3,
     ) -> None:
-        super().__init__(static_frame, dynamic_frame)
+        super().__init__(static_frame, dynamic_frame, atol=atol)
         self.static_position = np.asarray(static_position)
         self.dynamic_position = np.asarray(dynamic_position)
 
@@ -163,6 +165,8 @@ class RotationTarget(Target):
         desired_rotation: Union[tf.Link, List[tf.Link]],
         static_frame: tf.Frame,
         dynamic_frame: tf.Frame,
+        *,
+        atol: float = 1e-3,
     ) -> None:
         parent_dim = static_frame.ndim
         child_dim = dynamic_frame.ndim
@@ -171,7 +175,7 @@ class RotationTarget(Target):
         if parent_dim not in [2, 3]:
             raise NotImplementedError("Only 2D and 3D is currently supported.")
 
-        super().__init__(static_frame, dynamic_frame)
+        super().__init__(static_frame, dynamic_frame, atol=atol)
 
         if isinstance(desired_rotation, tf.Link):
             self.desired_rotation = [desired_rotation]
