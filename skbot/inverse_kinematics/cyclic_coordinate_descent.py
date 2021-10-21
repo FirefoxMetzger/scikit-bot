@@ -85,10 +85,6 @@ def analytic_rotation(
         if np.linalg.norm(target_projected) < eps:
             return
 
-        # skip adjustment if the current position is in the joints null space
-        if np.linalg.norm(current_projected) < eps:
-            return
-
         target_angle = angle_between(target_projected, basis1)
         if angle_between(target_projected, basis2) > np.pi / 2:
             target_angle = -target_angle
