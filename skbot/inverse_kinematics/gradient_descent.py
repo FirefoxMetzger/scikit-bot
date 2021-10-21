@@ -88,11 +88,11 @@ def gd(
             options={"maxiter": maxiter, "ftol": rtol},
         )
 
-        if not result.success:
-            raise RuntimeError(f"IK failed. Reason: {result.message}")
-
         scores = np.array([x.score() for x in targets])
         if np.any(scores > atols):
+            if not result.success:
+                raise RuntimeError(f"IK failed. Reason: {result.message}")
+
             raise RuntimeError(
                 f"IK failed. Reason: Local minimum doesn't reach one or more targets."
             )

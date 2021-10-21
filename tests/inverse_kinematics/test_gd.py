@@ -31,29 +31,29 @@ def test_panda(panda):
     assert np.allclose(final_pos, root_pos, atol=0.001)
 
 
-# def test_panda_orientation(panda):
-#     base_frame: tf.Frame
-#     joints: List[joint_types]
-#     base_frame, joints = panda
-#     tool_frame = base_frame.find_frame(".../panda_link8")
+def test_panda_orientation(panda):
+    base_frame: tf.Frame
+    joints: List[joint_types]
+    base_frame, joints = panda
+    tool_frame = base_frame.find_frame(".../panda_link8")
 
-#     expected = np.zeros(len(joints))
-#     for idx, joint in enumerate(joints):
-#         expected[idx] = joint.param
-#         joint.param = (joint.upper_limit - joint.lower_limit) / 2
+    expected = np.zeros(len(joints))
+    for idx, joint in enumerate(joints):
+        expected[idx] = joint.param
+        joint.param = joint.param + 0.2
 
-#     targets = [
-#         ik.RotationTarget(
-#             tf.EulerRotation("Y", 90, degrees=True), tool_frame, base_frame
-#         )
-#     ]
-#     ik.gd(targets, joints)
+    targets = [
+        ik.RotationTarget(
+            tf.EulerRotation("Y", 90, degrees=True), tool_frame, base_frame
+        )
+    ]
+    ik.gd(targets, joints)
 
-#     tool_origin = tool_frame.transform((0, 0, 0), base_frame)
-#     tool_facing = tool_frame.transform((1, 0, 0), base_frame)
-#     final_ori = tool_facing - tool_origin
+    tool_origin = tool_frame.transform((0, 0, 0), base_frame)
+    tool_facing = tool_frame.transform((1, 0, 0), base_frame)
+    final_ori = tool_facing - tool_origin
 
-#     assert np.allclose(final_ori, (0, 0, -1), atol=0.001)
+    assert np.allclose(final_ori, (0, 0, -1), atol=0.001)
 
 
 def test_pendulum(double_pendulum):
