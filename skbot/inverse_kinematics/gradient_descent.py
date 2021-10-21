@@ -90,7 +90,9 @@ def gd(
         )
 
         if not result.success:
-            warnings.warn(f"L-BFGS-B terminated abnormally with message `{result.message}`.")
+            warnings.warn(
+                f"L-BFGS-B terminated abnormally with message `{result.message}`."
+            )
 
         scores = np.array([x.score() for x in targets])
         if np.any(scores > atols):
