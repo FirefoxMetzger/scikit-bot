@@ -239,9 +239,9 @@ def ccd(
             DeprecationWarning,
         )
 
-        target = PositionTarget(targets, joints, args[2], args[3])
+        target = PositionTarget(targets, joints, args[0], args[1])
         targets = [target]
-        joints = args[4]
+        joints = args[2]
 
     elif frameA is not None:
         warnings.warn(
