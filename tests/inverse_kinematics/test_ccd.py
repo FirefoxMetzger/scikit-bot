@@ -157,17 +157,19 @@ def test_pendulum_legacy_kwargs(double_pendulum):
         expected[idx] = joint.param
         joint.param = (joint.upper_limit + joint.lower_limit) / 2
 
-    angles = ik.ccd(
-        [],
-        pointA=(0, 0, 0),
-        pointB=root_pos,
-        frameA=tool_frame,
-        frameB=base_frame,
-        cycle_links=joints,
-    )
+    with pytest.deprecated_call():
+        angles = ik.ccd(
+            [],
+            pointA=(0, 0, 0),
+            pointB=root_pos,
+            frameA=tool_frame,
+            frameB=base_frame,
+            cycle_links=joints,
+            tol=0.01,
+        )
     final_pos = tool_frame.transform((0, 0, 0), base_frame)
 
-    assert np.allclose(final_pos, root_pos, atol=0.001)
+    assert np.allclose(final_pos, root_pos, atol=0.01)
 
 
 def test_ccd_maxiter(double_pendulum):
