@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.9.8 (2021-11-02)
+### Fix
+* Bump numpy from 1.21.2 to 1.21.3 ([#95](https://github.com/FirefoxMetzger/scikit-bot/issues/95)) ([`c645ce7`](https://github.com/FirefoxMetzger/scikit-bot/commit/c645ce7cbd285655fa35658da16d567867e5be07))
+
 ## v0.9.7 (2021-10-16)
 ### Fix
 * Sync SDF bindings ([#93](https://github.com/FirefoxMetzger/scikit-bot/issues/93)) ([`63dbe05`](https://github.com/FirefoxMetzger/scikit-bot/commit/63dbe05b83ccd62650205d67df95cf84f51f0a35))
