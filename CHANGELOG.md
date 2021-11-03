@@ -2,6 +2,11 @@
 
 <!--next-version-placeholder-->
 
+## v0.9.10 (2021-11-03)
+### Fix
+* Bump black from 21.9b0 to 21.10b0 ([#96](https://github.com/FirefoxMetzger/scikit-bot/issues/96)) ([`c23886d`](https://github.com/FirefoxMetzger/scikit-bot/commit/c23886d102ee2b58bff7b1c4323085378507a7a5))
+* Bump xsdata from 21.9 to 21.11 ([#98](https://github.com/FirefoxMetzger/scikit-bot/issues/98)) ([`3226a75`](https://github.com/FirefoxMetzger/scikit-bot/commit/3226a75f631dbb83e4f32055ca6fcfffc4e6a051))
+
 ## v0.9.9 (2021-11-03)
 ### Fix
 * Bump coverage[toml] from 6.0.2 to 6.1.1 ([#97](https://github.com/FirefoxMetzger/scikit-bot/issues/97)) ([`93f87db`](https://github.com/FirefoxMetzger/scikit-bot/commit/93f87db02b11f3efa91157527959d50214664760))
