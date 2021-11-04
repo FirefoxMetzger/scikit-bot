@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.9.11 (2021-11-04)
+### Fix
+* Bump twine from 3.4.2 to 3.5.0 ([#100](https://github.com/FirefoxMetzger/scikit-bot/issues/100)) ([`4b3a9b6`](https://github.com/FirefoxMetzger/scikit-bot/commit/4b3a9b6f4700e06b629eeb16eb107dc383f8731f))
+
 ## v0.9.10 (2021-11-03)
 ### Fix
 * Bump black from 21.9b0 to 21.10b0 ([#96](https://github.com/FirefoxMetzger/scikit-bot/issues/96)) ([`c23886d`](https://github.com/FirefoxMetzger/scikit-bot/commit/c23886d102ee2b58bff7b1c4323085378507a7a5))
