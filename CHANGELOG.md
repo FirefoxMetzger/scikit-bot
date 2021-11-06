@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.9.12 (2021-11-06)
+### Fix
+* Bump numpy from 1.21.3 to 1.21.4 ([#101](https://github.com/FirefoxMetzger/scikit-bot/issues/101)) ([`1bab7bb`](https://github.com/FirefoxMetzger/scikit-bot/commit/1bab7bbb40c203fdf4d2cf9c0b10d73b04c26242))
+
 ## v0.9.11 (2021-11-04)
 ### Fix
 * Bump twine from 3.4.2 to 3.5.0 ([#100](https://github.com/FirefoxMetzger/scikit-bot/issues/100)) ([`4b3a9b6`](https://github.com/FirefoxMetzger/scikit-bot/commit/4b3a9b6f4700e06b629eeb16eb107dc383f8731f))
