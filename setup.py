@@ -9,7 +9,7 @@ extras_require = {
         "psutil == 5.8.0",
         "requests == 2.26.0",
         "xsdata == 21.11",
-        "lxml == 4.6.3",
+        "lxml == 4.6.4",
         "cachetools == 4.2.4",
     ],
     "docs": [
@@ -21,7 +21,7 @@ extras_require = {
         "cachetools == 4.2.4",
         "sphinx-gallery == 0.10.0",
         "xsdata == 21.11",
-        "lxml == 4.6.3",
+        "lxml == 4.6.4",
     ],
     "linting": ["flake8 == 4.0.1", "black == 21.10b0"],
     "testing": ["pytest == 6.2.5", "coverage[toml] == 6.1.1"],
