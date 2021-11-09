@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.9.13 (2021-11-09)
+### Fix
+* Bump scipy from 1.7.1 to 1.7.2 ([#102](https://github.com/FirefoxMetzger/scikit-bot/issues/102)) ([`c3d1ecd`](https://github.com/FirefoxMetzger/scikit-bot/commit/c3d1ecde9de747a0ea4a18255ec300e48d1ec56a))
+
 ## v0.9.12 (2021-11-06)
 ### Fix
 * Bump numpy from 1.21.3 to 1.21.4 ([#101](https://github.com/FirefoxMetzger/scikit-bot/issues/101)) ([`1bab7bb`](https://github.com/FirefoxMetzger/scikit-bot/commit/1bab7bbb40c203fdf4d2cf9c0b10d73b04c26242))
