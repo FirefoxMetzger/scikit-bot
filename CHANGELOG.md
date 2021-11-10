@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.9.14 (2021-11-10)
+### Fix
+* Bump lxml from 4.6.3 to 4.6.4 ([#99](https://github.com/FirefoxMetzger/scikit-bot/issues/99)) ([`b55c7db`](https://github.com/FirefoxMetzger/scikit-bot/commit/b55c7dbb95c96014aecf84c402245f218a6b0855))
+
 ## v0.9.13 (2021-11-09)
 ### Fix
 * Bump scipy from 1.7.1 to 1.7.2 ([#102](https://github.com/FirefoxMetzger/scikit-bot/issues/102)) ([`c3d1ecd`](https://github.com/FirefoxMetzger/scikit-bot/commit/c3d1ecde9de747a0ea4a18255ec300e48d1ec56a))
