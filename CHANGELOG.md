@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.9.16 (2021-11-12)
+### Fix
+* Bump sphinx from 4.2.0 to 4.3.0 ([#104](https://github.com/FirefoxMetzger/scikit-bot/issues/104)) ([`0dd0bd4`](https://github.com/FirefoxMetzger/scikit-bot/commit/0dd0bd41ab53db9342cd3a12bbd95f86df0759a9))
+
 ## v0.9.15 (2021-11-12)
 ### Fix
 * Bump coverage[toml] from 6.1.1 to 6.1.2 ([#106](https://github.com/FirefoxMetzger/scikit-bot/issues/106)) ([`e0acef8`](https://github.com/FirefoxMetzger/scikit-bot/commit/e0acef82569870b5e9440afdfec828feed436799))
