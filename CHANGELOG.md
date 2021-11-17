@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.9.17 (2021-11-17)
+### Fix
+* Bump matplotlib from 3.4.3 to 3.5.0 ([#108](https://github.com/FirefoxMetzger/scikit-bot/issues/108)) ([`3146e12`](https://github.com/FirefoxMetzger/scikit-bot/commit/3146e128bc617b85ce2c631112f96fa54d659ad5))
+
 ## v0.9.16 (2021-11-12)
 ### Fix
 * Bump sphinx from 4.2.0 to 4.3.0 ([#104](https://github.com/FirefoxMetzger/scikit-bot/issues/104)) ([`0dd0bd4`](https://github.com/FirefoxMetzger/scikit-bot/commit/0dd0bd41ab53db9342cd3a12bbd95f86df0759a9))
