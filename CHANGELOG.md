@@ -2,6 +2,11 @@
 
 <!--next-version-placeholder-->
 
+## v0.9.18 (2021-11-19)
+### Fix
+* Bump sphinx-gallery from 0.10.0 to 0.10.1 ([#107](https://github.com/FirefoxMetzger/scikit-bot/issues/107)) ([`f0cbaad`](https://github.com/FirefoxMetzger/scikit-bot/commit/f0cbaad7810e396bf65a17c1adf1fe16ea96c8a4))
+* Bump black from 21.10b0 to 21.11b1 ([#110](https://github.com/FirefoxMetzger/scikit-bot/issues/110)) ([`60837bd`](https://github.com/FirefoxMetzger/scikit-bot/commit/60837bd84572fa06a8a172ce6625c56d6e1d5330))
+
 ## v0.9.17 (2021-11-17)
 ### Fix
 * Bump matplotlib from 3.4.3 to 3.5.0 ([#108](https://github.com/FirefoxMetzger/scikit-bot/issues/108)) ([`3146e12`](https://github.com/FirefoxMetzger/scikit-bot/commit/3146e128bc617b85ce2c631112f96fa54d659ad5))
