@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.9.19 (2021-11-23)
+### Fix
+* Bump lxml-stubs from 0.2.0 to 0.3.0 ([#111](https://github.com/FirefoxMetzger/scikit-bot/issues/111)) ([`4c17e1f`](https://github.com/FirefoxMetzger/scikit-bot/commit/4c17e1f862c85bf726d9b2fb7d0ce207b455cad0))
+
 ## v0.9.18 (2021-11-19)
 ### Fix
 * Bump sphinx-gallery from 0.10.0 to 0.10.1 ([#107](https://github.com/FirefoxMetzger/scikit-bot/issues/107)) ([`f0cbaad`](https://github.com/FirefoxMetzger/scikit-bot/commit/f0cbaad7810e396bf65a17c1adf1fe16ea96c8a4))
