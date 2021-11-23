@@ -2,6 +2,11 @@
 
 <!--next-version-placeholder-->
 
+## v0.9.20 (2021-11-23)
+### Fix
+* Bump python-semantic-release from 7.19.2 to 7.22.0 ([#112](https://github.com/FirefoxMetzger/scikit-bot/issues/112)) ([`d7d3af8`](https://github.com/FirefoxMetzger/scikit-bot/commit/d7d3af8b589401015f7e54860885daf3f5ee4bc7))
+* Bump twine from 3.5.0 to 3.6.0 ([#105](https://github.com/FirefoxMetzger/scikit-bot/issues/105)) ([`2bd1484`](https://github.com/FirefoxMetzger/scikit-bot/commit/2bd14844ae1da9653020e39f69a9c67f2a90e4ff))
+
 ## v0.9.19 (2021-11-23)
 ### Fix
 * Bump lxml-stubs from 0.2.0 to 0.3.0 ([#111](https://github.com/FirefoxMetzger/scikit-bot/issues/111)) ([`4c17e1f`](https://github.com/FirefoxMetzger/scikit-bot/commit/4c17e1f862c85bf726d9b2fb7d0ce207b455cad0))
