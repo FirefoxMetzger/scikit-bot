@@ -27,7 +27,7 @@ extras_require = {
     "testing": ["pytest == 6.2.5", "coverage[toml] == 6.1.2"],
     "dev": [
         "lxml-stubs == 0.3.0",
-        "python-semantic-release == 7.19.2",
+        "python-semantic-release == 7.22.0",
     ],
     "build": [
         "build == 0.7.0",
