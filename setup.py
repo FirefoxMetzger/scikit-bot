@@ -31,7 +31,7 @@ extras_require = {
     ],
     "build": [
         "build == 0.7.0",
-        "twine == 3.6.0",
+        "twine == 3.7.0",
     ],
 }
 
