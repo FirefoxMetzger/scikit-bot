@@ -2,6 +2,13 @@
 
 <!--next-version-placeholder-->
 
+## v0.9.21 (2021-12-01)
+### Fix
+* Bump python-semantic-release from 7.22.0 to 7.23.0 ([#116](https://github.com/FirefoxMetzger/scikit-bot/issues/116)) ([`eb74514`](https://github.com/FirefoxMetzger/scikit-bot/commit/eb74514ab2073ea65c51c42ac9015228b4639e9e))
+* Bump sphinx from 4.3.0 to 4.3.1 ([#115](https://github.com/FirefoxMetzger/scikit-bot/issues/115)) ([`52011e6`](https://github.com/FirefoxMetzger/scikit-bot/commit/52011e635ab57816d9f72593f55c972480d79b62))
+* Bump coverage[toml] from 6.1.2 to 6.2 ([#114](https://github.com/FirefoxMetzger/scikit-bot/issues/114)) ([`f91485f`](https://github.com/FirefoxMetzger/scikit-bot/commit/f91485f09baba0bdcc75ce082c841b4bfce96e77))
+* Bump scipy from 1.7.2 to 1.7.3 ([#113](https://github.com/FirefoxMetzger/scikit-bot/issues/113)) ([`86149af`](https://github.com/FirefoxMetzger/scikit-bot/commit/86149af7f1eaeba2a70eeb5888591eb86c7ad355))
+
 ## v0.9.20 (2021-11-23)
 ### Fix
 * Bump python-semantic-release from 7.19.2 to 7.22.0 ([#112](https://github.com/FirefoxMetzger/scikit-bot/issues/112)) ([`d7d3af8`](https://github.com/FirefoxMetzger/scikit-bot/commit/d7d3af8b589401015f7e54860885daf3f5ee4bc7))
