@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v0.9.22 (2021-12-07)
+### Fix
+* Bump twine from 3.6.0 to 3.7.0 ([#117](https://github.com/FirefoxMetzger/scikit-bot/issues/117)) ([`f6d3cf6`](https://github.com/FirefoxMetzger/scikit-bot/commit/f6d3cf691e6ae722b940af5e0dd32aa282333109))
+* Bump black from 21.11b1 to 21.12b0 ([#119](https://github.com/FirefoxMetzger/scikit-bot/issues/119)) ([`e9a49ed`](https://github.com/FirefoxMetzger/scikit-bot/commit/e9a49ed7c4fdc52665796f7c6facaea25aeea192))
+* Bump xsdata from 21.11 to 21.12 ([#118](https://github.com/FirefoxMetzger/scikit-bot/issues/118)) ([`4c60ef0`](https://github.com/FirefoxMetzger/scikit-bot/commit/4c60ef060b147f8cfe7474a2d512841c0c713cc7))
+
 ## v0.9.21 (2021-12-01)
 ### Fix
 * Bump python-semantic-release from 7.22.0 to 7.23.0 ([#116](https://github.com/FirefoxMetzger/scikit-bot/issues/116)) ([`eb74514`](https://github.com/FirefoxMetzger/scikit-bot/commit/eb74514ab2073ea65c51c42ac9015228b4639e9e))
