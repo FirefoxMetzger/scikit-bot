@@ -2,6 +2,11 @@
 
 <!--next-version-placeholder-->
 
+## v0.9.23 (2021-12-12)
+### Fix
+* Bump twine from 3.7.0 to 3.7.1 ([#120](https://github.com/FirefoxMetzger/scikit-bot/issues/120)) ([`c7440e0`](https://github.com/FirefoxMetzger/scikit-bot/commit/c7440e0f8ec51d9e3e140087f68bfedc616fa322))
+* Fix 1d spline ([#121](https://github.com/FirefoxMetzger/scikit-bot/issues/121)) ([`3eac69d`](https://github.com/FirefoxMetzger/scikit-bot/commit/3eac69d921c5f4648e2f19a3ebc36e36f961d7d5))
+
 ## v0.9.22 (2021-12-07)
 ### Fix
 * Bump twine from 3.6.0 to 3.7.0 ([#117](https://github.com/FirefoxMetzger/scikit-bot/issues/117)) ([`f6d3cf6`](https://github.com/FirefoxMetzger/scikit-bot/commit/f6d3cf691e6ae722b940af5e0dd32aa282333109))
