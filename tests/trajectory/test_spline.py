@@ -46,3 +46,12 @@ def test_derivative():
     estimate = rtj.spline_trajectory(t, y, t_control=x, derivative=1)
 
     assert np.allclose(estimate, dy)
+
+
+def test_1d_trajectory():
+    t = np.linspace(0, 1, 100)
+    x = np.linspace(0, 1, 50)
+
+    x_interpolated = rtj.spline_trajectory(t, x, t_control=x)
+
+    assert np.allclose(x_interpolated.T, t)
