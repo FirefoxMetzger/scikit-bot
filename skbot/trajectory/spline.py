@@ -96,6 +96,9 @@ def spline_trajectory(
     t = np.asarray(t)
     control_points = np.asarray(control_points)
 
+    if control_points.ndim == 1:
+        control_points = control_points[:, None]
+
     if t_control is None:
         t_control = np.linspace(t_min, t_max, len(control_points), dtype=np.float_)
     else:
