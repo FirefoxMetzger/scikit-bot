@@ -76,6 +76,8 @@ Available Transformations
     PrismaticJoint
 
 .. rubric:: 2D Links
+
+.. autosummary::
     :template: transform_class.rst
     :toctree:
 

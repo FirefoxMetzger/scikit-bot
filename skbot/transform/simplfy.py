@@ -128,12 +128,6 @@ def simplify_links(
         while idx < len(links):
             link = links[idx]
 
-            # skip if link should not be modified
-            if link in keep_links:
-                improved_links.append(link)
-                idx += 1
-                continue
-
             if not isinstance(link, Translation):
                 improved_links.append(link)
                 idx += 1
@@ -142,9 +136,6 @@ def simplify_links(
             translations: List[Translation] = list()
             for sub_link in links[idx:]:
                 if not isinstance(sub_link, Translation):
-                    break
-
-                if sub_link in keep_links:
                     break
 
                 translations.append(sub_link)

@@ -107,6 +107,8 @@ class AngleJoint(Rotation):
             angle = angle / 360 * 2 * np.pi
 
         self.param = angle
+        self.upper_limit = upper_limit
+        self.lower_limit = lower_limit
 
     @property
     def param(self) -> float:

@@ -137,6 +137,25 @@ def test_keep_link():
         result = link.transform(result)
     assert np.allclose(result, expected)
 
+    keep_link = tf.Translation((0, 1, 0))
+    original_link = tf.CompundLink(
+        [
+            tf.Translation((1, 0, 0)),
+            tf.Translation((1, 1, 0)),
+            keep_link,
+            tf.EulerRotation("Y", -90, degrees=True),
+        ]
+    )
+    simplified_links = tf.simplify_links([original_link], keep_links=[keep_link])
+
+    assert keep_link in simplified_links
+
+    expected = original_link.transform(points)
+    result = points
+    for link in simplified_links:
+        result = link.transform(result)
+    assert np.allclose(result, expected)
+
 
 def test_combine_translation():
     points = np.arange(200 * 3).reshape(200, 3)
