@@ -1,0 +1,31 @@
+<?xml version="1.0" ?>
+<sdf version="1.8">
+    <world name="panda_cam">
+        <model name="camera_model">
+            <pose>1 0 0.5 0 0 0</pose>
+            <link name="camera_link">
+                <sensor name="camera_sensor" type="camera">
+                    <camera>
+                        <horizontal_fov>1.13446</horizontal_fov>
+                        <image>
+                            <width>1920</width>
+                            <height>1080</height>
+                        </image>
+                        <clip>
+                            <near>0.01</near>
+                            <far>100</far>
+                        </clip>
+                    </camera>
+                </sensor>
+            </link>
+            <joint name="connect" type="fixed">
+                <parent>world</parent>
+                <child>camera_link</child>
+            </joint>
+        </model>
+        <include>
+            <uri>https://fuel.ignitionrobotics.org/1.0/AndrejOrsula/models/panda</uri>
+            <name>panda</name>
+        </include>
+    </world>
+</sdf>
