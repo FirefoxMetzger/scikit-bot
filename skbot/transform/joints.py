@@ -1,7 +1,7 @@
 from numpy.typing import ArrayLike
 import numpy as np
 from .utils3d import RotvecRotation
-from .affine import Translation
+from .affine import Translation, Rotation
 
 
 class RotationalJoint(RotvecRotation):
@@ -67,8 +67,70 @@ class RotationalJoint(RotvecRotation):
         self.param = angle
 
 
+class AngleJoint(Rotation):
+    """Rotation with constraints in 2D.
+
+    Parameters
+    ----------
+    angle : ArrayLike
+        The magnitude of the rotation. If None, it will be set to ``lower_limit``.
+    degrees : bool
+        If True, angle is assumed to be in degrees. Default is False.
+    axis : int
+        The axis along which to to compute. Default: -1.
+    upper_limit : ArrayLike
+        The maximum joint angle. Default: 2pi.
+    lower_limit : ArrayLike
+        The minimum joint angle. Default: 0.
+
+    Notes
+    -----
+
+    Setting ``RotationalJoint.angle`` will check if the joint angle limits are
+    respected; however, setting ``RotationalJoint.param`` will not.
+
+    """
+
+    def __init__(
+        self,
+        *,
+        angle: ArrayLike = None,
+        degrees: bool = False,
+        axis: int = -1,
+        upper_limit: ArrayLike = 2 * np.pi,
+        lower_limit: ArrayLike = 0,
+    ) -> None:
+        super().__init__((1, 0), (0, 1), axis=axis)
+
+        angle = angle or lower_limit
+        if degrees:  # make radians
+            angle = angle / 360 * 2 * np.pi
+
+        self.param = angle
+
+    @property
+    def param(self) -> float:
+        """Magnitude of the rotation (in radians)."""
+        return self._angle
+
+    @param.setter
+    def param(self, value: ArrayLike) -> None:
+        self._angle = value
+
+        self._v = np.cos(value / 2) * self._u - np.sin(value / 2) * self._u_ortho
+
+    @Rotation.angle.setter
+    def angle(self, angle: ArrayLike) -> None:
+        angle = np.asarray(angle)
+
+        if np.any(angle < self.lower_limit) or np.any(angle > self.upper_limit):
+            raise ValueError("An angle exceeds the joint's limit.")
+
+        self.param = angle
+
+
 class PrismaticJoint(Translation):
-    """Translation with constraints in 3D.
+    """Translation with constraints in N-D.
 
     Parameters
     ----------

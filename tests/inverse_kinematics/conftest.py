@@ -39,3 +39,18 @@ def double_pendulum():
             joints.append(link)
 
     return base_frame, joints
+
+
+@pytest.fixture()
+def circle_bot():
+    world = tf.Frame(3, name="world")
+    ellbow = tf.Frame(3, name="ellbow")
+    tool = tf.Frame(3, name="tool")
+
+    rotate = tf.RotationalJoint((0, 0, 1), angle=0)
+    reach = tf.PrismaticJoint((-1, 0, 0), upper_limit=10, lower_limit=-10)
+
+    rotate(world, ellbow)
+    reach(ellbow, tool)
+
+    return world, [rotate, reach]

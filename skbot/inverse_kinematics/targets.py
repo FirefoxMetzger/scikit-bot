@@ -77,6 +77,8 @@ class Target:
         for link in self._chain:
             if link is joint:
                 return True
+            elif isinstance(link, tf.InvertLink) and link._forward_link is joint:
+                return True
         return False
 
 
@@ -127,6 +129,8 @@ class PositionTarget(Target):
 
         if norm is None:
             self.norm = np.linalg.norm
+        else:
+            self.norm = norm
 
     def score(self):
         current_pos = self.static_position
@@ -203,7 +207,7 @@ class RotationTarget(Target):
         if self.static_frame.ndim == 3:
             value = np.clip((trace - 1) / 2, -1, 1)
             theta = np.arccos(value)
-        elif self.static_frame.ndim == 3:
+        elif self.static_frame.ndim == 2:
             value = np.clip(trace / 2, -1, 1)
             theta = np.arccos(value)
         else:
