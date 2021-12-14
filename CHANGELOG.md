@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.10.0 (2021-12-14)
+### Feature
+* L-BFGS-B based inverse kinematics ([#94](https://github.com/FirefoxMetzger/scikit-bot/issues/94)) ([`6cd52b8`](https://github.com/FirefoxMetzger/scikit-bot/commit/6cd52b82fa1efedc0c20650bb2a99b20521bfaa3))
+
 ## v0.9.23 (2021-12-12)
 ### Fix
 * Bump twine from 3.7.0 to 3.7.1 ([#120](https://github.com/FirefoxMetzger/scikit-bot/issues/120)) ([`c7440e0`](https://github.com/FirefoxMetzger/scikit-bot/commit/c7440e0f8ec51d9e3e140087f68bfedc616fa322))
