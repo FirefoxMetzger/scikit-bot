@@ -13,7 +13,7 @@ extras_require = {
         "cachetools == 5.0.0",
     ],
     "docs": [
-        "sphinx == 4.3.1",
+        "sphinx == 4.3.2",
         "numpydoc == 1.1.0",
         "sphinx-autodoc-typehints == 1.12.0",
         "matplotlib == 3.5.1",
