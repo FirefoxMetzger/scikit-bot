@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v0.10.1 (2022-01-06)
+### Fix
+* Bump sphinx from 4.3.1 to 4.3.2 ([#124](https://github.com/FirefoxMetzger/scikit-bot/issues/124)) ([`bef36f7`](https://github.com/FirefoxMetzger/scikit-bot/commit/bef36f71c00f21441cb4de17f0ee5b3fc24313a2))
+* Bump matplotlib from 3.5.0 to 3.5.1 ([#123](https://github.com/FirefoxMetzger/scikit-bot/issues/123)) ([`f61047f`](https://github.com/FirefoxMetzger/scikit-bot/commit/f61047ffc0d8da7bf05cd43f55d36b9fe7cb65ce))
+* Bump cachetools from 4.2.4 to 5.0.0 ([#126](https://github.com/FirefoxMetzger/scikit-bot/issues/126)) ([`cc597b8`](https://github.com/FirefoxMetzger/scikit-bot/commit/cc597b80d82767556b7fc4fa8eb1d16c55f282ad))
+
 ## v0.10.0 (2021-12-14)
 ### Feature
 * L-BFGS-B based inverse kinematics ([#94](https://github.com/FirefoxMetzger/scikit-bot/issues/94)) ([`6cd52b8`](https://github.com/FirefoxMetzger/scikit-bot/commit/6cd52b82fa1efedc0c20650bb2a99b20521bfaa3))
