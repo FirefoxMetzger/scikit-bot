@@ -9,7 +9,7 @@
     <xs:all>
       <xs:element name="static" minOccurs="1" maxOccurs="1" default="false" type="xs:boolean">
         <xs:annotation>
-          <xs:documentation xml:lang="en">If set to true, the model is immovable. Otherwise the model is simulated in the dynamics engine.</xs:documentation>
+          <xs:documentation xml:lang="en">If set to true, the model is immovable; i.e., a dynamics engine will not       update its position. This will also overwrite this model's `@canonical_link`       and instead attach the model's implicit frame to the world's implicit frame.       This holds even if this model is nested (or included) by another model       instead of being a direct child of `//world`.</xs:documentation>
         </xs:annotation>
       </xs:element>
       <xs:element name="self_collide" minOccurs="1" maxOccurs="1" default="false" type="xs:boolean">
@@ -224,7 +224,7 @@
     </xs:attribute>
     <xs:attribute name="canonical_link" type="xs:string" use="optional">
       <xs:annotation>
-        <xs:documentation xml:lang="en">The name of the model's canonical link, to which the model's implicit       coordinate frame is attached. If unset or set to an empty string,       the first link element listed as a child of this model is chosen       as the canonical link.</xs:documentation>
+        <xs:documentation xml:lang="en">The name of the model's canonical link, to which the model's implicit       coordinate frame is attached. If unset or set to an empty string, the       first `/link` listed as a direct child of this model is chosen as the       canonical link. If the model has no direct `/link` children, it will       instead be attached to the first nested (or included) model's implicit       frame.</xs:documentation>
       </xs:annotation>
     </xs:attribute>
     <xs:attribute name="placement_frame" type="xs:string" use="optional">
