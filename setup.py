@@ -16,7 +16,7 @@ extras_require = {
         "sphinx == 4.3.1",
         "numpydoc == 1.1.0",
         "sphinx-autodoc-typehints == 1.12.0",
-        "matplotlib == 3.5.0",
+        "matplotlib == 3.5.1",
         "pydata-sphinx-theme == 0.7.2",
         "cachetools == 5.0.0",
         "sphinx-gallery == 0.10.1",
