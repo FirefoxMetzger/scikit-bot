@@ -95,7 +95,7 @@ def _vector_project_impl(a: ArrayLike, b: ArrayLike) -> np.ndarray:
     Notes
     -----
     This function exists to help numba with caching.
-    
+
     """
     numerator = reduce(np.sum, a * b, axis=-1, keepdims=True)
     denominator = reduce(np.sum, b * b, axis=-1, keepdims=True)
@@ -138,6 +138,7 @@ def vector_project(a: ArrayLike, b: ArrayLike, axis: int = -1) -> np.ndarray:
     result = np.moveaxis(result, -1, axis)
 
     return result
+
 
 def scalar_project(
     a: ArrayLike, b: ArrayLike, *, axis: int = -1, keepdims=False
