@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v0.10.3 (2022-01-07)
+### Fix
+* Bump lxml from 4.6.4 to 4.6.5 ([#132](https://github.com/FirefoxMetzger/scikit-bot/issues/132)) ([`2556f59`](https://github.com/FirefoxMetzger/scikit-bot/commit/2556f5940c3974f728ed40769a8fb576c65ff62e))
+* Bump sphinx-autodoc-typehints from 1.12.0 to 1.14.0 ([#131](https://github.com/FirefoxMetzger/scikit-bot/issues/131)) ([`88109c2`](https://github.com/FirefoxMetzger/scikit-bot/commit/88109c25e768b65b7bd279a8d29789d8c54c06a2))
+* Bump requests from 2.26.0 to 2.27.1 ([#130](https://github.com/FirefoxMetzger/scikit-bot/issues/130)) ([`516c0b7`](https://github.com/FirefoxMetzger/scikit-bot/commit/516c0b7d48b5d889abc0a7e231f1ed19b8bd0b07))
+
 ## v0.10.2 (2022-01-07)
 ### Fix
 * Updated bindings ([#128](https://github.com/FirefoxMetzger/scikit-bot/issues/128)) ([`469cf48`](https://github.com/FirefoxMetzger/scikit-bot/commit/469cf48e63f6b7739ab7be21328f66d6e2c8fb8a))
