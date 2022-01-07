@@ -13,8 +13,12 @@ class Model:
 
     Parameters
     ----------
-    static: If set to true, the model is immovable. Otherwise the model
-        is simulated in the dynamics engine.
+    static: If set to true, the model is immovable; i.e., a dynamics
+        engine will not       update its position. This will also
+        overwrite this model's `@canonical_link`       and instead
+        attach the model's implicit frame to the world's implicit frame.
+        This holds even if this model is nested (or included) by another
+        model       instead of being a direct child of `//world`.
     self_collide: If set to true, all links in the model will collide
         with each other (except those connected by a joint). Can be
         overridden by the link or collision element self_collide
@@ -52,8 +56,11 @@ class Model:
         //frame, //joint, or //link within the same       scope.
     canonical_link: The name of the model's canonical link, to which the
         model's implicit       coordinate frame is attached. If unset or
-        set to an empty string,       the first link element listed as a
-        child of this model is chosen       as the canonical link.
+        set to an empty string, the       first `/link` listed as a
+        direct child of this model is chosen as the       canonical
+        link. If the model has no direct `/link` children, it will
+        instead be attached to the first nested (or included) model's
+        implicit       frame.
     placement_frame: The frame inside this model whose pose will be set
         by the pose element of the model. i.e, the pose element
         specifies the pose of this frame instead of the model frame.

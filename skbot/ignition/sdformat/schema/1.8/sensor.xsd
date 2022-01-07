@@ -663,6 +663,414 @@
                 <xs:documentation xml:lang="en">Direction of the wrench measured by the sensor. The supported options are:         "parent_to_child" if the measured wrench is the one applied by the parent link on the child link,         "child_to_parent" if the measured wrench is the one applied by the child link on the parent link.</xs:documentation>
               </xs:annotation>
             </xs:element>
+            <xs:element name="force" minOccurs="0" maxOccurs="1">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">These elements are specific to measurement-frame force,     which is expressed in Newtons</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:annotation>
+                  <xs:documentation xml:lang="en">These elements are specific to measurement-frame force,     which is expressed in Newtons</xs:documentation>
+                </xs:annotation>
+                <xs:all>
+                  <xs:element name="x" minOccurs="0" maxOccurs="1">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">Force along the X axis</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                      <xs:annotation>
+                        <xs:documentation xml:lang="en">Force along the X axis</xs:documentation>
+                      </xs:annotation>
+                      <xs:all>
+                        <xs:element name="noise" minOccurs="1" maxOccurs="1">
+                          <xs:annotation>
+                            <xs:documentation xml:lang="en">The properties of a sensor noise model.</xs:documentation>
+                          </xs:annotation>
+                          <xs:complexType>
+                            <xs:annotation>
+                              <xs:documentation xml:lang="en">The properties of a sensor noise model.</xs:documentation>
+                            </xs:annotation>
+                            <xs:all>
+                              <xs:element name="mean" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian*", the mean of the Gaussian distribution from which       noise values are drawn.</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element name="stddev" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian*", the standard deviation of the Gaussian distribution from which noise values are drawn.</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element name="bias_mean" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian*", the mean of the Gaussian distribution from which bias values are drawn.</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element name="bias_stddev" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian*", the standard deviation of the Gaussian distribution from which bias values are drawn.</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element name="dynamic_bias_stddev" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian*", the standard deviation of the noise used to drive a process to model slow variations in a sensor bias.</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element name="dynamic_bias_correlation_time" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian*", the correlation time in seconds of the noise used to drive a process to model slow variations in a sensor bias. A typical value, when used, would be on the order of 3600 seconds (1 hour).</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element name="precision" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian_quantized", the precision of output signals. A value       of zero implies infinite precision / no quantization.</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                            </xs:all>
+                            <xs:attribute name="type" type="xs:string" use="required">
+                              <xs:annotation>
+                                <xs:documentation xml:lang="en">The type of noise. Currently supported types are:       "none" (no noise).       "gaussian" (draw noise values independently for each measurement from a Gaussian distribution).       "gaussian_quantized" ("gaussian" plus quantization of outputs (ie. rounding))</xs:documentation>
+                              </xs:annotation>
+                            </xs:attribute>
+                          </xs:complexType>
+                        </xs:element>
+                      </xs:all>
+                    </xs:complexType>
+                  </xs:element>
+                  <xs:element name="y" minOccurs="0" maxOccurs="1">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">Force along the Y axis</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                      <xs:annotation>
+                        <xs:documentation xml:lang="en">Force along the Y axis</xs:documentation>
+                      </xs:annotation>
+                      <xs:all>
+                        <xs:element name="noise" minOccurs="1" maxOccurs="1">
+                          <xs:annotation>
+                            <xs:documentation xml:lang="en">The properties of a sensor noise model.</xs:documentation>
+                          </xs:annotation>
+                          <xs:complexType>
+                            <xs:annotation>
+                              <xs:documentation xml:lang="en">The properties of a sensor noise model.</xs:documentation>
+                            </xs:annotation>
+                            <xs:all>
+                              <xs:element name="mean" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian*", the mean of the Gaussian distribution from which       noise values are drawn.</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element name="stddev" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian*", the standard deviation of the Gaussian distribution from which noise values are drawn.</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element name="bias_mean" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian*", the mean of the Gaussian distribution from which bias values are drawn.</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element name="bias_stddev" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian*", the standard deviation of the Gaussian distribution from which bias values are drawn.</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element name="dynamic_bias_stddev" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian*", the standard deviation of the noise used to drive a process to model slow variations in a sensor bias.</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element name="dynamic_bias_correlation_time" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian*", the correlation time in seconds of the noise used to drive a process to model slow variations in a sensor bias. A typical value, when used, would be on the order of 3600 seconds (1 hour).</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element name="precision" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian_quantized", the precision of output signals. A value       of zero implies infinite precision / no quantization.</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                            </xs:all>
+                            <xs:attribute name="type" type="xs:string" use="required">
+                              <xs:annotation>
+                                <xs:documentation xml:lang="en">The type of noise. Currently supported types are:       "none" (no noise).       "gaussian" (draw noise values independently for each measurement from a Gaussian distribution).       "gaussian_quantized" ("gaussian" plus quantization of outputs (ie. rounding))</xs:documentation>
+                              </xs:annotation>
+                            </xs:attribute>
+                          </xs:complexType>
+                        </xs:element>
+                      </xs:all>
+                    </xs:complexType>
+                  </xs:element>
+                  <xs:element name="z" minOccurs="0" maxOccurs="1">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">Force along the Z axis</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                      <xs:annotation>
+                        <xs:documentation xml:lang="en">Force along the Z axis</xs:documentation>
+                      </xs:annotation>
+                      <xs:all>
+                        <xs:element name="noise" minOccurs="1" maxOccurs="1">
+                          <xs:annotation>
+                            <xs:documentation xml:lang="en">The properties of a sensor noise model.</xs:documentation>
+                          </xs:annotation>
+                          <xs:complexType>
+                            <xs:annotation>
+                              <xs:documentation xml:lang="en">The properties of a sensor noise model.</xs:documentation>
+                            </xs:annotation>
+                            <xs:all>
+                              <xs:element name="mean" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian*", the mean of the Gaussian distribution from which       noise values are drawn.</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element name="stddev" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian*", the standard deviation of the Gaussian distribution from which noise values are drawn.</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element name="bias_mean" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian*", the mean of the Gaussian distribution from which bias values are drawn.</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element name="bias_stddev" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian*", the standard deviation of the Gaussian distribution from which bias values are drawn.</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element name="dynamic_bias_stddev" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian*", the standard deviation of the noise used to drive a process to model slow variations in a sensor bias.</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element name="dynamic_bias_correlation_time" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian*", the correlation time in seconds of the noise used to drive a process to model slow variations in a sensor bias. A typical value, when used, would be on the order of 3600 seconds (1 hour).</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element name="precision" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian_quantized", the precision of output signals. A value       of zero implies infinite precision / no quantization.</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                            </xs:all>
+                            <xs:attribute name="type" type="xs:string" use="required">
+                              <xs:annotation>
+                                <xs:documentation xml:lang="en">The type of noise. Currently supported types are:       "none" (no noise).       "gaussian" (draw noise values independently for each measurement from a Gaussian distribution).       "gaussian_quantized" ("gaussian" plus quantization of outputs (ie. rounding))</xs:documentation>
+                              </xs:annotation>
+                            </xs:attribute>
+                          </xs:complexType>
+                        </xs:element>
+                      </xs:all>
+                    </xs:complexType>
+                  </xs:element>
+                </xs:all>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="torque" minOccurs="0" maxOccurs="1">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">These elements are specific to measurement-frame torque,     which is expressed in Newton-meters</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:annotation>
+                  <xs:documentation xml:lang="en">These elements are specific to measurement-frame torque,     which is expressed in Newton-meters</xs:documentation>
+                </xs:annotation>
+                <xs:all>
+                  <xs:element name="x" minOccurs="0" maxOccurs="1">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">Torque about the X axis</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                      <xs:annotation>
+                        <xs:documentation xml:lang="en">Torque about the X axis</xs:documentation>
+                      </xs:annotation>
+                      <xs:all>
+                        <xs:element name="noise" minOccurs="1" maxOccurs="1">
+                          <xs:annotation>
+                            <xs:documentation xml:lang="en">The properties of a sensor noise model.</xs:documentation>
+                          </xs:annotation>
+                          <xs:complexType>
+                            <xs:annotation>
+                              <xs:documentation xml:lang="en">The properties of a sensor noise model.</xs:documentation>
+                            </xs:annotation>
+                            <xs:all>
+                              <xs:element name="mean" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian*", the mean of the Gaussian distribution from which       noise values are drawn.</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element name="stddev" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian*", the standard deviation of the Gaussian distribution from which noise values are drawn.</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element name="bias_mean" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian*", the mean of the Gaussian distribution from which bias values are drawn.</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element name="bias_stddev" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian*", the standard deviation of the Gaussian distribution from which bias values are drawn.</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element name="dynamic_bias_stddev" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian*", the standard deviation of the noise used to drive a process to model slow variations in a sensor bias.</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element name="dynamic_bias_correlation_time" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian*", the correlation time in seconds of the noise used to drive a process to model slow variations in a sensor bias. A typical value, when used, would be on the order of 3600 seconds (1 hour).</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element name="precision" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian_quantized", the precision of output signals. A value       of zero implies infinite precision / no quantization.</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                            </xs:all>
+                            <xs:attribute name="type" type="xs:string" use="required">
+                              <xs:annotation>
+                                <xs:documentation xml:lang="en">The type of noise. Currently supported types are:       "none" (no noise).       "gaussian" (draw noise values independently for each measurement from a Gaussian distribution).       "gaussian_quantized" ("gaussian" plus quantization of outputs (ie. rounding))</xs:documentation>
+                              </xs:annotation>
+                            </xs:attribute>
+                          </xs:complexType>
+                        </xs:element>
+                      </xs:all>
+                    </xs:complexType>
+                  </xs:element>
+                  <xs:element name="y" minOccurs="0" maxOccurs="1">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">Force about the Y axis</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                      <xs:annotation>
+                        <xs:documentation xml:lang="en">Force about the Y axis</xs:documentation>
+                      </xs:annotation>
+                      <xs:all>
+                        <xs:element name="noise" minOccurs="1" maxOccurs="1">
+                          <xs:annotation>
+                            <xs:documentation xml:lang="en">The properties of a sensor noise model.</xs:documentation>
+                          </xs:annotation>
+                          <xs:complexType>
+                            <xs:annotation>
+                              <xs:documentation xml:lang="en">The properties of a sensor noise model.</xs:documentation>
+                            </xs:annotation>
+                            <xs:all>
+                              <xs:element name="mean" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian*", the mean of the Gaussian distribution from which       noise values are drawn.</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element name="stddev" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian*", the standard deviation of the Gaussian distribution from which noise values are drawn.</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element name="bias_mean" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian*", the mean of the Gaussian distribution from which bias values are drawn.</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element name="bias_stddev" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian*", the standard deviation of the Gaussian distribution from which bias values are drawn.</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element name="dynamic_bias_stddev" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian*", the standard deviation of the noise used to drive a process to model slow variations in a sensor bias.</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element name="dynamic_bias_correlation_time" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian*", the correlation time in seconds of the noise used to drive a process to model slow variations in a sensor bias. A typical value, when used, would be on the order of 3600 seconds (1 hour).</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element name="precision" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian_quantized", the precision of output signals. A value       of zero implies infinite precision / no quantization.</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                            </xs:all>
+                            <xs:attribute name="type" type="xs:string" use="required">
+                              <xs:annotation>
+                                <xs:documentation xml:lang="en">The type of noise. Currently supported types are:       "none" (no noise).       "gaussian" (draw noise values independently for each measurement from a Gaussian distribution).       "gaussian_quantized" ("gaussian" plus quantization of outputs (ie. rounding))</xs:documentation>
+                              </xs:annotation>
+                            </xs:attribute>
+                          </xs:complexType>
+                        </xs:element>
+                      </xs:all>
+                    </xs:complexType>
+                  </xs:element>
+                  <xs:element name="z" minOccurs="0" maxOccurs="1">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">Torque about the Z axis</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                      <xs:annotation>
+                        <xs:documentation xml:lang="en">Torque about the Z axis</xs:documentation>
+                      </xs:annotation>
+                      <xs:all>
+                        <xs:element name="noise" minOccurs="1" maxOccurs="1">
+                          <xs:annotation>
+                            <xs:documentation xml:lang="en">The properties of a sensor noise model.</xs:documentation>
+                          </xs:annotation>
+                          <xs:complexType>
+                            <xs:annotation>
+                              <xs:documentation xml:lang="en">The properties of a sensor noise model.</xs:documentation>
+                            </xs:annotation>
+                            <xs:all>
+                              <xs:element name="mean" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian*", the mean of the Gaussian distribution from which       noise values are drawn.</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element name="stddev" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian*", the standard deviation of the Gaussian distribution from which noise values are drawn.</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element name="bias_mean" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian*", the mean of the Gaussian distribution from which bias values are drawn.</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element name="bias_stddev" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian*", the standard deviation of the Gaussian distribution from which bias values are drawn.</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element name="dynamic_bias_stddev" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian*", the standard deviation of the noise used to drive a process to model slow variations in a sensor bias.</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element name="dynamic_bias_correlation_time" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian*", the correlation time in seconds of the noise used to drive a process to model slow variations in a sensor bias. A typical value, when used, would be on the order of 3600 seconds (1 hour).</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element name="precision" minOccurs="1" maxOccurs="1" default="0.0" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">For type "gaussian_quantized", the precision of output signals. A value       of zero implies infinite precision / no quantization.</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                            </xs:all>
+                            <xs:attribute name="type" type="xs:string" use="required">
+                              <xs:annotation>
+                                <xs:documentation xml:lang="en">The type of noise. Currently supported types are:       "none" (no noise).       "gaussian" (draw noise values independently for each measurement from a Gaussian distribution).       "gaussian_quantized" ("gaussian" plus quantization of outputs (ie. rounding))</xs:documentation>
+                              </xs:annotation>
+                            </xs:attribute>
+                          </xs:complexType>
+                        </xs:element>
+                      </xs:all>
+                    </xs:complexType>
+                  </xs:element>
+                </xs:all>
+              </xs:complexType>
+            </xs:element>
           </xs:all>
         </xs:complexType>
       </xs:element>
