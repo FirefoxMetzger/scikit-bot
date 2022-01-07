@@ -8,7 +8,7 @@ import numba
 def reduce(
     reduce_op, x: np.ndarray, axis: ArrayLike, keepdims: bool = False
 ) -> np.ndarray:
-    return NotImplementedError("This function is Numba only.")
+    raise NotImplementedError("This function is Numba only.")
 
 
 @overload(reduce)
@@ -79,22 +79,29 @@ def numba_reduce(reduce_op, x, axis, keepdims=False) -> np.ndarray:
 
         return result[0, ...]
 
-    if isinstance(keepdims, numba.types.Literal):
-        should_keep = keepdims.literal_value
-    elif isinstance(keepdims, bool):
-        should_keep = keepdims
-    # elif isinstance(keepdims, numba.types.boolean):
-    #     should_keep = False
-    else:
-        raise NotImplementedError(f"Unsupported type for `keepdims`: {type(keepdims)}")
-
-    if should_keep:
+    if numba.literally(keepdims).literal_value:
         return impl_keepdims
     else:
         return impl_dropdims
 
 
 @numba.jit(nopython=True, cache=True)
+def _vector_project_impl(a: ArrayLike, b: ArrayLike) -> np.ndarray:
+    """Implementation of vector_project
+
+    See vector_project for documentation. This function differs in that it
+    assumes that axis=-1.
+
+    Notes
+    -----
+    This function exists to help numba with caching.
+    
+    """
+    numerator = reduce(np.sum, a * b, axis=-1, keepdims=True)
+    denominator = reduce(np.sum, b * b, axis=-1, keepdims=True)
+    return numerator / denominator * b
+
+
 def vector_project(a: ArrayLike, b: ArrayLike, axis: int = -1) -> np.ndarray:
     """Returns the components of each a along each b.
 
@@ -119,14 +126,18 @@ def vector_project(a: ArrayLike, b: ArrayLike, axis: int = -1) -> np.ndarray:
 
     """
 
-    a = np.asarray(a)
-    b = np.asarray(b)
+    # data preparation for bettech numba caching
+    a = np.moveaxis(a, axis, -1)
+    b = np.moveaxis(b, axis, -1)
+    a = np.ascontiguousarray(a).view()
+    b = np.ascontiguousarray(b).view()
+    a.flags.writeable = False
+    b.flags.writeable = False
 
-    numerator = reduce(np.sum, a * b, axis=axis, keepdims=True)
-    denominator = reduce(np.sum, b * b, axis=axis, keepdims=True)
+    result = _vector_project_impl(a, b)
+    result = np.moveaxis(result, -1, axis)
 
-    return numerator / denominator * b
-
+    return result
 
 def scalar_project(
     a: ArrayLike, b: ArrayLike, *, axis: int = -1, keepdims=False
