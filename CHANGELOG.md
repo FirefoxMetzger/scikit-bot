@@ -2,6 +2,125 @@
 
 <!--next-version-placeholder-->
 
+## v0.10.3 (2022-01-07)
+### Fix
+* Bump lxml from 4.6.4 to 4.6.5 ([#132](https://github.com/FirefoxMetzger/scikit-bot/issues/132)) ([`2556f59`](https://github.com/FirefoxMetzger/scikit-bot/commit/2556f5940c3974f728ed40769a8fb576c65ff62e))
+* Bump sphinx-autodoc-typehints from 1.12.0 to 1.14.0 ([#131](https://github.com/FirefoxMetzger/scikit-bot/issues/131)) ([`88109c2`](https://github.com/FirefoxMetzger/scikit-bot/commit/88109c25e768b65b7bd279a8d29789d8c54c06a2))
+* Bump requests from 2.26.0 to 2.27.1 ([#130](https://github.com/FirefoxMetzger/scikit-bot/issues/130)) ([`516c0b7`](https://github.com/FirefoxMetzger/scikit-bot/commit/516c0b7d48b5d889abc0a7e231f1ed19b8bd0b07))
+
+## v0.10.2 (2022-01-07)
+### Fix
+* Updated bindings ([#128](https://github.com/FirefoxMetzger/scikit-bot/issues/128)) ([`469cf48`](https://github.com/FirefoxMetzger/scikit-bot/commit/469cf48e63f6b7739ab7be21328f66d6e2c8fb8a))
+* Bump psutil from 5.8.0 to 5.9.0 ([#129](https://github.com/FirefoxMetzger/scikit-bot/issues/129)) ([`676f529`](https://github.com/FirefoxMetzger/scikit-bot/commit/676f52935016f06e936f53e8eb48780d92a72818))
+
+## v0.10.1 (2022-01-06)
+### Fix
+* Bump sphinx from 4.3.1 to 4.3.2 ([#124](https://github.com/FirefoxMetzger/scikit-bot/issues/124)) ([`bef36f7`](https://github.com/FirefoxMetzger/scikit-bot/commit/bef36f71c00f21441cb4de17f0ee5b3fc24313a2))
+* Bump matplotlib from 3.5.0 to 3.5.1 ([#123](https://github.com/FirefoxMetzger/scikit-bot/issues/123)) ([`f61047f`](https://github.com/FirefoxMetzger/scikit-bot/commit/f61047ffc0d8da7bf05cd43f55d36b9fe7cb65ce))
+* Bump cachetools from 4.2.4 to 5.0.0 ([#126](https://github.com/FirefoxMetzger/scikit-bot/issues/126)) ([`cc597b8`](https://github.com/FirefoxMetzger/scikit-bot/commit/cc597b80d82767556b7fc4fa8eb1d16c55f282ad))
+
+## v0.10.0 (2021-12-14)
+### Feature
+* L-BFGS-B based inverse kinematics ([#94](https://github.com/FirefoxMetzger/scikit-bot/issues/94)) ([`6cd52b8`](https://github.com/FirefoxMetzger/scikit-bot/commit/6cd52b82fa1efedc0c20650bb2a99b20521bfaa3))
+
+## v0.9.23 (2021-12-12)
+### Fix
+* Bump twine from 3.7.0 to 3.7.1 ([#120](https://github.com/FirefoxMetzger/scikit-bot/issues/120)) ([`c7440e0`](https://github.com/FirefoxMetzger/scikit-bot/commit/c7440e0f8ec51d9e3e140087f68bfedc616fa322))
+* Fix 1d spline ([#121](https://github.com/FirefoxMetzger/scikit-bot/issues/121)) ([`3eac69d`](https://github.com/FirefoxMetzger/scikit-bot/commit/3eac69d921c5f4648e2f19a3ebc36e36f961d7d5))
+
+## v0.9.22 (2021-12-07)
+### Fix
+* Bump twine from 3.6.0 to 3.7.0 ([#117](https://github.com/FirefoxMetzger/scikit-bot/issues/117)) ([`f6d3cf6`](https://github.com/FirefoxMetzger/scikit-bot/commit/f6d3cf691e6ae722b940af5e0dd32aa282333109))
+* Bump black from 21.11b1 to 21.12b0 ([#119](https://github.com/FirefoxMetzger/scikit-bot/issues/119)) ([`e9a49ed`](https://github.com/FirefoxMetzger/scikit-bot/commit/e9a49ed7c4fdc52665796f7c6facaea25aeea192))
+* Bump xsdata from 21.11 to 21.12 ([#118](https://github.com/FirefoxMetzger/scikit-bot/issues/118)) ([`4c60ef0`](https://github.com/FirefoxMetzger/scikit-bot/commit/4c60ef060b147f8cfe7474a2d512841c0c713cc7))
+
+## v0.9.21 (2021-12-01)
+### Fix
+* Bump python-semantic-release from 7.22.0 to 7.23.0 ([#116](https://github.com/FirefoxMetzger/scikit-bot/issues/116)) ([`eb74514`](https://github.com/FirefoxMetzger/scikit-bot/commit/eb74514ab2073ea65c51c42ac9015228b4639e9e))
+* Bump sphinx from 4.3.0 to 4.3.1 ([#115](https://github.com/FirefoxMetzger/scikit-bot/issues/115)) ([`52011e6`](https://github.com/FirefoxMetzger/scikit-bot/commit/52011e635ab57816d9f72593f55c972480d79b62))
+* Bump coverage[toml] from 6.1.2 to 6.2 ([#114](https://github.com/FirefoxMetzger/scikit-bot/issues/114)) ([`f91485f`](https://github.com/FirefoxMetzger/scikit-bot/commit/f91485f09baba0bdcc75ce082c841b4bfce96e77))
+* Bump scipy from 1.7.2 to 1.7.3 ([#113](https://github.com/FirefoxMetzger/scikit-bot/issues/113)) ([`86149af`](https://github.com/FirefoxMetzger/scikit-bot/commit/86149af7f1eaeba2a70eeb5888591eb86c7ad355))
+
+## v0.9.20 (2021-11-23)
+### Fix
+* Bump python-semantic-release from 7.19.2 to 7.22.0 ([#112](https://github.com/FirefoxMetzger/scikit-bot/issues/112)) ([`d7d3af8`](https://github.com/FirefoxMetzger/scikit-bot/commit/d7d3af8b589401015f7e54860885daf3f5ee4bc7))
+* Bump twine from 3.5.0 to 3.6.0 ([#105](https://github.com/FirefoxMetzger/scikit-bot/issues/105)) ([`2bd1484`](https://github.com/FirefoxMetzger/scikit-bot/commit/2bd14844ae1da9653020e39f69a9c67f2a90e4ff))
+
+## v0.9.19 (2021-11-23)
+### Fix
+* Bump lxml-stubs from 0.2.0 to 0.3.0 ([#111](https://github.com/FirefoxMetzger/scikit-bot/issues/111)) ([`4c17e1f`](https://github.com/FirefoxMetzger/scikit-bot/commit/4c17e1f862c85bf726d9b2fb7d0ce207b455cad0))
+
+## v0.9.18 (2021-11-19)
+### Fix
+* Bump sphinx-gallery from 0.10.0 to 0.10.1 ([#107](https://github.com/FirefoxMetzger/scikit-bot/issues/107)) ([`f0cbaad`](https://github.com/FirefoxMetzger/scikit-bot/commit/f0cbaad7810e396bf65a17c1adf1fe16ea96c8a4))
+* Bump black from 21.10b0 to 21.11b1 ([#110](https://github.com/FirefoxMetzger/scikit-bot/issues/110)) ([`60837bd`](https://github.com/FirefoxMetzger/scikit-bot/commit/60837bd84572fa06a8a172ce6625c56d6e1d5330))
+
+## v0.9.17 (2021-11-17)
+### Fix
+* Bump matplotlib from 3.4.3 to 3.5.0 ([#108](https://github.com/FirefoxMetzger/scikit-bot/issues/108)) ([`3146e12`](https://github.com/FirefoxMetzger/scikit-bot/commit/3146e128bc617b85ce2c631112f96fa54d659ad5))
+
+## v0.9.16 (2021-11-12)
+### Fix
+* Bump sphinx from 4.2.0 to 4.3.0 ([#104](https://github.com/FirefoxMetzger/scikit-bot/issues/104)) ([`0dd0bd4`](https://github.com/FirefoxMetzger/scikit-bot/commit/0dd0bd41ab53db9342cd3a12bbd95f86df0759a9))
+
+## v0.9.15 (2021-11-12)
+### Fix
+* Bump coverage[toml] from 6.1.1 to 6.1.2 ([#106](https://github.com/FirefoxMetzger/scikit-bot/issues/106)) ([`e0acef8`](https://github.com/FirefoxMetzger/scikit-bot/commit/e0acef82569870b5e9440afdfec828feed436799))
+* Bump pydata-sphinx-theme from 0.7.1 to 0.7.2 ([#103](https://github.com/FirefoxMetzger/scikit-bot/issues/103)) ([`e257e9f`](https://github.com/FirefoxMetzger/scikit-bot/commit/e257e9f8bd470cd39dfdac1e7c6e3937fb530af8))
+
+## v0.9.14 (2021-11-10)
+### Fix
+* Bump lxml from 4.6.3 to 4.6.4 ([#99](https://github.com/FirefoxMetzger/scikit-bot/issues/99)) ([`b55c7db`](https://github.com/FirefoxMetzger/scikit-bot/commit/b55c7dbb95c96014aecf84c402245f218a6b0855))
+
+## v0.9.13 (2021-11-09)
+### Fix
+* Bump scipy from 1.7.1 to 1.7.2 ([#102](https://github.com/FirefoxMetzger/scikit-bot/issues/102)) ([`c3d1ecd`](https://github.com/FirefoxMetzger/scikit-bot/commit/c3d1ecde9de747a0ea4a18255ec300e48d1ec56a))
+
+## v0.9.12 (2021-11-06)
+### Fix
+* Bump numpy from 1.21.3 to 1.21.4 ([#101](https://github.com/FirefoxMetzger/scikit-bot/issues/101)) ([`1bab7bb`](https://github.com/FirefoxMetzger/scikit-bot/commit/1bab7bbb40c203fdf4d2cf9c0b10d73b04c26242))
+
+## v0.9.11 (2021-11-04)
+### Fix
+* Bump twine from 3.4.2 to 3.5.0 ([#100](https://github.com/FirefoxMetzger/scikit-bot/issues/100)) ([`4b3a9b6`](https://github.com/FirefoxMetzger/scikit-bot/commit/4b3a9b6f4700e06b629eeb16eb107dc383f8731f))
+
+## v0.9.10 (2021-11-03)
+### Fix
+* Bump black from 21.9b0 to 21.10b0 ([#96](https://github.com/FirefoxMetzger/scikit-bot/issues/96)) ([`c23886d`](https://github.com/FirefoxMetzger/scikit-bot/commit/c23886d102ee2b58bff7b1c4323085378507a7a5))
+* Bump xsdata from 21.9 to 21.11 ([#98](https://github.com/FirefoxMetzger/scikit-bot/issues/98)) ([`3226a75`](https://github.com/FirefoxMetzger/scikit-bot/commit/3226a75f631dbb83e4f32055ca6fcfffc4e6a051))
+
+## v0.9.9 (2021-11-03)
+### Fix
+* Bump coverage[toml] from 6.0.2 to 6.1.1 ([#97](https://github.com/FirefoxMetzger/scikit-bot/issues/97)) ([`93f87db`](https://github.com/FirefoxMetzger/scikit-bot/commit/93f87db02b11f3efa91157527959d50214664760))
+
+## v0.9.8 (2021-11-02)
+### Fix
+* Bump numpy from 1.21.2 to 1.21.3 ([#95](https://github.com/FirefoxMetzger/scikit-bot/issues/95)) ([`c645ce7`](https://github.com/FirefoxMetzger/scikit-bot/commit/c645ce7cbd285655fa35658da16d567867e5be07))
+
+## v0.9.7 (2021-10-16)
+### Fix
+* Sync SDF bindings ([#93](https://github.com/FirefoxMetzger/scikit-bot/issues/93)) ([`63dbe05`](https://github.com/FirefoxMetzger/scikit-bot/commit/63dbe05b83ccd62650205d67df95cf84f51f0a35))
+
+## v0.9.6 (2021-10-16)
+### Fix
+* Bump flake8 from 3.9.2 to 4.0.1 ([#92](https://github.com/FirefoxMetzger/scikit-bot/issues/92)) ([`c119859`](https://github.com/FirefoxMetzger/scikit-bot/commit/c1198596c6846d690256f936d5b62b99d1824f71))
+
+## v0.9.5 (2021-10-16)
+### Fix
+* Bump coverage[toml] from 6.0.1 to 6.0.2 ([#91](https://github.com/FirefoxMetzger/scikit-bot/issues/91)) ([`6046aa5`](https://github.com/FirefoxMetzger/scikit-bot/commit/6046aa50ec638c875a6c2c18f1fed33cdf2f0bdd))
+
+## v0.9.4 (2021-10-10)
+### Fix
+* Bump coverage[toml] from 6.0 to 6.0.1 ([#90](https://github.com/FirefoxMetzger/scikit-bot/issues/90)) ([`acbbaa8`](https://github.com/FirefoxMetzger/scikit-bot/commit/acbbaa8396f54df7b23bcb4aae2cfa0c3ad8981d))
+
+## v0.9.3 (2021-10-05)
+### Fix
+* Bump pydata-sphinx-theme from 0.6.3 to 0.7.1 ([#88](https://github.com/FirefoxMetzger/scikit-bot/issues/88)) ([`5dde672`](https://github.com/FirefoxMetzger/scikit-bot/commit/5dde67210b2645c99de65584246056f09b95a7a8))
+
+## v0.9.2 (2021-10-05)
+### Fix
+* Bump coverage[toml] from 5.5 to 6.0 ([#89](https://github.com/FirefoxMetzger/scikit-bot/issues/89)) ([`18ea4ba`](https://github.com/FirefoxMetzger/scikit-bot/commit/18ea4bac466788c3a98643e8fd8fa142e82eb51b))
+
 ## v0.9.1 (2021-10-01)
 ### Fix
 * Bump cachetools from 4.2.2 to 4.2.4 ([#84](https://github.com/FirefoxMetzger/scikit-bot/issues/84)) ([`79d43db`](https://github.com/FirefoxMetzger/scikit-bot/commit/79d43dbd64966789aecade50a40e464fe1d213a7))

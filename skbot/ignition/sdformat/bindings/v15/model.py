@@ -13,8 +13,11 @@ class Model:
 
     Parameters
     ----------
-    static: If set to true, the model is immovable. Otherwise the model
-        is simulated in the dynamics engine.
+    static: If set to true, the model is immovable; i.e., a dynamics
+        engine will not       update its position. The model's implicit
+        frame will be attached to the       world's implicit frame. This
+        holds even if this model is nested (or       included) by
+        another model.
     self_collide: If set to true, all links in the model will collide
         with each other (except those connected by a joint). Can be
         overridden by the link or collision element self_collide

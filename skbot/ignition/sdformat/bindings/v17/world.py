@@ -33,7 +33,7 @@ class World:
         dynamics engine.
     scene: Specifies the look of the environment.
     light: The light element describes a light source.
-    frame: A frame of reference to which a pose is relative.
+    frame: A frame of reference in which poses may be expressed.
     model: The model element defines a complete robot or any other
         physical object.
     actor: A special kind of model which can have a scripted motion.
@@ -245,7 +245,7 @@ class World:
         name: Override the name of the included entity.
         static: Override the static value of the included entity.
         pose: A position(x,y,z) and orientation(roll, pitch yaw) with
-            respect to the frame named in the relative_to attribute.
+            respect   to the frame named in the relative_to attribute.
         plugin: A plugin is a dynamically loaded chunk of code. It can
             exist as a child of world, model, and sensor.
         """
@@ -295,8 +295,18 @@ class World:
             Parameters
             ----------
             value:
-            relative_to: Name of frame relative to which the pose is
-                applied.
+            relative_to: If specified, this pose is expressed in the
+                named frame. The named frame       must be declared
+                within the same scope (world/model) as the element that
+                has its pose specified by this tag.        If missing,
+                the pose is expressed in the frame of the parent XML
+                element       of the element that contains the pose. For
+                exceptions to this rule and       more details on the
+                default behavior, see
+                http://sdformat.org/tutorials?tut=pose_frame_semantics.
+                Note that @relative_to merely affects an element's
+                initial pose and       does not affect the element's
+                dynamic movement thereafter.
             """
 
             value: str = field(
@@ -443,7 +453,7 @@ class World:
                 Valid values are "perspective" and "orthographic".
             track_visual:
             pose: A position(x,y,z) and orientation(roll, pitch yaw)
-                with respect to the frame named in the relative_to
+                with respect   to the frame named in the relative_to
                 attribute.
             name:
             """
@@ -592,8 +602,18 @@ class World:
                 Parameters
                 ----------
                 value:
-                relative_to: Name of frame relative to which the pose is
-                    applied.
+                relative_to: If specified, this pose is expressed in the
+                    named frame. The named frame       must be declared
+                    within the same scope (world/model) as the element
+                    that       has its pose specified by this tag.
+                    If missing, the pose is expressed in the frame of
+                    the parent XML element       of the element that
+                    contains the pose. For exceptions to this rule and
+                    more details on the default behavior, see
+                    http://sdformat.org/tutorials?tut=pose_frame_semantics.
+                    Note that @relative_to merely affects an element's
+                    initial pose and       does not affect the element's
+                    dynamic movement thereafter.
                 """
 
                 value: str = field(
@@ -653,19 +673,33 @@ class World:
     @dataclass
     class Frame:
         """
-        A frame of reference to which a pose is relative.
+        A frame of reference in which poses may be expressed.
 
         Parameters
         ----------
         pose: A position(x,y,z) and orientation(roll, pitch yaw) with
-            respect to the frame named in the relative_to attribute.
-        name: Name of the frame. This name must not match another frame
-            defined inside the parent that this frame is attached to.
-        attached_to: Name of the link or frame to which this frame is
-            attached.       If a frame is specified, recursively
-            following the attached_to attributes       of the specified
-            frames must lead to the name of a link, a model, or the
-            world frame.
+            respect   to the frame named in the relative_to attribute.
+        name: Name of the frame. It must be unique whithin its scope
+            (model/world),       i.e., it must not match the name of
+            another frame, link, joint, or model       within the same
+            scope.
+        attached_to: If specified, this frame is attached to the
+            specified frame. The specified       frame must be within
+            the same scope and may be defined implicitly, i.e.,
+            the name of any //frame, //model, //joint, or //link within
+            the same scope       may be used.        If missing, this
+            frame is attached to the containing scope's frame. Within
+            a //world scope this is the implicit world frame, and within
+            a //model       scope this is the implicit model frame.
+            A frame moves jointly with the frame it is @attached_to.
+            This is different       from //pose/@relative_to.
+            @attached_to defines how the frame is attached       to a
+            //link, //model, or //world frame, while //pose/@relative_to
+            defines       how the frame's pose is represented
+            numerically. As a result, following       the chain of
+            @attached_to attributes must always lead to a //link,
+            //model, //world, or //joint (implicitly attached_to its
+            child //link).
         """
 
         pose: Optional["World.Frame.Pose"] = field(
@@ -696,8 +730,18 @@ class World:
             Parameters
             ----------
             value:
-            relative_to: Name of frame relative to which the pose is
-                applied.
+            relative_to: If specified, this pose is expressed in the
+                named frame. The named frame       must be declared
+                within the same scope (world/model) as the element that
+                has its pose specified by this tag.        If missing,
+                the pose is expressed in the frame of the parent XML
+                element       of the element that contains the pose. For
+                exceptions to this rule and       more details on the
+                default behavior, see
+                http://sdformat.org/tutorials?tut=pose_frame_semantics.
+                Note that @relative_to merely affects an element's
+                initial pose and       does not affect the element's
+                dynamic movement thereafter.
             """
 
             value: str = field(
@@ -900,7 +944,7 @@ class World:
         box: Box shape
         cylinder: Cylinder shape
         pose: A position(x,y,z) and orientation(roll, pitch yaw) with
-            respect to the frame named in the relative_to attribute.
+            respect   to the frame named in the relative_to attribute.
         model: The model element defines a complete robot or any other
             physical object.
         name: A unique name for the population. This name must not match
@@ -1075,8 +1119,18 @@ class World:
             Parameters
             ----------
             value:
-            relative_to: Name of frame relative to which the pose is
-                applied.
+            relative_to: If specified, this pose is expressed in the
+                named frame. The named frame       must be declared
+                within the same scope (world/model) as the element that
+                has its pose specified by this tag.        If missing,
+                the pose is expressed in the frame of the parent XML
+                element       of the element that contains the pose. For
+                exceptions to this rule and       more details on the
+                default behavior, see
+                http://sdformat.org/tutorials?tut=pose_frame_semantics.
+                Note that @relative_to merely affects an element's
+                initial pose and       does not affect the element's
+                dynamic movement thereafter.
             """
 
             value: str = field(

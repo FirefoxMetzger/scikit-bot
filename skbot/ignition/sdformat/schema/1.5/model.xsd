@@ -9,7 +9,7 @@
     <xs:all>
       <xs:element name="static" minOccurs="1" maxOccurs="1" default="false" type="xs:boolean">
         <xs:annotation>
-          <xs:documentation xml:lang="en">If set to true, the model is immovable. Otherwise the model is simulated in the dynamics engine.</xs:documentation>
+          <xs:documentation xml:lang="en">If set to true, the model is immovable; i.e., a dynamics engine will not       update its position. The model's implicit frame will be attached to the       world's implicit frame. This holds even if this model is nested (or       included) by another model.</xs:documentation>
         </xs:annotation>
       </xs:element>
       <xs:element name="self_collide" minOccurs="1" maxOccurs="1" default="false" type="xs:boolean">

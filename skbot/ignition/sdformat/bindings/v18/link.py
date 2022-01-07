@@ -28,8 +28,8 @@ class Link:
     must_be_base_link: If true, the link will have 6DOF and be a direct
         child of world.
     velocity_decay: Exponential damping of the link's velocity.
-    pose: A position(x,y,z) and orientation(roll, pitch yaw) with
-        respect to the frame named in the relative_to attribute.
+    pose: A position (x,y,z) and orientation (roll, pitch yaw) with
+        respect   to the frame named in the relative_to attribute.
     inertial: The inertial properties of the link.
     collision: The collision properties of a link. Note that this can be
         different from the visual properties of a link, for example,
@@ -220,8 +220,21 @@ class Link:
         Parameters
         ----------
         value:
-        relative_to: Name of frame relative to which the pose is
-            applied.
+        relative_to: If specified, this pose is expressed in the named
+            frame. The named frame       must be declared within the
+            same scope (world/model) as the element that       has its
+            pose specified by this tag.        If missing, the pose is
+            expressed in the frame of the parent XML element       of
+            the element that contains the pose. For exceptions to this
+            rule and       more details on the default behavior, see
+            http://sdformat.org/tutorials?tut=pose_frame_semantics.
+            Note that @relative_to merely affects an element's initial
+            pose and       does not affect the element's dynamic
+            movement thereafter.        New in v1.8: @relative_to may
+            use frames of nested scopes. In this case,       the frame
+            is specified using `::` as delimiter to define the scope of
+            the       frame, e.g.
+            `nested_model_A::nested_model_B::awesome_frame`.
         """
 
         value: str = field(
@@ -349,8 +362,8 @@ class Link:
         fov: Field of view
         near_clip: Near clip distance
         far_clip: far clip distance
-        pose: A position(x,y,z) and orientation(roll, pitch yaw) with
-            respect to the frame named in the relative_to attribute.
+        pose: A position (x,y,z) and orientation (roll, pitch yaw) with
+            respect   to the frame named in the relative_to attribute.
         plugin: A plugin is a dynamically loaded chunk of code. It can
             exist as a child of world, model, and sensor.
         name: Name of the projector
@@ -417,8 +430,22 @@ class Link:
             Parameters
             ----------
             value:
-            relative_to: Name of frame relative to which the pose is
-                applied.
+            relative_to: If specified, this pose is expressed in the
+                named frame. The named frame       must be declared
+                within the same scope (world/model) as the element that
+                has its pose specified by this tag.        If missing,
+                the pose is expressed in the frame of the parent XML
+                element       of the element that contains the pose. For
+                exceptions to this rule and       more details on the
+                default behavior, see
+                http://sdformat.org/tutorials?tut=pose_frame_semantics.
+                Note that @relative_to merely affects an element's
+                initial pose and       does not affect the element's
+                dynamic movement thereafter.        New in v1.8:
+                @relative_to may use frames of nested scopes. In this
+                case,       the frame is specified using `::` as
+                delimiter to define the scope of the       frame, e.g.
+                `nested_model_A::nested_model_B::awesome_frame`.
             """
 
             value: str = field(
@@ -488,8 +515,8 @@ class Link:
         contact: List of collision objects that will trigger audio
             playback.
         loop: True to make the audio source loop playback.
-        pose: A position(x,y,z) and orientation(roll, pitch yaw) with
-            respect to the frame named in the relative_to attribute.
+        pose: A position (x,y,z) and orientation (roll, pitch yaw) with
+            respect   to the frame named in the relative_to attribute.
         """
 
         uri: str = field(
@@ -566,8 +593,22 @@ class Link:
             Parameters
             ----------
             value:
-            relative_to: Name of frame relative to which the pose is
-                applied.
+            relative_to: If specified, this pose is expressed in the
+                named frame. The named frame       must be declared
+                within the same scope (world/model) as the element that
+                has its pose specified by this tag.        If missing,
+                the pose is expressed in the frame of the parent XML
+                element       of the element that contains the pose. For
+                exceptions to this rule and       more details on the
+                default behavior, see
+                http://sdformat.org/tutorials?tut=pose_frame_semantics.
+                Note that @relative_to merely affects an element's
+                initial pose and       does not affect the element's
+                dynamic movement thereafter.        New in v1.8:
+                @relative_to may use frames of nested scopes. In this
+                case,       the frame is specified using `::` as
+                delimiter to define the scope of the       frame, e.g.
+                `nested_model_A::nested_model_B::awesome_frame`.
             """
 
             value: str = field(
@@ -680,8 +721,8 @@ class Link:
             emitter appear more dense. Decreasing the ratio decreases
             the chance     of particles reflecting and interfering with
             depth sensing, making it     appear less dense.
-        pose: A position(x,y,z) and orientation(roll, pitch yaw) with
-            respect to the frame named in the relative_to attribute.
+        pose: A position (x,y,z) and orientation (roll, pitch yaw) with
+            respect   to the frame named in the relative_to attribute.
         material: The material of the visual element.
         name: A unique name for the particle emitter.
         type: The type of a particle emitter. One of "box", "cylinder",
@@ -838,8 +879,22 @@ class Link:
             Parameters
             ----------
             value:
-            relative_to: Name of frame relative to which the pose is
-                applied.
+            relative_to: If specified, this pose is expressed in the
+                named frame. The named frame       must be declared
+                within the same scope (world/model) as the element that
+                has its pose specified by this tag.        If missing,
+                the pose is expressed in the frame of the parent XML
+                element       of the element that contains the pose. For
+                exceptions to this rule and       more details on the
+                default behavior, see
+                http://sdformat.org/tutorials?tut=pose_frame_semantics.
+                Note that @relative_to merely affects an element's
+                initial pose and       does not affect the element's
+                dynamic movement thereafter.        New in v1.8:
+                @relative_to may use frames of nested scopes. In this
+                case,       the frame is specified using `::` as
+                delimiter to define the scope of the       frame, e.g.
+                `nested_model_A::nested_model_B::awesome_frame`.
             """
 
             value: str = field(

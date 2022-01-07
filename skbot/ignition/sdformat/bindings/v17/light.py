@@ -19,7 +19,7 @@ class Light:
         directional lights.
     spot: Spot light parameters
     pose: A position(x,y,z) and orientation(roll, pitch yaw) with
-        respect to the frame named in the relative_to attribute.
+        respect   to the frame named in the relative_to attribute.
     name: A unique name for the light.
     type: The light type: point, directional, spot.
     """
@@ -193,8 +193,17 @@ class Light:
         Parameters
         ----------
         value:
-        relative_to: Name of frame relative to which the pose is
-            applied.
+        relative_to: If specified, this pose is expressed in the named
+            frame. The named frame       must be declared within the
+            same scope (world/model) as the element that       has its
+            pose specified by this tag.        If missing, the pose is
+            expressed in the frame of the parent XML element       of
+            the element that contains the pose. For exceptions to this
+            rule and       more details on the default behavior, see
+            http://sdformat.org/tutorials?tut=pose_frame_semantics.
+            Note that @relative_to merely affects an element's initial
+            pose and       does not affect the element's dynamic
+            movement thereafter.
         """
 
         value: str = field(

@@ -139,6 +139,9 @@ class Rotation(AffineLink):
     -----
     Implements __inverse_transform__.
 
+    If you wish to initialize a rotation that rotates u onto v, and both are of
+    same length, you can use ``tf.Rotation(u+v, v)``.
+
     """
 
     def __init__(self, u: ArrayLike, v: ArrayLike, *, axis: int = -1) -> None:

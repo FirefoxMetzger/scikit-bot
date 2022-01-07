@@ -75,6 +75,14 @@ Available Transformations
     RotationalJoint
     PrismaticJoint
 
+.. rubric:: 2D Links
+
+.. autosummary::
+    :template: transform_class.rst
+    :toctree:
+
+    AngleJoint
+
 .. rubric:: Other Links
 
 .. autosummary::
@@ -84,6 +92,15 @@ Available Transformations
     CustomLink
     CompundLink
     InvertLink
+
+Functions
+---------
+
+.. autosummary::
+    :toctree:
+
+    simplify_links
+
 
 """
 
@@ -112,9 +129,10 @@ from .utils3d import (
     QuaternionRotation,
     RotvecRotation,
 )
-from .joints import RotationalJoint, PrismaticJoint
+from .joints import RotationalJoint, PrismaticJoint, AngleJoint
 
 from . import metrics
+from .simplfy import simplify_links
 
 __all__ = [
     # Core Classes for Frame Management
@@ -126,6 +144,8 @@ __all__ = [
     "Rotation",
     "Translation",
     "PerspectiveProjection",
+    # 2D Links
+    "AngleJoint",
     # 3D Links
     "EulerRotation",
     "QuaternionRotation",
@@ -144,4 +164,5 @@ __all__ = [
     "reflect",
     "shear",
     "scale",
+    "simplify_links",
 ]

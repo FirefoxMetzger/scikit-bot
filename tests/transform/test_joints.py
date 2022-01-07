@@ -30,3 +30,15 @@ def test_rotational_out_of_bounds():
 
     with pytest.raises(ValueError):
         joint.angle = -45
+
+
+def test_angle_joint():
+    joint = tf.AngleJoint(angle=45, degrees=True)
+
+    assert joint.param == np.pi / 4
+
+    joint.angle = np.pi / 2
+    assert joint.param == np.pi / 2
+
+    with pytest.raises(ValueError):
+        joint.angle = 3 * np.pi

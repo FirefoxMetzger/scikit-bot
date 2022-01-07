@@ -21,8 +21,8 @@ class Actor:
         the skin. The skeleton must be compatible with the skin
         skeleton.
     script: Adds scripted trajectories to the actor.
-    pose: A position(x,y,z) and orientation(roll, pitch yaw) with
-        respect to the frame named in the relative_to attribute.
+    pose: A position (x,y,z) and orientation (roll, pitch yaw) with
+        respect   to the frame named in the relative_to attribute.
     link: A physical link with inertia, collision, and visual
         properties. A link must be a child of a model, and any number of
         links may exist in a model.
@@ -309,8 +309,21 @@ class Actor:
         Parameters
         ----------
         value:
-        relative_to: Name of frame relative to which the pose is
-            applied.
+        relative_to: If specified, this pose is expressed in the named
+            frame. The named frame       must be declared within the
+            same scope (world/model) as the element that       has its
+            pose specified by this tag.        If missing, the pose is
+            expressed in the frame of the parent XML element       of
+            the element that contains the pose. For exceptions to this
+            rule and       more details on the default behavior, see
+            http://sdformat.org/tutorials?tut=pose_frame_semantics.
+            Note that @relative_to merely affects an element's initial
+            pose and       does not affect the element's dynamic
+            movement thereafter.        New in v1.8: @relative_to may
+            use frames of nested scopes. In this case,       the frame
+            is specified using `::` as delimiter to define the scope of
+            the       frame, e.g.
+            `nested_model_A::nested_model_B::awesome_frame`.
         """
 
         value: str = field(
