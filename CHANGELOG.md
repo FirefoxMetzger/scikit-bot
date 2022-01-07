@@ -2,6 +2,11 @@
 
 <!--next-version-placeholder-->
 
+## v0.10.2 (2022-01-07)
+### Fix
+* Updated bindings ([#128](https://github.com/FirefoxMetzger/scikit-bot/issues/128)) ([`469cf48`](https://github.com/FirefoxMetzger/scikit-bot/commit/469cf48e63f6b7739ab7be21328f66d6e2c8fb8a))
+* Bump psutil from 5.8.0 to 5.9.0 ([#129](https://github.com/FirefoxMetzger/scikit-bot/issues/129)) ([`676f529`](https://github.com/FirefoxMetzger/scikit-bot/commit/676f52935016f06e936f53e8eb48780d92a72818))
+
 ## v0.10.1 (2022-01-06)
 ### Fix
 * Bump sphinx from 4.3.1 to 4.3.2 ([#124](https://github.com/FirefoxMetzger/scikit-bot/issues/124)) ([`bef36f7`](https://github.com/FirefoxMetzger/scikit-bot/commit/bef36f71c00f21441cb4de17f0ee5b3fc24313a2))
