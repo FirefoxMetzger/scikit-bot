@@ -6,7 +6,7 @@ extras_require = {
     "ignition": [
         "pyzmq == 22.3.0",
         "betterproto == 1.2.5",
-        "psutil == 5.8.0",
+        "psutil == 5.9.0",
         "requests == 2.26.0",
         "xsdata == 21.12",
         "lxml == 4.6.4",
