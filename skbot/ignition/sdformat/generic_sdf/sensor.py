@@ -46,6 +46,7 @@ class Sensor(ElementBase):
         preferred to use "lidar", "gpu_lidar", and "navsat" since "ray",
         "gpu_ray", and "gps" will be deprecated. The "ray", "gpu_ray", and "gps"
         types are maintained for legacy support. Must be one of:
+
             - air_pressure
             - altimeter
             - camera
@@ -69,6 +70,7 @@ class Sensor(ElementBase):
             - thermal_camera, thermal
             - wireless_receiver
             - wireless_transmitter
+
     always_on : bool
         If true the sensor will always be updated according to the update rate.
         Default is ``False``.
