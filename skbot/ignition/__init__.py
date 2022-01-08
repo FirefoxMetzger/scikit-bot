@@ -107,6 +107,7 @@ bindings for documentation on how to do this:
     :recursive:
 
     skbot.ignition.sdformat.bindings.v18
+
 #     skbot.ignition.sdformat.bindings.v17
 #     skbot.ignition.sdformat.bindings.v16
 #     skbot.ignition.sdformat.bindings.v15
