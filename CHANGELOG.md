@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.10.4 (2022-01-08)
+### Fix
+* Bump sphinx-autodoc-typehints from 1.14.0 to 1.14.1 ([#133](https://github.com/FirefoxMetzger/scikit-bot/issues/133)) ([`3734d05`](https://github.com/FirefoxMetzger/scikit-bot/commit/3734d05e155944235e5438d76f24e7d81ef19473))
+
 ## v0.10.3 (2022-01-07)
 ### Fix
 * Bump lxml from 4.6.4 to 4.6.5 ([#132](https://github.com/FirefoxMetzger/scikit-bot/issues/132)) ([`2556f59`](https://github.com/FirefoxMetzger/scikit-bot/commit/2556f5940c3974f728ed40769a8fb576c65ff62e))
