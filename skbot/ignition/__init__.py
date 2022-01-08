@@ -107,13 +107,13 @@ bindings for documentation on how to do this:
     :recursive:
 
     skbot.ignition.sdformat.bindings.v18
-    skbot.ignition.sdformat.bindings.v17
-    skbot.ignition.sdformat.bindings.v16
-    skbot.ignition.sdformat.bindings.v15
-    skbot.ignition.sdformat.bindings.v14
-    skbot.ignition.sdformat.bindings.v13
-    skbot.ignition.sdformat.bindings.v12
-    skbot.ignition.sdformat.bindings.v10
+#     skbot.ignition.sdformat.bindings.v17
+#     skbot.ignition.sdformat.bindings.v16
+#     skbot.ignition.sdformat.bindings.v15
+#     skbot.ignition.sdformat.bindings.v14
+#     skbot.ignition.sdformat.bindings.v13
+#     skbot.ignition.sdformat.bindings.v12
+#     skbot.ignition.sdformat.bindings.v10
 
 Ignition Messages
 -----------------
