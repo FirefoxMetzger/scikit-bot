@@ -37,63 +37,61 @@ class World(ElementBase):
     Parameters
     ----------
     name : str
-        .. versionadded:: SDFormat v1.2
-
         The name of the world. It must be unique among all worlds in the same
         :class:`Sdf` container.
+
+        .. versionadded:: SDFormat v1.2
     audio: World.Audio
-        .. versionadded:: SDFormat v1.4
-
         The simulations global audio properties.
-    wind : World.Wind
-        .. versionadded:: SDFormat v1.6
 
+        .. versionadded:: SDFormat v1.4
+    wind : World.Wind
         The direction and strength of the wind. Currently only constant wind
         is supported.
 
-    includes : "World.Include"
-        .. versionadded:: SDFormat v1.4
-
+        .. versionadded:: SDFormat v1.6
+    includes : List[Include]
         References to other SDF files that contain fragments
-        (:class:`Model`s, :class:`Light`s, :class:`Actor`s) to include in the
+        (:class:`Models <Model>`, :class:`Lights <Light>`, :class:`Actors <Actor>`) to include in the
         simulation.
 
+        .. versionadded:: SDFormat v1.4
     gravity : str
-        .. versionadded:: SDFormat v1.6
-
         The gravity in m/s^2, expressed in a coordinate frame defined by the
         spherical_coordinates attribute. The default is "0 0 -9.8".
 
-    magnetic_field : str
         .. versionadded:: SDFormat v1.6
-
+    magnetic_field : str
         The magnetic field vector in Tesla, expressed in a coordinate frame
         defined by the spherical_coordinates attribute. The default is
         "5.5645e-6 22.8758e-6 -42.3884e-6".
-    atmosphere : World.Atmosphere
-        .. versionadded:: SDFormat v1.6
 
+        .. versionadded:: SDFormat v1.6
+    atmosphere : World.Atmosphere
         The atmosphere model to use.
+
+        .. versionadded:: SDFormat v1.6
     gui : World.Gui
         Layout of the Ignition Gazebo GUI. (Applications other than Gazebo will
         likely not need this.)
     physics_engine : Physics
+        Configuration parameters of the dynamics engine.
+
         .. deprecated:: SDFormat v1.6
             Use `physics_engines` instead.
 
-        Configuration parameters of the dynamics engine.
     physics_engines : List[Physics]
-        .. versionadded:: SDFormat v1.6
-
         Configuration parameters of the dynamics engine.
+
+        .. versionadded:: SDFormat v1.6
     scene : Scene
         Ambience configuration of the world (skybox, ambient light, etc.)
     lights : List[Light]
         A list of light sources of the world.
     frames : List[Frame]
-        .. versionadded:: SDFormat v1.7
-
         A list of reference frames used to ease the positioning of objects.
+
+        .. versionadded:: SDFormat v1.7
     models : List[Model]
         A list of models used in this simulation.
     actors : List[Actor]
@@ -102,25 +100,26 @@ class World(ElementBase):
         A list of plugins used to customize the runtime behavior of the
         simulation.
     joints : List[Joint]
+        A list of connections between two :class:`Links <Link>` that constrains
+        their relative movement.
+
         .. deprecated:: SDFormat v1.7
             To attach models to the world, use the canonical_link kwarg
             instead. All other usage of `joints` has no replacement.
 
-        A list of connections between two :class:`Link`s that constrains
-        their relative movement.
     road : List[World.Road]
         A list of roads used in this simulation.
     spherical_coordinates : World.SphericalCoordinates
-        .. versionadded:: SDFormat v1.4
-
         Simulator root frame location.
+
+        .. versionadded:: SDFormat v1.4
 
     state : List[State]
         The current state of this simulation.
     population : List["Population"]
-        .. versionadded:: SDFormat v1.5
-
         A group of models that is procedually inserted into the simulation.
+
+        .. versionadded:: SDFormat v1.5
     sdf_version : str
         The SDFormat version to use when constructing this element.
 

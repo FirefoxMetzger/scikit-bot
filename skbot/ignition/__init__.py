@@ -87,19 +87,26 @@ where possible.
 
 .. rubric:: _`SDF Bindings`
 
-Scikit-bot features a DOM-style parser and serializer for SDFormat XML. You can load
-all SDFormat versions and scikit-bot will construct a class tree out of it.
-Similarily, you can construct objects that represent SDF elements and scikit-bot can
-serialize them into SDF. 
+Scikit-bot features a DOM-style parser (and serializer) for SDFormat XML.
+DOM-style means that the entire document will be read and converted into a tree
+where each SDFormat element is turned into a node in the tree and the nesting of
+elements is used to determine the edges of this tree.
 
-The API used here mimics the API used by the familiar `JSON parser <json>`_ or
-`YAML parser <yaml>`_. The main difference is that this module returns an object
-tree of dataclass objects, whilst JSON and YAML return dictionaries.
+The aim of these bindings is to allow scripted manipulation and generation of
+SDF files. It is also used in other parts of the library, for example to
+construct the kinematic tree of an environment or to construct the
+transformation chain of a robot model.
 
-While the parser is imported together with :mod:`skbot.ignition`, the individual
-models are imported on demand. This is done to keep import times low. To use the
-bindings explicitly you must import them explicitly. Check the individual
-bindings for documentation on how to do this:
+There are currently two styles of parsers: a auto-generated version-specific
+parser, and a experimental version-agnostic parser. The version-specific parser
+will load a set of bindings generated from the XSD Schema Files and parse the
+SDF using that. The version-agnistic parser will load any (valid) SDF; however,
+not all elements are supported at this stage.
+
+Below you can find an example of a version-specifc parser (for SDF v1.8) as well
+as the documentation of the version-agnostic parser. If you wish to parse SDF of
+a different version using the version-specific parser, the procedure is
+analogous to SDF v1.8.
 
 .. autosummary::
     :template: sdformat_model.rst
@@ -108,13 +115,10 @@ bindings for documentation on how to do this:
 
     skbot.ignition.sdformat.bindings.v18
 
-#     skbot.ignition.sdformat.bindings.v17
-#     skbot.ignition.sdformat.bindings.v16
-#     skbot.ignition.sdformat.bindings.v15
-#     skbot.ignition.sdformat.bindings.v14
-#     skbot.ignition.sdformat.bindings.v13
-#     skbot.ignition.sdformat.bindings.v12
-#     skbot.ignition.sdformat.bindings.v10
+.. autosummary::
+    :toctree:
+
+    skbot.ignition.sdformat.generic_sdf
 
 Ignition Messages
 -----------------

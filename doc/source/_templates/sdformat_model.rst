@@ -11,11 +11,11 @@
 
         import skbot.ignition.sdformat.bindings.{{name}} as {{name}}
 
-Scikit-bot's SDFormat bindings are realized as a set of dataclasses. Each class
-corresponds to a unique element found within SDFormat XML and has an attribute
-for every attribute and child of the corresponding SDFormat element. Names
-generally match the names used within SDFormat; however, are adapted to python
-convention where needed.
+Scikit-bot's version-specific SDFormat bindings are realized as a set of
+dataclasses. Each class corresponds to a unique element found within SDFormat
+XML and has an attribute for every attribute and child of the corresponding
+SDFormat element. Names generally match the names used within SDFormat; however,
+are adapted to python convention where needed.
 
 .. currentmodule:: {{ fullname.split(".")[:-1] | join(".") }}
 
