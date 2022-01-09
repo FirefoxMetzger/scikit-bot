@@ -30,14 +30,14 @@ def test_valid_parsing_generic(verifiable_sdf_string):
     except NotImplementedError:
         pytest.xfail("Encountered not yet supported element.")
 
-    with pytest.warns(None):  # supress warnings temporarily
-        ign.sdformat.generic_sdf.base.WARN_UNSUPPORTED = False
+    with pytest.warns(None) as warnings:  # gather warnings
+        ign.sdformat.generic_sdf.base.WARN_UNSUPPORTED = True
         try:
             ign.sdformat.loads_generic(verifiable_sdf_string)
         except NotImplementedError:
             pytest.xfail("Encountered not yet supported element.")
         finally:
-            ign.sdformat.generic_sdf.base.WARN_UNSUPPORTED = True
+            ign.sdformat.generic_sdf.base.WARN_UNSUPPORTED = False
 
 
 def test_invalid_parsing(invalid_sdf_string):
