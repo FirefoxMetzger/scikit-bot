@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.11.1 (2022-01-09)
+### Fix
+* Sdformat warning supression ([#135](https://github.com/FirefoxMetzger/scikit-bot/issues/135)) ([`cdd595b`](https://github.com/FirefoxMetzger/scikit-bot/commit/cdd595b85f9d965f4218136f101fc7b218522f4b))
+
 ## v0.11.0 (2022-01-09)
 ### Feature
 * Numba + version agnostic SDF bindings ([#86](https://github.com/FirefoxMetzger/scikit-bot/issues/86)) ([`255dc3b`](https://github.com/FirefoxMetzger/scikit-bot/commit/255dc3b59117798fcb9c64e8e66ef05d3124ac5d))
