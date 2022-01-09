@@ -14,21 +14,21 @@ from .frame import Frame
 from .origin import Origin
 from .plugin import Plugin
 from .camera import Camera
-from .ray import Ray
-from .contact import Contact
-from .rfid import RfidTag
-from .rfidtag import Rfid
-from .imu import Imu
-from .forcetorque import ForceTorque
-from .gps import Gps
-from .sonar import Sonar
-from .transceiver import Transceiver
-from .altimeter import Altimeter
-from .logical_camera import LogicalCamera
-from .magnetometer import Magnetometer
-from .air_pressure import AirPressure
-from .lidar import Lidar
-from .navsat import Navsat
+from .sensors import Ray
+from .sensors import Contact
+from .sensors import RfidTag
+from .sensors import Rfid
+from .sensors import Imu
+from .sensors import ForceTorque
+from .sensors import Gps
+from .sensors import Sonar
+from .sensors import Transceiver
+from .sensors import Altimeter
+from .sensors import LogicalCamera
+from .sensors import Magnetometer
+from .sensors import AirPressure
+from .sensors import Lidar
+from .sensors import Navsat
 from .... import transform as tf
 
 
@@ -46,6 +46,7 @@ class Sensor(ElementBase):
         preferred to use "lidar", "gpu_lidar", and "navsat" since "ray",
         "gpu_ray", and "gps" will be deprecated. The "ray", "gpu_ray", and "gps"
         types are maintained for legacy support. Must be one of:
+
             - air_pressure
             - altimeter
             - camera
@@ -69,6 +70,7 @@ class Sensor(ElementBase):
             - thermal_camera, thermal
             - wireless_receiver
             - wireless_transmitter
+
     always_on : bool
         If true the sensor will always be updated according to the update rate.
         Default is ``False``.

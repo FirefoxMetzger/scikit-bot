@@ -89,7 +89,7 @@ class Model(ElementBase):
     grippers: List[Gripper],
         A list of grippers.
     includes : List[Include]
-        A list of references to other SDF files that contain :class:`Model`s to
+        A list of references to other SDF files that contain :class:`Models <Model>` to
         include as nested models.
 
         .. versionadded:: SDFormat v1.5

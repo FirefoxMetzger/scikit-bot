@@ -33,15 +33,17 @@ class Sdf(ElementBase):
     Parameters
     ----------
     payload : Union[List[World], Model, Light, Actor]
-        The element contained in this SDF. This can be one :class:`Model`, one :class`Actor`, one
-        :class:`Light`, or a list of :class`Worlds`.
+        The element contained in this SDF. This can be one :class:`Model`, one :class:`Actor`, one
+        :class:`Light`, or a list of :class:`Worlds`.
     version : str
         The SDFormat version.
     worlds : List[World]
+        The worlds contained in this SDF.
+
         .. deprecated:: SDFormat v1.8
             Worlds, models, lights, and/or actors can no longer be combined. Use
             `payload` instead.
-        The worlds contained in this SDF.
+
     models : List[Model]
         .. deprecated:: SDFormat v1.8
             Starting with SDFormat v1.8 only a single model is supported. Use the
@@ -76,9 +78,11 @@ class Sdf(ElementBase):
     models : List[Model]
         .. deprecated:: SDFormat v1.8
             Use the `Sdf.model` instead.
+
     lights : List[Light]
         .. deprecated:: SDFormat v1.8
             Use the `Sdf.light` instead.
+
     actors : List[Actor]
         .. deprecated:: SDFormat v1.8
             Use the `Sdf.actor` instead.

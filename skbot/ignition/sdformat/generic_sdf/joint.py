@@ -25,11 +25,11 @@ class Joint(ElementBase):
     type : str
         The type of joint, which must be one of the following:
             continuous
-                A hinge joint that rotates around :class:``Joint.Axis``with a
+                A hinge joint that rotates around :class:`Joint.Axis` with a
                 continuous range of motion.  This means that the upper
                 and lower axis limits are ignored.
             revolute
-                a hinge joint that rotates around :class:``Joint.Axis`` with
+                a hinge joint that rotates around :class:`Joint.Axis` with
                 a fixed range of motion.
             gearbox
                 A geared revolute joints.

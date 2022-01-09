@@ -8,6 +8,34 @@ from .. import sdformat
 
 
 class Include(ElementBase):
+    """Include a fragment (Model, World, or Light) from URI.
+
+    The version agnostic SDF bindings are oppinionated here. Whenever a Include element
+    is encountered, it is immediately resolved and replaced by the corresponding
+    model, actor, or light element. As such, you will not encounter it in a parsed
+    tree.
+
+    Parameters
+    ----------
+    uri : str
+        The location of the included fragment.
+    name : str
+        If not None, overwrite the fragment's name with this name.
+    static : bool
+        If not None, overwrite the fragment's static flag with this value. This
+        only applies if the fragment is a Model.
+    pose : Pose
+        If not None, overwrite the fragment's pose with this pose.
+    plugins : List[Plugin]
+        A list of plugins to attach to the fragment.
+    placement_frame : str
+        If not None, overwrite the fragment's placement frame with this value. This
+        only applies if the fragment is a Model.
+    sdf_version : str
+        The SDFormat version to use when constructing this element.
+
+    """
+
     def __init__(
         self,
         *,
@@ -91,7 +119,9 @@ class Include(ElementBase):
         from .light import Light
 
         if not self.uri.startswith("https://fuel.ignitionrobotics.org"):
-            raise ParseError("Includes from non-fuel sources are not implemented yet.")
+            raise NotImplementedError(
+                "Includes from non-fuel sources are not implemented yet."
+            )
 
         sdf_string = fuel.get_fuel_model(self.uri)
         specific_sdf = sdformat.loads(sdf_string)
