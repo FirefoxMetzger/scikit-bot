@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.11.0 (2022-01-09)
+### Feature
+* Numba + version agnostic SDF bindings ([#86](https://github.com/FirefoxMetzger/scikit-bot/issues/86)) ([`255dc3b`](https://github.com/FirefoxMetzger/scikit-bot/commit/255dc3b59117798fcb9c64e8e66ef05d3124ac5d))
+
 ## v0.10.4 (2022-01-08)
 ### Fix
 * Bump sphinx-autodoc-typehints from 1.14.0 to 1.14.1 ([#133](https://github.com/FirefoxMetzger/scikit-bot/issues/133)) ([`3734d05`](https://github.com/FirefoxMetzger/scikit-bot/commit/3734d05e155944235e5438d76f24e7d81ef19473))
