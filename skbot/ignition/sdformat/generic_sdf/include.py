@@ -119,7 +119,7 @@ class Include(ElementBase):
         from .light import Light
 
         if not self.uri.startswith("https://fuel.ignitionrobotics.org"):
-            raise ParseError("Includes from non-fuel sources are not implemented yet.")
+            raise NotImplementedError("Includes from non-fuel sources are not implemented yet.")
 
         sdf_string = fuel.get_fuel_model(self.uri)
         specific_sdf = sdformat.loads(sdf_string)
