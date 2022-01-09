@@ -1,13 +1,14 @@
 import warnings
 from typing import List, Any
 
-from .base import ElementBase, NamedPoseBearing, Pose
+from .base import ElementBase, NamedPoseBearing, Pose, should_warn_unsupported
 from .frame import Frame
 
 
 class Light(ElementBase):
     def __init__(self, *, sdf_version: str) -> None:
-        warnings.warn("`Light` has not been implemented yet.")
+        if should_warn_unsupported():
+            warnings.warn("`Light` has not been implemented yet.")
         super().__init__(sdf_version=sdf_version)
 
 

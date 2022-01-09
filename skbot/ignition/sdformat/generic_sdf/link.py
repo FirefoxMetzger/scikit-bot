@@ -3,7 +3,7 @@ from itertools import chain
 from typing import List, Any, Dict, Tuple
 
 
-from .base import BoolElement, ElementBase, Pose
+from .base import BoolElement, ElementBase, Pose, should_warn_unsupported
 from .light import Light
 from .frame import Frame
 from .sensor import Sensor
@@ -186,7 +186,9 @@ class Link(ElementBase):
         elif sdf_version == "1.0":
             self._origin = origin
         else:
-            warnings.warn("`origin` is deprecated. Use `pose` instead.")
+            warnings.warn(
+                "`origin` is deprecated. Use `pose` instead.", DeprecationWarning
+            )
             self._origin = origin
         if sdf_version == "1.0":
             self.pose = self._origin.pose
@@ -200,7 +202,10 @@ class Link(ElementBase):
         elif sdf_version == "1.0":
             self._damping = damping
         else:
-            warnings.warn("`damping` is deprecated. Use `velocity_decay` instead.")
+            warnings.warn(
+                "`damping` is deprecated. Use `velocity_decay` instead.",
+                DeprecationWarning,
+            )
             self._damping = damping
         if sdf_version == "1.0":
             self.velocity_decay = self._damping
@@ -429,12 +434,14 @@ class Link(ElementBase):
         def __init__(
             self, *, linear: float = 0.0, angular: float = 0.0, sdf_version: str
         ) -> None:
-            warnings.warn("`Link.Damping` has not been implemented yet.")
+            if should_warn_unsupported():
+                warnings.warn("`Link.Damping` has not been implemented yet.")
             super().__init__(sdf_version=sdf_version)
 
     class VelocityDecay(ElementBase):
         def __init__(
             self, *, linear: float = 0.0, angular: float = 0.0, sdf_version: str
         ) -> None:
-            warnings.warn("`Link.VelocityDecay` has not been implemented yet.")
+            if should_warn_unsupported():
+                warnings.warn("`Link.VelocityDecay` has not been implemented yet.")
             super().__init__(sdf_version=sdf_version)

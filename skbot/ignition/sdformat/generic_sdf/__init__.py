@@ -55,6 +55,7 @@ Supported Elements
     sensor.Sensor
     world.World
     include.Include
+    origin.Origin
 
 
 Unsupported Elements
@@ -132,7 +133,6 @@ they will raise a warning.
     atmosphere.Atmosphere
     battery.Battery
     noise.Noise
-    origin.Origin
     population.Population
     projector.Projector
 
@@ -142,6 +142,7 @@ they will raise a warning.
 # currently imported for coverage x)
 from . import sensors
 from . import shapes
+from . import bas
 
 # import top-level elements as mentioned in the
 # SDFormat spec.

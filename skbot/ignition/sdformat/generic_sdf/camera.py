@@ -120,7 +120,6 @@ class Camera(ElementBase):
         visibility_mask: int = 4294967295,
         sdf_version: str,
     ) -> None:
-        warnings.warn("`Camera` has not been implemented yet.")
         super().__init__(sdf_version=sdf_version)
 
         self.name = name

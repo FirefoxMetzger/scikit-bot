@@ -9,6 +9,7 @@ from .base import (
     NamedPoseBearing,
     Pose,
     StringElement,
+    should_warn_unsupported,
 )
 from .frame import Frame
 from .origin import Origin
@@ -260,7 +261,9 @@ class Sensor(ElementBase):
         elif sdf_version == "1.0":
             self._origin = origin
         else:
-            warnings.warn("`origin` is deprecated. Use `Sensor.pose` instead.")
+            warnings.warn(
+                "`origin` is deprecated. Use `Sensor.pose` instead.", DeprecationWarning
+            )
             self._origin = origin
         if sdf_version == "1.0":
             self.pose = self._origin.pose
@@ -313,7 +316,8 @@ class Sensor(ElementBase):
     @property
     def origin(self):
         warnings.warn(
-            "`Sensor.origin` is deprecated since SDFormat v1.2. Use `Sensor.pose` instead."
+            "`Sensor.origin` is deprecated since SDFormat v1.2. Use `Sensor.pose` instead.",
+            DeprecationWarning,
         )
         return self._origin
 
@@ -374,7 +378,8 @@ class Sensor(ElementBase):
         if self.type == "camera":
             relevant_config = self.camera
         else:
-            warnings.warn(f"Sensor type `{self.type}` is not implemented.")
+            if should_warn_unsupported():
+                warnings.warn(f"Sensor type `{self.type}` is not implemented.")
 
         if relevant_config is not None:
             nested_elements = relevant_config.declared_frames()
@@ -402,7 +407,8 @@ class Sensor(ElementBase):
         if self.type == "camera":
             relevant_config = self.camera
         else:
-            warnings.warn(f"Sensor type `{self.type}` is not implemented.")
+            if should_warn_unsupported():
+                warnings.warn(f"Sensor type `{self.type}` is not implemented.")
 
         if relevant_config is not None:
             relevant_config.to_static_graph(
@@ -435,7 +441,8 @@ class Sensor(ElementBase):
         if self.type == "camera":
             relevant_config = self.camera
         else:
-            warnings.warn(f"Sensor type `{self.type}` is not implemented.")
+            if should_warn_unsupported():
+                warnings.warn(f"Sensor type `{self.type}` is not implemented.")
 
         if relevant_config is not None:
             relevant_config.to_dynamic_graph(

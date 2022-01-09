@@ -3,7 +3,15 @@ from typing import List, Union, Dict, Any, Tuple
 from itertools import chain
 import numpy as np
 
-from .base import BoolElement, ElementBase, FloatElement, Pose, StringElement, vector3
+from .base import (
+    BoolElement,
+    ElementBase,
+    FloatElement,
+    Pose,
+    StringElement,
+    vector3,
+    should_warn_unsupported,
+)
 from .sensor import Sensor
 from .frame import Frame
 from .origin import Origin
@@ -181,7 +189,9 @@ class Joint(ElementBase):
         elif sdf_version == "1.0":
             self._origin = origin
         else:
-            warnings.warn("`origin` is deprecated. Use `pose` instead.")
+            warnings.warn(
+                "`origin` is deprecated. Use `pose` instead.", DeprecationWarning
+            )
             self._origin = origin
         if sdf_version == "1.0":
             self.pose = self._origin.pose
@@ -451,7 +461,8 @@ class Joint(ElementBase):
         joint_axis1 = expressed_frame.transform(self.axis.xyz.value, child_frame)
 
         if self.type == "continuous":
-            warnings.warn("Hinge joints have not been added yet.")
+            if should_warn_unsupported():
+                warnings.warn("Hinge joints have not been added yet.")
             link = tf.Translation((0, 0, 0))
         elif self.type == "revolute":
             angle = np.clip(0, self.axis.limit.lower, self.axis.limit.upper)
@@ -463,13 +474,16 @@ class Joint(ElementBase):
                 axis=axis,
             )
         elif self.type == "hinge":
-            warnings.warn("Hinge joints have not been added yet.")
+            if should_warn_unsupported():
+                warnings.warn("Hinge joints have not been added yet.")
             link = tf.Translation((0, 0, 0))
         elif self.type == "gearbox":
-            warnings.warn("Gearbox joints have not been added yet.")
+            if should_warn_unsupported():
+                warnings.warn("Gearbox joints have not been added yet.")
             link = tf.Translation((0, 0, 0))
         elif self.type == "revolute2":
-            warnings.warn("Revolute2 type joint is not added yet.")
+            if should_warn_unsupported():
+                warnings.warn("Revolute2 type joint is not added yet.")
             link = tf.Translation((0, 0, 0))
         elif self.type == "prismatic":
             amount = np.clip(1, self.axis.limit.lower, self.axis.limit.upper)
@@ -481,13 +495,16 @@ class Joint(ElementBase):
                 axis=axis,
             )
         elif self.type == "ball":
-            warnings.warn("Ball joints have not been added yet.")
+            if should_warn_unsupported():
+                warnings.warn("Ball joints have not been added yet.")
             link = tf.Translation((0, 0, 0))
         elif self.type == "screw":
-            warnings.warn("Screw joints have not been added yet.")
+            if should_warn_unsupported():
+                warnings.warn("Screw joints have not been added yet.")
             link = tf.Translation((0, 0, 0))
         elif self.type == "universal":
-            warnings.warn("Universal joints have not been added yet.")
+            if should_warn_unsupported():
+                warnings.warn("Universal joints have not been added yet.")
             link = tf.Translation((0, 0, 0))
         elif self.type == "fixed":
             link = tf.Translation((0, 0, 0))
@@ -600,7 +617,8 @@ class Joint(ElementBase):
         def use_parent_model_frame(self):
             warnings.warn(
                 "`Joint.Axis.use_parent_model_frame` is deprecated."
-                " Use `Joint.Axis.Xyz.expressed_in` instead."
+                " Use `Joint.Axis.Xyz.expressed_in` instead.",
+                DeprecationWarning,
             )
             return self._use_parent_model_frame
 
@@ -911,7 +929,8 @@ class Joint(ElementBase):
             provide_feedback: bool = False,
             sdf_version: str,
         ) -> None:
-            warnings.warn("`Joint.Physics` is not implemented yet.")
+            if should_warn_unsupported():
+                warnings.warn("`Joint.Physics` is not implemented yet.")
             super().__init__(sdf_version=sdf_version)
 
         class Simbody(ElementBase):
@@ -921,7 +940,8 @@ class Joint(ElementBase):
                 must_be_loop_joint: bool = False,
                 sdf_version: str,
             ) -> None:
-                warnings.warn("`Joint.Physics.Simbody` is not implemented yet.")
+                if should_warn_unsupported():
+                    warnings.warn("`Joint.Physics.Simbody` is not implemented yet.")
                 super().__init__(sdf_version=sdf_version)
 
         class Ode(ElementBase):
@@ -941,7 +961,8 @@ class Joint(ElementBase):
                 suspension: "Joint.Physics.Ode.Suspension" = None,
                 sdf_version: str,
             ) -> None:
-                warnings.warn("`Joint.Physics.Ode` is not implemented yet.")
+                if should_warn_unsupported():
+                    warnings.warn("`Joint.Physics.Ode` is not implemented yet.")
                 super().__init__(sdf_version=sdf_version)
 
             class Limit(ElementBase):
@@ -952,7 +973,10 @@ class Joint(ElementBase):
                     erp: float = 0.2,
                     sdf_version: str,
                 ) -> None:
-                    warnings.warn("`Joint.Physics.Ode.Limit` is not implemented yet.")
+                    if should_warn_unsupported():
+                        warnings.warn(
+                            "`Joint.Physics.Ode.Limit` is not implemented yet."
+                        )
                     super().__init__(sdf_version=sdf_version)
 
             class Suspension(ElementBase):
@@ -963,7 +987,8 @@ class Joint(ElementBase):
                     erp: float = 0.2,
                     sdf_version: str,
                 ) -> None:
-                    warnings.warn(
-                        "`Joint.Physics.Ode.Suspension` is not implemented yet."
-                    )
+                    if should_warn_unsupported():
+                        warnings.warn(
+                            "`Joint.Physics.Ode.Suspension` is not implemented yet."
+                        )
                     super().__init__(sdf_version=sdf_version)

@@ -4,6 +4,12 @@ import warnings
 
 from .... import transform as tf
 
+WARN_UNSUPPORTED = True
+
+
+def should_warn_unsupported():
+    return WARN_UNSUPPORTED
+
 
 def vector3(value: str):
     return np.fromstring(value, dtype=float, count=3, sep=" ")
@@ -47,7 +53,8 @@ class ElementBase:
             The generic counterpart of the specific element.
 
         """
-        warnings.warn(f"`{cls.__name__}` is not implemented yet.")
+        if should_warn_unsupported():
+            warnings.warn(f"`{cls.__name__}` is not implemented yet.")
         return cls(sdf_version=version)
 
     def to_static_graph(
@@ -107,9 +114,10 @@ class ElementBase:
         any frames declared by this frame to it.
 
         """
-        warnings.warn(
-            f"`{self.__class__.__name__}` does not implement `to_static_graph` yet."
-        )
+        if should_warn_unsupported():
+            warnings.warn(
+                f"`{self.__class__.__name__}` does not implement `to_static_graph` yet."
+            )
         return tf.Frame(3, name="missing")
 
     def to_dynamic_graph(
@@ -180,9 +188,10 @@ class ElementBase:
         any frames declared by this frame to it.
 
         """
-        warnings.warn(
-            f"`{self.__class__.__name__}` does not implement `to_dynamic_graph` yet."
-        )
+        if should_warn_unsupported():
+            warnings.warn(
+                f"`{self.__class__.__name__}` does not implement `to_dynamic_graph` yet."
+            )
         return tf.Frame(3, name="missing")
 
     def declared_frames(self) -> Dict[str, tf.Frame]:
@@ -200,9 +209,10 @@ class ElementBase:
         Namespaces follow the SDFormat convention and are separated using `::`.
 
         """
-        warnings.warn(
-            f"`{self.__class__.__name__}` does not implement `declared_frames` yet."
-        )
+        if should_warn_unsupported():
+            warnings.warn(
+                f"`{self.__class__.__name__}` does not implement `declared_frames` yet."
+            )
         return dict()
 
     @staticmethod
@@ -327,7 +337,10 @@ class Pose(ElementBase):
 
     @property
     def frame(self):
-        warnings.warn("`Pose.frame` is deprecated. Use `Pose.relative_to` instead.")
+        warnings.warn(
+            "`Pose.frame` is deprecated. Use `Pose.relative_to` instead.",
+            DeprecationWarning,
+        )
         return self.relative_to
 
     @classmethod

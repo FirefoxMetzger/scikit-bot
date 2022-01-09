@@ -11,6 +11,7 @@ from .base import (
     PoseBearing,
     StringElement,
     FloatElement,
+    should_warn_unsupported,
 )
 from .model import Model
 from .physics import Physics
@@ -497,7 +498,8 @@ class World(ElementBase):
 
     class Road(ElementBase):
         def __init__(self, *, sdf_version: str) -> None:
-            warnings.warn("`Road` has not been implemented yet.")
+            if should_warn_unsupported():
+                warnings.warn("`Road` has not been implemented yet.")
             super().__init__(sdf_version=sdf_version)
 
     class SphericalCoordinates(ElementBase):
