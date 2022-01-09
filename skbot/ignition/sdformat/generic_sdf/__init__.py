@@ -138,3 +138,41 @@ they will raise a warning.
 
 
 """
+
+# currently imported for coverage x)
+from . import sensors
+from . import shapes
+
+# import top-level elements as mentioned in the
+# SDFormat spec.
+from .actor import Actor
+from .collision import Collision
+from .geometry import Geometry
+from .joint import Joint
+from .light import Light
+from .link import Link
+from .material import Material
+from .model import Model
+from .physics import Physics
+from .scene import Scene
+from .sensor import Sensor
+from .state import State
+from .visual import Visual
+from .world import World
+
+__all__ = [
+    "World",
+    "Scene",
+    "State",
+    "Physics",
+    "Light",
+    "Actor",
+    "Model",
+    "Link",
+    "Sensor",
+    "Joint",
+    "Collision",
+    "Visual",
+    "Material",
+    "Geometry",
+]

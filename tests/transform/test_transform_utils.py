@@ -75,12 +75,23 @@ def test_numba_reduce_keepdims():
     # jitted functions that build on top of it.
 
     @numba.jit(nopython=True)
-    def test_reduce(array):
+    def test_reduce_discard(array):
         return reduce(np.sum, array, axis=-1, keepdims=False)
+
+    @numba.jit(nopython=True)
+    def test_reduce_keep(array):
+        return reduce(np.sum, array, axis=-1, keepdims=True)
 
     arr_in = np.arange(10)
     expected = np.sum(arr_in)
-    actual = test_reduce(arr_in)
+    actual = test_reduce_discard(arr_in)
 
     assert isinstance(actual, int)
+    assert np.allclose(actual, expected)
+
+    arr_in = np.arange(10)
+    expected = np.sum(arr_in)
+    actual = test_reduce_keep(arr_in)
+
+    assert actual.ndim == 1
     assert np.allclose(actual, expected)
