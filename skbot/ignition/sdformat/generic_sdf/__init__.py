@@ -144,6 +144,7 @@ they will raise a warning.
 
 # currently imported for coverage x)
 from . import base, sensors, shapes
+
 # import top-level elements as mentioned in the
 # SDFormat spec.
 from .actor import Actor
