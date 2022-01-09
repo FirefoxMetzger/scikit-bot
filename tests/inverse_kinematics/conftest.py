@@ -7,6 +7,7 @@ from pathlib import Path
 
 joint_types = Union[tf.RotationalJoint, tf.PrismaticJoint]
 sdf_folder = Path(__file__).parents[1] / "ignition" / "sdf"
+ign.sdformat.generic_sdf.base.WARN_UNSUPPORTED = False
 
 
 @pytest.fixture()

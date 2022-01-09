@@ -4,8 +4,11 @@
 
 .. warning::
     This module is experimental and not all SDFormat elements are currently
-    supported. If an element is not supported, it will raise an appropriate
-    Warning.
+    supported. If an element is not supported, it will raise a warning. To
+    suppress this warning use::
+
+        skbot.ignition.sdformat.generic_sdf.base.WARN_UNSUPPORTED = False
+    
 
 This module contains version-agnostic bindings for `SDFormat
 <http://sdformat.org/spec>`_. The idea of these bindings is that they can parse
@@ -55,6 +58,7 @@ Supported Elements
     sensor.Sensor
     world.World
     include.Include
+    origin.Origin
 
 
 Unsupported Elements
@@ -132,7 +136,6 @@ they will raise a warning.
     atmosphere.Atmosphere
     battery.Battery
     noise.Noise
-    origin.Origin
     population.Population
     projector.Projector
 
@@ -140,8 +143,7 @@ they will raise a warning.
 """
 
 # currently imported for coverage x)
-from . import sensors
-from . import shapes
+from . import base, sensors, shapes
 
 # import top-level elements as mentioned in the
 # SDFormat spec.

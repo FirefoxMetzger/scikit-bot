@@ -8,6 +8,7 @@ from io import BytesIO
 import skbot.ignition as ign
 
 sdf_folder = Path(__file__).parent / "sdf"
+ign.sdformat.generic_sdf.base.WARN_UNSUPPORTED = False
 
 """
 SDF Fixtures
