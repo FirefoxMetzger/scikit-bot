@@ -18,6 +18,19 @@ def test_valid_parsing(valid_sdf_string):
     ign.sdformat.loads(valid_sdf_string)
 
 
+def test_valid_parsing_generic(verifiable_sdf_string):
+    """
+    Test is successful if it doesn't produce an error. This isn't super amazing
+    so it might be refactored once I have more sophisticated tests. Meanwhile it
+    hits on quite a few edge cases of the SDFormat that need to be handled
+    correctly.
+    """
+    try:
+        ign.sdformat.loads_generic(verifiable_sdf_string)
+    except NotImplementedError:
+        pytest.xfail("Encountered not yet supported element.")
+
+
 def test_invalid_parsing(invalid_sdf_string):
     with pytest.raises(ParserError):
         ign.sdformat.loads(invalid_sdf_string)

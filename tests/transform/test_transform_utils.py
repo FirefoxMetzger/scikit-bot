@@ -1,9 +1,8 @@
-from math import exp
+import numba
 import numpy as np
-import skbot.transform._utils as util
-from skbot.transform._utils import angle_between
-from skbot.transform._utils import vector_project, scalar_project
 import pytest
+import skbot.transform._utils as util
+from skbot.transform._utils import angle_between, scalar_project, vector_project, reduce
 
 
 @pytest.mark.parametrize(
@@ -71,22 +70,17 @@ def test_scalar_projection(vec_A, vec_B, expected):
     assert np.allclose(result, expected)
 
 
-# @pytest.mark.parametrize(
-#     ("v1", "v2", "expected"),
-#     [
-#         ((1, 0), (0, 2), 1),
-#         ((0, 2), (1, 0), -1),
-#         ((0, 2), (5, 0), -1),
-#         ((1, 1), (0, 1), 1),
-#         (np.eye(3)[1:, :], np.array((1, 0, 0))[None, :], (-1, 1)),
-#         (np.eye(4)[1:, :], np.array((1, 0, 0, 0))[None, :], (-1, 1, 1)),
-#         (np.eye(3), np.eye(3)[[1, 2, 1]], (1, 1, 1)),
-#         ((0, 1, 0), (1, 0, 0), -1),
-#         ((1, 0, 0), (0, 0, 1), 1),
-#         ((0, 0, 1), (1, 0, 0), 1),
-#         (((1, 0), (2, 0)), ((0, 2), (0, 1)), (1, 1))
-#     ],
-# )
-# def test_angle_between(v1, v2, expected):
-#     result = util.rotation_direction(v1, v2)
-#     assert np.allclose(result, expected)
+def test_numba_reduce_keepdims():
+    # numba_reduce is a pure numba function. It is tested indirectly by calling
+    # jitted functions that build on top of it.
+
+    @numba.jit(nopython=True)
+    def test_reduce(array):
+        return reduce(np.sum, array, axis=-1, keepdims=False)
+
+    arr_in = np.arange(10)
+    expected = np.sum(arr_in)
+    actual = test_reduce(arr_in)
+
+    assert isinstance(actual, int)
+    assert np.allclose(actual, expected)
