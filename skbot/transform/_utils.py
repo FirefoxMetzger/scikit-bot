@@ -127,6 +127,8 @@ def vector_project(a: ArrayLike, b: ArrayLike, axis: int = -1) -> np.ndarray:
     """
 
     # data preparation for bettech numba caching
+    a = np.asarray(a)
+    b = np.asarray(b)
     a = np.moveaxis(a, axis, -1)
     b = np.moveaxis(b, axis, -1)
     a = np.ascontiguousarray(a).view()
