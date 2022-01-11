@@ -93,6 +93,47 @@ Available Transformations
     CompundLink
     InvertLink
 
+Joints
+------
+
+Joints are a special subclass of links. On top of normal links, they are bounded, i.e. they have
+an ``upper_limit`` and a ``lower_limit``, and their value can be accessed by the common name ``param``.
+For example::
+
+    import skbot.transform as tf
+    import numpy as np
+
+    joint = tf.AngleJoint()
+    assert joint.param == joint.angle
+    assert joint.lower_limit == 0
+    assert joint.upper_limit == 2 * np.pi
+
+    # setting param affects the angle
+    joint.param = np.pi
+    assert joint.angle == np.pi
+
+.. rubric:: Available Joints
+
+.. autosummary::
+    
+    RotationalJoint
+    PrismaticJoint
+    AngleJoint
+
+.. rubric:: Custom Joints
+
+You can create your own joints by inheriting from :class:`tf.Link
+<skbot.transform.Link>` (to make the class a link) and from ``tf.Joint`` (to
+mark the class as a joint)::
+
+    class CustomJoint(tf.Link, tf.Joint):
+        ...
+
+        # Make sure to implement the required properties: 
+        # param, lower_limit, upper_limit
+        # and to implement a setter for param
+
+
 Functions
 ---------
 
@@ -129,7 +170,7 @@ from .utils3d import (
     QuaternionRotation,
     RotvecRotation,
 )
-from .joints import RotationalJoint, PrismaticJoint, AngleJoint
+from .joints import RotationalJoint, PrismaticJoint, AngleJoint, Joint
 
 from . import metrics
 from .simplfy import simplify_links
@@ -158,6 +199,7 @@ __all__ = [
     "InvertLink",
     "CompundLink",
     "Inverse",
+    "Joint",
     # basic transformation functions
     "translate",
     "rotate",

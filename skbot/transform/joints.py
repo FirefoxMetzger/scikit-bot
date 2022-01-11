@@ -1,10 +1,57 @@
-from numpy.typing import ArrayLike
+from abc import ABC, abstractmethod
+
 import numpy as np
+from numpy.typing import ArrayLike
+
+from .affine import Rotation, Translation
 from .utils3d import RotvecRotation
-from .affine import Translation, Rotation
 
 
-class RotationalJoint(RotvecRotation):
+class Joint(ABC):
+    """Abstract Joint.
+
+    This class is used to define the joint interface and to create a common base
+    class that joints can inherit from.
+    """
+
+    @property
+    @abstractmethod
+    def param(self):
+        """Unified name for the parameter controlling this joint"""
+        raise NotImplementedError()
+
+    @param.setter
+    @abstractmethod
+    def param(self, value: ArrayLike):
+        """Joints must be modifiable."""
+        raise NotImplementedError()
+
+    @property
+    @abstractmethod
+    def upper_limit(self):
+        """Maximum parameter value.
+
+        Notes
+        -----
+        This can be ``np.inf`` if there is no upper limit.
+
+        """
+        raise NotImplementedError()
+
+    @property
+    @abstractmethod
+    def lower_limit(self):
+        """Minimum parameter value.
+
+        Notes
+        -----
+        This can be ``-np.inf`` if there is no lower limit.
+
+        """
+        raise NotImplementedError()
+
+
+class RotationalJoint(RotvecRotation, Joint):
     """Rotation with constraints in 3D.
 
     Parameters
@@ -42,9 +89,17 @@ class RotationalJoint(RotvecRotation):
         upper_limit: ArrayLike = 2 * np.pi,
         lower_limit: ArrayLike = 0,
     ) -> None:
-        self.upper_limit = upper_limit
-        self.lower_limit = lower_limit
+        self._upper_limit = upper_limit
+        self._lower_limit = lower_limit
         super().__init__(rotvec, angle=angle, degrees=degrees, axis=axis)
+
+    @property
+    def upper_limit(self):
+        return self._upper_limit
+
+    @property
+    def lower_limit(self):
+        return self._lower_limit
 
     @property
     def param(self) -> float:
@@ -67,7 +122,7 @@ class RotationalJoint(RotvecRotation):
         self.param = angle
 
 
-class AngleJoint(Rotation):
+class AngleJoint(Rotation, Joint):
     """Rotation with constraints in 2D.
 
     Parameters
@@ -107,8 +162,16 @@ class AngleJoint(Rotation):
             angle = angle / 360 * 2 * np.pi
 
         self.param = angle
-        self.upper_limit = upper_limit
-        self.lower_limit = lower_limit
+        self._upper_limit = upper_limit
+        self._lower_limit = lower_limit
+
+    @property
+    def upper_limit(self):
+        return self._upper_limit
+
+    @property
+    def lower_limit(self):
+        return self._lower_limit
 
     @property
     def param(self) -> float:
@@ -131,7 +194,7 @@ class AngleJoint(Rotation):
         self.param = angle
 
 
-class PrismaticJoint(Translation):
+class PrismaticJoint(Translation, Joint):
     """Translation with constraints in N-D.
 
     Parameters
@@ -164,9 +227,17 @@ class PrismaticJoint(Translation):
         amount: ArrayLike = 1,
         axis: int = -1,
     ) -> None:
-        self.upper_limit = np.asarray(upper_limit)
-        self.lower_limit = np.asarray(lower_limit)
+        self._upper_limit = upper_limit
+        self._lower_limit = lower_limit
         super().__init__(direction, amount=amount, axis=axis)
+
+    @property
+    def upper_limit(self):
+        return self._upper_limit
+
+    @property
+    def lower_limit(self):
+        return self._lower_limit
 
     @property
     def param(self) -> float:
