@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.12.0 (2022-01-11)
+### Feature
+* Common joint class ([#138](https://github.com/FirefoxMetzger/scikit-bot/issues/138)) ([`47d034f`](https://github.com/FirefoxMetzger/scikit-bot/commit/47d034fb1b9c6757dc0d5cd94bed41aca2ad228b))
+
 ## v0.11.2 (2022-01-11)
 ### Fix
 * Convert input to array ([#137](https://github.com/FirefoxMetzger/scikit-bot/issues/137)) ([`3e2e1df`](https://github.com/FirefoxMetzger/scikit-bot/commit/3e2e1dfc98ad741df8ccb4a7fb28aa2967c331b6))
