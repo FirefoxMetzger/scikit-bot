@@ -6,17 +6,16 @@ import numpy as np
 from scipy.optimize import minimize_scalar
 from scipy.optimize import OptimizeResult
 from .targets import Target, PositionTarget, RotationTarget
-from .types import IKJoint
 
 import warnings
 
 
 def step_generic_joint(
-    joint: IKJoint, target: Target, maxiter: int
+    joint: tf.Joint, target: Target, maxiter: int
 ) -> Callable[[], None]:
     """Find the optimal value for the current joint."""
 
-    def generic_objective(x: float, current_joint: IKJoint) -> float:
+    def generic_objective(x: float, current_joint: tf.Joint) -> float:
         current_joint.param = x
         return target.score()
 
@@ -104,14 +103,14 @@ def analytic_rotation(
 
 def ccd(
     targets: List[Target],
-    joints: List[IKJoint] = None,
+    joints: List[tf.Joint] = None,
     *args,
     rtol: float = 1e-6,
     maxiter: int = 500,
     line_search_maxiter: int = 500,
     weights: List[float] = None,
     tol: float = None,
-    cycle_links: List[IKJoint] = None,
+    cycle_links: List[tf.Joint] = None,
     pointA: ArrayLike = None,
     pointB: ArrayLike = None,
     frameA: tf.Frame = None,
@@ -155,7 +154,7 @@ def ccd(
             Targets are optimized cyclical instead of optimizing a weighted sum.
 
         This parameter has no effect.
-    cycle_links : List[IKJoint]
+    cycle_links : List[tf.Joint]
         .. deprecated:: 0.10.0
             Use ``joints`` instead.
 
@@ -221,7 +220,7 @@ def ccd(
 
     References
     ----------
-    .. [kenwright2012] Kenwright, Ben. "Inverse kinematics–cyclic coordinate descent (CCD)."
+    .. [kenwright2012] Kenwright, Ben. "Inverse kinematics-cyclic coordinate descent (CCD)."
         Journal of Graphics Tools 16.4 (2012): 177-217.
 
     """

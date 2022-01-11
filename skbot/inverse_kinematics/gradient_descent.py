@@ -2,14 +2,13 @@ from .. import transform as tf
 from .targets import Target
 from typing import List
 import numpy as np
-from .types import IKJoint
 from scipy.optimize import minimize, OptimizeResult, Bounds
 import warnings
 
 
 def gd(
     targets: List[Target],
-    joints: List[IKJoint],
+    joints: List[tf.Joint],
     *,
     rtol: float = 1e-6,
     maxiter: int = 500,
