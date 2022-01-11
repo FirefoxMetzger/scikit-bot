@@ -256,7 +256,7 @@ def test_keep_joints():
         tf.Translation((1, 1, 1)),
         tf.InvertLink(joint2),
     ]
-    simplified_links = tf.simplify_links(links)
+    simplified_links = tf.simplify_links(links, keep_joints=True)
 
     expected = points
     for link in links:

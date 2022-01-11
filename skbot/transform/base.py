@@ -672,7 +672,7 @@ class Frame:
         )
 
         # unwrap and summarize what we can
-        links = simplify_links(links)
+        links = simplify_links(links, keep_joints=True)
 
         # unwrap inverse links
         links = [

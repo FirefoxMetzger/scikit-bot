@@ -9,7 +9,7 @@ def simplify_links(
     links: List[Link],
     *,
     keep_links: List[Link] = None,
-    keep_joints: bool = True,
+    keep_joints: bool = False,
     eps: float = 1e-16
 ) -> List[Link]:
     """Simplify a transformation sequence.
@@ -37,7 +37,7 @@ def simplify_links(
     keep_links : List[Link]
         A list list of links that - if present - should not be simplified.
     keep_joints : bool
-        If True (default) don't replace tf.Joint instances.
+        If True treat tf.Joint instances as if they were in keep_links.
     eps : float
         The number below which angles and translations are interpreted as 0.
         Defaults to ``1e-16``.
