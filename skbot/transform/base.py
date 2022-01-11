@@ -614,6 +614,76 @@ class Frame:
 
         return frames
 
+    def joints_between(
+        self,
+        to_frame: Union["Frame", str],
+        *,
+        ignore_frames: List["Frame"] = None,
+        metric: Callable[[Tuple["Frame"], Tuple[Link]], float] = DepthFirst,
+        max_depth: int = None,
+    ):
+        """Get the links between this frame and ``to_frame``.
+
+        .. versionadded:: 0.12.0
+
+        This function searches the frame graph for a chain of transformations
+        from the current frame into ``to_frame`` and returns the sequence of
+        joints involved in this transformation. All joints will be "unwraped",
+        i.e., if a Joint occurs inside a :class:`tf:InvertLink` or similar, then
+        only the Joint will be returned. The resulting order matches the order
+        that links are encountered in the transformation chain.
+
+        Parameters
+        ----------
+        to_frame : Frame, str
+            The frame in which to express vectors. If ``str``, the graph is
+            searched for any node matching that name and the transformation
+            chain to the first node matching the name is returned.
+        ignore_frames : List[Frame]
+            A list of frames to exclude while searching for a transformation
+            chain.
+        metric : Callable[[Tuple[Frame], Tuple[Link]], float]
+            A function to compute the priority of a sub-chain. Sub-chains are
+            searched in order of priority starting with the lowest value. The
+            first chain that matches ``to_frame`` is returned. You can use a
+            custom function that takes a sequence of frames and links involved
+            in the sub-chain as input and returns a float (signature
+            ``custom_fn(frames, links) -> float``), or you can use a pre-build
+            function:
+
+                skbot.transform.metric.DepthFirst
+                    The frame graph is searched depth-first with no
+                    preference among frames (default).
+                skbot.transform.metric.BreadthFirst
+                    The frame graph is searched breadth-first with no
+                    preference among frames.
+        max_depth : int
+            If not None, the maximum depth to search, i.e., the maximum length
+            of the transform chain.
+
+        """
+
+        # avoid circular import
+        from .simplfy import simplify_links
+        from .joints import Joint
+
+        links = self.links_between(
+            to_frame, ignore_frames=ignore_frames, metric=metric, max_depth=max_depth
+        )
+
+        # unwrap and summarize what we can
+        links = simplify_links(links, keep_joints=True)
+
+        # unwrap inverse links
+        links = [
+            link._forward_link if isinstance(link, InvertLink) else link
+            for link in links
+        ]
+
+        joints = [link for link in links if isinstance(link, Joint)]
+
+        return joints
+
     def find_frame(self, path: str, *, ignore_frames: List["Frame"] = None) -> "Frame":
         """Find a frame matching a given path.
 

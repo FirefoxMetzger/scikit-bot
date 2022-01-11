@@ -5,13 +5,12 @@ import skbot.transform as tf
 import skbot.ignition as ign
 from typing import List
 import numpy as np
-from skbot.inverse_kinematics.types import IKJoint as joint_types
 from pathlib import Path
 
 
 def test_panda(panda):
     base_frame: tf.Frame
-    joints: List[joint_types]
+    joints: List[tf.Joint]
     base_frame, joints = panda
     tool_frame = base_frame.find_frame(".../panda_link8")
 
@@ -32,7 +31,7 @@ def test_panda(panda):
 
 def test_panda_orientation(panda):
     base_frame: tf.Frame
-    joints: List[joint_types]
+    joints: List[tf.Joint]
     base_frame, joints = panda
     tool_frame = base_frame.find_frame(".../panda_link8")
 
@@ -59,7 +58,7 @@ def test_panda_orientation(panda):
 
 def test_custom_distance(panda):
     base_frame: tf.Frame
-    joints: List[joint_types]
+    joints: List[tf.Joint]
     base_frame, joints = panda
     tool_frame = base_frame.find_frame(".../panda_link8")
 
@@ -91,7 +90,7 @@ def test_custom_distance(panda):
 
 def test_pendulum(double_pendulum):
     base_frame: tf.Frame
-    joints: List[joint_types]
+    joints: List[tf.Joint]
     base_frame, joints = double_pendulum
     tool_frame = base_frame.find_frame(".../lower_link")
 
@@ -121,7 +120,7 @@ def test_pendulum(double_pendulum):
 
 def test_pendulum_legacy(double_pendulum):
     base_frame: tf.Frame
-    joints: List[joint_types]
+    joints: List[tf.Joint]
     base_frame, joints = double_pendulum
     tool_frame = base_frame.find_frame(".../lower_link")
 
@@ -143,7 +142,7 @@ def test_pendulum_legacy(double_pendulum):
 
 def test_pendulum_legacy_kwargs(double_pendulum):
     base_frame: tf.Frame
-    joints: List[joint_types]
+    joints: List[tf.joint]
     base_frame, joints = double_pendulum
     tool_frame = base_frame.find_frame(".../lower_link")
 
@@ -174,7 +173,7 @@ def test_pendulum_legacy_kwargs(double_pendulum):
 
 def test_ccd_maxiter(double_pendulum):
     base_frame: tf.Frame
-    joints: List[joint_types]
+    joints: List[tf.joint]
     base_frame, joints = double_pendulum
     tool_frame = base_frame.find_frame(".../lower_link")
 
@@ -191,7 +190,7 @@ def test_ccd_maxiter(double_pendulum):
 
 def test_ccd_linesearch_maxiter(panda):
     base_frame: tf.Frame
-    joints: List[joint_types]
+    joints: List[tf.joint]
     base_frame, joints = panda
     tool_frame = base_frame.find_frame(".../panda_link8")
 
@@ -215,7 +214,7 @@ def test_ccd_linesearch_maxiter(panda):
 # # Multi-Frame (pos+rot) doesn't work with CCD (yet?)
 # def test_multi_frame_ccd(panda):
 #     base_frame: tf.Frame
-#     joints: List[joint_types]
+#     joints: List[tf.joint]
 #     base_frame, joints = panda
 #     tool_frame = base_frame.find_frame(".../panda_link8")
 

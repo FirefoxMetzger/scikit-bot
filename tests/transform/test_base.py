@@ -111,6 +111,26 @@ def test_named_links_between():
     assert len(elements) == 3
 
 
+def test_joints_between():
+    joint1 = tf.RotationalJoint((0, 1, 0))
+    joint2 = tf.PrismaticJoint((1, 0, 0))
+
+    start = tf.Frame(3)
+    x = tf.Rotation((1, 0, 0), (0, 1, 0))(start)
+    x = tf.Translation((1, 0, 0))(x)
+    x = joint1(x)
+    x = tf.CompundLink(
+        [joint2, tf.EulerRotation("xy", (90, -90), degrees=True), joint1]
+    )(x)
+    x = tf.Translation((1, 1, 0))(x)
+    x = tf.Translation((1, 1, 1))(x)
+    end = tf.InvertLink(joint2)(x)
+
+    joints = start.joints_between(end)
+
+    assert joints == [joint1, joint2, joint1, joint2]
+
+
 def test_inverse_attributes():
     link = tf.Translation((1, 0), amount=0.5)
     inv_link = tf.InvertLink(link)

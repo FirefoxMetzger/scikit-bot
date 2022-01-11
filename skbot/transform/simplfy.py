@@ -1,11 +1,16 @@
 from typing import List
 from .base import CompundLink, Link, InvertLink
 from .affine import AffineCompound, Translation, Rotation
+from .joints import Joint
 import numpy as np
 
 
 def simplify_links(
-    links: List[Link], *, keep_links: List[Link] = None, eps: float = 1e-16
+    links: List[Link],
+    *,
+    keep_links: List[Link] = None,
+    keep_joints: bool = False,
+    eps: float = 1e-16
 ) -> List[Link]:
     """Simplify a transformation sequence.
 
@@ -31,6 +36,8 @@ def simplify_links(
         The list of links to simplify.
     keep_links : List[Link]
         A list list of links that - if present - should not be simplified.
+    keep_joints : bool
+        If True treat tf.Joint instances as if they were in keep_links.
     eps : float
         The number below which angles and translations are interpreted as 0.
         Defaults to ``1e-16``.
@@ -51,7 +58,7 @@ def simplify_links(
             link = links[idx]
 
             # skip if link should not be modified
-            if link in keep_links:
+            if link in keep_links or (isinstance(link, Joint) and keep_joints):
                 improved_links.append(link)
                 continue
 
@@ -60,7 +67,9 @@ def simplify_links(
                 inverted_link = link._forward_link
 
                 # still don't touch keep links
-                if inverted_link in keep_links:
+                if inverted_link in keep_links or (
+                    isinstance(inverted_link, Joint) and keep_joints
+                ):
                     improved_links.append(link)
                     continue
 
@@ -177,7 +186,7 @@ def simplify_links(
     keepsies: List[Link] = list()
     current_subchain: List[Link] = list()
     for link in improved_links:
-        if link in keep_links:
+        if link in keep_links or (isinstance(link, Joint) and keep_joints):
             keepsies.append(link)
             subchains.append(current_subchain)
             current_subchain = list()
