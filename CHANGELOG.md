@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.12.1 (2022-01-11)
+### Fix
+* Bump sphinx-autodoc-typehints from 1.14.1 to 1.15.1 ([#136](https://github.com/FirefoxMetzger/scikit-bot/issues/136)) ([`f8fa094`](https://github.com/FirefoxMetzger/scikit-bot/commit/f8fa09452b391df2bc2fc7f3b7cece2c8823b327))
+
 ## v0.12.0 (2022-01-11)
 ### Feature
 * Common joint class ([#138](https://github.com/FirefoxMetzger/scikit-bot/issues/138)) ([`47d034f`](https://github.com/FirefoxMetzger/scikit-bot/commit/47d034fb1b9c6757dc0d5cd94bed41aca2ad228b))
