@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.11.2 (2022-01-11)
+### Fix
+* Convert input to array ([#137](https://github.com/FirefoxMetzger/scikit-bot/issues/137)) ([`3e2e1df`](https://github.com/FirefoxMetzger/scikit-bot/commit/3e2e1dfc98ad741df8ccb4a7fb28aa2967c331b6))
+
 ## v0.11.1 (2022-01-09)
 ### Fix
 * Sdformat warning supression ([#135](https://github.com/FirefoxMetzger/scikit-bot/issues/135)) ([`cdd595b`](https://github.com/FirefoxMetzger/scikit-bot/commit/cdd595b85f9d965f4218136f101fc7b218522f4b))
