@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.12.3 (2022-01-18)
+### Fix
+* Bump numba from 0.54.1 to 0.55.0 ([#140](https://github.com/FirefoxMetzger/scikit-bot/issues/140)) ([`9d68d53`](https://github.com/FirefoxMetzger/scikit-bot/commit/9d68d5382990c80b4babdf5279e47c2b23e00c9c))
+
 ## v0.12.2 (2022-01-18)
 ### Fix
 * Bump sphinx-autodoc-typehints from 1.15.1 to 1.15.2 ([#139](https://github.com/FirefoxMetzger/scikit-bot/issues/139)) ([`c19ef8c`](https://github.com/FirefoxMetzger/scikit-bot/commit/c19ef8cd60afbe85a1acdd043f99306a2f506543))
