@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v0.12.2 (2022-01-18)
+### Fix
+* Bump sphinx-autodoc-typehints from 1.15.1 to 1.15.2 ([#139](https://github.com/FirefoxMetzger/scikit-bot/issues/139)) ([`c19ef8c`](https://github.com/FirefoxMetzger/scikit-bot/commit/c19ef8cd60afbe85a1acdd043f99306a2f506543))
+* Bump pydata-sphinx-theme from 0.7.2 to 0.8.0 ([#142](https://github.com/FirefoxMetzger/scikit-bot/issues/142)) ([`8d5b75d`](https://github.com/FirefoxMetzger/scikit-bot/commit/8d5b75d75ac2f08ebff63759ac1a034e6f6a1984))
+* Bump sphinx from 4.3.2 to 4.4.0 ([#143](https://github.com/FirefoxMetzger/scikit-bot/issues/143)) ([`7c91208`](https://github.com/FirefoxMetzger/scikit-bot/commit/7c91208c62d9427b9a60a131fbd2be1f364a0500))
+
 ## v0.12.1 (2022-01-11)
 ### Fix
 * Bump sphinx-autodoc-typehints from 1.14.1 to 1.15.1 ([#136](https://github.com/FirefoxMetzger/scikit-bot/issues/136)) ([`f8fa094`](https://github.com/FirefoxMetzger/scikit-bot/commit/f8fa09452b391df2bc2fc7f3b7cece2c8823b327))
