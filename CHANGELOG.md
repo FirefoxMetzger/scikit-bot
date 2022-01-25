@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v0.12.4 (2022-01-25)
+### Fix
+* Bump xsdata from 21.12 to 22.1 ([#145](https://github.com/FirefoxMetzger/scikit-bot/issues/145)) ([`dc0408f`](https://github.com/FirefoxMetzger/scikit-bot/commit/dc0408fd451a5e107a2872126b091c7d51df9449))
+* Bump python-semantic-release from 7.23.0 to 7.24.0 ([#146](https://github.com/FirefoxMetzger/scikit-bot/issues/146)) ([`87d322e`](https://github.com/FirefoxMetzger/scikit-bot/commit/87d322ed5bcea73bfb9fe3cf706923d57ffed831))
+* Bump numpydoc from 1.1.0 to 1.2 ([#147](https://github.com/FirefoxMetzger/scikit-bot/issues/147)) ([`591331d`](https://github.com/FirefoxMetzger/scikit-bot/commit/591331d544c6eb02a546ab9a37e6cc37a3bc4784))
+
 ## v0.12.3 (2022-01-18)
 ### Fix
 * Bump numba from 0.54.1 to 0.55.0 ([#140](https://github.com/FirefoxMetzger/scikit-bot/issues/140)) ([`9d68d53`](https://github.com/FirefoxMetzger/scikit-bot/commit/9d68d5382990c80b4babdf5279e47c2b23e00c9c))
