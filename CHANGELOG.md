@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.12.5 (2022-02-23)
+### Fix
+* Bumpy numpy and numba ([#157](https://github.com/FirefoxMetzger/scikit-bot/issues/157)) ([`8c47ab4`](https://github.com/FirefoxMetzger/scikit-bot/commit/8c47ab4b16d05d4f341171da9a22ed75896dc4a5))
+
 ## v0.12.4 (2022-01-25)
 ### Fix
 * Bump xsdata from 21.12 to 22.1 ([#145](https://github.com/FirefoxMetzger/scikit-bot/issues/145)) ([`dc0408f`](https://github.com/FirefoxMetzger/scikit-bot/commit/dc0408fd451a5e107a2872126b091c7d51df9449))
