@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v0.12.6 (2022-02-23)
+### Fix
+* Bump lxml-stubs from 0.3.0 to 0.3.1 ([#151](https://github.com/FirefoxMetzger/scikit-bot/issues/151)) ([`3ee26fc`](https://github.com/FirefoxMetzger/scikit-bot/commit/3ee26fc28571785c6f17b28441b892bb47dd5d47))
+* Bump sphinx-autodoc-typehints from 1.15.2 to 1.17.0 ([#154](https://github.com/FirefoxMetzger/scikit-bot/issues/154)) ([`0727451`](https://github.com/FirefoxMetzger/scikit-bot/commit/07274513ae5c495e290aa3eef046d6c80ef37a8d))
+* Bump coverage[toml] from 6.2 to 6.3.2 ([#155](https://github.com/FirefoxMetzger/scikit-bot/issues/155)) ([`38f0834`](https://github.com/FirefoxMetzger/scikit-bot/commit/38f0834ae567ddbd84355fe69744c1639e521e5b))
+
 ## v0.12.5 (2022-02-23)
 ### Fix
 * Bumpy numpy and numba ([#157](https://github.com/FirefoxMetzger/scikit-bot/issues/157)) ([`8c47ab4`](https://github.com/FirefoxMetzger/scikit-bot/commit/8c47ab4b16d05d4f341171da9a22ed75896dc4a5))
