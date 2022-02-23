@@ -7,8 +7,8 @@ import skbot.trajectory as trj
 @pytest.mark.parametrize(
     ["t", "f", "expected"],
     [
-        [np.linspace(0, 5, 200), lambda x: x, 0.5 * 5 ** 2],
-        [np.linspace(0, 5, 500), lambda x: x ** 2, 1 / 3 * 5 ** 3],
+        [np.linspace(0, 5, 200), lambda x: x, 0.5 * 5**2],
+        [np.linspace(0, 5, 500), lambda x: x**2, 1 / 3 * 5**3],
         [np.linspace(0, 0, 200), lambda x: x, 0],
     ],
 )
@@ -23,5 +23,5 @@ def test_cumulative_integration():
     f = lambda x: x
     f_val = f(t)
     estimate = trj.utils.cumulative_integral(f_val, t)
-    expected = 0.5 * t ** 2
+    expected = 0.5 * t**2
     assert np.allclose(estimate, expected)
