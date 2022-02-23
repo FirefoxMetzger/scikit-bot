@@ -56,7 +56,7 @@ class AxialHexagonTransform(Link):
     hence this transform returns a 2D vector in (r, q) coordinates.
 
     See here for an overview of `Hexagon Coordinate Systems
-    <https://www.redblobgames.com/grids/hexagons/#coordinates>`_
+    <https://www.redblobgames.com/grids/hexagons/#coordinates>`_.
 
     Parameters
     ----------
@@ -65,8 +65,8 @@ class AxialHexagonTransform(Link):
         center to one of it's corners.
     flat_top : bool
         If True (default), hexagons are oriented with one side parallel to the x
-        axis (it's top is flat). Otherwise they are oriented with one side
-        parallel to the y-axis (it's top is pointy).
+        axis (top is flat). Otherwise they are oriented with one side
+        parallel to the y-axis (top is pointy).
     axis : int
         The axis along which computation takes place. All other axes are
         considered batch dimensions.
