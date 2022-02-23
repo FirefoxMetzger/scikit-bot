@@ -3,6 +3,44 @@ import numpy as np
 import skbot.transform as tf
 
 
+def test_rotation2d_euler():
+    expected = np.array(
+        [
+            [1, 0],
+            [0.5, 8.66025404e-01],
+            [-0.5, 8.66025404e-01],
+            [-1, 0],
+            [-0.5, -8.66025404e-01],
+            [0.5, -8.66025404e-01],
+            [1, 0],
+        ]
+    )
+
+    angles = np.array([60 * x for x in range(7)])[:, None]
+    corner_rot = tf.Rotation2D(angles, degrees=True)
+    hexagon_corners = corner_rot.transform((1, 0))
+
+    assert np.allclose(hexagon_corners, expected)
+
+
+def test_rotatation2d_radians():
+    expected = np.array(
+        [
+            [1, 0],
+            [0, 1],
+            [-1, 0],
+            [0, -1],
+            [1, 0],
+        ]
+    )
+
+    angles = np.array([0, np.pi / 2, np.pi, 3 / 2 * np.pi, 2 * np.pi])[:, None]
+    corner_rot = tf.Rotation2D(angles)
+    hexagon_corners = corner_rot.transform((1, 0))
+
+    assert np.allclose(hexagon_corners, expected)
+
+
 def test_axisHex():
     hex_coords = np.repeat(np.arange(-5, 5)[:, None], 2, axis=-1)
 

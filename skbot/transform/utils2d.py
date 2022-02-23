@@ -1,7 +1,50 @@
 from math import sqrt
 from .base import Link
+from .affine import Rotation
 from numpy.typing import ArrayLike
 import numpy as np
+
+
+class Rotation2D(Rotation):
+    """Rotation in 2D.
+
+    A convenient way of initializing a rotation in 2D.
+
+    Parameters
+    ----------
+    angle : ArrayLike
+        The magnitude of the rotation.
+    degrees : bool
+        If True, angle is assumed to be in degrees. Default is False.
+    axis : int
+        The axis along which computation takes place. All other axes are
+        considered batch dimensions.
+
+    """
+
+    def __init__(
+        self,
+        angle: ArrayLike,
+        *,
+        degrees: bool = False,
+        axis: int = -1,
+    ) -> None:
+        angle = np.asarray(angle)
+        vector_shape = [*angle.shape]
+        vector_shape[axis] = 2
+
+        u_vector = np.zeros(vector_shape)
+        u_vector[..., 1] = 1
+
+        v_vector = np.zeros(vector_shape)
+        v_vector[..., 0] = 1
+
+        super().__init__(u_vector, v_vector, axis=axis)
+
+        if degrees:  # make radians
+            angle = angle / 360 * 2 * np.pi
+
+        self.angle = angle
 
 
 class AxialHexagonTransform(Link):
@@ -11,6 +54,9 @@ class AxialHexagonTransform(Link):
     converts it into coordinates on a (r, q, s) hexagonal grid. For this, it
     uses axial coordinates for which the value of s is implied, because r+q+s=1;
     hence this transform returns a 2D vector in (r, q) coordinates.
+
+    See here for an overview of `Hexagon Coordinate Systems
+    <https://www.redblobgames.com/grids/hexagons/#coordinates>`_
 
     Parameters
     ----------
@@ -24,11 +70,6 @@ class AxialHexagonTransform(Link):
     axis : int
         The axis along which computation takes place. All other axes are
         considered batch dimensions.
-
-    See Also
-    --------
-    `Overview of Hexagon Coordinate Systems
-    <https://www.redblobgames.com/grids/hexagons/#coordinates>`_
 
     """
 
