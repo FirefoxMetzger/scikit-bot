@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.13.0 (2022-02-23)
+### Feature
+* Hex grid transform ([#162](https://github.com/FirefoxMetzger/scikit-bot/issues/162)) ([`6300443`](https://github.com/FirefoxMetzger/scikit-bot/commit/630044309516389ca97af781e8a5df516f037a88))
+
 ## v0.12.6 (2022-02-23)
 ### Fix
 * Bump lxml-stubs from 0.3.0 to 0.3.1 ([#151](https://github.com/FirefoxMetzger/scikit-bot/issues/151)) ([`3ee26fc`](https://github.com/FirefoxMetzger/scikit-bot/commit/3ee26fc28571785c6f17b28441b892bb47dd5d47))
