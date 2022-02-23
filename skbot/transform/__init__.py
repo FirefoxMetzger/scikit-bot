@@ -81,7 +81,9 @@ Available Transformations
     :template: transform_class.rst
     :toctree:
 
+    Rotation2D
     AngleJoint
+    AxialHexagonTransform
 
 .. rubric:: Other Links
 
@@ -171,6 +173,7 @@ from .utils3d import (
     RotvecRotation,
 )
 from .joints import RotationalJoint, PrismaticJoint, AngleJoint, Joint
+from .utils2d import AxialHexagonTransform, Rotation2D
 
 from . import metrics
 from .simplfy import simplify_links
@@ -187,6 +190,8 @@ __all__ = [
     "PerspectiveProjection",
     # 2D Links
     "AngleJoint",
+    "AxialHexagonTransform",
+    "Rotation2D",
     # 3D Links
     "EulerRotation",
     "QuaternionRotation",
