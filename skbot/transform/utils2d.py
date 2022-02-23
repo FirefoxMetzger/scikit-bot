@@ -1,0 +1,78 @@
+from math import sqrt
+from .base import Link
+from numpy.typing import ArrayLike
+import numpy as np
+
+
+class AxialHexagonTransform(Link):
+    """Conversion to Axial Hexagon Coordininates in 2D
+
+    This transform takes a 2D vector in euclidian (x, y) coordinates and
+    converts it into coordinates on a (r, q, s) hexagonal grid. For this, it
+    uses axial coordinates for which the value of s is implied, because r+q+s=1;
+    hence this transform returns a 2D vector in (r, q) coordinates.
+
+    Parameters
+    ----------
+    size : ArrayLike
+        The size of a single hexagon. It measures the distance from a hexagon
+        center to one of it's corners.
+    flat_top : bool
+        If True (default), hexagons are oriented with one side parallel to the x
+        axis (it's top is flat). Otherwise they are oriented with one side
+        parallel to the y-axis (it's top is pointy).
+    axis : int
+        The axis along which computation takes place. All other axes are
+        considered batch dimensions.
+
+    See Also
+    --------
+    `Overview of Hexagon Coordinate Systems
+    <https://www.redblobgames.com/grids/hexagons/#coordinates>`_
+
+    """
+
+    def __init__(
+        self, *, size: ArrayLike = 1.0, flat_top: bool = True, axis: int = -1
+    ) -> None:
+        super().__init__(2, 2)
+
+        self.size = size
+        self._axis = axis
+
+        if flat_top:
+            self.q_basis = np.array([2 / 3, 0])
+            self.r_basis = np.array([-1 / 3, sqrt(3) / 3])
+
+            # basis for inverse transform
+            self.x_basis = np.array([3 / 2, 0])
+            self.y_basis = np.array([sqrt(3) / 2, sqrt(3)])
+        else:
+            self.q_basis = np.array([sqrt(3) / 3, -1 / 3])
+            self.r_basis = np.array([0, 2 / 3])
+
+            # basis for inverse transform
+            self.x_basis = np.array([sqrt(3), sqrt(3) / 2])
+            self.y_basis = np.array([0, 3 / 2])
+
+    def transform(self, x: ArrayLike) -> np.ndarray:
+        x = np.asfarray(x)
+        x = np.moveaxis(x, self._axis, -1)
+
+        result = np.empty_like(x)
+        result[..., 0] = np.sum(x * self.q_basis, axis=-1)
+        result[..., 1] = np.sum(x * self.r_basis, axis=-1)
+        result /= self.size
+
+        return result
+
+    def __inverse_transform__(self, x: ArrayLike) -> np.ndarray:
+        x = np.asfarray(x)
+        x = np.moveaxis(x, self._axis, -1)
+
+        result = np.empty_like(x)
+        result[..., 0] = np.sum(x * self.x_basis, axis=-1)
+        result[..., 1] = np.sum(x * self.y_basis, axis=-1)
+        result *= self.size
+
+        return result
