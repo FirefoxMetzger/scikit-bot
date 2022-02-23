@@ -40,7 +40,7 @@ def test_custom_spacing(t, t_out, t_k):
 
 def test_derivative():
     x = np.linspace(0, 2, 10)
-    y = (x ** 2)[:, None]
+    y = (x**2)[:, None]
     t = np.linspace(0, 2, 100)
     dy = (2 * t)[:, None]
     estimate = rtj.spline_trajectory(t, y, t_control=x, derivative=1)
