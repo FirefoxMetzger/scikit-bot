@@ -52,7 +52,7 @@ class AxialHexagonTransform(Link):
 
     This transform takes a 2D vector in euclidian (x, y) coordinates and
     converts it into coordinates on a (r, q, s) hexagonal grid. For this, it
-    uses axial coordinates for which the value of s is implied, because r+q+s=1;
+    uses axial coordinates for which the value of s is implied, because r+q+s=0;
     hence this transform returns a 2D vector in (r, q) coordinates.
 
     See here for an overview of `Hexagon Coordinate Systems
@@ -117,3 +117,45 @@ class AxialHexagonTransform(Link):
         result *= self.size
 
         return result
+
+
+class HexagonAxisRound(Link):
+    """Round Hexagon Axis Coordinates in 2D.
+
+    This link rounds hexagon coordinates given in axis coordinates (r, q) to
+    their closest hexagon.
+
+    Parameters
+    ----------
+    axis : int
+        The axis along which rounding takes place.
+
+
+    Notes
+    -----
+    This link is _not_ invertible.
+
+    """
+
+    def __init__(self, *, axis=-1) -> None:
+        super().__init__(2, 2)
+        self._axis = axis
+
+    def transform(self, x: ArrayLike) -> np.ndarray:
+        x = np.moveaxis(x, self._axis, -1)
+
+        # convert to cube coordinates
+        cube_coordinates = np.empty((*x.shape[:-1], 3))
+        cube_coordinates[..., :-1] = x
+        cube_coordinates[..., -1] = -x[..., 0] - x[..., 1]
+        cube_coordinates = cube_coordinates.reshape(-1, 3)
+
+        # round and enforce q+r+s=0 constraint
+        cube_rounded = np.round(cube_coordinates)
+        residual = np.abs(cube_coordinates - cube_rounded)
+        first_max = np.argmax(residual, axis=-1)
+        matching_range = np.arange(first_max.shape[0])
+        cube_rounded[matching_range, first_max] -= np.sum(cube_rounded, axis=-1)
+
+        rounded_coordinates = np.moveaxis(cube_rounded[..., :2], -1, self._axis)
+        return rounded_coordinates

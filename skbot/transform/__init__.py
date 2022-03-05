@@ -84,6 +84,7 @@ Available Transformations
     Rotation2D
     AngleJoint
     AxialHexagonTransform
+    HexagonAxisRound
 
 .. rubric:: Other Links
 
@@ -173,7 +174,7 @@ from .utils3d import (
     RotvecRotation,
 )
 from .joints import RotationalJoint, PrismaticJoint, AngleJoint, Joint
-from .utils2d import AxialHexagonTransform, Rotation2D
+from .utils2d import AxialHexagonTransform, Rotation2D, HexagonAxisRound
 
 from . import metrics
 from .simplfy import simplify_links
@@ -192,6 +193,7 @@ __all__ = [
     "AngleJoint",
     "AxialHexagonTransform",
     "Rotation2D",
+    "HexagonAxisRound",
     # 3D Links
     "EulerRotation",
     "QuaternionRotation",
