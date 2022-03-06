@@ -151,7 +151,7 @@ class HexagonAxisRound(Link):
         cube_coordinates = cube_coordinates.reshape(-1, 3)
 
         # round and enforce q+r+s=0 constraint
-        cube_rounded = np.round(cube_coordinates)
+        cube_rounded = np.round(cube_coordinates).astype(int)
         residual = np.abs(cube_coordinates - cube_rounded)
         first_max = np.argmax(residual, axis=-1)
         matching_range = np.arange(first_max.shape[0])
