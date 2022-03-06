@@ -9,7 +9,7 @@ extras_require = {
         "psutil == 5.9.0",
         "requests == 2.27.1",
         "xsdata == 22.1",
-        "lxml == 4.6.5",
+        "lxml == 4.8.0",
         "cachetools == 5.0.0",
     ],
     "docs": [
@@ -21,13 +21,13 @@ extras_require = {
         "cachetools == 5.0.0",
         "sphinx-gallery == 0.10.1",
         "xsdata == 22.1",
-        "lxml == 4.6.5",
+        "lxml == 4.8.0",
     ],
     "linting": ["flake8 == 4.0.1", "black == 21.12b0"],
     "testing": ["pytest == 6.2.5", "coverage[toml] == 6.3.2"],
     "dev": [
         "lxml-stubs == 0.3.1",
-        "python-semantic-release == 7.24.0",
+        "python-semantic-release == 7.25.2",
     ],
     "build": [
         "build == 0.7.0",
