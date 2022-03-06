@@ -63,7 +63,7 @@ points = candidate_points[is_in_hexagon, :]  # points are rejected here
 
 hex_points = to_hex.transform(points)
 hex_points_rounded = tf.HexagonAxisRound().transform(hex_points)
-col_idx = np.ravel_multi_index(tuple(hex_points_rounded[:, ::-1].T.astype(int)), (3, 3))
+col_idx = np.ravel_multi_index(tuple(hex_points_rounded[:, ::-1].T), (3, 3))
 
 plt.scatter(points[..., 1], points[..., 0], marker="s", c=cmap(col_idx))
 plt.scatter(hex_centers[..., 1], hex_centers[..., 0], c=cmap(np.arange(9)), s=150)
