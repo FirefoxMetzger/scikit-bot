@@ -2,6 +2,15 @@
 
 <!--next-version-placeholder-->
 
+## v0.14.0 (2022-03-06)
+### Feature
+* Hexagon coordinate round ([#166](https://github.com/FirefoxMetzger/scikit-bot/issues/166)) ([`d3a0744`](https://github.com/FirefoxMetzger/scikit-bot/commit/d3a0744195d10e496f39f6b72cd0fb2e0687e0f2))
+
+### Fix
+* Bump pytest from 6.2.5 to 7.0.1 ([#160](https://github.com/FirefoxMetzger/scikit-bot/issues/160)) ([`4dc6717`](https://github.com/FirefoxMetzger/scikit-bot/commit/4dc6717f3b3c619f8513a98b6d23421dc18edbef))
+* Bump twine from 3.7.1 to 3.8.0 ([#161](https://github.com/FirefoxMetzger/scikit-bot/issues/161)) ([`bad6b26`](https://github.com/FirefoxMetzger/scikit-bot/commit/bad6b2639bcda43f59cc4b388779c1882901569a))
+* Bump python-semantic-release from 7.24.0 to 7.25.2 ([#164](https://github.com/FirefoxMetzger/scikit-bot/issues/164)) ([`fc91079`](https://github.com/FirefoxMetzger/scikit-bot/commit/fc91079df83c885b06da6743b0b678e8e3bc8c2a))
+
 ## v0.13.0 (2022-02-23)
 ### Feature
 * Hex grid transform ([#162](https://github.com/FirefoxMetzger/scikit-bot/issues/162)) ([`6300443`](https://github.com/FirefoxMetzger/scikit-bot/commit/630044309516389ca97af781e8a5df516f037a88))
