@@ -107,3 +107,41 @@ def test_axisHex():
     assert np.allclose(actual, expected)
     actual = hex_transform.transform(actual)
     assert np.allclose(actual, hex_coords)
+
+
+def test_hexagonal_rounding():
+    points = np.array(
+        [
+            [1.52995404, 1.66930696],
+            [3.57505867, 5.779062],
+            [3.01175057, 3.25270593],
+            [1.77169734, 0.75625665],
+            [0.86887117, 3.50156075],
+            [3.00158257, 4.4222308],
+            [0.67052669, 4.51412333],
+            [-0.46998425, 2.20315508],
+            [2.28559953, 1.5207328],
+            [-0.85131309, 3.39568141],
+        ]
+    )
+
+    expected = np.array(
+        [
+            [1.0, 0.0],
+            [2.0, 2.0],
+            [2.0, 1.0],
+            [1.0, -0.0],
+            [0.0, 2.0],
+            [2.0, 2.0],
+            [1.0, 2.0],
+            [-0.0, 1.0],
+            [2.0, 0.0],
+            [0.0, 2.0],
+        ]
+    )
+
+    to_hex = tf.AxialHexagonTransform()
+    hex_points = to_hex.transform(points)
+    hex_points_rounded = tf.HexagonAxisRound().transform(hex_points)
+
+    assert np.allclose(hex_points_rounded, expected)
